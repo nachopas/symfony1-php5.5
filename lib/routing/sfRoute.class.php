@@ -698,7 +698,7 @@ class sfRoute implements Serializable
     // compute some regexes
     $this->options['variable_prefix_regex'] = '(?:'.implode('|', array_map($preg_quote_hash, $this->options['variable_prefixes'])).')';
 
-    if (count($this->options['segment_separators']))
+    if (is_array($this->options['segment_separators']) && count($this->options['segment_separators']))
     {
       $this->options['segment_separators_regex'] = '(?:'.implode('|', array_map($preg_quote_hash, $this->options['segment_separators'])).')';
 
