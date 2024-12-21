@@ -31,7 +31,7 @@ abstract class sfPropelBaseTask extends sfBaseTask
 
     if (!self::$done)
     {
-      sfToolkit::addIncludePath([sfConfig::get('sf_propel_runtime_path', realpath(dirname(__FILE__).'/../lib/vendor')), dirname(__FILE__)]);
+      sfToolkit::addIncludePath([sfConfig::get('sf_propel_runtime_path', realpath(__DIR__.'/../lib/vendor')), __DIR__]);
 
       self::$done = true;
     }
@@ -170,7 +170,7 @@ abstract class sfPropelBaseTask extends sfBaseTask
       }
 
       // if the prefix is not in the schema filename, add it
-      if (!strstr(basename($schema), $prefix))
+      if (!strstr(basename($schema), (string) $prefix))
       {
         $localprefix = $prefix.$localprefix;
       }
@@ -201,7 +201,7 @@ abstract class sfPropelBaseTask extends sfBaseTask
     }
 
     // Call phing targets
-    sfToolkit::addIncludePath([sfConfig::get('sf_symfony_lib_dir'), sfConfig::get('sf_propel_generator_path', realpath(dirname(__FILE__).'/../vendor/propel-generator/classes'))]);
+    sfToolkit::addIncludePath([sfConfig::get('sf_symfony_lib_dir'), sfConfig::get('sf_propel_generator_path', realpath(__DIR__.'/../vendor/propel-generator/classes'))]);
 
     $args = [];
     $bufferPhingOutput = null === $this->commandApplication || !$this->commandApplication->withTrace();
@@ -214,7 +214,7 @@ abstract class sfPropelBaseTask extends sfBaseTask
 
     // Build file
     $args[] = '-f';
-    $args[] = realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'propel-generator'.DIRECTORY_SEPARATOR.'build.xml');
+    $args[] = realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'propel-generator'.DIRECTORY_SEPARATOR.'build.xml');
 
     // Logger
     if (DIRECTORY_SEPARATOR != '\\' && (function_exists('posix_isatty') && @posix_isatty(STDOUT)))
@@ -243,7 +243,7 @@ abstract class sfPropelBaseTask extends sfBaseTask
     // filter arguments through the event dispatcher
     $args = $this->dispatcher->filter(new sfEvent($this, 'propel.filter_phing_args'), $args)->getReturnValue();
 
-    require_once dirname(__FILE__).'/sfPhing.class.php';
+    require_once __DIR__.'/sfPhing.class.php';
 
     // enable output buffering
     Phing::setOutputStream(new OutputStream(fopen('php://output', 'w')));

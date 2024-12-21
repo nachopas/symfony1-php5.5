@@ -373,10 +373,10 @@ class BasePeer
 								$rawcvt = '';
 								// parse the $params['raw'] for ? chars
 								for($r=0,$len=strlen($raw); $r < $len; $r++) {
-									if ($raw{$r} == '?') {
+									if ($raw[$r] == '?') {
 										$rawcvt .= ':p'.$p++;
 									} else {
-										$rawcvt .= $raw{$r};
+										$rawcvt .= $raw[$r];
 									}
 								}
 								$sql .= $rawcvt . ', ';
@@ -880,7 +880,7 @@ class BasePeer
 				if ($ignoreCase) {
 					$condition .= $db->ignoreCase($conditionDesc['left']) . $conditionDesc['operator'] . $db->ignoreCase($conditionDesc['right']);
 				} else {
-					$condition .= implode($conditionDesc);
+					$condition .= implode('', $conditionDesc);
 				}
 				if ($index + 1 < $join->countConditions()) {
 					$condition .= ' AND ';
@@ -989,7 +989,7 @@ class BasePeer
 		// from / join tables quoten if it is necessary
 		if ($db->useQuoteIdentifier()) {
 			$fromClause = array_map([$db, 'quoteIdentifierTable'], $fromClause);
-			$joinClause = $joinClause ? $joinClause : array_map([$db, 'quoteIdentifierTable'], $joinClause);
+			$joinClause = $joinClause ?: array_map([$db, 'quoteIdentifierTable'], $joinClause);
 		}
 
 		// build from-clause
@@ -1049,7 +1049,7 @@ class BasePeer
 	public static function getValidator($classname)
 	{
 		try {
-			$v = isset(self::$validatorMap[$classname]) ? self::$validatorMap[$classname] : null;
+			$v = self::$validatorMap[$classname] ?? null;
 			if ($v === null) {
 				$cls = Propel::importClass($classname);
 				$v = new $cls();

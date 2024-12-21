@@ -179,11 +179,7 @@ abstract class Doctrine_Relation implements ArrayAccess
 
     public function offsetGet($offset)
     {
-        if (isset($this->definition[$offset])) {
-            return $this->definition[$offset];
-        }
-        
-        return null;
+        return $this->definition[$offset] ?? null;
     }
 
     public function offsetSet($offset, $value)
@@ -375,10 +371,7 @@ abstract class Doctrine_Relation implements ArrayAccess
      */
     public function getForeignKeyName()
     {
-        if (isset($this->definition['foreignKeyName'])) {
-            return $this->definition['foreignKeyName'];
-        }
-        return $this['localTable']->getConnection()->generateUniqueRelationForeignKeyName($this);
+        return $this->definition['foreignKeyName'] ?? $this['localTable']->getConnection()->generateUniqueRelationForeignKeyName($this);
     }
 
     /**

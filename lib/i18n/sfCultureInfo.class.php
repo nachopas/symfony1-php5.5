@@ -225,7 +225,7 @@ class sfCultureInfo
    */
   protected static function dataDir()
   {
-    return dirname(__FILE__).'/data/';
+    return __DIR__.'/data/';
   }
 
   /**
@@ -513,7 +513,7 @@ class sfCultureInfo
   {
     $lang = substr($this->culture, 0, 2);
     $reg = substr($this->culture, 3, 2);
-    $culture = $this->getInvariantCulture();
+    $culture = static::getInvariantCulture();
 
     $language = $culture->findInfo("Languages/{$lang}");
     if (count($language) == 0)
@@ -599,7 +599,7 @@ class sfCultureInfo
   {
     if (strlen($this->culture) == 2)
     {
-      return $this->getInvariantCulture();
+      return static::getInvariantCulture();
     }
 
     return new sfCultureInfo(substr($this->culture, 0, 2));

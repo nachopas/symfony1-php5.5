@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfPropelBaseTask.class.php');
+require_once(__DIR__.'/sfPropelBaseTask.class.php');
 
 /**
  * Generates a Propel module.
@@ -69,13 +69,13 @@ EOF;
 
     $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
-    $this->constants = ['PROJECT_NAME'   => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony', 'APP_NAME'       => $arguments['application'], 'MODULE_NAME'    => $arguments['module'], 'UC_MODULE_NAME' => ucfirst($arguments['module']), 'MODEL_CLASS'    => $arguments['model'], 'AUTHOR_NAME'    => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here'];
+    $this->constants = ['PROJECT_NAME'   => $properties['symfony']['name'] ?? 'symfony', 'APP_NAME'       => $arguments['application'], 'MODULE_NAME'    => $arguments['module'], 'UC_MODULE_NAME' => ucfirst($arguments['module']), 'MODEL_CLASS'    => $arguments['model'], 'AUTHOR_NAME'    => $properties['symfony']['author'] ?? 'Your name here'];
 
     $method = $options['generate-in-cache'] ? 'executeInit' : 'executeGenerate';
 
     // for backwarads compatibility symfony uses the model name as singular and plural form if none specified (#5640)
-    $options['singular']  = $options['singular'] ? $options['singular'] : $arguments['model'];
-    $options['plural']  = $options['plural'] ? $options['plural'] : $arguments['model'].'s';
+    $options['singular']  = $options['singular'] ?: $arguments['model'];
+    $options['plural']  = $options['plural'] ?: $arguments['model'].'s';
 
     $this->$method($arguments, $options);
   }
@@ -83,7 +83,7 @@ EOF;
   protected function executeGenerate($arguments = [], $options = [])
   {
     // generate module
-    $tmpDir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.md5(uniqid(rand(), true));
+    $tmpDir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.md5(uniqid(random_int(0, mt_getrandmax()), true));
     $generatorManager = new sfGeneratorManager($this->configuration, $tmpDir);
     $generatorManager->generate('sfPropelGenerator', ['model_class'           => $arguments['model'], 'moduleName'            => $arguments['module'], 'theme'                 => $options['theme'], 'non_verbose_templates' => $options['non-verbose-templates'], 'with_show'             => $options['with-show'], 'singular'              => $options['singular'], 'plural'                => $options['plural'], 'route_prefix'          => $options['route-prefix'], 'with_propel_route'     => $options['with-propel-route'], 'actions_base_class'    => $options['actions-base-class']]);
 
@@ -182,10 +182,10 @@ EOF
       $options['theme'],
       $options['non-verbose-templates'] ? 'true' : 'false',
       $options['with-show'] ? 'true' : 'false',
-      $options['singular'] ? $options['singular'] : '~',
-      $options['plural'] ? $options['plural'] : '~',
-      $options['route-prefix'] ? $options['route-prefix'] : '~',
-      $options['with-propel-route'] ? $options['with-propel-route'] : 'false',
+      $options['singular'] ?: '~',
+      $options['plural'] ?: '~',
+      $options['route-prefix'] ?: '~',
+      $options['with-propel-route'] ?: 'false',
       $options['actions-base-class']
     );
     $this->getFilesystem()->replaceTokens($finder->in($moduleDir), '##', '##', $this->constants);

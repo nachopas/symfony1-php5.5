@@ -50,7 +50,7 @@ require_once 'phing/system/io/PhingFile.php';
  */
 class ManifestTask extends Task
 {
-	var $taskname = 'manifest';
+	public $taskname = 'manifest';
 	
 	/**
 	 * Action

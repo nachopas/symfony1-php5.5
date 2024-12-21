@@ -37,7 +37,7 @@ class sfFormField
    * @param string           $value  The field value
    * @param sfValidatorError $error  A sfValidatorError instance
    */
-  public function __construct(sfWidgetForm $widget, sfFormField $parent = null, $name, $value, sfValidatorError $error = null)
+  public function __construct(sfWidgetForm $widget, $name, $value, sfFormField $parent = null, sfValidatorError $error = null)
   {
     $this->widget = $widget;
     $this->parent = $parent;
@@ -148,7 +148,7 @@ class sfFormField
 
     $error = $this->error instanceof sfValidatorErrorSchema ? $this->error->getGlobalErrors() : $this->error;
 
-    $help = null === $help ? $this->parent->getWidget()->getHelp($this->name) : $help;
+    $help ??= $this->parent->getWidget()->getHelp($this->name);
 
     return strtr($this->parent->getWidget()->getFormFormatter()->formatRow($this->renderLabel($label), $field, $error, $help), ['%hidden_fields%' => '']);
   }

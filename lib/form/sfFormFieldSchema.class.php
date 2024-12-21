@@ -32,9 +32,9 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    * @param string             $value  The field value
    * @param sfValidatorError   $error  A sfValidatorError instance
    */
-  public function __construct(sfWidgetFormSchema $widget, sfFormField $parent = null, $name, $value, sfValidatorError $error = null)
+  public function __construct(sfWidgetFormSchema $widget, $name, $value, sfFormField $parent = null, sfValidatorError $error = null)
   {
-    parent::__construct($widget, $parent, $name, $value, $error);
+    parent::__construct($widget, $name, $value, $parent, $error);
 
     $this->fieldNames = $widget->getPositions();
   }
@@ -112,7 +112,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
         throw new InvalidArgumentException(sprintf('Widget "%s" does not exist.', $name));
       }
 
-      $error = isset($this->error[$name]) ? $this->error[$name] : null;
+      $error = $this->error[$name] ?? null;
 
       if ($widget instanceof sfWidgetFormSchema)
       {
@@ -128,7 +128,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
         $class = 'sfFormField';
       }
 
-      $this->fields[$name] = new $class($widget, $this, $name, isset($this->value[$name]) ? $this->value[$name] : null, $error);
+      $this->fields[$name] = new $class($widget, $this, $name, $this->value[$name] ?? null, $error);
     }
 
     return $this->fields[$name];

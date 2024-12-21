@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfPropelBaseTask.class.php');
+require_once(__DIR__.'/sfPropelBaseTask.class.php');
 
 /**
  * Inserts SQL for current model.
@@ -94,7 +94,7 @@ EOF;
       return 1;
     }
 
-    $this->tmpDir = sys_get_temp_dir().'/propel_insert_sql_'.rand(11111, 99999);
+    $this->tmpDir = sys_get_temp_dir().'/propel_insert_sql_'.random_int(11111, 99999);
     register_shutdown_function([$this, 'removeTmpDir']);
     mkdir($this->tmpDir, 0777, true);
     foreach ($sqls as $connection => $files)

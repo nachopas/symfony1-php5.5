@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfDoctrineBaseTask.class.php');
+require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 
 /**
  * Generates a Doctrine module.
@@ -69,7 +69,7 @@ EOF;
     
     $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
-    $this->constants = ['PROJECT_NAME'   => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony', 'APP_NAME'       => $arguments['application'], 'MODULE_NAME'    => $arguments['module'], 'UC_MODULE_NAME' => ucfirst($arguments['module']), 'MODEL_CLASS'    => $arguments['model'], 'AUTHOR_NAME'    => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here'];
+    $this->constants = ['PROJECT_NAME'   => $properties['symfony']['name'] ?? 'symfony', 'APP_NAME'       => $arguments['application'], 'MODULE_NAME'    => $arguments['module'], 'UC_MODULE_NAME' => ucfirst($arguments['module']), 'MODEL_CLASS'    => $arguments['model'], 'AUTHOR_NAME'    => $properties['symfony']['author'] ?? 'Your name here'];
 
     $method = $options['generate-in-cache'] ? 'executeInit' : 'executeGenerate';
 
@@ -79,9 +79,9 @@ EOF;
   protected function executeGenerate($arguments = [], $options = [])
   {
     // generate module
-    $tmpDir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.md5(uniqid(rand(), true));
+    $tmpDir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.md5(uniqid(random_int(0, mt_getrandmax()), true));
     $generatorManager = new sfGeneratorManager($this->configuration, $tmpDir);
-    $generatorManager->generate('sfDoctrineGenerator', ['model_class'           => $arguments['model'], 'moduleName'            => $arguments['module'], 'theme'                 => $options['theme'], 'non_verbose_templates' => $options['non-verbose-templates'], 'with_show'             => $options['with-show'], 'singular'              => $options['singular'] ? $options['singular'] : sfInflector::underscore($arguments['model']), 'plural'                => $options['plural'] ? $options['plural'] : sfInflector::underscore($arguments['model'].'s'), 'route_prefix'          => $options['route-prefix'], 'with_doctrine_route'   => $options['with-doctrine-route'], 'actions_base_class'    => $options['actions-base-class']]);
+    $generatorManager->generate('sfDoctrineGenerator', ['model_class'           => $arguments['model'], 'moduleName'            => $arguments['module'], 'theme'                 => $options['theme'], 'non_verbose_templates' => $options['non-verbose-templates'], 'with_show'             => $options['with-show'], 'singular'              => $options['singular'] ?: sfInflector::underscore($arguments['model']), 'plural'                => $options['plural'] ?: sfInflector::underscore($arguments['model'].'s'), 'route_prefix'          => $options['route-prefix'], 'with_doctrine_route'   => $options['with-doctrine-route'], 'actions_base_class'    => $options['actions-base-class']]);
 
     $moduleDir = sfConfig::get('sf_app_module_dir').'/'.$arguments['module'];
 
@@ -178,9 +178,9 @@ EOF
       $options['theme'],
       $options['non-verbose-templates'] ? 'true' : 'false',
       $options['with-show'] ? 'true' : 'false',
-      $options['singular'] ? $options['singular'] : '~',
-      $options['plural'] ? $options['plural'] : '~',
-      $options['route-prefix'] ? $options['route-prefix'] : '~',
+      $options['singular'] ?: '~',
+      $options['plural'] ?: '~',
+      $options['route-prefix'] ?: '~',
       $options['with-doctrine-route'] ? 'true' : 'false',
       $options['actions-base-class']
     );

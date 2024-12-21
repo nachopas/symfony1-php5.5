@@ -49,7 +49,7 @@ class sfValidatedFile
    */
   public function __toString()
   {
-    return null === $this->savedName ? '' : $this->savedName;
+    return $this->savedName ?? '';
   }
 
   /**
@@ -131,7 +131,7 @@ class sfValidatedFile
    */
   public function generateFilename()
   {
-    return sha1($this->getOriginalName().rand(11111, 99999)).$this->getExtension($this->getOriginalExtension());
+    return sha1($this->getOriginalName().random_int(11111, 99999)).$this->getExtension($this->getOriginalExtension());
   }
 
   /**

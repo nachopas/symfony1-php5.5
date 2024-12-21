@@ -193,7 +193,7 @@ class sfNumberFormat
       // now for the integer groupings
       for ($i = 0; $i < $len; $i++)
       {
-        $char = $string{$len - $i - 1};
+        $char = $string[$len - $i - 1];
 
         if ($multiGroup && $count == 0)
         {
@@ -327,8 +327,8 @@ class sfNumberFormat
       return $string;
     }
 
-    list($significand, $exp) = explode('E', $string);
-    list(, $decimal) = explode('.', $significand);
+    [$significand, $exp] = explode('E', $string);
+    [, $decimal] = explode('.', $significand);
     if ('-' === $exp[0]) {
         $exp = str_replace('-', '', $exp);
 

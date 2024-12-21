@@ -181,7 +181,7 @@ class Doctrine_Collection extends Doctrine_Access implements Countable, Iterator
 
         $this->_table = $connection->getTable($this->_table);
 
-        $keyColumn = isset($array['keyColumn']) ? $array['keyColumn'] : null;
+        $keyColumn = $array['keyColumn'] ?? null;
         if ($keyColumn === null) {
             $keyColumn = $this->_table->getBoundQueryPart('indexBy');
         }
@@ -889,11 +889,7 @@ class Doctrine_Collection extends Doctrine_Access implements Countable, Iterator
      */
     protected function compareRecords($a, $b)
     {
-        if ($a->getOid() == $b->getOid()) {
-            return 0;
-        }
-        
-        return ($a->getOid() > $b->getOid()) ? 1 : -1;
+        return $a->getOid() <=> $b->getOid();
     }
 
     /**

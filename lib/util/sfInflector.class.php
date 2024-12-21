@@ -30,7 +30,7 @@ class sfInflector
     $tmp = $lower_case_and_underscored_word;
     $tmp = sfToolkit::pregtrcb(
                         $tmp,
-                        ['#/(.?)#' => function ($matches) { return '::'.strtoupper($matches[1]); }, '/(^|_|-)+(.)/' => function ($matches) { return strtoupper($matches[2]); }]
+                        ['#/(.?)#' => fn($matches) => '::'.strtoupper($matches[1]), '/(^|_|-)+(.)/' => fn($matches) => strtoupper($matches[2])]
                       );
 
     return $tmp;

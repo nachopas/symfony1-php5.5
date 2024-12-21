@@ -41,7 +41,7 @@ class sfContext implements ArrayAccess
    *
    * @return sfContext                  An sfContext instance
    */
-  static public function createInstance(sfApplicationConfiguration $configuration, $name = null, $class = __CLASS__)
+  static public function createInstance(sfApplicationConfiguration $configuration, $name = null, $class = self::class)
   {
     if (null === $name)
     {
@@ -99,7 +99,7 @@ class sfContext implements ArrayAccess
    *
    * @return sfContext An sfContext implementation instance.
    */
-  static public function getInstance($name = null, $class = __CLASS__)
+  static public function getInstance($name = null, $class = self::class)
   {
     if (null === $name)
     {
@@ -242,7 +242,7 @@ class sfContext implements ArrayAccess
    */
   public function getController()
   {
-    return isset($this->factories['controller']) ? $this->factories['controller'] : null;
+    return $this->factories['controller'] ?? null;
   }
 
   /**
@@ -316,7 +316,7 @@ class sfContext implements ArrayAccess
    */
   public function getDatabaseManager()
   {
-    return isset($this->factories['databaseManager']) ? $this->factories['databaseManager'] : null;
+    return $this->factories['databaseManager'] ?? null;
   }
 
   /**
@@ -356,7 +356,7 @@ class sfContext implements ArrayAccess
    */
   public function getRequest()
   {
-    return isset($this->factories['request']) ? $this->factories['request'] : null;
+    return $this->factories['request'] ?? null;
   }
 
   /**
@@ -366,7 +366,7 @@ class sfContext implements ArrayAccess
    */
   public function getResponse()
   {
-    return isset($this->factories['response']) ? $this->factories['response'] : null;
+    return $this->factories['response'] ?? null;
   }
 
   /**
@@ -388,7 +388,7 @@ class sfContext implements ArrayAccess
    */
   public function getStorage()
   {
-    return isset($this->factories['storage']) ? $this->factories['storage'] : null;
+    return $this->factories['storage'] ?? null;
   }
 
   /**
@@ -398,7 +398,7 @@ class sfContext implements ArrayAccess
    */
   public function getViewCacheManager()
   {
-    return isset($this->factories['viewCacheManager']) ? $this->factories['viewCacheManager'] : null;
+    return $this->factories['viewCacheManager'] ?? null;
   }
 
   /**
@@ -423,7 +423,7 @@ class sfContext implements ArrayAccess
    */
   public function getRouting()
   {
-    return isset($this->factories['routing']) ? $this->factories['routing'] : null;
+    return $this->factories['routing'] ?? null;
   }
 
   /**
@@ -433,7 +433,7 @@ class sfContext implements ArrayAccess
    */
   public function getUser()
   {
-    return isset($this->factories['user']) ? $this->factories['user'] : null;
+    return $this->factories['user'] ?? null;
   }
 
   /**

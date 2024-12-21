@@ -36,7 +36,7 @@ class lime_test
 
     $this->options = array_merge(['force_colors'    => false, 'output'          => null, 'verbose'         => false, 'error_reporting' => false], $options);
 
-    $this->output = $this->options['output'] ? $this->options['output'] : new lime_output($this->options['force_colors']);
+    $this->output = $this->options['output'] ?: new lime_output($this->options['force_colors']);
 
     $caller = $this->find_caller(debug_backtrace());
     self::$all_results[] = ['file'  => $caller[0], 'tests' => [], 'stats' => ['plan' => $plan, 'total' => 0, 'failed' => [], 'passed' => [], 'skipped' => [], 'errors' => []]];
@@ -507,7 +507,7 @@ class lime_test
     ++$this->test_nb;
     ++$this->results['stats']['total'];
 
-    list($this->results['tests'][$this->test_nb]['file'], $this->results['tests'][$this->test_nb]['line']) = $this->find_caller(debug_backtrace());
+    [$this->results['tests'][$this->test_nb]['file'], $this->results['tests'][$this->test_nb]['line']] = $this->find_caller(debug_backtrace());
   }
 
   protected function set_last_test_errors(array $errors)
@@ -557,7 +557,7 @@ class lime_test
     $this->error($type.': '.$message, $file, $line, $trace);
   }
 
-  public function handle_exception(Exception $exception)
+  public function handle_exception(\Throwable $exception)
   {
     $this->error(get_class($exception).': '.$exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTrace());
 
@@ -574,7 +574,7 @@ class lime_output
   public function __construct($force_colors = false, $base_dir = null)
   {
     $this->colorizer = new lime_colorizer($force_colors);
-    $this->base_dir = $base_dir === null ? getcwd() : $base_dir;
+    $this->base_dir = $base_dir ?? getcwd();
   }
 
   public function diag()
@@ -671,10 +671,10 @@ class lime_output
   {
     if ($colorize)
     {
-      $message = preg_replace('/(?:^|\.)((?:not ok|dubious|errors) *\d*)\b/e', '$this->colorizer->colorize(\'$1\', \'ERROR\')', $message);
-      $message = preg_replace('/(?:^|\.)(ok *\d*)\b/e', '$this->colorizer->colorize(\'$1\', \'INFO\')', $message);
-      $message = preg_replace('/"(.+?)"/e', '$this->colorizer->colorize(\'$1\', \'PARAMETER\')', $message);
-      $message = preg_replace('/(\->|\:\:)?([a-zA-Z0-9_]+?)\(\)/e', '$this->colorizer->colorize(\'$1$2()\', \'PARAMETER\')', $message);
+      $message = preg_replace_callback('/(?:^|\.)((?:not ok|dubious|errors) *\d*)\b/', fn($matches) => $this->colorizer->colorize($matches[1], 'ERROR'), $message);
+      $message = preg_replace_callback('/(?:^|\.)(ok *\d*)\b/', fn($matches) => $this->colorizer->colorize($matches[1], 'INFO'), $message);
+      $message = preg_replace_callback('/"(.+?)"/', fn($matches) => $this->colorizer->colorize($matches[1], 'PARAMETER'), $message);
+      $message = preg_replace_callback('/(\->|\:\:)?([a-zA-Z0-9_]+?)\(\)/', fn($matches) => $this->colorizer->colorize($matches[1], 'PARAMETER'), $message);
     }
 
     echo ($colorizer_parameter ? $this->colorizer->colorize($message, $colorizer_parameter) : $message)."\n";
@@ -785,7 +785,7 @@ class lime_harness extends lime_registration
     $this->options = array_merge(['php_cli'      => null, 'force_colors' => false, 'output'       => null, 'verbose'      => false], $options);
 
     $this->php_cli = $this->find_php_cli($this->options['php_cli']);
-    $this->output = $this->options['output'] ? $this->options['output'] : new lime_output($this->options['force_colors']);
+    $this->output = $this->options['output'] ?: new lime_output($this->options['force_colors']);
   }
 
   protected function find_php_cli($php_cli = null)
@@ -812,7 +812,7 @@ class lime_harness extends lime_registration
       return $php_cli;
     }
 
-    $path = getenv('PATH') ? getenv('PATH') : getenv('Path');
+    $path = getenv('PATH') ?: getenv('Path');
     $exe_suffixes = DIRECTORY_SEPARATOR == '\\' ? (getenv('PATHEXT') ? explode(PATH_SEPARATOR, getenv('PATHEXT')) : ['.exe', '.bat', '.cmd', '.com']) : [''];
     foreach (['php5', 'php'] as $php_cli)
     {
@@ -1040,7 +1040,7 @@ EOF
 
   public function get_failed_files()
   {
-    return isset($this->stats['failed_files']) ? $this->stats['failed_files'] : [];
+    return $this->stats['failed_files'] ?? [];
   }
 }
 
@@ -1166,7 +1166,7 @@ EOF;
     {
       $file = realpath($file);
       $is_covered = isset($this->coverage[$file]);
-      $cov = isset($this->coverage[$file]) ? $this->coverage[$file] : [];
+      $cov = $this->coverage[$file] ?? [];
       $covered_lines = [];
       $missing_lines = [];
 
@@ -1187,7 +1187,7 @@ EOF;
       if (!$total_lines)
       {
         // probably means that the file is not covered at all!
-        $total_lines = count($this->get_php_lines(file_get_contents($file)));
+        $total_lines = count(static::get_php_lines(file_get_contents($file)));
       }
 
       $output = $this->harness->output;
@@ -1259,7 +1259,7 @@ EOF;
         continue;
       }
 
-      list($id, $text) = $token;
+      [$id, $text] = $token;
 
       switch ($id)
       {

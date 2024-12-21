@@ -97,7 +97,7 @@ class sfMailer extends Swift_Mailer
       {
         throw new InvalidArgumentException('For the spool mail delivery strategy, you must also define a spool_class option');
       }
-      $arguments = isset($options['spool_arguments']) ? $options['spool_arguments'] : [];
+      $arguments = $options['spool_arguments'] ?? [];
 
       if ($arguments)
       {

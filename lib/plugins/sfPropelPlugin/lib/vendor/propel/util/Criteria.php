@@ -366,10 +366,7 @@ class Criteria implements IteratorAggregate {
 	 */
 	public function getCriterion($column)
 	{
-		if ( isset ( $this->map[$column] ) ) {
-			return $this->map[$column];
-		}
-		return null;
+		return $this->map[$column] ?? null;
 	}
 
 	/**
@@ -452,7 +449,7 @@ class Criteria implements IteratorAggregate {
 	 */
 	public function setDbName($dbName = null)
 	{
-		$this->dbName = ($dbName === null ? Propel::getDefaultDB() : $dbName);
+		$this->dbName = ($dbName ?? Propel::getDefaultDB());
 	}
 
 	/**
@@ -672,7 +669,7 @@ class Criteria implements IteratorAggregate {
   {
 		$join = new Join();
 		foreach ($conditions as $condition) {
-		  $join->addCondition($condition[0], $condition[1], isset($condition[2]) ? $condition[2] : Criteria::EQUAL);
+		  $join->addCondition($condition[0], $condition[1], $condition[2] ?? Criteria::EQUAL);
 		}
 		$join->setJoinType($joinType);
 		
@@ -1327,7 +1324,7 @@ class Criterion  {
 			$this->table = substr($column, 0, $dotPos); 
 			$this->column = substr($column, $dotPos+1, strlen($column));
 		}
-		$this->comparison = ($comparison === null ? Criteria::EQUAL : $comparison);
+		$this->comparison = ($comparison ?? Criteria::EQUAL);
 		$this->init($outer);
 	}
 

@@ -47,10 +47,7 @@ class Doctrine_Validator_Driver
      */
     public function __get($arg)
     {
-        if (isset($this->args[$arg])) {
-            return $this->args[$arg];
-        }
-        return null;
+        return $this->args[$arg] ?? null;
     }
 
     /**

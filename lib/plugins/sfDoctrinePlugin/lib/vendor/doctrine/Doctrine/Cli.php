@@ -77,7 +77,7 @@ class Doctrine_Cli
     public function __construct(array $config = [], Doctrine_Cli_Formatter $formatter = null)
     {
         $this->setConfig($config);
-        $this->setFormatter($formatter ? $formatter : new Doctrine_Cli_AnsiColorFormatter());
+        $this->setFormatter($formatter ?: new Doctrine_Cli_AnsiColorFormatter());
         $this->includeAndRegisterTaskClasses();
     }
 
@@ -477,7 +477,7 @@ class Doctrine_Cli
     {        
         $this->_scriptName = $args[0];
         
-        $requestedTaskName = isset($args[1]) ? $args[1] : null;
+        $requestedTaskName = $args[1] ?? null;
         
         if ( ! $requestedTaskName || $requestedTaskName == 'help') {
             $this->printTasks(null, $requestedTaskName == 'help' ? true : false);

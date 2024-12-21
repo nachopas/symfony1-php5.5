@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfDoctrineBaseTask.class.php');
+require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 
 /**
  * Inserts SQL for current model.
@@ -129,7 +129,7 @@ EOF;
       {
         $this->logBlock(array_merge(
           ['The following errors occurred:', ''],
-          array_map(function($e) { return ' - ' . $e->getMessage(); }, $migration->getErrors())
+          array_map(fn($e) => ' - ' . $e->getMessage(), $migration->getErrors())
         ), 'ERROR_LARGE');
       }
 

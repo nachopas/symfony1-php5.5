@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfPropelBaseTask.class.php');
+require_once(__DIR__.'/sfPropelBaseTask.class.php');
 
 /**
  * Create form classes for the current model.
@@ -63,7 +63,7 @@ EOF;
 
     $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
-    $constants = ['PROJECT_NAME' => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony', 'AUTHOR_NAME'  => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here'];
+    $constants = ['PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony', 'AUTHOR_NAME'  => $properties['symfony']['author'] ?? 'Your name here'];
 
     // customize php and yml files
     $finder = sfFinder::type('file')->name('*.php');

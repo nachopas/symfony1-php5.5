@@ -89,13 +89,13 @@ class sfWidgetFormPropelChoice extends sfWidgetFormChoice
     $methodKey = $this->getOption('key_method');
     if (!method_exists($this->getOption('model'), $methodKey))
     {
-      throw new RuntimeException(sprintf('Class "%s" must implement a "%s" method to be rendered in a "%s" widget', $this->getOption('model'), $methodKey, __CLASS__));
+      throw new RuntimeException(sprintf('Class "%s" must implement a "%s" method to be rendered in a "%s" widget', $this->getOption('model'), $methodKey, self::class));
     }
 
     $methodValue = $this->getOption('method');
     if (!method_exists($this->getOption('model'), $methodValue))
     {
-      throw new RuntimeException(sprintf('Class "%s" must implement a "%s" method to be rendered in a "%s" widget', $this->getOption('model'), $methodValue, __CLASS__));
+      throw new RuntimeException(sprintf('Class "%s" must implement a "%s" method to be rendered in a "%s" widget', $this->getOption('model'), $methodValue, self::class));
     }
 
     foreach ($objects as $object)

@@ -136,7 +136,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
           break;
         }
 
-        if (false !== strpos($log['message'], $event->getQuery()))
+        if (false !== strpos($log['message'], (string) $event->getQuery()))
         {
           // assume queries are being requested in order
           unset($logs[$i]);

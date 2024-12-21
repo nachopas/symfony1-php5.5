@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfYamlInline.php');
+require_once(__DIR__.'/sfYamlInline.php');
 
 if (!defined('PREG_BAD_UTF8_OFFSET_ERROR'))
 {
@@ -394,7 +394,7 @@ class sfYamlParser
 
     if (preg_match('/^(?P<separator>\||>)(?P<modifiers>\+|\-|\d+|\+\d+|\-\d+|\d+\+|\d+\-)?(?P<comments> +#.*)?$/', $value, $matches))
     {
-      $modifiers = isset($matches['modifiers']) ? $matches['modifiers'] : '';
+      $modifiers = $matches['modifiers'] ?? '';
 
       return $this->parseFoldedScalar($matches['separator'], preg_replace('#\d+#', '', $modifiers), intval(abs($modifiers)));
     }

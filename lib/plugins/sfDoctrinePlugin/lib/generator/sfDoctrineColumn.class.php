@@ -98,7 +98,7 @@ class sfDoctrineColumn implements ArrayAccess
    */
   public function getDoctrineType()
   {
-    return isset($this->definition['type']) ? $this->definition['type']:null;
+    return $this->definition['type'] ?? null;
   }
 
   /**
@@ -190,15 +190,7 @@ class sfDoctrineColumn implements ArrayAccess
    */
   public function isNotNull()
   {
-    if (isset($this->definition['notnull']))
-    {
-      return $this->definition['notnull'];
-    }
-    if (isset($this->definition['notblank']))
-    {
-      return $this->definition['notblank'];
-    }
-    return false;
+    return $this->definition['notnull'] ?? $this->definition['notblank'] ?? false;
   }
 
   /**
@@ -208,11 +200,7 @@ class sfDoctrineColumn implements ArrayAccess
    */
   public function isPrimaryKey()
   {
-    if (isset($this->definition['primary']))
-    {
-      return $this->definition['primary'];
-    }
-    return false;
+    return $this->definition['primary'] ?? false;
   }
 
   /**

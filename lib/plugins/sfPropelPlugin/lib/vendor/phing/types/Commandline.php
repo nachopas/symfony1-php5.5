@@ -59,7 +59,7 @@ class Commandline {
 
     public function __construct($to_process = null) {
         if ($to_process !== null) {                 
-            $tmp = $this->translateCommandline($to_process);
+            $tmp = static::translateCommandline($to_process);
             if ($tmp) {
                 $this->setExecutable(array_shift($tmp)); // removes first el
                 foreach($tmp as $arg) { // iterate through remaining elements

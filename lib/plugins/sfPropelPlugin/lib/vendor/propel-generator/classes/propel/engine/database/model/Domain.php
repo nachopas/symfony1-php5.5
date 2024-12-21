@@ -83,7 +83,7 @@ class Domain extends XMLElement {
 	public function __construct($type = null, $sqlType = null, $size = null, $scale = null)
 	{
 		$this->propelType = $type;
-		$this->sqlType = ($sqlType !== null) ? $sqlType : $type;
+		$this->sqlType = $sqlType ?? $type;
 		$this->size = $size;
 		$this->scale = $scale;
 	}

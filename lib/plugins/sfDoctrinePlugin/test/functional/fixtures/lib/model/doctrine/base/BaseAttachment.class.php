@@ -25,7 +25,5 @@ abstract class BaseAttachment extends myDoctrineRecord
 
     public function setUp()
     {
-        parent::setUp();
-        
     }
 }

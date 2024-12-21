@@ -242,7 +242,7 @@ class PropelCreoleTransformTask extends Task {
 
 		$this->log("Propel - CreoleToXMLSchema starting");
 		$this->log("Your DB settings are:");
-		$this->log("driver : " . ($this->dbDriver ? $this->dbDriver : "(default)"));
+		$this->log("driver : " . ($this->dbDriver ?: "(default)"));
 		$this->log("URL : " . $this->dbUrl);
 
 		//(not yet supported) $this->log("schema : " . $this->dbSchema);

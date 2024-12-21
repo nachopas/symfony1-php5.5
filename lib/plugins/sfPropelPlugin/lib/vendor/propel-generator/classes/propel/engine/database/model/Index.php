@@ -222,10 +222,7 @@ class Index extends XMLElement {
 	 */
 	public function getColumnSize($name)
 	{
-		if (isset($this->indexColumnSizes[$name])) {
-			return $this->indexColumnSizes[$name];
-		}
-		return null; // just to be explicit
+		return $this->indexColumnSizes[$name] ?? null; // just to be explicit
 	}
 
 	/**

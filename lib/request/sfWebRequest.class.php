@@ -178,11 +178,11 @@ class sfWebRequest extends sfRequest
     // for IIS with rewrite module (IIFR, ISAPI Rewrite, ...)
     if ('HTTP_X_REWRITE_URL' == $this->options['path_info_key'])
     {
-      $uri = isset($pathArray['HTTP_X_REWRITE_URL']) ? $pathArray['HTTP_X_REWRITE_URL'] : '';
+      $uri = $pathArray['HTTP_X_REWRITE_URL'] ?? '';
     }
     else
     {
-      $uri = isset($pathArray['REQUEST_URI']) ? $pathArray['REQUEST_URI'] : '';
+      $uri = $pathArray['REQUEST_URI'] ?? '';
     }
 
     return $this->isAbsUri() ? $uri : $this->getUriPrefix().$uri;
@@ -217,7 +217,7 @@ class sfWebRequest extends sfRequest
     // extract port from host or environment variable
     if (false !== strpos($host, ':'))
     {
-      list($host, $port) = explode(':', $host, 2);
+      [$host, $port] = explode(':', $host, 2);
     }
     else if (isset($this->options[$protocol.'_port']))
     {
@@ -259,7 +259,7 @@ class sfWebRequest extends sfRequest
     {
       if (isset($pathArray['REQUEST_URI']))
       {
-        $qs = isset($pathArray['QUERY_STRING']) ? $pathArray['QUERY_STRING'] : '';
+        $qs = $pathArray['QUERY_STRING'] ?? '';
         $script_name = $this->getScriptName();
         $uri_prefix = $this->isAbsUri() ? $this->getUriPrefix() : '';
         $pathInfo = preg_replace('/^'.preg_quote($uri_prefix, '/').'/','',$pathArray['REQUEST_URI']);
@@ -362,7 +362,7 @@ class sfWebRequest extends sfRequest
   {
     $pathArray = $this->getPathInfoArray();
 
-    return isset($pathArray['HTTP_REFERER']) ? $pathArray['HTTP_REFERER'] : '';
+    return $pathArray['HTTP_REFERER'] ?? '';
   }
 
   /**
@@ -381,7 +381,7 @@ class sfWebRequest extends sfRequest
       return trim($elements[count($elements) - 1]);
     }
 
-    return isset($pathArray['HTTP_HOST']) ? $pathArray['HTTP_HOST'] : '';
+    return $pathArray['HTTP_HOST'] ?? '';
   }
 
   /**
@@ -393,7 +393,7 @@ class sfWebRequest extends sfRequest
   {
     $pathArray = $this->getPathInfoArray();
 
-    return isset($pathArray['SCRIPT_NAME']) ? $pathArray['SCRIPT_NAME'] : (isset($pathArray['ORIG_SCRIPT_NAME']) ? $pathArray['ORIG_SCRIPT_NAME'] : '');
+    return $pathArray['SCRIPT_NAME'] ?? $pathArray['ORIG_SCRIPT_NAME'] ?? '';
   }
 
   /**
@@ -421,7 +421,7 @@ class sfWebRequest extends sfRequest
 
     if (null === $cultures)
     {
-      return isset($preferredCultures[0]) ? $preferredCultures[0] : null;
+      return $preferredCultures[0] ?? null;
     }
 
     if (!$preferredCultures)
@@ -431,7 +431,7 @@ class sfWebRequest extends sfRequest
 
     $preferredCultures = array_values(array_intersect($preferredCultures, $cultures));
 
-    return isset($preferredCultures[0]) ? $preferredCultures[0] : $cultures[0];
+    return $preferredCultures[0] ?? $cultures[0];
   }
 
   /**
@@ -801,7 +801,7 @@ class sfWebRequest extends sfRequest
       $this->fixedFileArray = self::convertFileInformation($_FILES);
     }
 
-    return null === $key ? $this->fixedFileArray : (isset($this->fixedFileArray[$key]) ? $this->fixedFileArray[$key] : []);
+    return null === $key ? $this->fixedFileArray : ($this->fixedFileArray[$key] ?? []);
   }
 
   /**

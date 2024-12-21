@@ -315,7 +315,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
    */
   public function offsetGet($name)
   {
-    return isset($this->fields[$name]) ? $this->fields[$name] : null;
+    return $this->fields[$name] ?? null;
   }
 
   /**
@@ -388,7 +388,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     $exp_by_modifier = ['k' => 1, 'm' => 2, 'g' => 3];
     if (array_key_exists($modifier, $exp_by_modifier)) {
       $exp = $exp_by_modifier[$modifier];
-      $number = $number * pow(1024, $exp);
+      $number = $number * 1024 ** $exp;
     }
 
     return $number;

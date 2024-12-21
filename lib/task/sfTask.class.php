@@ -305,9 +305,7 @@ abstract class sfTask
   public function getDetailedDescription()
   {
     $formatter = $this->getFormatter();
-    return preg_replace_callback('/\[(.+?)\|(\w+)\]/s', function ($match) use ($formatter) {
-      return $formatter->format($match['1'], $match['2']);
-    }, $this->detailedDescription);
+    return preg_replace_callback('/\[(.+?)\|(\w+)\]/s', fn($match) => $formatter->format($match['1'], $match['2']), $this->detailedDescription);
   }
 
   /**
@@ -463,12 +461,12 @@ abstract class sfTask
     }
     else
     {
-      $this->logBlock($question, null === $style ? 'QUESTION' : $style);
+      $this->logBlock($question, $style ?? 'QUESTION');
     }
 
     $ret = trim(fgets(STDIN));
 
-    return $ret ? $ret : $default;
+    return $ret ?: $default;
   }
 
   /**
@@ -570,7 +568,7 @@ abstract class sfTask
     $dom->formatOutput = true;
     $dom->appendChild($taskXML = $dom->createElement('task'));
     $taskXML->setAttribute('id', $this->getFullName());
-    $taskXML->setAttribute('namespace', $this->getNamespace() ? $this->getNamespace() : '_global');
+    $taskXML->setAttribute('namespace', $this->getNamespace() ?: '_global');
     $taskXML->setAttribute('name', $this->getName());
 
     $taskXML->appendChild($usageXML = $dom->createElement('usage'));

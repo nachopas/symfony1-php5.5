@@ -158,9 +158,9 @@ class sfSymfonyPluginManager extends sfPluginManager
    */
   public function listenToPluginPostInstall($event)
   {
-    $this->installWebContent($event['plugin'], isset($event['plugin_dir']) ? $event['plugin_dir'] : $this->environment->getOption('plugin_dir'));
+    $this->installWebContent($event['plugin'], $event['plugin_dir'] ?? $this->environment->getOption('plugin_dir'));
 
-    $this->enablePlugin($event['plugin'], $this->environment->getOption('config_dir'));
+    static::enablePlugin($event['plugin'], $this->environment->getOption('config_dir'));
   }
 
   /**
@@ -172,7 +172,7 @@ class sfSymfonyPluginManager extends sfPluginManager
   {
     $this->uninstallWebContent($event['plugin']);
 
-    $this->disablePlugin($event['plugin'], $this->environment->getOption('config_dir'));
+    static::disablePlugin($event['plugin'], $this->environment->getOption('config_dir'));
   }
 
   /**

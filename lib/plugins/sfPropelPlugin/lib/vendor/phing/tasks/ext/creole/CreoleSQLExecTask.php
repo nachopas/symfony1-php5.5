@@ -336,14 +336,7 @@ class CreoleSQLExecTask extends CreoleTask {
                     if ($out) $out->close();
                     throw $e;
                 } 
-            } catch (IOException $e) {
-                if (!$this->isAutocommit() && $this->conn !== null && $this->onError == "abort") {
-                    try {
-                        $this->conn->rollback();
-                    } catch (SQLException $ex) {}
-                }
-                throw new BuildException($e->getMessage(), $this->location);
-            } catch (SQLException $e){
+            } catch (IOException|SQLException $e){
                 if (!$this->isAutocommit() && $this->conn !== null && $this->onError == "abort") {
                     try {
                         $this->conn->rollback();

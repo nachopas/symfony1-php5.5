@@ -163,7 +163,7 @@ abstract class sfWidget
    */
   public function getOption($name, $default = null)
   {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
+    return $this->options[$name] ?? $default;
   }
 
   /**
@@ -236,7 +236,7 @@ abstract class sfWidget
    */
   public function getAttribute($name)
   {
-    return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+    return $this->attributes[$name] ?? null;
   }
 
   /**
@@ -406,6 +406,6 @@ abstract class sfWidget
    */
   protected function attributesToHtmlCallback($k, $v)
   {
-    return false === $v || null === $v || ('' === $v && 'value' != $k) ? '' : sprintf(' %s="%s"', $k, $this->escapeOnce($v));
+    return false === $v || null === $v || ('' === $v && 'value' != $k) ? '' : sprintf(' %s="%s"', $k, static::escapeOnce($v));
   }
 }

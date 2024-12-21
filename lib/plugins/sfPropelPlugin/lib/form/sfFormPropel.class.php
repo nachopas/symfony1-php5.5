@@ -77,7 +77,7 @@ abstract class sfFormPropel extends sfFormObject
     $class = $this->getI18nFormClass();
     foreach ($cultures as $culture)
     {
-      $method = sprintf('getCurrent%s', $this->getI18nModelName($culture));
+      $method = sprintf('getCurrent%s', $this->getI18nModelName());
       $i18nObject = $this->getObject()->$method($culture);
       $i18n = new $class($i18nObject);
       

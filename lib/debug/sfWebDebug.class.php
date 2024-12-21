@@ -142,7 +142,7 @@ class sfWebDebug
    */
   public function getOption($name, $default = null)
   {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
+    return $this->options[$name] ?? $default;
   }
 
   /**
@@ -193,7 +193,7 @@ class sfWebDebug
    */
   public function asHtml()
   {
-    $current = isset($this->options['request_parameters']['sfWebDebugPanel']) ? $this->options['request_parameters']['sfWebDebugPanel'] : null;
+    $current = $this->options['request_parameters']['sfWebDebugPanel'] ?? null;
 
     $titles = [];
     $panels = [];
@@ -207,7 +207,7 @@ class sfWebDebug
           $titles[] = sprintf('<li%s><a title="%s" href="%s"%s>%s</a></li>',
             $panel->getStatus() ? ' class="sfWebDebug'.ucfirst($this->getPriority($panel->getStatus())).'"' : '',
             $panel->getPanelTitle(),
-            $panel->getTitleUrl() ? $panel->getTitleUrl() : '#',
+            $panel->getTitleUrl() ?: '#',
             $panel->getTitleUrl() ? '' : ' onclick="sfWebDebugShowDetailsFor(\''.$id.'\'); return false;"',
             $title
           );

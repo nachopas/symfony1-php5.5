@@ -73,7 +73,7 @@ EOF;
 
     $config = file_exists($file) ? sfYaml::load($file) : [];
 
-    $config[$options['env']][$options['name']] = ['class' => $options['class'], 'param' => array_merge(isset($config[$options['env']][$options['name']]['param']) ? $config[$options['env']][$options['name']]['param'] : [], ['dsn' => $arguments['dsn'], 'username' => $arguments['username'], 'password' => $arguments['password']])];
+    $config[$options['env']][$options['name']] = ['class' => $options['class'], 'param' => array_merge($config[$options['env']][$options['name']]['param'] ?? [], ['dsn' => $arguments['dsn'], 'username' => $arguments['username'], 'password' => $arguments['password']])];
 
     file_put_contents($file, sfYaml::dump($config, 4));
 

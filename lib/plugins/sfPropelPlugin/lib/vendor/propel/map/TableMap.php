@@ -603,7 +603,7 @@ class TableMap {
    */
   protected function hasPrefix($data)
   {
-    return (strpos($data, $this->prefix) === 0);
+    return (strpos($data, (string) $this->prefix) === 0);
   }
 
   /**

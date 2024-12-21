@@ -127,7 +127,7 @@ class sfMixer
   {
     self::getMixinInstance($name);
 
-    return isset(self::$mixins[$name]) ? self::$mixins[$name] : [];
+    return self::$mixins[$name] ?? [];
   }
 
   static public function getCallable($name)
@@ -179,7 +179,7 @@ class sfMixer
     }
     else
     {
-      $hookName = $hookName ? $hookName : $method;
+      $hookName = $hookName ?: $method;
       foreach (self::getCallables($class.':'.$method.':'.$hookName) as $callable)
       {
         call_user_func_array($callable, $parameters);

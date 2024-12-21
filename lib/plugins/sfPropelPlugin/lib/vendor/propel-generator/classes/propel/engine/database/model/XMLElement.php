@@ -158,7 +158,7 @@ abstract class XMLElement {
     }
     // first fallback: maybe the behavior is loaded or autoloaded
     $gen = new PhpNameGenerator();
-    if(class_exists($class = $gen->generateName($bname, PhpNameGenerator::CONV_METHOD_PHPNAME) . 'Behavior')) {
+    if(class_exists($class = $gen->generateName($bname) . 'Behavior')) {
       return $class;
     }
     // second fallback: use parent behavior class (mostly for unit tests)

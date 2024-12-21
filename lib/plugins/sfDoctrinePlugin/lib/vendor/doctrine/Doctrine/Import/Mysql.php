@@ -141,7 +141,7 @@ class Doctrine_Import_Mysql extends Doctrine_Import
 
             $decl = $this->conn->dataDict->getPortableDeclaration($val);
 
-            $values = isset($decl['values']) ? $decl['values'] : [];
+            $values = $decl['values'] ?? [];
             $val['default'] = $val['default'] == 'CURRENT_TIMESTAMP' ? null : $val['default'];
 
             $description = ['name'          => $val['field'], 'type'          => $decl['type'][0], 'alltypes'      => $decl['type'], 'ntype'         => $val['type'], 'length'        => $decl['length'], 'fixed'         => (bool) $decl['fixed'], 'unsigned'      => (bool) $decl['unsigned'], 'values'        => $values, 'primary'       => (strtolower($val['key']) == 'pri'), 'default'       => $val['default'], 'notnull'       => (bool) ($val['null'] != 'YES'), 'autoincrement' => (bool) (strpos($val['extra'], 'auto_increment') !== false)];

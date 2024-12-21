@@ -44,7 +44,7 @@ class sfEAcceleratorCache extends sfCache
   {
     $value = eaccelerator_get($this->getOption('prefix').$key);
 
-    return null === $value ? $default : $value;
+    return $value ?? $default;
   }
 
   /**
@@ -107,7 +107,7 @@ class sfEAcceleratorCache extends sfCache
     {
       foreach ($infos as $info)
       {
-        if (false !== strpos($info['name'], $this->getOption('prefix')))
+        if (false !== strpos($info['name'], (string) $this->getOption('prefix')))
         {
           // eaccelerator bug (http://eaccelerator.net/ticket/287)
           $key = 0 === strpos($info['name'], ':') ? substr($info['name'], 1) : $info['name'];

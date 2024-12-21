@@ -225,9 +225,9 @@ abstract class Doctrine_Cache_Driver implements Doctrine_Cache_Interface
      */
     protected function _getKey($id)
     {
-        $prefix = isset($this->_options['prefix']) ? $this->_options['prefix'] : '';
+        $prefix = $this->_options['prefix'] ?? '';
 
-        if ( ! $prefix || strpos($id, $prefix) === 0) {
+        if ( ! $prefix || strpos($id, (string) $prefix) === 0) {
             return $id;
         } else {
             return $prefix . $id;

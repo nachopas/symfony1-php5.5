@@ -50,7 +50,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
             $query.= $this->conn->options['database_size'] ? '=' .
                      $this->conn->options['database_size'] : '';
         }
-        return $this->conn->standaloneQuery($query, [], true);
+        return $this->conn->standaloneQuery($query, []);
     }
 
     /**
@@ -62,7 +62,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
     public function dropDatabase($name)
     {
         $name = $this->conn->quoteIdentifier($name, true);
-        return $this->conn->standaloneQuery('DROP DATABASE ' . $name, [], true);
+        return $this->conn->standaloneQuery('DROP DATABASE ' . $name, []);
     }
 
     /**

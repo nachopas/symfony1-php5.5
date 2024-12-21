@@ -54,7 +54,7 @@ abstract class sfCache
    */
   public function initialize($options = [])
   {
-    $this->options = array_merge(['automatic_cleaning_factor' => 1000, 'lifetime'                  => 86400, 'prefix'                    => md5(dirname(__FILE__))], $options);
+    $this->options = array_merge(['automatic_cleaning_factor' => 1000, 'lifetime'                  => 86400, 'prefix'                    => md5(__DIR__)], $options);
 
     $this->options['prefix'] .= self::SEPARATOR;
   }
@@ -165,7 +165,7 @@ abstract class sfCache
    */
   public function getLifetime($lifetime)
   {
-    return null === $lifetime ? $this->getOption('lifetime') : $lifetime;
+    return $lifetime ?? $this->getOption('lifetime');
   }
 
   /**
@@ -188,7 +188,7 @@ abstract class sfCache
    */
   public function getOption($name, $default = null)
   {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
+    return $this->options[$name] ?? $default;
   }
 
   /**

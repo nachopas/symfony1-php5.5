@@ -147,7 +147,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
      */
     public function getPortableDeclaration(array $field)
     {
-        $length = (isset($field['length'])) ? $field['length'] : null;
+        $length = $field['length'] ?? null;
         if ($length == '-1' && isset($field['atttypmod'])) {
             $length = $field['atttypmod'] - 4;
         }
@@ -164,7 +164,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
         $dbType = strtolower($field['type']);
 
         // Default from field for enum support
-        $default = isset($field['default']) ? $field['default'] : null;
+        $default = $field['default'] ?? null;
         $enumName = null;
         if (strpos($dbType, 'enum') !== false){
             $enumName = $dbType;
@@ -238,7 +238,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
                 break;
             case 'enum':
                 $type[] = 'enum';
-                $length = $length ? $length :255;
+                $length = $length ?: 255;
                 if($default) {
                     $default = preg_replace('/\'(\w+)\'.*/', '${1}', $default);
                 }
@@ -299,7 +299,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
                 break;
             default:
                 $type[] = $field['type'];
-                $length = isset($field['length']) ? $field['length']:null;
+                $length = $field['length'] ?? null;
         }
 
         $ret = ['type'     => $type, 'length'   => $length, 'unsigned' => $unsigned, 'fixed'    => $fixed];

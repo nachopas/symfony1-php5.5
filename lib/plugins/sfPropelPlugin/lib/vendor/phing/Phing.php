@@ -284,12 +284,12 @@ class Phing {
 		// Note: The order in which these are executed is important (if multiple of these options are specified)
 
 		if (in_array('-help', $args) || in_array('-h', $args)) {
-			$this->printUsage();
+			static::printUsage();
 			return;
 		}
 
 		if (in_array('-version', $args) || in_array('-v', $args)) {
-			$this->printVersion();
+			static::printVersion();
 			return;
 		}
 
@@ -505,7 +505,7 @@ class Phing {
 			throw $exc;
 		}
 
-		$project->setUserProperty("phing.version", $this->getPhingVersion());
+		$project->setUserProperty("phing.version", static::getPhingVersion());
 
 		$e = self::$definedProps->keys();
 		while (count($e)) {
@@ -549,7 +549,7 @@ class Phing {
 		// if help is requested print it
 		if ($this->projectHelp) {
 			try {
-				$this->printDescription($project);
+				static::printDescription($project);
 				$this->printTargets($project);
 			} catch (Exception $exc) {
 				$project->fireBuildFinished($exc);
@@ -1049,7 +1049,7 @@ class Phing {
 		// This is a bit of a hack, but works better than previous solution of assuming
 		// data_dir is on the include_path.
 		$dataDir = '@DATA-DIR@';
-		if ($dataDir{0} != '@') { // if we're using PEAR then the @ DATA-DIR @ token will have been substituted.
+		if ($dataDir[0] != '@') { // if we're using PEAR then the @ DATA-DIR @ token will have been substituted.
 			$testPath = $dataDir . DIRECTORY_SEPARATOR . $path;
 			if (file_exists($testPath)) {
 				return $testPath;
@@ -1057,7 +1057,7 @@ class Phing {
 		} else {
 			// We're not using PEAR, so do one additional check based on path of
 			// current file (Phing.php)
-			$maybeHomeDir = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR  . '..');
+			$maybeHomeDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR  . '..');
 			$testPath = $maybeHomeDir . DIRECTORY_SEPARATOR . $path;
 			if (file_exists($testPath)) {
 				return $testPath;
@@ -1132,17 +1132,17 @@ class Phing {
 			$sysInfo['nodename'] = php_uname('n');
 			$sysInfo['machine']= php_uname('m') ;
 			//this is a not so ideal substition, but maybe better than nothing
-			$sysInfo['domain'] = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "unknown";
+			$sysInfo['domain'] = $_SERVER['SERVER_NAME'] ?? "unknown";
 			$sysInfo['release'] = php_uname('r');
 			$sysInfo['version'] = php_uname('v');
 		}
 
 
-		self::setProperty("host.name", isset($sysInfo['nodename']) ? $sysInfo['nodename'] : "unknown");
-		self::setProperty("host.arch", isset($sysInfo['machine']) ? $sysInfo['machine'] : "unknown");
-		self::setProperty("host.domain",isset($sysInfo['domain']) ? $sysInfo['domain'] : "unknown");
-		self::setProperty("host.os.release", isset($sysInfo['release']) ? $sysInfo['release'] : "unknown");
-		self::setProperty("host.os.version", isset($sysInfo['version']) ? $sysInfo['version'] : "unknown");
+		self::setProperty("host.name", $sysInfo['nodename'] ?? "unknown");
+		self::setProperty("host.arch", $sysInfo['machine'] ?? "unknown");
+		self::setProperty("host.domain",$sysInfo['domain'] ?? "unknown");
+		self::setProperty("host.os.release", $sysInfo['release'] ?? "unknown");
+		self::setProperty("host.os.version", $sysInfo['version'] ?? "unknown");
 		unset($sysInfo);
 	}
 
@@ -1185,7 +1185,7 @@ class Phing {
 		// some are cached, see below
 
 		// default is the cached value:
-		$val = isset(self::$properties[$propName]) ? self::$properties[$propName] : null;
+		$val = self::$properties[$propName] ?? null;
 
 		// special exceptions
 		switch($propName) {
@@ -1210,7 +1210,7 @@ class Phing {
 	}
 
 	public static function currentTimeMillis() {
-		list($usec, $sec) = explode(" ",microtime());
+		[$usec, $sec] = explode(" ",microtime());
 		return ((float)$usec + (float)$sec);
 	}
 

@@ -487,8 +487,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
             $componentAlias = $terms[0];
             $field = $terms[1];
         } else {
-            reset($this->_queryComponents);
-            $componentAlias = key($this->_queryComponents);
+            $componentAlias = array_key_first($this->_queryComponents);
             $fields = $terms[0];
         }
 
@@ -589,8 +588,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
                 // Fix for http://www.doctrine-project.org/jira/browse/DC-706
                 if ($pos !== false && substr($expression, 0, 1) !== "'" && substr($expression, 0, $pos) == '') {
                     $_queryComponents = $this->_queryComponents;
-                    reset($_queryComponents);
-                    $componentAlias = key($_queryComponents);
+                    $componentAlias = array_key_first($_queryComponents);
                 } else {
                     $componentAlias = $this->getExpressionOwner($expression);
                 }
@@ -625,8 +623,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
                     $componentAlias = $e[0];
                     $field = $e[1];
                 } else {
-                    reset($this->_queryComponents);
-                    $componentAlias = key($this->_queryComponents);
+                    $componentAlias = array_key_first($this->_queryComponents);
                     $field = $e[0];
                 }
 
@@ -849,15 +846,13 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
     public function processPendingSubqueries()
     {
         foreach ($this->_pendingSubqueries as $value) {
-            list($dql, $alias) = $value;
+            [$dql, $alias] = $value;
 
             $subquery = $this->createSubquery();
 
             $sql = $subquery->parseDqlQuery($dql, false)->getQuery();
             $subquery->free();
-
-            reset($this->_queryComponents);
-            $componentAlias = key($this->_queryComponents);
+            $componentAlias = array_key_first($this->_queryComponents);
             $tableAlias = $this->getSqlTableAlias($componentAlias);
 
             $sqlAlias = $tableAlias . '__' . count($this->_aggregateAliasMap);
@@ -881,7 +876,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
     {
         // iterate trhough all aggregates
         foreach ($this->_pendingAggregates as $aggregate) {
-            list ($expression, $components, $alias) = $aggregate;
+            [$expression, $components, $alias] = $aggregate;
 
             $tableAliases = [];
 
@@ -1323,7 +1318,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
         $q .= ( ! empty($this->_sqlParts['orderby'])) ? ' ORDER BY ' . implode(', ', $this->_sqlParts['orderby'])  : '';
 
         if ($modifyLimit) {
-            $q = $this->_conn->modifyLimitQuery($q, $this->_sqlParts['limit'], $this->_sqlParts['offset'], false, false, $this);
+            $q = $this->_conn->modifyLimitQuery($q, $this->_sqlParts['limit'], $this->_sqlParts['offset'], false);
         }
 
         $q .= $this->_sqlParts['forUpdate'] === true ? ' FOR UPDATE ' : '';
@@ -1467,7 +1462,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
         // add driver specific limit clause
         $subquery = $this->_conn->modifyLimitSubquery($table, $subquery, $this->_sqlParts['limit'], $this->_sqlParts['offset']);
 
-        $parts = $this->_tokenizer->quoteExplode($subquery, ' ', "'", "'");
+        $parts = $this->_tokenizer->quoteExplode($subquery, ' ');
 
         foreach ($parts as $k => $part) {
             if (strpos($part, ' ') !== false) {
@@ -1559,7 +1554,7 @@ class Doctrine_Query extends Doctrine_Query_Abstract implements Countable
             if (strpos($part, '.') === false) {
                 continue;
             }
-            list($tableAlias, $columnName) = explode('.', $part);
+            [$tableAlias, $columnName] = explode('.', $part);
             if ($tableAlias != $mainTableAlias) {
                 return true;
             }

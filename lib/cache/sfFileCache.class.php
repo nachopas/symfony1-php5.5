@@ -82,7 +82,7 @@ class sfFileCache extends sfCache
    */
   public function set($key, $data, $lifetime = null)
   {
-    if ($this->getOption('automatic_cleaning_factor') > 0 && rand(1, $this->getOption('automatic_cleaning_factor')) == 1)
+    if ($this->getOption('automatic_cleaning_factor') > 0 && random_int(1, $this->getOption('automatic_cleaning_factor')) == 1)
     {
       $this->clean(sfCache::OLD);
     }

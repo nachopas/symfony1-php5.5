@@ -10,7 +10,7 @@
 
 $app = 'frontend';
 $fixtures = 'fixtures/fixtures.yml';
-require_once(dirname(__FILE__).'/../bootstrap/functional.php');
+require_once(__DIR__.'/../bootstrap/functional.php');
 
 $t = new lime_test(22);
 
@@ -50,7 +50,7 @@ $t->is($article->getauthor_id(), $article->author_id);
 // Camel case columns
 $camelCase = new CamelCase();
 $camelCase->testCamelCase = 'camel';
-$camelCase->setTestCamelCase('camel');
+$camelCase->setTestCamelCase();
 
 $t->is($camelCase->getTestCamelCase(), 'camel');
 $t->is($camelCase->gettestCamelCase(), 'camel');

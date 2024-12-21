@@ -673,13 +673,7 @@ abstract class FileSystem {
             // Add error from php to end of log message. $php_errormsg.
             $msg = "FileSystem::compareMTimes() FAILED. Cannot can not get modified time of $file2.";
             throw new Exception($msg);
-        } else { // Worked. Log and return compare.                
-            // Compare mtimes.
-            if ($mtime1 == $mtime2) {
-                return 0;
-            } else {
-                return ($mtime1 < $mtime2) ? -1 : 1;
-            } // end compare
+        } else { return $mtime1 <=> $mtime2; // end compare
         }
     }
         

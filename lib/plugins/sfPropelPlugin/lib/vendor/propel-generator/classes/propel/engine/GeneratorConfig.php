@@ -87,7 +87,7 @@ class GeneratorConfig {
    */
   public function getBuildProperty($name)
   {
-    return isset($this->buildProperties[$name]) ? $this->buildProperties[$name] : null;
+    return $this->buildProperties[$name] ?? null;
   }
 
   /**
@@ -119,7 +119,7 @@ class GeneratorConfig {
     // Basically, we want to turn ?.?.?.sqliteDDLBuilder into ?.?.?.SqliteDDLBuilder
     $lastdotpos = strrpos($classpath, '.');
     if ($lastdotpos !== null) {
-      $classpath{$lastdotpos+1} = strtoupper($classpath{$lastdotpos+1});
+      $classpath[$lastdotpos+1] = strtoupper($classpath[$lastdotpos+1]);
     } else {
       $classpath = ucfirst($classpath);
     }

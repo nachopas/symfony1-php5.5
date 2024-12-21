@@ -353,9 +353,7 @@ class sfToolkit
       return $value;
     }
 
-    return preg_replace_callback('/%(.+?)%/', function ($v) {
-      return sfConfig::has(strtolower($v[1])) ? sfConfig::get(strtolower($v[1])) : '%'.$v[1].'%';
-    }, $value);
+    return preg_replace_callback('/%(.+?)%/', fn($v) => sfConfig::has(strtolower($v[1])) ? sfConfig::get(strtolower($v[1])) : '%'.$v[1].'%', $value);
   }
 
   /**
@@ -481,7 +479,7 @@ class sfToolkit
   {
     if (false === $offset = strpos($name, '['))
     {
-      return isset($values[$name]) ? $values[$name] : $default;
+      return $values[$name] ?? $default;
     }
 
     if (!isset($values[substr($name, 0, $offset)]))
@@ -529,7 +527,7 @@ class sfToolkit
    */
   public static function getPhpCli()
   {
-    $path = getenv('PATH') ? getenv('PATH') : getenv('Path');
+    $path = getenv('PATH') ?: getenv('Path');
     $suffixes = DIRECTORY_SEPARATOR == '\\' ? (getenv('PATHEXT') ? explode(PATH_SEPARATOR, getenv('PATHEXT')) : ['.exe', '.bat', '.cmd', '.com']) : [''];
     foreach (['php5', 'php'] as $phpCli)
     {

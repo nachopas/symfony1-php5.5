@@ -1036,7 +1036,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 	{
 	  if (null === $culture)
 	  {
-	    $culture = null === $this->culture ? sfPropel::getDefaultCulture() : $this->culture;
+	    $culture = $this->culture ?? sfPropel::getDefaultCulture();
 	  }
 	
 	  if (!isset($this->current_i18n[$culture]))

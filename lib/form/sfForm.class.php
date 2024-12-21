@@ -384,7 +384,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
 
     $this->setDefault($name, $form->getDefaults());
 
-    $decorator = null === $decorator ? $widgetSchema->getFormFormatter()->getDecoratorFormat() : $decorator;
+    $decorator ??= $widgetSchema->getFormFormatter()->getDecoratorFormat();
 
     $this->widgetSchema[$name] = new sfWidgetFormSchemaDecorator($widgetSchema, $decorator);
     $this->validatorSchema[$name] = $form->getValidatorSchema();
@@ -429,8 +429,8 @@ class sfForm implements ArrayAccess, Iterator, Countable
 
     $this->setDefault($name, $defaults);
 
-    $decorator = null === $decorator ? $widgetSchema->getFormFormatter()->getDecoratorFormat() : $decorator;
-    $innerDecorator = null === $innerDecorator ? $widgetSchema->getFormFormatter()->getDecoratorFormat() : $innerDecorator;
+    $decorator ??= $widgetSchema->getFormFormatter()->getDecoratorFormat();
+    $innerDecorator ??= $widgetSchema->getFormFormatter()->getDecoratorFormat();
 
     $this->widgetSchema[$name] = new sfWidgetFormSchemaDecorator(new sfWidgetFormSchemaForEach(new sfWidgetFormSchemaDecorator($widgetSchema, $innerDecorator), $n, $options, $attributes), $decorator);
     $this->validatorSchema[$name] = new sfValidatorSchemaForEach($form->getValidatorSchema(), $n);
@@ -764,7 +764,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    */
   public function getOption($name, $default = null)
   {
-    return isset($this->options[$name]) ? $this->options[$name] : $default;
+    return $this->options[$name] ?? $default;
   }
 
   /**
@@ -793,7 +793,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    */
   public function getDefault($name)
   {
-    return isset($this->defaults[$name]) ? $this->defaults[$name] : null;
+    return $this->defaults[$name] ?? null;
   }
 
   /**
@@ -819,11 +819,11 @@ class sfForm implements ArrayAccess, Iterator, Countable
    */
   public function setDefaults($defaults)
   {
-    $this->defaults = null === $defaults ? [] : $defaults;
+    $this->defaults = $defaults ?? [];
 
     if ($this->isCSRFProtected())
     {
-      $this->setDefault(self::$CSRFFieldName, $this->getCSRFToken($this->localCSRFSecret ? $this->localCSRFSecret : self::$CSRFSecret));
+      $this->setDefault(self::$CSRFFieldName, $this->getCSRFToken($this->localCSRFSecret ?: self::$CSRFSecret));
     }
 
     $this->resetFormFields();
@@ -893,7 +893,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
   {
     if (null === $secret)
     {
-      $secret = $this->localCSRFSecret ? $this->localCSRFSecret : self::$CSRFSecret;
+      $secret = $this->localCSRFSecret ?: self::$CSRFSecret;
     }
 
     return md5($secret.session_id().get_class($this));
@@ -939,7 +939,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    */
   public function enableLocalCSRFProtection($secret = null)
   {
-    $this->localCSRFSecret = null === $secret ? true : $secret;
+    $this->localCSRFSecret = $secret ?? true;
   }
 
   /**
@@ -1052,7 +1052,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
 
       if ($this->isBound)
       {
-        $value = isset($this->taintedValues[$name]) ? $this->taintedValues[$name] : null;
+        $value = $this->taintedValues[$name] ?? null;
       }
       else if (isset($this->defaults[$name]))
       {
@@ -1146,7 +1146,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
     {
       $values = $this->isBound ? $this->taintedValues : $this->defaults + $this->widgetSchema->getDefaults();
 
-      $this->formFieldSchema = new sfFormFieldSchema($this->widgetSchema, null, null, $values, $this->errorSchema);
+      $this->formFieldSchema = new sfFormFieldSchema($this->widgetSchema, null, $values, null, $this->errorSchema);
     }
 
     return $this->formFieldSchema;

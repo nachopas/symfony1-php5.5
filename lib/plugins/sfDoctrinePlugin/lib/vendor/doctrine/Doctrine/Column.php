@@ -121,7 +121,7 @@ class Doctrine_Column extends Doctrine_Access implements IteratorAggregate, Coun
             return false;
         }
 
-        return isset($this->_definition['values'][$index]) ? $this->_definition['values'][$index] : false;
+        return $this->_definition['values'][$index] ?? false;
     }
 
     /**
@@ -133,7 +133,7 @@ class Doctrine_Column extends Doctrine_Access implements IteratorAggregate, Coun
      */
     public function enumIndex($field, $value)
     {
-        $values = $this->getEnumValues($field);
+        $values = $this->getEnumValues();
 
         return array_search($value, $values);
     }

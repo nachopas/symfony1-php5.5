@@ -104,10 +104,7 @@ class Doctrine_Connection_Profiler implements Doctrine_Overloadable, IteratorAgg
      */
     public function get($key) 
     {
-        if (isset($this->events[$key])) {
-            return $this->events[$key];
-        }
-        return null;
+        return $this->events[$key] ?? null;
     }
 
     /**

@@ -36,7 +36,6 @@ abstract class BaseAuthor extends myDoctrineRecord
 
     public function setUp()
     {
-        parent::setUp();
         $this->hasMany('Article as Articles', ['local' => 'id', 'foreign' => 'author_id']);
     }
 }

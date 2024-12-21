@@ -245,11 +245,11 @@ function link_to_if()
   $arguments = func_get_args();
   if (empty($arguments[2]) || '@' == substr($arguments[2], 0, 1) || false !== strpos($arguments[2], '/'))
   {
-    list($condition, $name, $params, $options) = array_pad($arguments, 4, null);
+    [$condition, $name, $params, $options] = array_pad($arguments, 4, null);
   }
   else
   {
-    list($condition, $name, $routeName, $params, $options) = array_pad($arguments, 5, null);
+    [$condition, $name, $routeName, $params, $options] = array_pad($arguments, 5, null);
     $params = array_merge(['sf_route' => $routeName], is_object($params) ? ['sf_subject' => $params] : (array) $params);
   }
 
@@ -526,18 +526,18 @@ function mail_to($email, $name = '', $options = [], $default_value = [])
 function _convert_options_to_javascript($html_options, $url = 'this.href')
 {
   // confirm
-  $confirm = isset($html_options['confirm']) ? $html_options['confirm'] : '';
+  $confirm = $html_options['confirm'] ?? '';
   unset($html_options['confirm']);
 
   // popup
-  $popup = isset($html_options['popup']) ? $html_options['popup'] : '';
+  $popup = $html_options['popup'] ?? '';
   unset($html_options['popup']);
 
   // method
-  $method = isset($html_options['method']) ? $html_options['method'] : (isset($html_options['post']) && $html_options['post'] ? 'post' : false);
+  $method = $html_options['method'] ?? isset($html_options['post']) && $html_options['post'] ? 'post' : false;
   unset($html_options['post'], $html_options['method']);
 
-  $onclick = isset($html_options['onclick']) ? $html_options['onclick'] : '';
+  $onclick = $html_options['onclick'] ?? '';
 
   if ($popup && $method)
   {
@@ -633,7 +633,7 @@ function _encodeText($text)
   for ($i = 0; $i < strlen($text); $i++)
   {
     $char = $text[$i];
-    $r = rand(0, 100);
+    $r = random_int(0, 100);
 
     # roughly 10% raw, 45% hex, 45% dec
     # '@' *must* be encoded. I insist.

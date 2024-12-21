@@ -138,7 +138,7 @@ class sfViewCacheManager
       // Contextual partial
       if (!$contextualPrefix)
       {
-        list($route_name, $params) = $this->controller->convertUrlStringToParameters($this->routing->getCurrentInternalUri());
+        [$route_name, $params] = $this->controller->convertUrlStringToParameters($this->routing->getCurrentInternalUri());
 
         // if there is no module/action, it means that we have a 404 and the user is trying to cache it
         if (!isset($params['module']) || !isset($params['action']))
@@ -152,13 +152,13 @@ class sfViewCacheManager
       {
         $cacheKey = $contextualPrefix;
       }
-      list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
-      $cacheKey .= sprintf('/%s/%s/%s', $params['module'], $params['action'], isset($params['sf_cache_key']) ? $params['sf_cache_key'] : '');
+      [$route_name, $params] = $this->controller->convertUrlStringToParameters($internalUri);
+      $cacheKey .= sprintf('/%s/%s/%s', $params['module'], $params['action'], $params['sf_cache_key'] ?? '');
     }
     else
     {
       // Regular action or non-contextual partial
-      list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
+      [$route_name, $params] = $this->controller->convertUrlStringToParameters($internalUri);
       if ($route_name == 'sf_cache_partial')
       {
         $cacheKey = 'sf_cache_partial/';
@@ -303,12 +303,12 @@ class sfViewCacheManager
       }
     }
 
-    $options['lifeTime'] = isset($options['lifeTime']) ? $options['lifeTime'] : 0;
+    $options['lifeTime'] ??= 0;
     if (!isset($this->cacheConfig[$moduleName]))
     {
       $this->cacheConfig[$moduleName] = [];
     }
-    $this->cacheConfig[$moduleName][$actionName] = ['withLayout'     => isset($options['withLayout']) ? $options['withLayout'] : false, 'lifeTime'       => $options['lifeTime'], 'clientLifeTime' => isset($options['clientLifeTime']) ? $options['clientLifeTime'] : $options['lifeTime'], 'contextual'     => isset($options['contextual']) ? $options['contextual'] : false, 'vary'           => isset($options['vary']) ? $options['vary'] : []];
+    $this->cacheConfig[$moduleName][$actionName] = ['withLayout'     => $options['withLayout'] ?? false, 'lifeTime'       => $options['lifeTime'], 'clientLifeTime' => $options['clientLifeTime'] ?? $options['lifeTime'], 'contextual'     => $options['contextual'] ?? false, 'vary'           => $options['vary'] ?? []];
   }
 
   /**
@@ -396,7 +396,7 @@ class sfViewCacheManager
    */
   protected function getCacheConfig($internalUri, $key, $defaultValue = null)
   {
-    list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
+    [$route_name, $params] = $this->controller->convertUrlStringToParameters($internalUri);
 
     if (!isset($params['module']))
     {
@@ -438,7 +438,7 @@ class sfViewCacheManager
       return false;
     }
 
-    list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
+    [$route_name, $params] = $this->controller->convertUrlStringToParameters($internalUri);
 
     if (!isset($params['module']))
     {
@@ -668,7 +668,7 @@ class sfViewCacheManager
     }
 
     // add cache config to cache manager
-    list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
+    [$route_name, $params] = $this->controller->convertUrlStringToParameters($internalUri);
     $this->addCache($params['module'], $params['action'], ['withLayout' => false, 'lifeTime' => $lifeTime, 'clientLifeTime' => $clientLifeTime, 'vary' => $vary]);
 
     // get data from cache if available

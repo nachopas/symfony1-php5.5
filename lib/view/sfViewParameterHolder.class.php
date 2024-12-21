@@ -55,8 +55,8 @@ class sfViewParameterHolder extends sfParameterHolder
 
     $this->add($parameters);
 
-    $this->setEscaping(isset($options['escaping_strategy']) ? $options['escaping_strategy'] : false);
-    $this->setEscapingMethod(isset($options['escaping_method']) ? $options['escaping_method'] : 'ESC_SPECIALCHARS');
+    $this->setEscaping($options['escaping_strategy'] ?? false);
+    $this->setEscapingMethod($options['escaping_method'] ?? 'ESC_SPECIALCHARS');
   }
 
   /**
@@ -179,7 +179,7 @@ class sfViewParameterHolder extends sfParameterHolder
    */
   public function unserialize($serialized)
   {
-    list($this->parameters, $escapingMethod, $escaping) = unserialize($serialized);
+    [$this->parameters, $escapingMethod, $escaping] = unserialize($serialized);
 
     $this->initialize(sfContext::hasInstance() ? sfContext::getInstance()->getEventDispatcher() : new sfEventDispatcher());
 

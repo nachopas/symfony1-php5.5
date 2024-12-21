@@ -94,7 +94,7 @@ class sfTesterResponse extends sfTester
     }
     else if (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match))
     {
-      $position = isset($options['position']) ? $options['position'] : 0;
+      $position = $options['position'] ?? 0;
       if ($match[1] == '!')
       {
         $this->tester->unlike(@$values[$position], substr($value, 1), sprintf('response selector "%s" does not match regex "%s"', $selector, substr($value, 1)));
@@ -106,7 +106,7 @@ class sfTesterResponse extends sfTester
     }
     else
     {
-      $position = isset($options['position']) ? $options['position'] : 0;
+      $position = $options['position'] ?? 0;
       $this->tester->is(@$values[$position], $value, sprintf('response selector "%s" matches "%s"', $selector, $value));
     }
 
@@ -204,7 +204,7 @@ class sfTesterResponse extends sfTester
           $filesystem = new sfFilesystem();
 
           $finder = sfFinder::type('any')->discard('.sf');
-          $filesystem->mirror(dirname(__FILE__).'/w3', $cache, $finder);
+          $filesystem->mirror(__DIR__.'/w3', $cache, $finder);
 
           $finder = sfFinder::type('file');
           $filesystem->replaceTokens($finder->in($cache), '##', '##', ['LOCAL_W3' => $local]);

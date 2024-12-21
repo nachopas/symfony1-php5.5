@@ -559,7 +559,7 @@ class Doctrine_Core
     public static function getPath()
     {
         if ( ! self::$_path) {
-            self::$_path = realpath(dirname(__FILE__) . '/..');
+            self::$_path = realpath(__DIR__ . '/..');
         }
 
         return self::$_path;
@@ -632,8 +632,8 @@ class Doctrine_Core
     {
         $manager = Doctrine_Manager::getInstance();
 
-        $modelLoading = $modelLoading === null ? $manager->getAttribute(Doctrine_Core::ATTR_MODEL_LOADING) : $modelLoading;
-        $classPrefix = $classPrefix === null ? $manager->getAttribute(Doctrine_Core::ATTR_MODEL_CLASS_PREFIX) : $classPrefix;
+        $modelLoading ??= $manager->getAttribute(Doctrine_Core::ATTR_MODEL_LOADING);
+        $classPrefix ??= $manager->getAttribute(Doctrine_Core::ATTR_MODEL_CLASS_PREFIX);
 
         $loadedModels = [];
 
@@ -856,7 +856,7 @@ class Doctrine_Core
     {
         $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp_doctrine_models';
 
-        $options['generateBaseClasses'] = isset($options['generateBaseClasses']) ? $options['generateBaseClasses']:false;
+        $options['generateBaseClasses'] ??= false;
         $result = Doctrine_Core::generateModelsFromDb($directory, $connections, $options);
 
         if ( empty($result) && ! is_dir($directory)) {
@@ -1115,7 +1115,7 @@ class Doctrine_Core
     public static function autoload($className)
     {
         if (strpos($className, 'sfYaml') === 0) {
-            require dirname(__FILE__) . '/Parser/sfYaml/' . $className . '.php';
+            require __DIR__ . '/Parser/sfYaml/' . $className . '.php';
 
             return true;
         }

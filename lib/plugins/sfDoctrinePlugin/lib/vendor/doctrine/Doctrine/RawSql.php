@@ -251,10 +251,7 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
         if (isset($this->_sqlParts['distinct']) && $this->_sqlParts['distinct'] == true) {
             $q .= 'DISTINCT ';
         }
-
-        // first add the fields of the root component
-        reset($this->_queryComponents);
-        $componentAlias = key($this->_queryComponents);
+        $componentAlias = array_key_first($this->_queryComponents);
         
         $this->_rootAlias = $componentAlias;
 
@@ -295,10 +292,7 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
      */
 	public function getCountSqlQuery($params = [])
     {
-        //Doing COUNT( DISTINCT rootComponent.id )
-        //This is not correct, if the result is not hydrated by doctrine, but it mimics the behaviour of Doctrine_Query::getCountQuery
-        reset($this->_queryComponents);
-        $componentAlias = key($this->_queryComponents);
+        $componentAlias = array_key_first($this->_queryComponents);
 
         $this->_rootAlias = $componentAlias;
 

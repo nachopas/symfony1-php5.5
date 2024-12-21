@@ -145,7 +145,7 @@ class CvsTask extends Task {
          // use the same filename.
 
         if ($this->passFile === null) {
-            $defaultPassFile = new PhingFile(Phing::getProperty("cygwin.user.home", Phing::getProperty("user.home")) 
+            $defaultPassFile = new PhingFile(Phing::getProperty("cygwin.user.home") 
                 . DIRECTORY_SEPARATOR . ".cvspass");
             if($defaultPassFile->exists()) {
                 $this->setPassfile($defaultPassFile);

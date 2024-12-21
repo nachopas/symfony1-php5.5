@@ -45,14 +45,12 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
      */
     protected function _getCustomIndexField($alias)
     {
-        return isset($this->_queryComponents[$alias]['map']) ? $this->_queryComponents[$alias]['map'] : null;
+        return $this->_queryComponents[$alias]['map'] ?? null;
     }
 
     public function hydrateResultSet($stmt)
     {
-        // Used variables during hydration
-        reset($this->_queryComponents);
-        $rootAlias = key($this->_queryComponents);
+        $rootAlias = array_key_first($this->_queryComponents);
         $this->_rootAlias = $rootAlias;
         $rootComponentName = $this->_queryComponents[$rootAlias]['table']->getComponentName();
         // if only one component is involved we can make our lives easier

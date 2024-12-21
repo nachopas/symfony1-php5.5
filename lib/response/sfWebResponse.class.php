@@ -83,7 +83,7 @@ class sfWebResponse extends sfResponse
       $this->options['http_protocol'] = 'HTTP/1.0';
     }
 
-    $this->options['content_type'] = $this->fixContentType(isset($this->options['content_type']) ? $this->options['content_type'] : 'text/html');
+    $this->options['content_type'] = $this->fixContentType($this->options['content_type'] ?? 'text/html');
   }
 
   /**
@@ -150,7 +150,7 @@ class sfWebResponse extends sfResponse
   public function setStatusCode($code, $name = null)
   {
     $this->statusCode = $code;
-    $this->statusText = null !== $name ? $name : self::$statusTexts[$code];
+    $this->statusText = $name ?? self::$statusTexts[$code];
   }
 
   /**
@@ -204,7 +204,7 @@ class sfWebResponse extends sfResponse
 
     if (!$replace)
     {
-      $current = isset($this->headers[$name]) ? $this->headers[$name] : '';
+      $current = $this->headers[$name] ?? '';
       $value = ($current ? $current.', ' : '').$value;
     }
 
@@ -223,7 +223,7 @@ class sfWebResponse extends sfResponse
   {
     $name = $this->normalizeHeaderName($name);
 
-    return isset($this->headers[$name]) ? $this->headers[$name] : $default;
+    return $this->headers[$name] ?? $default;
   }
 
   /**
@@ -315,7 +315,7 @@ class sfWebResponse extends sfResponse
     // cookies
     foreach ($this->cookies as $cookie)
     {
-      setrawcookie($cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+      setrawcookie($cookie['name'], $cookie['value'], ['expires' => $cookie['expire'], 'path' => $cookie['path'], 'domain' => $cookie['domain'], 'secure' => $cookie['secure'], 'httponly' => $cookie['httpOnly']]);
 
       if ($this->options['logging'])
       {
@@ -431,7 +431,7 @@ class sfWebResponse extends sfResponse
       foreach (preg_split('/\s*,\s*/', $cacheControl) as $tmp)
       {
         $tmp = explode('=', $tmp);
-        $currentHeaders[$tmp[0]] = isset($tmp[1]) ? $tmp[1] : null;
+        $currentHeaders[$tmp[0]] = $tmp[1] ?? null;
       }
     }
     $currentHeaders[str_replace('_', '-', strtolower($name))] = $value;
@@ -482,7 +482,7 @@ class sfWebResponse extends sfResponse
     }
     elseif (!$replace)
     {
-      $current = isset($this->httpMetas[$key]) ? $this->httpMetas[$key] : '';
+      $current = $this->httpMetas[$key] ?? '';
       $value = ($current ? $current.', ' : '').$value;
     }
 
@@ -525,7 +525,7 @@ class sfWebResponse extends sfResponse
       $value = htmlspecialchars($value, ENT_QUOTES, $this->options['charset']);
     }
 
-    $current = isset($this->metas[$key]) ? $this->metas[$key] : null;
+    $current = $this->metas[$key] ?? null;
     if ($replace || !$current)
     {
       $this->metas[$key] = $value;
@@ -539,7 +539,7 @@ class sfWebResponse extends sfResponse
    */
   public function getTitle()
   {
-    return isset($this->metas['title']) ? $this->metas['title'] : '';
+    return $this->metas['title'] ?? '';
   }
 
   /**
@@ -753,7 +753,7 @@ class sfWebResponse extends sfResponse
 
     // HTTP protocol must be from the current request
     // this fix is not nice but that's the only way to fix it and keep BC (see #9254)
-    $this->options['http_protocol'] = isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0';
+    $this->options['http_protocol'] = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
   }
 
   /**
@@ -785,7 +785,7 @@ class sfWebResponse extends sfResponse
    */
   public function unserialize($serialized)
   {
-    list($this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots) = unserialize($serialized);
+    [$this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots] = unserialize($serialized);
   }
 
   /**

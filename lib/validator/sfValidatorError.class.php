@@ -61,7 +61,7 @@ class sfValidatorError extends Exception implements Serializable
    */
   public function getValue()
   {
-    return isset($this->arguments['value']) ? $this->arguments['value'] : null;
+    return $this->arguments['value'] ?? null;
   }
 
   /**
@@ -151,6 +151,6 @@ class sfValidatorError extends Exception implements Serializable
    */
   public function unserialize($serialized)
   {
-    list($this->validator, $this->arguments, $this->code, $this->message) = unserialize($serialized);
+    [$this->validator, $this->arguments, $this->code, $this->message] = unserialize($serialized);
   }
 }

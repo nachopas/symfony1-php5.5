@@ -59,8 +59,8 @@ class sfMemcacheCache extends sfCache
       {
         foreach ($this->getOption('servers') as $server)
         {
-          $port = isset($server['port']) ? $server['port'] : 11211;
-          if (!$this->memcache->addServer($server['host'], $port, isset($server['persistent']) ? $server['persistent'] : true))
+          $port = $server['port'] ?? 11211;
+          if (!$this->memcache->addServer($server['host'], $port, $server['persistent'] ?? true))
           {
             throw new sfInitializationException(sprintf('Unable to connect to the memcache server (%s:%s).', $server['host'], $port));
           }
@@ -108,7 +108,7 @@ class sfMemcacheCache extends sfCache
    */
   public function set($key, $data, $lifetime = null)
   {
-    $lifetime = null === $lifetime ? $this->getOption('lifetime') : $lifetime;
+    $lifetime ??= $this->getOption('lifetime');
 
     // save metadata
     $this->setMetadata($key, $lifetime);
@@ -204,7 +204,7 @@ class sfMemcacheCache extends sfCache
   public function getMany($keys)
   {
     $values = [];
-    foreach ($this->memcache->get(array_map(function($k) { return "'.$this->getOption('prefix').'".$k; }, $keys)) as $key => $value)
+    foreach ($this->memcache->get(array_map(fn($k) => "'.$this->getOption('prefix').'".$k, $keys)) as $key => $value)
     {
       $values[str_replace($this->getOption('prefix'), '', $key)] = $value;
     }

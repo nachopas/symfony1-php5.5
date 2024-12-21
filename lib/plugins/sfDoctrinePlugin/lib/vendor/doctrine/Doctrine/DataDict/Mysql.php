@@ -99,7 +99,7 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
                 }
 
                 $length = ($field['length'] <= $this->conn->varchar_max_length) ? $field['length'] : false;
-                $fixed  = (isset($field['fixed'])) ? $field['fixed'] : false;
+                $fixed  = $field['fixed'] ?? false;
 
                 return $fixed ? ($length ? 'CHAR(' . $length . ')' : 'CHAR(255)')
                     : ($length ? 'VARCHAR(' . $length . ')' : 'TEXT');
@@ -345,7 +345,7 @@ class Doctrine_DataDict_Mysql extends Doctrine_DataDict
             break;
             default:
                 $type[] = $field['type'];
-                $length = isset($field['length']) ? $field['length']:null;
+                $length = $field['length'] ?? null;
         }
 
         $length = ((int) $length == 0) ? null : (int) $length;

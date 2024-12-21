@@ -80,7 +80,7 @@ class sfPluginManager
     {
       foreach ($packages as $package)
       {
-        $installed[] = $this->environment->getRegistry()->getPackage(isset($package['package']) ? $package['package'] : $package['name'], $channel);
+        $installed[] = $this->environment->getRegistry()->getPackage($package['package'] ?? $package['name'], $channel);
       }
     }
 
@@ -119,9 +119,9 @@ class sfPluginManager
    */
   protected function doInstallPlugin($plugin, $options = [])
   {
-    $channel   = isset($options['channel']) ? $options['channel'] : $this->environment->getConfig()->get('default_channel');
-    $stability = isset($options['stability']) ? $options['stability'] : $this->environment->getConfig()->get('preferred_state', null, $channel);
-    $version   = isset($options['version']) ? $options['version'] : null;
+    $channel   = $options['channel'] ?? $this->environment->getConfig()->get('default_channel');
+    $stability = $options['stability'] ?? $this->environment->getConfig()->get('preferred_state', null, $channel);
+    $version   = $options['version'] ?? null;
 
     $isPackage = true;
     if (0 === strpos($plugin, 'http://') || file_exists($plugin))
@@ -136,7 +136,7 @@ class sfPluginManager
     }
     else if (false !== strpos($plugin, '/'))
     {
-      list($channel, $plugin) = explode('/', $plugin);
+      [$channel, $plugin] = explode('/', $plugin);
     }
 
     $this->dispatcher->notify(new sfEvent($this, 'plugin.pre_install', ['channel' => $channel, 'plugin' => $plugin, 'is_package' => $isPackage]));
@@ -268,10 +268,10 @@ class sfPluginManager
   {
     if (false !== strpos($plugin, '/'))
     {
-      list($channel, $plugin) = explode('/', $plugin);
+      [$channel, $plugin] = explode('/', $plugin);
     }
 
-    $channel = null === $channel ? $this->environment->getConfig()->get('default_channel') : $channel;
+    $channel ??= $this->environment->getConfig()->get('default_channel');
 
     $existing = $this->environment->getRegistry()->packageInfo($plugin, 'version', $channel);
     if (null === $existing)
@@ -430,12 +430,12 @@ class sfPluginManager
    */
   public function getPluginLicense($plugin, $options = [])
   {
-    $channel   = isset($options['channel']) ? $options['channel'] : $this->environment->getConfig()->get('default_channel');
-    $stability = isset($options['stability']) ? $options['stability'] : $this->environment->getConfig()->get('preferred_state', null, $channel);
-    $version   = isset($options['version']) ? $options['version'] : null;
+    $channel   = $options['channel'] ?? $this->environment->getConfig()->get('default_channel');
+    $stability = $options['stability'] ?? $this->environment->getConfig()->get('preferred_state', null, $channel);
+    $version   = $options['version'] ?? null;
 
     $rest = $this->environment->getRest();
-    $rest->setChannel(null === $channel ? $this->environment->getConfig()->get('default_channel') : $channel);
+    $rest->setChannel($channel ?? $this->environment->getConfig()->get('default_channel'));
 
     if (null === $version)
     {

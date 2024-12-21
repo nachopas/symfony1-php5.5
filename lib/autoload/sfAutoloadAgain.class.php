@@ -77,7 +77,7 @@ class sfAutoloadAgain
     }
     else
     {
-      $position  = array_search([__CLASS__, 'autoload'], $autoloads, true);
+      $position  = array_search([self::class, 'autoload'], $autoloads, true);
     }
 
     if (isset($autoloads[$position + 1]))

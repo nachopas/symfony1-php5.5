@@ -163,10 +163,7 @@ abstract class BaseSchemaParser implements SchemaParser {
 		if ($this->nativeToPropelTypeMap === null) {
 			$this->nativeToPropelTypeMap = $this->getTypeMapping();
 		}
-		if (isset($this->nativeToPropelTypeMap[$nativeType])) {
-			return $this->nativeToPropelTypeMap[$nativeType];
-		}
-		return null;
+		return $this->nativeToPropelTypeMap[$nativeType] ?? null;
 	}
 
 	/**
@@ -180,7 +177,7 @@ abstract class BaseSchemaParser implements SchemaParser {
 		if ($this->reverseTypeMap === null) {
 			$this->reverseTypeMap = array_flip($this->getTypeMapping());
 		}
-		return isset($this->reverseTypeMap[$propelType]) ? $this->reverseTypeMap[$propelType] : null;
+		return $this->reverseTypeMap[$propelType] ?? null;
 	}
 
 	/**

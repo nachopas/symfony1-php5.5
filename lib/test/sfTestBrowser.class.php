@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__).'/../vendor/lime/lime.php');
+require_once(__DIR__.'/../vendor/lime/lime.php');
 
 /*
  * This file is part of the symfony package.
@@ -43,7 +43,7 @@ class sfTestBrowser extends sfTestFunctional
 
       if (null === self::$test)
       {
-        $lime = new lime_test(null, isset($options['output']) ? $options['output'] : null);
+        $lime = new lime_test(null, $options['output'] ?? null);
       }
       else
       {

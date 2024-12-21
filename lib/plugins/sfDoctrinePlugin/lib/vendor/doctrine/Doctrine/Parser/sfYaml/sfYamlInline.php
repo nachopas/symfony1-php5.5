@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once dirname(__FILE__).'/sfYaml.php';
+require_once __DIR__.'/sfYaml.php';
 
 /**
  * sfYamlInline implements a YAML parser/dumper for the YAML inline syntax.
@@ -135,7 +135,7 @@ class sfYamlInline
     if (
       (1 == count($keys) && '0' == $keys[0])
       ||
-      (count($keys) > 1 && array_reduce($keys, function($v, $w) { return (integer) $v + $w; }, 0) == count($keys) * (count($keys) - 1) / 2))
+      (count($keys) > 1 && array_reduce($keys, fn($v, $w) => (integer) $v + $w, 0) == count($keys) * (count($keys) - 1) / 2))
     {
       $output = [];
       foreach ($value as $val)

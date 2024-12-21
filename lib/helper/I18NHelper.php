@@ -60,7 +60,7 @@ function __($text, $args = [], $catalogue = 'messages')
  *
  * @return string Result of the translation
  */
-function format_number_choice($text, $args = [], $number, $catalogue = 'messages')
+function format_number_choice($text, $number, $args = [], $catalogue = 'messages')
 {
   $translated = __($text, $args, $catalogue);
 
@@ -78,16 +78,16 @@ function format_number_choice($text, $args = [], $number, $catalogue = 'messages
 
 function format_country($country_iso, $culture = null)
 {
-  $c = sfCultureInfo::getInstance($culture === null ? sfContext::getInstance()->getUser()->getCulture() : $culture);
+  $c = sfCultureInfo::getInstance($culture ?? sfContext::getInstance()->getUser()->getCulture());
   $countries = $c->getCountries();
 
-  return isset($countries[$country_iso]) ? $countries[$country_iso] : '';
+  return $countries[$country_iso] ?? '';
 }
 
 function format_language($language_iso, $culture = null)
 {
-  $c = sfCultureInfo::getInstance($culture === null ? sfContext::getInstance()->getUser()->getCulture() : $culture);
+  $c = sfCultureInfo::getInstance($culture ?? sfContext::getInstance()->getUser()->getCulture());
   $languages = $c->getLanguages();
 
-  return isset($languages[$language_iso]) ? $languages[$language_iso] : '';
+  return $languages[$language_iso] ?? '';
 }

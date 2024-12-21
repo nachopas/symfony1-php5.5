@@ -58,7 +58,6 @@ abstract class BaseArticle extends myDoctrineRecord
 
     public function setUp()
     {
-        parent::setUp();
         $this->hasOne('Author', ['local' => 'author_id', 'foreign' => 'id']);
 
         $this->hasMany('CamelCase as camelCase', ['local' => 'id', 'foreign' => 'article_id']);

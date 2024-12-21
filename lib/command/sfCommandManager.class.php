@@ -108,9 +108,7 @@ class sfCommandManager
     else if (!is_array($arguments))
     {
       // hack to split arguments with spaces : --test="with some spaces"
-      $arguments = preg_replace_callback('/(\'|")(.+?)\\1/', function ($matches) {
-          return str_replace(' ', '=PLACEHOLDER=', $matches[2]);
-        },
+      $arguments = preg_replace_callback('/(\'|")(.+?)\\1/', fn($matches) => str_replace(' ', '=PLACEHOLDER=', $matches[2]),
         $arguments
       );
       $arguments = preg_split('/\s+/', $arguments);
@@ -332,7 +330,7 @@ class sfCommandManager
   {
     if (false !== strpos($argument, '='))
     {
-      list($name, $value) = explode('=', $argument, 2);
+      [$name, $value] = explode('=', $argument, 2);
 
       if (!$this->optionSet->hasOption($name))
       {

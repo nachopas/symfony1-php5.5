@@ -52,7 +52,7 @@ class PhingPhpDocumentorSetup extends phpDocumentor_setup {
         $_phpDocumentor_phpfile_exts = $GLOBALS['_phpDocumentor_phpfile_exts'];
 		$_phpDocumentor_cvsphpfile_exts = $GLOBALS['_phpDocumentor_cvsphpfile_exts'];
 
-		if (tokenizer_ext) {
+		if (\TOKENIZER_EXT) {
             $this->parse = new phpDocumentorTParser();
         } else {
             $this->parse = new Parser();

@@ -332,14 +332,7 @@ class PDOSQLExecTask extends PDOTask {
     			} catch (Exception $e) {
     				throw $e;
     			}
-    		} catch (IOException $e) {
-    			if (!$this->isAutocommit() && $this->conn !== null && $this->onError == "abort") {
-    				try {
-    					$this->conn->rollback();
-    				} catch (PDOException $ex) {}
-    			}
-    			throw new BuildException($e->getMessage(), $this->location);
-    		} catch (PDOException $e){
+    		} catch (IOException|PDOException $e){
     			if (!$this->isAutocommit() && $this->conn !== null && $this->onError == "abort") {
     				try {
     					$this->conn->rollback();

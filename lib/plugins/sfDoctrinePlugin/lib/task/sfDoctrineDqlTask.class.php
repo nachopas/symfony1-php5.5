@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfDoctrineBaseTask.class.php');
+require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 
 /**
  * Creates database for current model.
@@ -161,6 +161,6 @@ EOF;
    */
   protected function renderValue($value)
   {
-    return null === $value ? 'NULL' : $value;
+    return $value ?? 'NULL';
   }
 }

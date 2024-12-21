@@ -81,27 +81,27 @@ abstract class sfModelGeneratorConfiguration
     // new|edit < form < default
     // list < default
     // filter < default
-    $this->configuration = ['list'   => ['fields'         => [], 'layout'         => $this->getListLayout(), 'title'          => $this->getListTitle(), 'actions'        => $this->getListActions(), 'object_actions' => $this->getListObjectActions(), 'params'         => $this->getListParams()], 'filter' => ['fields'  => []], 'form'   => ['fields'  => []], 'new'    => ['fields'  => [], 'title'   => $this->getNewTitle(), 'actions' => $this->getNewActions() ? $this->getNewActions() : $this->getFormActions()], 'edit'   => ['fields'  => [], 'title'   => $this->getEditTitle(), 'actions' => $this->getEditActions() ? $this->getEditActions() : $this->getFormActions()]];
+    $this->configuration = ['list'   => ['fields'         => [], 'layout'         => $this->getListLayout(), 'title'          => $this->getListTitle(), 'actions'        => $this->getListActions(), 'object_actions' => $this->getListObjectActions(), 'params'         => $this->getListParams()], 'filter' => ['fields'  => []], 'form'   => ['fields'  => []], 'new'    => ['fields'  => [], 'title'   => $this->getNewTitle(), 'actions' => $this->getNewActions() ?: $this->getFormActions()], 'edit'   => ['fields'  => [], 'title'   => $this->getEditTitle(), 'actions' => $this->getEditActions() ?: $this->getFormActions()]];
 
     foreach (array_keys($config['default']) as $field)
     {
-      $formConfig = array_merge($config['default'][$field], isset($config['form'][$field]) ? $config['form'][$field] : []);
+      $formConfig = array_merge($config['default'][$field], $config['form'][$field] ?? []);
 
-      $this->configuration['list']['fields'][$field]   = new sfModelGeneratorConfigurationField($field, array_merge(['label' => sfInflector::humanize(sfInflector::underscore($field))], $config['default'][$field], isset($config['list'][$field]) ? $config['list'][$field] : []));
-      $this->configuration['filter']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge($config['default'][$field], isset($config['filter'][$field]) ? $config['filter'][$field] : []));
-      $this->configuration['new']['fields'][$field]    = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, isset($config['new'][$field]) ? $config['new'][$field] : []));
-      $this->configuration['edit']['fields'][$field]   = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, isset($config['edit'][$field]) ? $config['edit'][$field] : []));
+      $this->configuration['list']['fields'][$field]   = new sfModelGeneratorConfigurationField($field, array_merge(['label' => sfInflector::humanize(sfInflector::underscore($field))], $config['default'][$field], $config['list'][$field] ?? []));
+      $this->configuration['filter']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge($config['default'][$field], $config['filter'][$field] ?? []));
+      $this->configuration['new']['fields'][$field]    = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, $config['new'][$field] ?? []));
+      $this->configuration['edit']['fields'][$field]   = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, $config['edit'][$field] ?? []));
     }
 
     // "virtual" fields for list
     foreach ($this->getListDisplay() as $field)
     {
-      list($field, $flag) = sfModelGeneratorConfigurationField::splitFieldWithFlag($field);
+      [$field, $flag] = sfModelGeneratorConfigurationField::splitFieldWithFlag($field);
 
       $this->configuration['list']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge(
         ['type' => 'Text', 'label' => sfInflector::humanize(sfInflector::underscore($field))],
-        isset($config['default'][$field]) ? $config['default'][$field] : [],
-        isset($config['list'][$field]) ? $config['list'][$field] : [],
+        $config['default'][$field] ?? [],
+        $config['list'][$field] ?? [],
         ['flag' => $flag]
       ));
     }
@@ -142,7 +142,7 @@ abstract class sfModelGeneratorConfiguration
     $this->configuration['list']['display'] = [];
     foreach ($this->getListDisplay() as $name)
     {
-      list($name, $flag) = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
+      [$name, $flag] = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
       if (!isset($this->configuration['list']['fields'][$name]))
       {
         throw new InvalidArgumentException(sprintf('The field "%s" does not exist.', $name));
@@ -168,8 +168,8 @@ abstract class sfModelGeneratorConfiguration
         $action = substr($action, 1);
       }
 
-      $this->configuration['credentials'][$action] = isset($params['credentials']) ? $params['credentials'] : [];
-      $this->configuration['credentials']['batch'.ucfirst($action)] = isset($params['credentials']) ? $params['credentials'] : [];
+      $this->configuration['credentials'][$action] = $params['credentials'] ?? [];
+      $this->configuration['credentials']['batch'.ucfirst($action)] = $params['credentials'] ?? [];
     }
     $this->configuration['credentials']['create'] = $this->configuration['credentials']['new'];
     $this->configuration['credentials']['update'] = $this->configuration['credentials']['edit'];
@@ -180,13 +180,13 @@ abstract class sfModelGeneratorConfiguration
     preg_match_all('/%%([^%]+)%%/', $this->configuration[$context][$key], $matches, PREG_PATTERN_ORDER);
     foreach ($matches[1] as $name)
     {
-      list($name, $flag) = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
+      [$name, $flag] = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
       if (!isset($this->configuration[$context]['fields'][$name]))
       {
         $this->configuration[$context]['fields'][$name] = new sfModelGeneratorConfigurationField($name, array_merge(
           ['type' => 'Text', 'label' => sfInflector::humanize(sfInflector::underscore($name))],
-          isset($config['default'][$name]) ? $config['default'][$name] : [],
-          isset($config[$context][$name]) ? $config[$context][$name] : [],
+          $config['default'][$name] ?? [],
+          $config[$context][$name] ?? [],
           ['flag' => $flag]
         ));
       }
@@ -279,12 +279,12 @@ abstract class sfModelGeneratorConfiguration
       $fields = [];
       foreach ($this->getFilterDisplay() as $name)
       {
-        list($name, $flag) = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
+        [$name, $flag] = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
         if (!isset($this->configuration['filter']['fields'][$name]))
         {
           $this->configuration['filter']['fields'][$name] = new sfModelGeneratorConfigurationField($name, array_merge(
-            isset($config['default'][$name]) ? $config['default'][$name] : [],
-            isset($config['filter'][$name]) ? $config['filter'][$name] : [],
+            $config['default'][$name] ?? [],
+            $config['filter'][$name] ?? [],
             ['is_real' => false, 'type' => 'Text', 'flag' => $flag]
           ));
         }
@@ -301,8 +301,8 @@ abstract class sfModelGeneratorConfiguration
     {
       $fields[$name] = new sfModelGeneratorConfigurationField($name, array_merge(
         ['type' => 'Text'],
-        isset($config['default'][$name]) ? $config['default'][$name] : [],
-        isset($config['filter'][$name]) ? $config['filter'][$name] : [],
+        $config['default'][$name] ?? [],
+        $config['filter'][$name] ?? [],
         ['is_real' => false]
       ));
     }
@@ -350,13 +350,13 @@ abstract class sfModelGeneratorConfiguration
 
         foreach ($names as $name)
         {
-          list($name, $flag) = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
+          [$name, $flag] = sfModelGeneratorConfigurationField::splitFieldWithFlag($name);
           if (!isset($this->configuration[$context]['fields'][$name]))
           {
             $this->configuration[$context]['fields'][$name] = new sfModelGeneratorConfigurationField($name, array_merge(
-              isset($config['default'][$name]) ? $config['default'][$name] : [],
-              isset($config['form'][$name]) ? $config['form'][$name] : [],
-              isset($config[$context][$name]) ? $config[$context][$name] : [],
+              $config['default'][$name] ?? [],
+              $config['form'][$name] ?? [],
+              $config[$context][$name] ?? [],
               ['is_real' => false, 'type' => 'Text', 'flag' => $flag]
             ));
           }
@@ -375,9 +375,9 @@ abstract class sfModelGeneratorConfiguration
     {
       $fields[$name] = new sfModelGeneratorConfigurationField($name, array_merge(
         ['type' => 'Text'],
-        isset($config['default'][$name]) ? $config['default'][$name] : [],
-        isset($config['form'][$name]) ? $config['form'][$name] : [],
-        isset($config[$context][$name]) ? $config[$context][$name] : [],
+        $config['default'][$name] ?? [],
+        $config['form'][$name] ?? [],
+        $config[$context][$name] ?? [],
         ['is_real' => false]
       ));
     }
@@ -427,7 +427,7 @@ abstract class sfModelGeneratorConfiguration
       $action = substr($action, 1);
     }
 
-    return isset($this->configuration['credentials'][$action]) ? $this->configuration['credentials'][$action] : [];
+    return $this->configuration['credentials'][$action] ?? [];
   }
 
   public function getPager($model)

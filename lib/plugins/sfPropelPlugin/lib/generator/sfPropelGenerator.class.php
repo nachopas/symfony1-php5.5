@@ -206,14 +206,14 @@ class sfPropelGenerator extends sfModelGenerator
     {
       $name = $this->translateColumnName($column);
       $names[] = $name;
-      $fields[$name] = array_merge(['is_link'      => (Boolean) $column->isPrimaryKey(), 'is_real'      => true, 'is_partial'   => false, 'is_component' => false, 'type'         => $this->getType($column)], isset($this->config['fields'][$name]) ? $this->config['fields'][$name] : []);
+      $fields[$name] = array_merge(['is_link'      => (Boolean) $column->isPrimaryKey(), 'is_real'      => true, 'is_partial'   => false, 'is_component' => false, 'type'         => $this->getType($column)], $this->config['fields'][$name] ?? []);
     }
 
     foreach ($this->getManyToManyTables() as $tables)
     {
       $name = sfInflector::underscore($tables['middleTable']->getClassname()).'_list';
       $names[] = $name;
-      $fields[$name] = array_merge(['is_link'      => false, 'is_real'      => false, 'is_partial'   => false, 'is_component' => false, 'type'         => 'Text'], isset($this->config['fields'][$name]) ? $this->config['fields'][$name] : []);
+      $fields[$name] = array_merge(['is_link'      => false, 'is_real'      => false, 'is_partial'   => false, 'is_component' => false, 'type'         => 'Text'], $this->config['fields'][$name] ?? []);
     }
 
     if (isset($this->config['fields']))
@@ -250,14 +250,14 @@ class sfPropelGenerator extends sfModelGenerator
     {
       $name = $this->translateColumnName($column);
       $names[] = $name;
-      $fields[$name] = isset($this->config[$context]['fields'][$name]) ? $this->config[$context]['fields'][$name] : [];
+      $fields[$name] = $this->config[$context]['fields'][$name] ?? [];
     }
 
     foreach ($this->getManyToManyTables() as $tables)
     {
       $name = sfInflector::underscore($tables['middleTable']->getClassname()).'_list';
       $names[] = $name;
-      $fields[$name] = isset($this->config[$context]['fields'][$name]) ? $this->config[$context]['fields'][$name] : [];
+      $fields[$name] = $this->config[$context]['fields'][$name] ?? [];
     }
 
     if (isset($this->config[$context]['fields']))

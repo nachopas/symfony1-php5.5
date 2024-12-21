@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__).'/../vendor/lime/lime.php');
+require_once(__DIR__.'/../vendor/lime/lime.php');
 
 /*
  * This file is part of the symfony package.
@@ -41,7 +41,7 @@ abstract class sfTestFunctionalBase
 
     if (null === self::$test)
     {
-      self::$test = null !== $lime ? $lime : new lime_test();
+      self::$test = $lime ?? new lime_test();
     }
 
     $this->setTesters(array_merge(['request'  => 'sfTesterRequest', 'response' => 'sfTesterResponse', 'user'     => 'sfTesterUser', 'mailer'   => 'sfTesterMailer'], $testers));
@@ -192,7 +192,7 @@ abstract class sfTestFunctionalBase
   public function getAndCheck($module, $action, $url = null, $code = 200)
   {
     return $this->
-      get(null !== $url ? $url : sprintf('/%s/%s', $module, $action))->
+      get($url ?? sprintf('/%s/%s', $module, $action))->
       with('request')->begin()->
         isParameter('module', $module)->
         isParameter('action', $action)->
@@ -284,17 +284,17 @@ abstract class sfTestFunctionalBase
   {
     if ($name instanceof DOMElement)
     {
-      list($uri, $method, $parameters) = $this->doClickElement($name, $arguments, $options);
+      [$uri, $method, $parameters] = $this->doClickElement($name, $arguments, $options);
     }
     else
     {
       try
       {
-        list($uri, $method, $parameters) = $this->doClick($name, $arguments, $options);
+        [$uri, $method, $parameters] = $this->doClick($name, $arguments, $options);
       }
       catch (InvalidArgumentException $e)
       {
-        list($uri, $method, $parameters) = $this->doClickCssSelector($name, $arguments, $options);
+        [$uri, $method, $parameters] = $this->doClickCssSelector($name, $arguments, $options);
       }
     }
 
@@ -475,7 +475,7 @@ abstract class sfTestFunctionalBase
    *
    * @param Exception $exception The exception
    */
-  function handleException(Exception $exception)
+  function handleException(\Throwable $exception)
   {
     $this->test()->error(sprintf('%s: %s', get_class($exception), $exception->getMessage()));
 
@@ -486,12 +486,12 @@ abstract class sfTestFunctionalBase
     $lineFormat = '  at %s%s%s() in %s line %s';
     for ($i = 0, $count = count($traceData); $i < $count; $i++)
     {
-      $line = isset($traceData[$i]['line']) ? $traceData[$i]['line'] : 'n/a';
-      $file = isset($traceData[$i]['file']) ? $traceData[$i]['file'] : 'n/a';
-      $args = isset($traceData[$i]['args']) ? $traceData[$i]['args'] : [];
+      $line = $traceData[$i]['line'] ?? 'n/a';
+      $file = $traceData[$i]['file'] ?? 'n/a';
+      $args = $traceData[$i]['args'] ?? [];
       $this->test()->error(sprintf($lineFormat,
-        (isset($traceData[$i]['class']) ? $traceData[$i]['class'] : ''),
-        (isset($traceData[$i]['type']) ? $traceData[$i]['type'] : ''),
+        ($traceData[$i]['class'] ?? ''),
+        ($traceData[$i]['type'] ?? ''),
         $traceData[$i]['function'],
         $file,
         $line

@@ -247,9 +247,7 @@ class Swift_Mime_SimpleMimeEntity implements Swift_Mime_MimeEntity
   {
     //TODO: Try to refactor this logic
     
-    $compoundLevel = isset($compoundLevel)
-      ? $compoundLevel
-      : $this->_getCompoundLevel($children)
+    $compoundLevel ??= $this->_getCompoundLevel($children)
       ;
     
     $immediateChildren = [];

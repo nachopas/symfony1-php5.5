@@ -165,7 +165,7 @@ class CoverageReportTask extends Task
 
 			$html = $geshi->parse_code();
 
-			$lines = split("<li>|</li>", $html);
+			$lines = preg_split("#<li>|<\\/li>#m", $html);
 
 			// skip first and last line
 			array_pop($lines);
@@ -218,7 +218,7 @@ class CoverageReportTask extends Task
 		foreach ($filelines as $line)
 		{
 			$lineElement = $this->doc->createElement('sourceline');
-			$lineElement->setAttribute('coveredcount', (isset($coverageInformation[$linenr]) ? $coverageInformation[$linenr] : '0'));
+			$lineElement->setAttribute('coveredcount', ($coverageInformation[$linenr] ?? '0'));
 
 			if ($linenr == $classStartLine)
 			{

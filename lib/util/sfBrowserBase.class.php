@@ -64,8 +64,8 @@ abstract class sfBrowserBase
     unset($_SERVER['argc']);
 
     // setup our fake environment
-    $this->hostname = null === $hostname ? 'localhost' : $hostname;
-    $this->remote   = null === $remote ? '127.0.0.1' : $remote;
+    $this->hostname = $hostname ?? 'localhost';
+    $this->remote   = $remote ?? '127.0.0.1';
 
     // we set a session id (fake cookie / persistence)
     $this->newSession();
@@ -220,7 +220,7 @@ abstract class sfBrowserBase
       $this->stackPosition = count($this->stack) - 1;
     }
 
-    list($path, $queryString) = false !== ($pos = strpos($uri, '?')) ? [substr($uri, 0, $pos), substr($uri, $pos + 1)] : [$uri, ''];
+    [$path, $queryString] = false !== ($pos = strpos($uri, '?')) ? [substr($uri, 0, $pos), substr($uri, $pos + 1)] : [$uri, ''];
     $queryString = html_entity_decode($queryString);
 
     // remove anchor
@@ -643,17 +643,17 @@ abstract class sfBrowserBase
   {
     if ($name instanceof DOMElement)
     {
-      list($uri, $method, $parameters) = $this->doClickElement($name, $arguments, $options);
+      [$uri, $method, $parameters] = $this->doClickElement($name, $arguments, $options);
     }
     else
     {
       try
       {
-        list($uri, $method, $parameters) = $this->doClick($name, $arguments, $options);
+        [$uri, $method, $parameters] = $this->doClick($name, $arguments, $options);
       }
       catch (InvalidArgumentException $e)
       {
-        list($uri, $method, $parameters) = $this->doClickCssSelector($name, $arguments, $options);
+        [$uri, $method, $parameters] = $this->doClickCssSelector($name, $arguments, $options);
       }
     }
 
@@ -747,7 +747,7 @@ abstract class sfBrowserBase
    */
   public function doClickElement(DOMElement $item, $arguments = [], $options = [])
   {
-    $method = strtolower(isset($options['method']) ? $options['method'] : 'get');
+    $method = strtolower($options['method'] ?? 'get');
 
     if ('a' == $item->nodeName)
     {
@@ -787,7 +787,7 @@ abstract class sfBrowserBase
     {
       $url = $this->stack[$this->stackPosition]['uri'];
     }
-    $method = strtolower(isset($options['method']) ? $options['method'] : ($item->getAttribute('method') ? $item->getAttribute('method') : 'get'));
+    $method = strtolower($options['method'] ?? ($item->getAttribute('method') ?: 'get'));
 
     // merge form default values and arguments
     $defaults = [];
@@ -913,7 +913,7 @@ abstract class sfBrowserBase
     if (false !== $pos = strpos($name, '['))
     {
       $var = &$vars;
-      $tmps = array_filter(preg_split('/(\[ | \[\] | \])/x', $name), function($s) { return $s !== ""; });
+      $tmps = array_filter(preg_split('/(\[ | \[\] | \])/x', $name), fn($s) => $s !== "");
       foreach ($tmps as $tmp)
       {
         $var = &$var[$tmp];
@@ -1006,6 +1006,6 @@ abstract class sfBrowserBase
    */
   protected function newSession()
   {
-    $this->defaultServerArray['session_id'] = $_SERVER['session_id'] = md5(uniqid(rand(), true));
+    $this->defaultServerArray['session_id'] = $_SERVER['session_id'] = md5(uniqid(random_int(0, mt_getrandmax()), true));
   }
 }

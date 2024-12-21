@@ -142,7 +142,7 @@ class Swift_Plugins_DecoratorPlugin
       $children = (array) $message->getChildren();
       foreach ($children as $child)
       {
-        list($type, ) = sscanf($child->getContentType(), '%[^/]/%s');
+        [$type, ] = sscanf($child->getContentType(), '%[^/]/%s');
         if ('text' == $type)
         {
           $body = $child->getBody();
@@ -182,9 +182,7 @@ class Swift_Plugins_DecoratorPlugin
     }
     else
     {
-      return isset($this->_replacements[$address])
-        ? $this->_replacements[$address]
-        : null
+      return $this->_replacements[$address] ?? null
         ;
     }
   }

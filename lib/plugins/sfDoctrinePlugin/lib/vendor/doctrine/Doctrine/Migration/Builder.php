@@ -348,7 +348,7 @@ END;
      */
     public function buildCreateForeignKey($tableName, $definition)
     {
-        return "        \$this->createForeignKey('" . $tableName . "', '" . $definition['name'] . "', " . $this->varExport($definition, true) . ");";
+        return "        \$this->createForeignKey('" . $tableName . "', '" . $definition['name'] . "', " . $this->varExport($definition) . ");";
     }
 
     /**
@@ -373,7 +373,7 @@ END;
     {
         $code  = "        \$this->createTable('" . $tableData['tableName'] . "', ";
 
-        $code .= $this->varExport($tableData['columns'], true) . ", ";
+        $code .= $this->varExport($tableData['columns']) . ", ";
 
         $optionsWeNeed = ['type', 'indexes', 'primary', 'collate', 'charset'];
 
@@ -384,7 +384,7 @@ END;
             }
         }
 
-        $code .= $this->varExport($options, true);
+        $code .= $this->varExport($options);
 
         $code .= ");";
 
@@ -528,7 +528,7 @@ END;
      */
     public function buildMigrationClass($className, $fileName = null, $options = [], $up = null, $down = null)
     {
-        $extends = isset($options['extends']) ? $options['extends']:'Doctrine_Migration_Base';
+        $extends = $options['extends'] ?? 'Doctrine_Migration_Base';
 
         $content  = '<?php' . PHP_EOL;
 

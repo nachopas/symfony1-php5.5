@@ -44,7 +44,7 @@ abstract class sfWidgetFormSchemaFormatter
 
   public function formatRow($label, $field, $errors = [], $help = '', $hiddenFields = null)
   {
-    return strtr($this->getRowFormat(), ['%label%'         => $label, '%field%'         => $field, '%error%'         => $this->formatErrorsForRow($errors), '%help%'          => $this->formatHelp($help), '%hidden_fields%' => null === $hiddenFields ? '%hidden_fields%' : $hiddenFields]);
+    return strtr($this->getRowFormat(), ['%label%'         => $label, '%field%'         => $field, '%error%'         => $this->formatErrorsForRow($errors), '%help%'          => $this->formatHelp($help), '%hidden_fields%' => $hiddenFields ?? '%hidden_fields%']);
   }
 
   /**

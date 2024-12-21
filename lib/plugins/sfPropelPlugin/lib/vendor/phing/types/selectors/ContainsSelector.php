@@ -134,7 +134,7 @@ class ContainsSelector extends BaseExtendSelector {
                 if (!$this->casesensitive) {
                     $teststr = strtolower($teststr);
                 }
-                if (strpos($teststr, $userstr) !== false) {
+                if (strpos($teststr, (string) $userstr) !== false) {
                     return true;
                 }
                 $teststr = $in->readLine();

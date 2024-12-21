@@ -214,7 +214,7 @@ class sfChoiceFormat
    */
   public function format($string, $number)
   {
-    list($sets, $strings) = $this->parse($string);
+    [$sets, $strings] = $this->parse($string);
     $total = count($sets);
     for ($i = 0; $i < $total; $i++)
     {

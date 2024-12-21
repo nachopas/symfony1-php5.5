@@ -763,8 +763,8 @@ class sfPropelDatabaseSchema
       {
         $attributes_string .= ' inheritance="single">'."\n";
 
-        $extended_package = isset($this->database[$tb_name]['_attributes']['package']) ? $this->database[$tb_name]['_attributes']['package'] : $this->database['_attributes']['package'];
-        $extended_class   = isset($this->database[$tb_name]['_attributes']['phpName']) ? $this->database[$tb_name]['_attributes']['phpName'] : sfInflector::camelize($tb_name);
+        $extended_package = $this->database[$tb_name]['_attributes']['package'] ?? $this->database['_attributes']['package'];
+        $extended_class   = $this->database[$tb_name]['_attributes']['phpName'] ?? sfInflector::camelize($tb_name);
 
         foreach ($column['inheritance'] as $key => $class)
         {
@@ -772,7 +772,7 @@ class sfPropelDatabaseSchema
           $package = null;
           if (is_array($class))
           {
-            $package = isset($class['package']) ? $class['package'] : null;
+            $package = $class['package'] ?? null;
             $class   = $class['phpName'];
           }
 
@@ -891,7 +891,7 @@ class sfPropelDatabaseSchema
     }
     else
     {
-      return null === $value ? 'null' : $value;
+      return $value ?? 'null';
     }
   }
 
@@ -937,7 +937,7 @@ class sfPropelDatabaseSchema
     $database = [];
 
     // database
-    list($database_name, $database_attributes) = $this->getNameAndAttributes($schema->attributes());
+    [$database_name, $database_attributes] = $this->getNameAndAttributes($schema->attributes());
     if ($database_name)
     {
       $this->connection_name = $database_name;
@@ -954,7 +954,7 @@ class sfPropelDatabaseSchema
     // tables
     foreach ($schema as $table)
     {
-      list($table_name, $table_attributes) = $this->getNameAndAttributes($table->attributes());
+      [$table_name, $table_attributes] = $this->getNameAndAttributes($table->attributes());
       if ($table_name)
       {
         $database[$table_name] = [];
@@ -971,7 +971,7 @@ class sfPropelDatabaseSchema
       // columns
       foreach ($table->xpath('column') as $column)
       {
-        list($column_name, $column_attributes) = $this->getNameAndAttributes($column->attributes());
+        [$column_name, $column_attributes] = $this->getNameAndAttributes($column->attributes());
         if ($column_name)
         {
           $database[$table_name][$column_name] = $column_attributes;

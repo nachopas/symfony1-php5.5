@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(dirname(__FILE__).'/sfPropelBaseTask.class.php');
+require_once(__DIR__.'/sfPropelBaseTask.class.php');
 
 /**
  * Generates a Propel admin module.
@@ -107,7 +107,7 @@ EOF;
     if (!isset($routesArray[$name]))
     {
       $primaryKey = $this->getPrimaryKey($model);
-      $module = $options['module'] ? $options['module'] : $name;
+      $module = $options['module'] ?: $name;
       $content = sprintf(<<<EOF
 %s:
   class: sfPropelRouteCollection
@@ -120,7 +120,7 @@ EOF;
 
 
 EOF
-      , $name, $model, $module, isset($options['plural']) ? $options['plural'] : $module, $primaryKey).$content;
+      , $name, $model, $module, $options['plural'] ?? $module, $primaryKey).$content;
 
       $this->logSection('file+', $routing);
 
@@ -163,12 +163,7 @@ EOF
     $config = new sfRoutingConfigHandler();
     $routes = $config->evaluate($this->configuration->getConfigPaths('config/routing.yml'));
 
-    if (isset($routes[$name]))
-    {
-      return $routes[$name];
-    }
-
-    return false;
+    return $routes[$name] ?? false;
   }
 
   /**

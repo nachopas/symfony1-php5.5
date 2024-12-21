@@ -317,7 +317,7 @@ class Doctrine_Adapter_Statement_Oracle implements Doctrine_Adapter_Statement_In
                 return oci_fetch_array($this->statement, OCI_NUM + OCI_RETURN_NULLS + OCI_RETURN_LOBS);
             break;
             case Doctrine_Core::FETCH_OBJ:
-                return oci_fetch_object($this->statement, OCI_NUM + OCI_RETURN_NULLS + OCI_RETURN_LOBS);
+                return oci_fetch_object($this->statement);
             break;
             default:
                 throw new Doctrine_Adapter_Exception("This type of fetch is not supported: ".$fetchStyle); 
@@ -401,7 +401,7 @@ class Doctrine_Adapter_Statement_Oracle implements Doctrine_Adapter_Statement_In
             return false;
         }
         $row = $this->fetch(Doctrine_Core::FETCH_NUM);
-        return isset($row[$columnIndex]) ? $row[$columnIndex] : false;
+        return $row[$columnIndex] ?? false;
     }
 
     /**

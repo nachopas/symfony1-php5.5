@@ -134,7 +134,7 @@ QEND;
             $val = array_change_key_case($val, CASE_LOWER);
             $decl = $this->conn->dataDict->getPortableDeclaration($val);
 
-            $descr[$val['column_name']] = ['name'       => $val['column_name'], 'notnull'    => (bool) ($val['nullable'] === 'N'), 'ntype'      => $val['data_type'], 'type'       => $decl['type'][0], 'alltypes'   => $decl['type'], 'fixed'      => (bool) $decl['fixed'], 'unsigned'   => (bool) $decl['unsigned'], 'default'    => $val['data_default'], 'length'     => $val['data_length'], 'primary'    => (bool) $val['primary'], 'scale'      => isset($val['scale']) ? $val['scale']:null];
+            $descr[$val['column_name']] = ['name'       => $val['column_name'], 'notnull'    => (bool) ($val['nullable'] === 'N'), 'ntype'      => $val['data_type'], 'type'       => $decl['type'][0], 'alltypes'   => $decl['type'], 'fixed'      => (bool) $decl['fixed'], 'unsigned'   => (bool) $decl['unsigned'], 'default'    => $val['data_default'], 'length'     => $val['data_length'], 'primary'    => (bool) $val['primary'], 'scale'      => $val['scale'] ?? null];
         }
 
         return $descr;
