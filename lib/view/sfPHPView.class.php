@@ -72,6 +72,10 @@ class sfPHPView extends sfView
 
     try
     {
+      if ($_sfFile == '/')
+      {
+        return '';
+      }
       require($_sfFile);
     }
     catch (Exception $e)
