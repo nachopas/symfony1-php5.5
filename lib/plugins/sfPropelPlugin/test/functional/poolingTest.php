@@ -15,7 +15,7 @@ if (!include(dirname(__FILE__).'/../bootstrap/functional.php'))
   return;
 }
 
-$b = new sfTestFunctional(new sfBrowser(), null, array('propel' => 'sfTesterPropel'));
+$b = new sfTestFunctional(new sfBrowser(), null, ['propel' => 'sfTesterPropel']);
 
 ArticlePeer::doDeleteAll();
 $c = CategoryPeer::doSelectOne(new Criteria());

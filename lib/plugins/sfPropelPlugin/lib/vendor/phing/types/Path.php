@@ -65,7 +65,7 @@ include_once 'phing/types/FileSet.php';
  */
 class Path extends DataType {
 
-    private $elements = array();
+    private $elements = [];
 
     /**
      * Constructor for internally instantiated objects sets project.
@@ -219,12 +219,12 @@ class Path extends DataType {
     public function listPaths() {
         if (!$this->checked) {
             // make sure we don't have a circular reference here
-            $stk = array();
+            $stk = [];
             array_push($stk, $this);
             $this->dieOnCircularReference($stk, $this->project);
         }
 
-        $result = array();
+        $result = [];
         for ($i = 0, $elSize=count($this->elements); $i < $elSize; $i++) {
             $o = $this->elements[$i];
             if ($o instanceof Reference) {
@@ -303,7 +303,7 @@ class Path extends DataType {
      * @param string $source
      */
     public static function translatePath(Project $project, $source) {
-        $result = array();
+        $result = [];
         if ($source == null) {
           return "";
         }
@@ -429,7 +429,7 @@ class Path extends DataType {
  */
 class PathElement {
 
-    private $parts = array();
+    private $parts = [];
     private $outer;
 
     public function __construct(Path $outer) {
@@ -437,7 +437,7 @@ class PathElement {
     }
 
     public function setDir(PhingFile $loc) {
-        $this->parts = array(Path::translateFile($loc->getAbsolutePath()));
+        $this->parts = [Path::translateFile($loc->getAbsolutePath())];
     }
 
     public function setPath($path) {

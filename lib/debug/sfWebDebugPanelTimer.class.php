@@ -30,7 +30,7 @@ class sfWebDebugPanelTimer extends sfWebDebugPanel
   {
     parent::__construct($webDebug);
 
-    $this->webDebug->getEventDispatcher()->connect('debug.web.filter_logs', array($this, 'filterLogs'));
+    $this->webDebug->getEventDispatcher()->connect('debug.web.filter_logs', [$this, 'filterLogs']);
   }
 
   public function getTitle()
@@ -61,7 +61,7 @@ class sfWebDebugPanelTimer extends sfWebDebugPanel
 
   public function filterLogs(sfEvent $event, $logs)
   {
-    $newLogs = array();
+    $newLogs = [];
     foreach ($logs as $log)
     {
       if ('sfWebDebugLogger' != $log['type'])

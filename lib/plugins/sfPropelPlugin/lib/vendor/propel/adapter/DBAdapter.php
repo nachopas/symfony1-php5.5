@@ -51,17 +51,7 @@ abstract class DBAdapter {
 	 * Creole driver to Propel adapter map.
 	 * @var        array
 	 */
-	private static $adapters = array(
-		'mysql' => 'DBMySQL',
-		'mysqli' => 'DBMySQLi',
-		'mssql' => 'DBMSSQL',
-    'dblib' => 'DBMSSQL',
-		'sybase' => 'DBSybase',
-		'oracle' => 'DBOracle',
-		'pgsql' => 'DBPostgres',
-		'sqlite' => 'DBSQLite',
-		'' => 'DBNone',
-	);
+	private static $adapters = ['mysql' => 'DBMySQL', 'mysqli' => 'DBMySQLi', 'mssql' => 'DBMSSQL', 'dblib' => 'DBMSSQL', 'sybase' => 'DBSybase', 'oracle' => 'DBOracle', 'pgsql' => 'DBPostgres', 'sqlite' => 'DBSQLite', '' => 'DBNone'];
 
 	/**
 	 * Creates a new instance of the database adapter associated
@@ -210,7 +200,7 @@ abstract class DBAdapter {
 	 * @return     string The quoted table name
 	 **/
 	public function quoteIdentifierTable($table) {
-		return implode(" ", array_map(array($this, "quoteIdentifier"), explode(" ", $table) ) );
+		return implode(" ", array_map([$this, "quoteIdentifier"], explode(" ", $table) ) );
 	}
 
 	/**

@@ -30,25 +30,25 @@
 
   public function getFilterDisplay()
   {
-    return <?php echo $this->asPhp(isset($this->config['filter']['display']) ? $this->config['filter']['display'] : array()) ?>;
+    return <?php echo $this->asPhp(isset($this->config['filter']['display']) ? $this->config['filter']['display'] : []) ?>;
 <?php unset($this->config['filter']['display']) ?>
   }
 
   public function getFormDisplay()
   {
-    return <?php echo $this->asPhp(isset($this->config['form']['display']) ? $this->config['form']['display'] : array()) ?>;
+    return <?php echo $this->asPhp(isset($this->config['form']['display']) ? $this->config['form']['display'] : []) ?>;
 <?php unset($this->config['form']['display']) ?>
   }
 
   public function getEditDisplay()
   {
-    return <?php echo $this->asPhp(isset($this->config['edit']['display']) ? $this->config['edit']['display'] : array()) ?>;
+    return <?php echo $this->asPhp(isset($this->config['edit']['display']) ? $this->config['edit']['display'] : []) ?>;
 <?php unset($this->config['edit']['display']) ?>
   }
 
   public function getNewDisplay()
   {
-    return <?php echo $this->asPhp(isset($this->config['new']['display']) ? $this->config['new']['display'] : array()) ?>;
+    return <?php echo $this->asPhp(isset($this->config['new']['display']) ? $this->config['new']['display'] : []) ?>;
 <?php unset($this->config['new']['display']) ?>
   }
 
@@ -73,7 +73,7 @@
     );
   }
 
-<?php foreach (array('list', 'filter', 'form', 'edit', 'new') as $context): ?>
+<?php foreach (['list', 'filter', 'form', 'edit', 'new'] as $context): ?>
   public function getFields<?php echo ucfirst($context) ?>()
   {
     return array(

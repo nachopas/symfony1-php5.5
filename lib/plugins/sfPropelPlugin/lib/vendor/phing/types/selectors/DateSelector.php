@@ -44,7 +44,7 @@ class DateSelector extends BaseExtendSelector {
     const CHECKDIRS_KEY = "checkdirs";
     const GRANULARITY_KEY = "granularity";
     const WHEN_KEY = "when";
-    private static $timeComparisons = array("before", "after", "equal");
+    private static $timeComparisons = ["before", "after", "equal"];
     
     public function __construct() {
         //if (Os.isFamily("dos")) {

@@ -57,7 +57,7 @@ class PropelPDO extends PDO {
 	 *
 	 * @var        array [md5(sql) => PDOStatement]
 	 */
-	protected $preparedStatements = array();
+	protected $preparedStatements = [];
 
 	/**
 	 * Whether to cache prepared statements.
@@ -241,7 +241,7 @@ class PropelPDO extends PDO {
 	 * @param      array
 	 * @return     PDOStatement
 	 */
-	public function prepare($sql, $driver_options = array())
+	public function prepare($sql, $driver_options = [])
 	{
 		if ($this->cachePreparedStatements) {
 			$key = $sql;
@@ -262,7 +262,7 @@ class PropelPDO extends PDO {
 	 */
 	public function clearStatementCache()
 	{
-		$this->preparedStatements = array();
+		$this->preparedStatements = [];
 	}
 
 }

@@ -74,7 +74,7 @@ class SourceFileScanner {
             $now += 2000;
         }
 
-        $v = array();
+        $v = [];
 
         for ($i=0, $size=count($files); $i < $size; $i++) {
         
@@ -137,7 +137,7 @@ class SourceFileScanner {
             }
 
         }
-        $result = array();
+        $result = [];
         $result = $v;
         return $result;
     }
@@ -149,7 +149,7 @@ class SourceFileScanner {
      */
     function restrictAsFiles(&$files, &$srcDir, &$destDir, &$mapper) {
         $res = $this->restrict($files, $srcDir, $destDir, $mapper);
-        $result = array();
+        $result = [];
         for ($i=0; $i<count($res); $i++) {
             $result[$i] = new PhingFile($srcDir, $res[$i]);
         }

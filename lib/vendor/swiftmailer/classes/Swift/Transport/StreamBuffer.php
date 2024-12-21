@@ -30,13 +30,13 @@ class Swift_Transport_StreamBuffer
   private $_out;
   
   /** Buffer initialization parameters */
-  private $_params = array();
+  private $_params = [];
   
   /** The ReplacementFilterFactory */
   private $_replacementFactory;
   
   /** Translations performed on data being streamed into the buffer */
-  private $_translations = array();
+  private $_translations = [];
   
   /**
    * Create a new StreamBuffer using $replacementFactory for transformations.
@@ -255,7 +255,7 @@ class Swift_Transport_StreamBuffer
     {
       $timeout = $this->_params['timeout'];
     }
-    $options = array();
+    $options = [];
     if (!empty($this->_params['sourceIp']))
     {
     	$options['socket']['bindto']=$this->_params['sourceIp'].':0';
@@ -288,11 +288,7 @@ class Swift_Transport_StreamBuffer
   private function _establishProcessConnection()
   {
     $command = $this->_params['command'];
-    $descriptorSpec = array(
-      0 => array('pipe', 'r'),
-      1 => array('pipe', 'w'),
-      2 => array('pipe', 'w')
-      );
+    $descriptorSpec = [0 => ['pipe', 'r'], 1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
     $this->_stream = proc_open($command, $descriptorSpec, $pipes);
     stream_set_blocking($pipes[2], 0);
     if ($err = stream_get_contents($pipes[2]))

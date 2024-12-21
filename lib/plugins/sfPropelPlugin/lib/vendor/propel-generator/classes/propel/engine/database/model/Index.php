@@ -43,7 +43,7 @@ class Index extends XMLElement {
 	private $indexColumns;
 
 	/** @var        array  */
-	private $indexColumnSizes = array();
+	private $indexColumnSizes = [];
 
 	/**
 	 * Creates a new Index instance.
@@ -58,7 +58,7 @@ class Index extends XMLElement {
 	private function createName()
 	{
 		$table = $this->getTable();
-		$inputs = array();
+		$inputs = [];
 		$inputs[] = $table->getDatabase();
 		$inputs[] = $table->getName();
 		if ($this->isUnique()) {
@@ -198,8 +198,8 @@ class Index extends XMLElement {
 	 */
 	public function setColumns(array $indexColumns)
 	{
-		$this->indexColumns = array();
-		$this->indexColumnSizes = array();
+		$this->indexColumns = [];
+		$this->indexColumnSizes = [];
 		foreach ($indexColumns as $col) {
 			$this->addColumn($col);
 		}

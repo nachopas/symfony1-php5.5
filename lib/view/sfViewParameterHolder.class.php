@@ -28,7 +28,7 @@ class sfViewParameterHolder extends sfParameterHolder
   /**
    * Constructor.
    */
-  public function __construct(sfEventDispatcher $dispatcher, $parameters = array(), $options = array())
+  public function __construct(sfEventDispatcher $dispatcher, $parameters = [], $options = [])
   {
     $this->initialize($dispatcher, $parameters, $options);
   }
@@ -49,7 +49,7 @@ class sfViewParameterHolder extends sfParameterHolder
    *
    * @throws sfInitializationException If an error occurs while initializing this view parameter holder.
    */
-  public function initialize(sfEventDispatcher $dispatcher, $parameters = array(), $options = array())
+  public function initialize(sfEventDispatcher $dispatcher, $parameters = [], $options = [])
   {
     $this->dispatcher = $dispatcher;
 
@@ -66,7 +66,7 @@ class sfViewParameterHolder extends sfParameterHolder
    */
   public function isEscaped()
   {
-    return in_array($this->getEscaping(), array('on', 'true', true), true);
+    return in_array($this->getEscaping(), ['on', 'true', true], true);
   }
 
   /**
@@ -80,7 +80,7 @@ class sfViewParameterHolder extends sfParameterHolder
   {
     $event = $this->dispatcher->filter(new sfEvent($this, 'template.filter_parameters'), $this->getAll());
     $parameters = $event->getReturnValue();
-    $attributes = array();
+    $attributes = [];
 
     if ($this->isEscaped())
     {
@@ -90,7 +90,7 @@ class sfViewParameterHolder extends sfParameterHolder
         $attributes[$key] = $value;
       }
     }
-    else if (in_array($this->getEscaping(), array('off', false), true))
+    else if (in_array($this->getEscaping(), ['off', false], true))
     {
       $attributes = $parameters;
       $attributes['sf_data'] = sfOutputEscaper::escape(ESC_RAW, $parameters);
@@ -169,7 +169,7 @@ class sfViewParameterHolder extends sfParameterHolder
    */
   public function serialize()
   {
-    return serialize(array($this->getAll(), $this->escapingMethod, $this->escaping));
+    return serialize([$this->getAll(), $this->escapingMethod, $this->escaping]);
   }
 
   /**

@@ -849,7 +849,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 	 * Array of ValidationFailed objects.
 	 * @var        array ValidationFailed[]
 	 */
-	protected $validationFailures = array();
+	protected $validationFailures = [];
 
 	/**
 	 * Gets any ValidationFailed objects that resulted from last call to validate().
@@ -878,7 +878,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 	{
 		$res = $this->doValidate($columns);
 		if ($res === true) {
-			$this->validationFailures = array();
+			$this->validationFailures = [];
 			return true;
 		} else {
 			$this->validationFailures = $res;
@@ -902,7 +902,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 			$this->alreadyInValidation = true;
 			$retval = null;
 
-			$failureMap = array();
+			$failureMap = [];
 
 
 			// We call the validate method on the following object(s) if they
@@ -1024,17 +1024,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
 		$keys = ArticlePeer::getFieldNames($keyType);
-		$result = array(
-			$keys[0] => $this->getId(),
-			$keys[1] => $this->getTitle(),
-			$keys[2] => $this->getBody(),
-			$keys[3] => $this->getOnline(),
-			$keys[4] => $this->getExcerpt(),
-			$keys[5] => $this->getCategoryId(),
-			$keys[6] => $this->getCreatedAt(),
-			$keys[7] => $this->getEndDate(),
-			$keys[8] => $this->getBookId(),
-		);
+		$result = [$keys[0] => $this->getId(), $keys[1] => $this->getTitle(), $keys[2] => $this->getBody(), $keys[3] => $this->getOnline(), $keys[4] => $this->getExcerpt(), $keys[5] => $this->getCategoryId(), $keys[6] => $this->getCreatedAt(), $keys[7] => $this->getEndDate(), $keys[8] => $this->getBookId()];
 		return $result;
 	}
 
@@ -1403,7 +1393,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 	 */
 	public function initAuthorArticles()
 	{
-		$this->collAuthorArticles = array();
+		$this->collAuthorArticles = [];
 	}
 
 	/**
@@ -1431,7 +1421,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 
 		if ($this->collAuthorArticles === null) {
 			if ($this->isNew()) {
-			   $this->collAuthorArticles = array();
+			   $this->collAuthorArticles = [];
 			} else {
 
 				$criteria->add(AuthorArticlePeer::ARTICLE_ID, $this->id);
@@ -1556,7 +1546,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 
 		if ($this->collAuthorArticles === null) {
 			if ($this->isNew()) {
-				$this->collAuthorArticles = array();
+				$this->collAuthorArticles = [];
 			} else {
 
 				$criteria->add(AuthorArticlePeer::ARTICLE_ID, $this->id);
@@ -1604,7 +1594,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 	 */
 	public function initAttachments()
 	{
-		$this->collAttachments = array();
+		$this->collAttachments = [];
 	}
 
 	/**
@@ -1632,7 +1622,7 @@ abstract class BaseArticle extends BaseObject  implements Persistent {
 
 		if ($this->collAttachments === null) {
 			if ($this->isNew()) {
-			   $this->collAttachments = array();
+			   $this->collAttachments = [];
 			} else {
 
 				$criteria->add(AttachmentPeer::ARTICLE_ID, $this->id);

@@ -21,7 +21,7 @@
 class sfFilterChain
 {
   protected
-    $chain = array(),
+    $chain = [],
     $index = -1;
 
   /**
@@ -46,7 +46,7 @@ class sfFilterChain
     {
       if (sfConfig::get('sf_logging_enabled'))
       {
-        sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', array(sprintf('Executing filter "%s"', get_class($this->chain[$this->index])))));
+        sfContext::getInstance()->getEventDispatcher()->notify(new sfEvent($this, 'application.log', [sprintf('Executing filter "%s"', get_class($this->chain[$this->index]))]));
       }
 
       // execute the next filter

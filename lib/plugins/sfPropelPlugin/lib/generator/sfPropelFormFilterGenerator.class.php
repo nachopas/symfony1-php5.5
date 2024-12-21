@@ -39,7 +39,7 @@ class sfPropelFormFilterGenerator extends sfPropelFormGenerator
    *
    * @return string The data to put in configuration cache
    */
-  public function generate($params = array())
+  public function generate($params = [])
   {
     $this->params = $params;
 
@@ -146,9 +146,9 @@ class sfPropelFormFilterGenerator extends sfPropelFormGenerator
    */
   public function getWidgetOptionsForColumn(ColumnMap $column)
   {
-    $options = array();
+    $options = [];
 
-    $withEmpty = $column->isNotNull() && !$column->isForeignKey() ? array("'with_empty' => false") : array();
+    $withEmpty = $column->isNotNull() && !$column->isForeignKey() ? ["'with_empty' => false"] : [];
     switch ($column->getType())
     {
       case PropelColumnTypes::BOOLEAN:
@@ -231,7 +231,7 @@ class sfPropelFormFilterGenerator extends sfPropelFormGenerator
    */
   public function getValidatorOptionsForColumn(ColumnMap $column)
   {
-    $options = array('\'required\' => false');
+    $options = ['\'required\' => false'];
 
     if ($column->isForeignKey())
     {
@@ -262,7 +262,7 @@ class sfPropelFormFilterGenerator extends sfPropelFormGenerator
   public function getValidatorForColumn($column)
   {
     $format = 'new %s(%s)';
-    if (in_array($class = $this->getValidatorClassForColumn($column), array('sfValidatorInteger', 'sfValidatorNumber')))
+    if (in_array($class = $this->getValidatorClassForColumn($column), ['sfValidatorInteger', 'sfValidatorNumber']))
     {
       $format = 'new sfValidatorSchemaFilter(\'text\', new %s(%s))';
     }

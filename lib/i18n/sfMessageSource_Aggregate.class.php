@@ -19,7 +19,7 @@
 class sfMessageSource_Aggregate extends sfMessageSource
 {
   protected
-    $messageSources = array();
+    $messageSources = [];
 
   /**
    * Constructor.
@@ -77,10 +77,10 @@ class sfMessageSource_Aggregate extends sfMessageSource
 
   public function getSource($variant)
   {
-    $sources = array();
+    $sources = [];
     foreach ($this->messageSources as $messageSource)
     {
-      $sources[] = array($messageSource, $messageSource->getSource(str_replace($messageSource->getId(), '', $variant)));
+      $sources[] = [$messageSource, $messageSource->getSource(str_replace($messageSource->getId(), '', $variant))];
     }
 
     return $sources;
@@ -88,7 +88,7 @@ class sfMessageSource_Aggregate extends sfMessageSource
 
   public function &loadData($sources)
   {
-    $messages = array();
+    $messages = [];
     foreach ($sources as $source)
     {
       if (false === $source[0]->isValidSource($source[1]))
@@ -108,7 +108,7 @@ class sfMessageSource_Aggregate extends sfMessageSource
 
   public function getCatalogueList($catalogue)
   {
-    $variants = array();
+    $variants = [];
     foreach ($this->messageSources as $messageSource)
     {
       foreach ($messageSource->getCatalogueList($catalogue) as $variant)

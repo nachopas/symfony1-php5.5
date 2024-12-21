@@ -34,9 +34,9 @@
 class RuntimeConfigurable {
 
     private $elementTag = null;
-    private $children = array();
+    private $children = [];
     private $wrappedObject = null;
-    private $attributes = array();
+    private $attributes = [];
     private $characters = "";
 
 

@@ -29,7 +29,7 @@ class Swift_StreamFilters_ByteArrayReplacementFilter
   private $_index;
 
   /** The Search Tree */
-  private $_tree = array();
+  private $_tree = [];
 
   /**  Gives the size of the largest search */
   private $_treeMaxLen = 0;
@@ -44,10 +44,10 @@ class Swift_StreamFilters_ByteArrayReplacementFilter
   public function __construct($search, $replace)
   {
     $this->_search = $search;
-    $this->_index = array();
-    $this->_tree = array();
-    $this->_replace = array();
-    $this->_repSize = array();
+    $this->_index = [];
+    $this->_tree = [];
+    $this->_replace = [];
+    $this->_repSize = [];
     
     $tree = null;
     $i = null;
@@ -67,7 +67,7 @@ class Swift_StreamFilters_ByteArrayReplacementFilter
           $this->_index[$char] = true;
           if (!isset($tree[$char]))
           {
-            $tree[$char] = array();
+            $tree[$char] = [];
           }
           $tree = &$tree[$char];
         }
@@ -79,7 +79,7 @@ class Swift_StreamFilters_ByteArrayReplacementFilter
         $last_size = 1;
         if (!isset($tree[$search_element]))
         {
-          $tree[$search_element] = array();
+          $tree[$search_element] = [];
         }
         $tree = &$tree[$search_element];
         $size = max($last_size, $size);
@@ -96,7 +96,7 @@ class Swift_StreamFilters_ByteArrayReplacementFilter
     {
       if (!is_array($rep))
       {
-        $rep = array ($rep);
+        $rep = [$rep];
       }
       $this->_replace[] = $rep;
     }
@@ -130,7 +130,7 @@ class Swift_StreamFilters_ByteArrayReplacementFilter
       return $buffer;
     }
     
-    $newBuffer = array();
+    $newBuffer = [];
     $buf_size = count($buffer);
     for ($i = 0; $i < $buf_size; ++$i)
     {

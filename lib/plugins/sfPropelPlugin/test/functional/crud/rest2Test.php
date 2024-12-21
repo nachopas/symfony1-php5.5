@@ -18,4 +18,4 @@ if (!include(dirname(__FILE__).'/../../bootstrap/functional.php'))
 require_once(dirname(__FILE__).'/restBrowser.class.php');
 
 $b = new RestBrowser();
-$b->browse(array('non-verbose-templates'));
+$b->browse(['non-verbose-templates']);

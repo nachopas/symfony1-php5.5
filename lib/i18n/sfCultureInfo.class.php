@@ -61,7 +61,7 @@ class sfCultureInfo
    * The ICU data array.
    * @var array
    */
-  protected $data = array();
+  protected $data = [];
 
   /**
    * The current culture.
@@ -79,7 +79,7 @@ class sfCultureInfo
    * A list of ICU date files loaded.
    * @var array
    */
-  protected $dataFiles = array();
+  protected $dataFiles = [];
 
   /**
    * The current date time format info.
@@ -97,7 +97,7 @@ class sfCultureInfo
    * A list of properties that are accessable/writable.
    * @var array
    */ 
-  protected $properties = array();
+  protected $properties = [];
 
   /**
    * Culture type, all.
@@ -129,7 +129,7 @@ class sfCultureInfo
    */
   public static function getInstance($culture = 'en')
   {
-    static $instances = array();
+    static $instances = [];
 
     if (!isset($instances[$culture]))
     {
@@ -284,7 +284,7 @@ class sfCultureInfo
     $file_parts = explode('_', $culture);
     $current_part = $file_parts[0];
 
-    $files = array($current_part);
+    $files = [$current_part];
 
     for ($i = 1, $max = count($file_parts); $i < $max; $i++)
     {
@@ -327,8 +327,8 @@ class sfCultureInfo
    */
   protected function &getData($filename)
   {
-    static $data  = array();
-    static $files = array();
+    static $data  = [];
+    static $files = [];
 
     if (!in_array($filename, $files))
     {
@@ -356,7 +356,7 @@ class sfCultureInfo
    */
   protected function findInfo($path = '/', $merge = false)
   {
-    $result = array();
+    $result = [];
     foreach ($this->dataFiles as $section)
     {
       $info = $this->searchArray($this->data[$section], $path);
@@ -571,7 +571,7 @@ class sfCultureInfo
       $elements = $this->findInfo('NumberElements');
       $patterns = $this->findInfo('NumberPatterns');
       $currencies = $this->getCurrencies(null, true);
-      $data = array('NumberElements' => $elements, 'NumberPatterns' => $patterns, 'Currencies' => $currencies);
+      $data = ['NumberElements' => $elements, 'NumberPatterns' => $patterns, 'Currencies' => $currencies];
 
       $this->setNumberFormat(new sfNumberFormatInfo($data));
     }
@@ -621,8 +621,8 @@ class sfCultureInfo
     $dataExt = sfCultureInfo::fileExt();
     $dir = dir($dataDir);
 
-    $neutral = array();
-    $specific = array();
+    $neutral = [];
+    $specific = [];
 
     while (false !== ($entry = $dir->read()))
     {
@@ -724,7 +724,7 @@ class sfCultureInfo
   public function getCountries($countries = null)
   {
     // remove integer keys as they do not represent countries
-    $allCountries = array();
+    $allCountries = [];
     foreach ($this->findInfo('Countries', true) as $key => $value)
     {
       if (!is_int($key))
@@ -772,7 +772,7 @@ class sfCultureInfo
       $allCurrencies = array_intersect_key($allCurrencies, array_flip($currencies));
     }
 
-    $tmp = array();
+    $tmp = [];
     foreach ($allCurrencies as $key => $value)
     {
       $allCurrencies[$key] = $value[1];
@@ -785,7 +785,7 @@ class sfCultureInfo
     {
         foreach ($allCurrencies as $key => $value)
         {
-          $allCurrencies[$key] = array($tmp[$key], $value);
+          $allCurrencies[$key] = [$tmp[$key], $value];
         }
     }
 

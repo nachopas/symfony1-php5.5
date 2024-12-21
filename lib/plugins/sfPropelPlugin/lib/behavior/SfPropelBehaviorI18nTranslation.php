@@ -18,9 +18,7 @@
  */
 class SfPropelBehaviorI18nTranslation extends SfPropelBehaviorBase
 {
-  protected $parameters = array(
-    'culture_column' => null,
-  );
+  protected $parameters = ['culture_column' => null];
 
   public function objectFilter(& $script)
   {
@@ -30,7 +28,7 @@ class SfPropelBehaviorI18nTranslation extends SfPropelBehaviorBase
     }
 
     $class = new sfClassManipulator($script);
-    $class->filterMethod('doSave', array($this, 'filterDoSave'));
+    $class->filterMethod('doSave', [$this, 'filterDoSave']);
 
     $script = $class->getCode();
   }

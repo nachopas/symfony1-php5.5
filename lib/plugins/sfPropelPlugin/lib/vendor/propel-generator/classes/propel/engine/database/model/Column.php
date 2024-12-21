@@ -43,7 +43,7 @@ class Column extends XMLElement {
 
   const DEFAULT_TYPE = "VARCHAR";
   const DEFAULT_VISIBILITY = 'public';
-  public static $valid_visibilities = array('public', 'protected', 'private');
+  public static $valid_visibilities = ['public', 'protected', 'private'];
 
   private $name;
   private $description;
@@ -124,7 +124,7 @@ class Column extends XMLElement {
    */
   public static function makeList($columns, Platform $platform)
   {
-    $list = array();
+    $list = [];
     foreach ($columns as $col) {
       if ($col instanceof Column) {
         $col = $col->getName();
@@ -492,7 +492,7 @@ class Column extends XMLElement {
       $inh = $inhdata;
       $inh->setColumn($this);
       if ($this->inheritanceList === null) {
-        $this->inheritanceList = array();
+        $this->inheritanceList = [];
         $this->isEnumeratedClasses = true;
       }
       $this->inheritanceList[] = $inh;
@@ -732,7 +732,7 @@ class Column extends XMLElement {
   public function addReferrer(ForeignKey $fk)
   {
     if ($this->referrers === null) {
-      $this->referrers = array();
+      $this->referrers = [];
     }
     $this->referrers[] = $fk;
   }
@@ -743,7 +743,7 @@ class Column extends XMLElement {
   public function getReferrers()
   {
     if ($this->referrers === null) {
-      $this->referrers = array();
+      $this->referrers = [];
     }
     return $this->referrers;
   }
@@ -1179,6 +1179,6 @@ class Column extends XMLElement {
   }
   
   public static function generatePhpName($name, $phpNamingMethod = PhpNameGenerator::CONV_METHOD_CLEAN, $namePrefix = null) {
-    return NameFactory::generateName(NameFactory::PHP_GENERATOR, array($name, $phpNamingMethod, $namePrefix));
+    return NameFactory::generateName(NameFactory::PHP_GENERATOR, [$name, $phpNamingMethod, $namePrefix]);
   }
 }

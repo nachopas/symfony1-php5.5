@@ -30,7 +30,7 @@ require_once 'phing/input/InputRequest.php';
  */
 class MultipleChoiceInputRequest extends InputRequest {
 
-    protected $choices = array();
+    protected $choices = [];
 
     /**
      * @param string $prompt The prompt to show to the user.  Must not be null.

@@ -47,7 +47,7 @@ class Commandline {
     /**
      * @var array CommandlineArguments[]
      */
-    public $arguments = array(); // public so "inner" class can access
+    public $arguments = []; // public so "inner" class can access
     
     /**
      * Full path (if not on %PATH% env var) to executable program.
@@ -121,7 +121,7 @@ class Commandline {
         if ($this->executable === null) {
             return $args;
         }
-        return array_merge(array($this->executable), $args);
+        return array_merge([$this->executable], $args);
     }
 
 
@@ -130,7 +130,7 @@ class Commandline {
      * <code>addValue</code> or the argument object.
      */
     public function getArguments() {
-        $result = array();
+        $result = [];
         foreach($this->arguments as $arg) {
             $parts = $arg->getParts();
             if ($parts !== null) {                           
@@ -200,7 +200,7 @@ class Commandline {
     public static function translateCommandline($to_process) {
         
         if (!$to_process) {
-            return array();
+            return [];
         }
             
         // parse with a simple finite state machine
@@ -210,7 +210,7 @@ class Commandline {
         $inDoubleQuote = 2;
         
         $state = $normal;
-        $args = array();
+        $args = [];
         $current = "";
         $lastTokenHasBeenQuoted = false;
         
@@ -289,7 +289,7 @@ class Commandline {
      * another operation.
      */
     public function clearArgs() {
-        $this->arguments = array();
+        $this->arguments = [];
     }
 
     /**
@@ -372,7 +372,7 @@ class Commandline {
  */
 class CommandlineArgument {
 
-    private $parts = array();
+    private $parts = [];
     private $outer;
     
     public function __construct(Commandline $outer) {
@@ -385,7 +385,7 @@ class CommandlineArgument {
      * @param string $value a single commandline argument.
      */
     public function setValue($value) {
-        $this->parts = array($value);
+        $this->parts = [$value];
     }
 
     /**
@@ -408,7 +408,7 @@ class CommandlineArgument {
      * @param value a single commandline argument.
      */
     public function setPath($value) {
-        $this->parts = array( (string) $value );
+        $this->parts = [(string) $value];
     }
 
     /**
@@ -418,7 +418,7 @@ class CommandlineArgument {
      * @param value a single commandline argument.
      */
     public function setFile(PhingFile $value) {
-        $this->parts = array($value->getAbsolutePath());
+        $this->parts = [$value->getAbsolutePath()];
     }
 
     /**

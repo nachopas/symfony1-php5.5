@@ -412,7 +412,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 	 * Array of ValidationFailed objects.
 	 * @var        array ValidationFailed[]
 	 */
-	protected $validationFailures = array();
+	protected $validationFailures = [];
 
 	/**
 	 * Gets any ValidationFailed objects that resulted from last call to validate().
@@ -441,7 +441,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 	{
 		$res = $this->doValidate($columns);
 		if ($res === true) {
-			$this->validationFailures = array();
+			$this->validationFailures = [];
 			return true;
 		} else {
 			$this->validationFailures = $res;
@@ -465,7 +465,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 			$this->alreadyInValidation = true;
 			$retval = null;
 
-			$failureMap = array();
+			$failureMap = [];
 
 
 			if (($retval = AuthorPeer::doValidate($this, $columns)) !== true) {
@@ -540,10 +540,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
 		$keys = AuthorPeer::getFieldNames($keyType);
-		$result = array(
-			$keys[0] => $this->getId(),
-			$keys[1] => $this->getName(),
-		);
+		$result = [$keys[0] => $this->getId(), $keys[1] => $this->getName()];
 		return $result;
 	}
 
@@ -759,7 +756,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 	 */
 	public function initAuthorArticles()
 	{
-		$this->collAuthorArticles = array();
+		$this->collAuthorArticles = [];
 	}
 
 	/**
@@ -787,7 +784,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 
 		if ($this->collAuthorArticles === null) {
 			if ($this->isNew()) {
-			   $this->collAuthorArticles = array();
+			   $this->collAuthorArticles = [];
 			} else {
 
 				$criteria->add(AuthorArticlePeer::AUTHOR_ID, $this->id);
@@ -912,7 +909,7 @@ abstract class BaseAuthor extends BaseObject  implements Persistent {
 
 		if ($this->collAuthorArticles === null) {
 			if ($this->isNew()) {
-				$this->collAuthorArticles = array();
+				$this->collAuthorArticles = [];
 			} else {
 
 				$criteria->add(AuthorArticlePeer::AUTHOR_ID, $this->id);

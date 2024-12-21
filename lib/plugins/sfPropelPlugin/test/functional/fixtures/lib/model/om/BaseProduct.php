@@ -78,7 +78,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 	/**
 	 * @var array Current I18N objects
 	 */
-	protected $current_i18n = array();
+	protected $current_i18n = [];
 
 	/**
 	 * Get the [id] column value.
@@ -461,7 +461,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 	 * Array of ValidationFailed objects.
 	 * @var        array ValidationFailed[]
 	 */
-	protected $validationFailures = array();
+	protected $validationFailures = [];
 
 	/**
 	 * Gets any ValidationFailed objects that resulted from last call to validate().
@@ -490,7 +490,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 	{
 		$res = $this->doValidate($columns);
 		if ($res === true) {
-			$this->validationFailures = array();
+			$this->validationFailures = [];
 			return true;
 		} else {
 			$this->validationFailures = $res;
@@ -514,7 +514,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 			$this->alreadyInValidation = true;
 			$retval = null;
 
-			$failureMap = array();
+			$failureMap = [];
 
 
 			if (($retval = ProductPeer::doValidate($this, $columns)) !== true) {
@@ -592,11 +592,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
 	{
 		$keys = ProductPeer::getFieldNames($keyType);
-		$result = array(
-			$keys[0] => $this->getId(),
-			$keys[1] => $this->getPrice(),
-			$keys[2] => $this->getAPrimaryString(),
-		);
+		$result = [$keys[0] => $this->getId(), $keys[1] => $this->getPrice(), $keys[2] => $this->getAPrimaryString()];
 		return $result;
 	}
 
@@ -819,7 +815,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 	 */
 	public function initTranslations()
 	{
-		$this->collTranslations = array();
+		$this->collTranslations = [];
 	}
 
 	/**
@@ -847,7 +843,7 @@ abstract class BaseProduct extends BaseObject  implements Persistent {
 
 		if ($this->collTranslations === null) {
 			if ($this->isNew()) {
-			   $this->collTranslations = array();
+			   $this->collTranslations = [];
 			} else {
 
 				$criteria->add(ProductI18nPeer::ID, $this->id);
