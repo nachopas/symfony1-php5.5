@@ -46,8 +46,16 @@ abstract class sfCommandApplication
 
     $this->fixCgi();
 
-    $argumentSet = new sfCommandArgumentSet([new sfCommandArgument('task', sfCommandArgument::REQUIRED, 'The task to execute')]);
-    $optionSet = new sfCommandOptionSet([new sfCommandOption('--help',    '-H', sfCommandOption::PARAMETER_NONE, 'Display this help message.'), new sfCommandOption('--quiet',   '-q', sfCommandOption::PARAMETER_NONE, 'Do not log messages to standard output.'), new sfCommandOption('--trace',   '-t', sfCommandOption::PARAMETER_NONE, 'Turn on invoke/execute tracing, enable full backtrace.'), new sfCommandOption('--version', '-V', sfCommandOption::PARAMETER_NONE, 'Display the program version.'), new sfCommandOption('--color',   '',   sfCommandOption::PARAMETER_NONE, 'Forces ANSI color output.')]);
+    $argumentSet = new sfCommandArgumentSet([
+      new sfCommandArgument('task', sfCommandArgument::REQUIRED, 'The task to execute'),
+    ]);
+    $optionSet = new sfCommandOptionSet([
+      new sfCommandOption('--help',    '-H', sfCommandOption::PARAMETER_NONE, 'Display this help message.'), 
+      new sfCommandOption('--quiet',   '-q', sfCommandOption::PARAMETER_NONE, 'Do not log messages to standard output.'), 
+      new sfCommandOption('--trace',   '-t', sfCommandOption::PARAMETER_NONE, 'Turn on invoke/execute tracing, enable full backtrace.'), 
+      new sfCommandOption('--version', '-V', sfCommandOption::PARAMETER_NONE, 'Display the program version.'), 
+      new sfCommandOption('--color',   '',   sfCommandOption::PARAMETER_NONE, 'Forces ANSI color output.'),
+    ]);
     $this->commandManager = new sfCommandManager($argumentSet, $optionSet);
 
     $this->configure();
