@@ -38,7 +38,9 @@
       [?php echo $form ?]
 <?php else: ?>
       [?php echo $form->renderGlobalErrors() ?]
-<?php foreach ($form as $name => $field): if ($field->isHidden()) continue ?>
+<?php foreach ($form as $name => $field): if ($field->isHidden()) {
+    continue;
+} ?>
       <tr>
         <th>[?php echo $form['<?php echo $name ?>']->renderLabel() ?]</th>
         <td>

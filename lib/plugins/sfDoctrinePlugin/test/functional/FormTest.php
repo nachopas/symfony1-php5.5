@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -56,10 +56,9 @@ $t->is($widget->getChoices(), ['jwage' => '4cb9c8a8048fd02294477fcb1a41191a']);
 
 $methods = ['widgetChoiceTableMethod1', 'widgetChoiceTableMethod2', 'widgetChoiceTableMethod3'];
 
-foreach ($methods as $method)
-{
-  $widget = new sfWidgetFormDoctrineChoice(['model' => 'User', 'table_method' => $method]);
-  $t->is($widget->getChoices(), [1 => 1]);
+foreach ($methods as $method) {
+    $widget = new sfWidgetFormDoctrineChoice(['model' => 'User', 'table_method' => $method]);
+    $t->is($widget->getChoices(), [1 => 1]);
 }
 
 $widget = new sfWidgetFormDoctrineChoice(['model' => 'User', 'table_method' => 'widgetChoiceTableMethod4']);
@@ -71,11 +70,11 @@ $user->Groups[]->name = 'User Group 2';
 
 class UserGroupForm extends GroupForm
 {
-  public function configure()
-  {
-    parent::configure();
-    $this->useFields(['name']);
-  }
+    public function configure()
+    {
+        parent::configure();
+        $this->useFields(['name']);
+    }
 }
 
 $userForm = new UserForm($user);
@@ -86,9 +85,8 @@ $data = ['username' => 'jonwage', 'password' => 'changeme', 'Groups'  => [0 => [
 $userForm->bind($data);
 $t->is($userForm->isValid(), true);
 
-if ($userForm->isValid())
-{
-  $userForm->save();
+if ($userForm->isValid()) {
+    $userForm->save();
 }
 
 $t->is($user->Groups[0]->name, 'New User Group 1 Name');

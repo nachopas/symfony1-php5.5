@@ -16,52 +16,52 @@
  * (i.e. if it's a text column type).
  *
  */
-class ProductI18nTableMap extends TableMap {
+class ProductI18nTableMap extends TableMap
+{
 
-	/**
-	 * The (dot-path) name of this class
-	 */
-	const CLASS_NAME = 'lib.model.map.ProductI18nTableMap';
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'lib.model.map.ProductI18nTableMap';
 
-	/**
-	 * Initialize the table attributes, columns and validators
-	 * Relations are not initialized by this method since they are lazy loaded
-	 *
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function initialize()
-	{
-	  // attributes
-		$this->setName('product_i18n');
-		$this->setPhpName('ProductI18n');
-		$this->setClassname('ProductI18n');
-		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(false);
-		// columns
-		$this->addForeignPrimaryKey('ID', 'Id', 'INTEGER' , 'product', 'ID', true, null, null);
-		$this->addPrimaryKey('CULTURE', 'Culture', 'VARCHAR', true, 7, null);
-		$this->addColumn('NAME', 'Name', 'VARCHAR', false, 50, null);
-		// validators
-	} // initialize()
+    /**
+     * Initialize the table attributes, columns and validators
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return     void
+     * @throws     PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('product_i18n');
+        $this->setPhpName('ProductI18n');
+        $this->setClassname('ProductI18n');
+        $this->setPackage('lib.model');
+        $this->setUseIdGenerator(false);
+        // columns
+        $this->addForeignPrimaryKey('ID', 'Id', 'INTEGER', 'product', 'ID', true, null, null);
+        $this->addPrimaryKey('CULTURE', 'Culture', 'VARCHAR', true, 7, null);
+        $this->addColumn('NAME', 'Name', 'VARCHAR', false, 50, null);
+        // validators
+    } // initialize()
 
-	/**
-	 * Build the RelationMap objects for this table relationships
-	 */
-	public function buildRelations()
-	{
-    $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, ['id' => 'id'], null, null);
-	} // buildRelations()
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+        $this->addRelation('Product', 'Product', RelationMap::MANY_TO_ONE, ['id' => 'id'], null, null);
+    } // buildRelations()
 
-	/**
-	 * 
-	 * Gets the list of behaviors registered for this table
-	 * 
-	 * @return array Associative array (name => parameters) of behaviors
-	 */
-	public function getBehaviors()
-	{
-		return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => [], 'symfony_i18n_translation' => ['culture_column' => 'culture']];
-	} // getBehaviors()
-
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => [], 'symfony_i18n_translation' => ['culture_column' => 'culture']];
+    } // getBehaviors()
 } // ProductI18nTableMap

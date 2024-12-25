@@ -7,8 +7,8 @@
  */
 class articleActions extends autoarticleActions
 {
-  public function executeMyAction()
-  {
-    return $this->renderText('Selected '.implode(', ', $this->getRequestParameter('sf_admin_batch_selection', [])));
-  }
+    public function executeMyAction()
+    {
+        return $this->renderText('Selected '.implode(', ', $this->getRequestParameter('sf_admin_batch_selection', [])));
+    }
 }

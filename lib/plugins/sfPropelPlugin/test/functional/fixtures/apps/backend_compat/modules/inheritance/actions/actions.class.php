@@ -7,19 +7,17 @@
  */
 class inheritanceActions extends autoinheritanceActions
 {
-  protected function addFiltersCriteria($c)
-  {
-    if ($this->getRequestParameter('filter'))
+    protected function addFiltersCriteria($c)
     {
-      $c->add(ArticlePeer::ONLINE, true);
+        if ($this->getRequestParameter('filter')) {
+            $c->add(ArticlePeer::ONLINE, true);
+        }
     }
-  }
 
-  protected function addSortCriteria($c)
-  {
-    if ($this->getRequestParameter('sort'))
+    protected function addSortCriteria($c)
     {
-      $c->addAscendingOrderByColumn(ArticlePeer::TITLE);
+        if ($this->getRequestParameter('sort')) {
+            $c->addAscendingOrderByColumn(ArticlePeer::TITLE);
+        }
     }
-  }
 }

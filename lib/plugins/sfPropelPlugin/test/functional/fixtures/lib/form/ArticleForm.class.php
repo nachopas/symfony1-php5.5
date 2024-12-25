@@ -6,22 +6,20 @@
  */
 class ArticleForm extends BaseArticleForm
 {
-  public function configure()
-  {
-    if ($category = $this->getObject()->getCategory())
+    public function configure()
     {
-      $this->embedForm('category', new CategoryForm($this->getObject()->getCategory()));
+        if ($category = $this->getObject()->getCategory()) {
+            $this->embedForm('category', new CategoryForm($this->getObject()->getCategory()));
+        }
+
+        if ($this->getOption('with_attachment')) {
+            $attachment = new Attachment();
+            $attachment->setArticle($this->object);
+
+            $attachmentForm = new AttachmentForm($attachment);
+            unset($attachmentForm['article_id']);
+
+            $this->embedForm('attachment', $attachmentForm);
+        }
     }
-
-    if ($this->getOption('with_attachment'))
-    {
-      $attachment = new Attachment();
-      $attachment->setArticle($this->object);
-
-      $attachmentForm = new AttachmentForm($attachment);
-      unset($attachmentForm['article_id']);
-
-      $this->embedForm('attachment', $attachmentForm);
-    }
-  }
 }

@@ -15,23 +15,23 @@ require_once('phing/Phing.php');
  */
 class sfPhing extends Phing
 {
-  static public function getPhingVersion()
-  {
-    return 'sfPhing';
-  }
+    public static function getPhingVersion()
+    {
+        return 'sfPhing';
+    }
 
-  /**
-   * @see Phing
-   */
-  public function runBuild()
-  {
-    // workaround for included phing 2.3 which by default loads many tasks
-    // that are not needed and incompatible (eg phing.tasks.ext.FtpDeployTask)
-    // by placing current directory on the include path our defaults will be loaded
-    // see ticket #5054
-    $includePath = get_include_path();
-    set_include_path(__DIR__.PATH_SEPARATOR.$includePath);
-    parent::runBuild();
-    set_include_path($includePath);
-  }
+    /**
+     * @see Phing
+     */
+    public function runBuild()
+    {
+        // workaround for included phing 2.3 which by default loads many tasks
+        // that are not needed and incompatible (eg phing.tasks.ext.FtpDeployTask)
+        // by placing current directory on the include path our defaults will be loaded
+        // see ticket #5054
+        $includePath = get_include_path();
+        set_include_path(__DIR__.PATH_SEPARATOR.$includePath);
+        parent::runBuild();
+        set_include_path($includePath);
+    }
 }

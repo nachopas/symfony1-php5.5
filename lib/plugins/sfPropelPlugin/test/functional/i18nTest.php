@@ -10,9 +10,8 @@
 
 $app = 'frontend';
 $fixtures = 'fixtures/fixtures.yml';
-if (!include(__DIR__.'/../bootstrap/functional.php'))
-{
-  return;
+if (!include(__DIR__.'/../bootstrap/functional.php')) {
+    return;
 }
 
 $b = new sfTestBrowser(new sfBrowser());

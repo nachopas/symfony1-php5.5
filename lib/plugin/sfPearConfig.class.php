@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -17,12 +17,12 @@ require_once 'PEAR/Config.php';
  */
 class sfPearConfig extends PEAR_Config
 {
-  function &getREST($version, $options = [])
-  {
-    $class = 'sfPearRest'.str_replace('.', '', $version);
+    public function &getREST($version, $options = [])
+    {
+        $class = 'sfPearRest'.str_replace('.', '', $version);
 
-    $remote = new $class($this, $options);
+        $remote = new $class($this, $options);
 
-    return $remote;
-  }
+        return $remote;
+    }
 }

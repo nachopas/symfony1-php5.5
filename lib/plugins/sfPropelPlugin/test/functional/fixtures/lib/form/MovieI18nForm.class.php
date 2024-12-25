@@ -6,7 +6,7 @@
  */
 class MovieI18nForm extends BaseMovieI18nForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

@@ -6,7 +6,7 @@
  */
 class CamelCaseFormFilter extends BaseCamelCaseFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

@@ -42,7 +42,7 @@
  */
 function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = [])
 {
-  return tag('link', ['rel'   => $tag_options['rel'] ?? 'alternate', 'type'  => $tag_options['type'] ?? 'application/'.$type.'+xml', 'title' => $tag_options['title'] ?? ucfirst($type), 'href'  => url_for($url, true)]);
+    return tag('link', ['rel'   => $tag_options['rel'] ?? 'alternate', 'type'  => $tag_options['type'] ?? 'application/'.$type.'+xml', 'title' => $tag_options['title'] ?? ucfirst($type), 'href'  => url_for($url, true)]);
 }
 
 /**
@@ -67,7 +67,7 @@ function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = [])
  */
 function javascript_path($source, $absolute = false)
 {
-  return _compute_public_path($source, sfConfig::get('sf_web_js_dir_name', 'js'), 'js', $absolute);
+    return _compute_public_path($source, sfConfig::get('sf_web_js_dir_name', 'js'), 'js', $absolute);
 }
 
 /**
@@ -90,47 +90,40 @@ function javascript_path($source, $absolute = false)
  */
 function javascript_include_tag()
 {
-  $sources = func_get_args();
-  $sourceOptions = (func_num_args() > 1 && is_array($sources[func_num_args() - 1])) ? array_pop($sources) : [];
+    $sources = func_get_args();
+    $sourceOptions = (func_num_args() > 1 && is_array($sources[func_num_args() - 1])) ? array_pop($sources) : [];
 
-  $html = '';
-  foreach ($sources as $source)
-  {
-    $absolute = false;
-    if (isset($sourceOptions['absolute']))
-    {
-      unset($sourceOptions['absolute']);
-      $absolute = true;
+    $html = '';
+    foreach ($sources as $source) {
+        $absolute = false;
+        if (isset($sourceOptions['absolute'])) {
+            unset($sourceOptions['absolute']);
+            $absolute = true;
+        }
+
+        $condition = null;
+        if (isset($sourceOptions['condition'])) {
+            $condition = $sourceOptions['condition'];
+            unset($sourceOptions['condition']);
+        }
+
+        if (!isset($sourceOptions['raw_name'])) {
+            $source = javascript_path($source, $absolute);
+        } else {
+            unset($sourceOptions['raw_name']);
+        }
+
+        $options = array_merge(['type' => 'text/javascript', 'src' => $source], $sourceOptions);
+        $tag = content_tag('script', '', $options);
+
+        if (null !== $condition) {
+            $tag = comment_as_conditional($condition, $tag);
+        }
+
+        $html .= $tag."\n";
     }
 
-    $condition = null;
-    if (isset($sourceOptions['condition']))
-    {
-      $condition = $sourceOptions['condition'];
-      unset($sourceOptions['condition']);
-    }
-
-    if (!isset($sourceOptions['raw_name']))
-    {
-      $source = javascript_path($source, $absolute);
-    }
-    else
-    {
-      unset($sourceOptions['raw_name']);
-    }
-
-    $options = array_merge(['type' => 'text/javascript', 'src' => $source], $sourceOptions);
-    $tag = content_tag('script', '', $options);
-
-    if (null !== $condition)
-    {
-      $tag = comment_as_conditional($condition, $tag);
-    }
-
-    $html .= $tag."\n";
-  }
-
-  return $html;
+    return $html;
 }
 
 /**
@@ -155,7 +148,7 @@ function javascript_include_tag()
  */
 function stylesheet_path($source, $absolute = false)
 {
-  return _compute_public_path($source, sfConfig::get('sf_web_css_dir_name', 'css'), 'css', $absolute);
+    return _compute_public_path($source, sfConfig::get('sf_web_css_dir_name', 'css'), 'css', $absolute);
 }
 
 /**
@@ -188,47 +181,40 @@ function stylesheet_path($source, $absolute = false)
  */
 function stylesheet_tag()
 {
-  $sources = func_get_args();
-  $sourceOptions = (func_num_args() > 1 && is_array($sources[func_num_args() - 1])) ? array_pop($sources) : [];
+    $sources = func_get_args();
+    $sourceOptions = (func_num_args() > 1 && is_array($sources[func_num_args() - 1])) ? array_pop($sources) : [];
 
-  $html = '';
-  foreach ($sources as $source)
-  {
-    $absolute = false;
-    if (isset($sourceOptions['absolute']))
-    {
-      unset($sourceOptions['absolute']);
-      $absolute = true;
+    $html = '';
+    foreach ($sources as $source) {
+        $absolute = false;
+        if (isset($sourceOptions['absolute'])) {
+            unset($sourceOptions['absolute']);
+            $absolute = true;
+        }
+
+        $condition = null;
+        if (isset($sourceOptions['condition'])) {
+            $condition = $sourceOptions['condition'];
+            unset($sourceOptions['condition']);
+        }
+
+        if (!isset($sourceOptions['raw_name'])) {
+            $source = stylesheet_path($source, $absolute);
+        } else {
+            unset($sourceOptions['raw_name']);
+        }
+
+        $options = array_merge(['rel' => 'stylesheet', 'type' => 'text/css', 'media' => 'screen', 'href' => $source], $sourceOptions);
+        $tag = tag('link', $options);
+
+        if (null !== $condition) {
+            $tag = comment_as_conditional($condition, $tag);
+        }
+
+        $html .= $tag."\n";
     }
 
-    $condition = null;
-    if (isset($sourceOptions['condition']))
-    {
-      $condition = $sourceOptions['condition'];
-      unset($sourceOptions['condition']);
-    }
-
-    if (!isset($sourceOptions['raw_name']))
-    {
-      $source = stylesheet_path($source, $absolute);
-    }
-    else
-    {
-      unset($sourceOptions['raw_name']);
-    }
-
-    $options = array_merge(['rel' => 'stylesheet', 'type' => 'text/css', 'media' => 'screen', 'href' => $source], $sourceOptions);
-    $tag = tag('link', $options);
-
-    if (null !== $condition)
-    {
-      $tag = comment_as_conditional($condition, $tag);
-    }
-
-    $html .= $tag."\n";
-  }
-
-  return $html;
+    return $html;
 }
 
 /**
@@ -238,7 +224,7 @@ function stylesheet_tag()
  */
 function use_stylesheet($css, $position = '', $options = [])
 {
-  sfContext::getInstance()->getResponse()->addStylesheet($css, $position, $options);
+    sfContext::getInstance()->getResponse()->addStylesheet($css, $position, $options);
 }
 
 /**
@@ -248,7 +234,7 @@ function use_stylesheet($css, $position = '', $options = [])
  */
 function use_javascript($js, $position = '', $options = [])
 {
-  sfContext::getInstance()->getResponse()->addJavascript($js, $position, $options);
+    sfContext::getInstance()->getResponse()->addJavascript($js, $position, $options);
 }
 
 /**
@@ -258,14 +244,11 @@ function use_javascript($js, $position = '', $options = [])
  */
 function decorate_with($layout)
 {
-  if (false === $layout)
-  {
-    sfContext::getInstance()->get('view_instance')->setDecorator(false);
-  }
-  else
-  {
-    sfContext::getInstance()->get('view_instance')->setDecoratorTemplate($layout);
-  }
+    if (false === $layout) {
+        sfContext::getInstance()->get('view_instance')->setDecorator(false);
+    } else {
+        sfContext::getInstance()->get('view_instance')->setDecoratorTemplate($layout);
+    }
 }
 
 /**
@@ -290,7 +273,7 @@ function decorate_with($layout)
  */
 function image_path($source, $absolute = false)
 {
-  return _compute_public_path($source, sfConfig::get('sf_web_images_dir_name', 'images'), 'png', $absolute);
+    return _compute_public_path($source, sfConfig::get('sf_web_images_dir_name', 'images'), 'png', $absolute);
 }
 
 /**
@@ -317,90 +300,75 @@ function image_path($source, $absolute = false)
  */
 function image_tag($source, $options = [])
 {
-  if (!$source)
-  {
-    return '';
-  }
-
-  $options = _parse_attributes($options);
-
-  $absolute = false;
-  if (isset($options['absolute']))
-  {
-    unset($options['absolute']);
-    $absolute = true;
-  }
-
-  if (!isset($options['raw_name']))
-  {
-    $options['src'] = image_path($source, $absolute);
-  }
-  else
-  {
-    $options['src'] = $source;
-    unset($options['raw_name']);
-  }
-
-  if (isset($options['alt_title']))
-  {
-    // set as alt and title but do not overwrite explicitly set
-    if (!isset($options['alt']))
-    {
-      $options['alt'] = $options['alt_title'];
+    if (!$source) {
+        return '';
     }
-    if (!isset($options['title']))
-    {
-      $options['title'] = $options['alt_title'];
+
+    $options = _parse_attributes($options);
+
+    $absolute = false;
+    if (isset($options['absolute'])) {
+        unset($options['absolute']);
+        $absolute = true;
     }
-    unset($options['alt_title']);
-  }
 
-  if (isset($options['size']))
-  {
-    [$options['width'], $options['height']] = explode('x', $options['size'], 2);
-    unset($options['size']);
-  }
+    if (!isset($options['raw_name'])) {
+        $options['src'] = image_path($source, $absolute);
+    } else {
+        $options['src'] = $source;
+        unset($options['raw_name']);
+    }
 
-  return tag('img', $options);
+    if (isset($options['alt_title'])) {
+        // set as alt and title but do not overwrite explicitly set
+        if (!isset($options['alt'])) {
+            $options['alt'] = $options['alt_title'];
+        }
+        if (!isset($options['title'])) {
+            $options['title'] = $options['alt_title'];
+        }
+        unset($options['alt_title']);
+    }
+
+    if (isset($options['size'])) {
+        [$options['width'], $options['height']] = explode('x', $options['size'], 2);
+        unset($options['size']);
+    }
+
+    return tag('img', $options);
 }
 
 function _compute_public_path($source, $dir, $ext, $absolute = false)
 {
-  if (strpos($source, '://') || strpos($source, '//') === 0)
-  {
-    return $source;
-  }
+    if (strpos($source, '://') || strpos($source, '//') === 0) {
+        return $source;
+    }
 
-  $request = sfContext::getInstance()->getRequest();
-  $sf_relative_url_root = $request->getRelativeUrlRoot();
-  if (0 !== strpos($source, '/'))
-  {
-    $source = $sf_relative_url_root.'/'.$dir.'/'.$source;
-  }
+    $request = sfContext::getInstance()->getRequest();
+    $sf_relative_url_root = $request->getRelativeUrlRoot();
+    if (0 !== strpos($source, '/')) {
+        $source = $sf_relative_url_root.'/'.$dir.'/'.$source;
+    }
 
-  $query_string = '';
-  if (false !== $pos = strpos($source, '?'))
-  {
-    $query_string = substr($source, $pos);
-    $source = substr($source, 0, $pos);
-  }
+    $query_string = '';
+    if (false !== $pos = strpos($source, '?')) {
+        $query_string = substr($source, $pos);
+        $source = substr($source, 0, $pos);
+    }
 
-  if (false === strpos(basename($source), '.'))
-  {
-    $source .= '.'.$ext;
-  }
+    if (false === strpos(basename($source), '.')) {
+        $source .= '.'.$ext;
+    }
 
-  if ($sf_relative_url_root && 0 !== strpos($source, (string) $sf_relative_url_root))
-  {
-    $source = $sf_relative_url_root.$source;
-  }
+    if ($sf_relative_url_root && 0 !== strpos($source, (string) $sf_relative_url_root)) {
+        $source = $sf_relative_url_root.$source;
+    }
 
-  if ($absolute)
-  {
-    $source = 'http'.($request->isSecure() ? 's' : '').'://'.$request->getHost().$source;
-  }
+    if ($absolute) {
+        $source = 'http'.($request->isSecure() ? 's' : '').'://'.$request->getHost().$source;
+    }
 
-  return $source.$query_string;
+    return $source.$query_string;
 }
 
 /**
@@ -425,12 +393,11 @@ function _compute_public_path($source, $dir, $ext, $absolute = false)
  */
 function include_metas()
 {
-  $context = sfContext::getInstance();
-  $i18n = sfConfig::get('sf_i18n') ? $context->getI18N() : null;
-  foreach ($context->getResponse()->getMetas() as $name => $content)
-  {
-    echo tag('meta', ['name' => $name, 'content' => null === $i18n ? $content : $i18n->__($content)])."\n";
-  }
+    $context = sfContext::getInstance();
+    $i18n = sfConfig::get('sf_i18n') ? $context->getI18N() : null;
+    foreach ($context->getResponse()->getMetas() as $name => $content) {
+        echo tag('meta', ['name' => $name, 'content' => null === $i18n ? $content : $i18n->__($content)])."\n";
+    }
 }
 
 /**
@@ -451,10 +418,9 @@ function include_metas()
  */
 function include_http_metas()
 {
-  foreach (sfContext::getInstance()->getResponse()->getHttpMetas() as $httpequiv => $value)
-  {
-    echo tag('meta', ['http-equiv' => $httpequiv, 'content' => $value])."\n";
-  }
+    foreach (sfContext::getInstance()->getResponse()->getHttpMetas() as $httpequiv => $value) {
+        echo tag('meta', ['http-equiv' => $httpequiv, 'content' => $value])."\n";
+    }
 }
 
 /**
@@ -467,9 +433,9 @@ function include_http_metas()
  */
 function include_title()
 {
-  $title = sfContext::getInstance()->getResponse()->getTitle();
+    $title = sfContext::getInstance()->getResponse()->getTitle();
 
-  echo content_tag('title', $title)."\n";
+    echo content_tag('title', $title)."\n";
 }
 
 /**
@@ -483,16 +449,15 @@ function include_title()
  */
 function get_javascripts()
 {
-  $response = sfContext::getInstance()->getResponse();
-  sfConfig::set('symfony.asset.javascripts_included', true);
+    $response = sfContext::getInstance()->getResponse();
+    sfConfig::set('symfony.asset.javascripts_included', true);
 
-  $html = '';
-  foreach ($response->getJavascripts() as $file => $options)
-  {
-    $html .= javascript_include_tag($file, $options);
-  }
+    $html = '';
+    foreach ($response->getJavascripts() as $file => $options) {
+        $html .= javascript_include_tag($file, $options);
+    }
 
-  return $html;
+    return $html;
 }
 
 /**
@@ -502,7 +467,7 @@ function get_javascripts()
  */
 function include_javascripts()
 {
-  echo get_javascripts();
+    echo get_javascripts();
 }
 
 /**
@@ -516,16 +481,15 @@ function include_javascripts()
  */
 function get_stylesheets()
 {
-  $response = sfContext::getInstance()->getResponse();
-  sfConfig::set('symfony.asset.stylesheets_included', true);
+    $response = sfContext::getInstance()->getResponse();
+    sfConfig::set('symfony.asset.stylesheets_included', true);
 
-  $html = '';
-  foreach ($response->getStylesheets() as $file => $options)
-  {
-    $html .= stylesheet_tag($file, $options);
-  }
+    $html = '';
+    foreach ($response->getStylesheets() as $file => $options) {
+        $html .= stylesheet_tag($file, $options);
+    }
 
-  return $html;
+    return $html;
 }
 
 /**
@@ -535,7 +499,7 @@ function get_stylesheets()
  */
 function include_stylesheets()
 {
-  echo get_stylesheets();
+    echo get_stylesheets();
 }
 
 /**
@@ -552,9 +516,9 @@ function include_stylesheets()
  */
 function dynamic_javascript_include_tag($uri, $absolute = false, $options = [])
 {
-  $options['raw_name'] = true;
+    $options['raw_name'] = true;
 
-  return javascript_include_tag(_dynamic_path($uri, 'js', $absolute), $options);
+    return javascript_include_tag(_dynamic_path($uri, 'js', $absolute), $options);
 }
 
 /**
@@ -567,9 +531,9 @@ function dynamic_javascript_include_tag($uri, $absolute = false, $options = [])
  */
 function use_dynamic_javascript($js, $position = '', $options = [])
 {
-  $options['raw_name'] = true;
+    $options['raw_name'] = true;
 
-  return use_javascript(_dynamic_path($js, 'js'), $position, $options);
+    return use_javascript(_dynamic_path($js, 'js'), $position, $options);
 }
 
 /**
@@ -582,14 +546,14 @@ function use_dynamic_javascript($js, $position = '', $options = [])
  */
 function use_dynamic_stylesheet($css, $position = '', $options = [])
 {
-  $options['raw_name'] = true;
+    $options['raw_name'] = true;
 
-  return use_stylesheet(_dynamic_path($css, 'css'), $position, $options);
+    return use_stylesheet(_dynamic_path($css, 'css'), $position, $options);
 }
 
 function _dynamic_path($uri, $format, $absolute = false)
 {
-  return url_for($uri.(false === strpos($uri, '?') ? '?' : '&').'sf_format='.$format, $absolute);
+    return url_for($uri.(false === strpos($uri, '?') ? '?' : '&').'sf_format='.$format, $absolute);
 }
 
 /**
@@ -612,13 +576,12 @@ function _dynamic_path($uri, $format, $absolute = false)
  */
 function get_javascripts_for_form(sfForm $form)
 {
-  $html = '';
-  foreach ($form->getJavascripts() as $file)
-  {
-    $html .= javascript_include_tag($file);
-  }
+    $html = '';
+    foreach ($form->getJavascripts() as $file) {
+        $html .= javascript_include_tag($file);
+    }
 
-  return $html;
+    return $html;
 }
 
 /**
@@ -628,7 +591,7 @@ function get_javascripts_for_form(sfForm $form)
  */
 function include_javascripts_for_form(sfForm $form)
 {
-  echo get_javascripts_for_form($form);
+    echo get_javascripts_for_form($form);
 }
 
 /**
@@ -638,12 +601,11 @@ function include_javascripts_for_form(sfForm $form)
  */
 function use_javascripts_for_form(sfForm $form)
 {
-  $response = sfContext::getInstance()->getResponse();
+    $response = sfContext::getInstance()->getResponse();
 
-  foreach ($form->getJavascripts() as $file)
-  {
-    $response->addJavascript($file);
-  }
+    foreach ($form->getJavascripts() as $file) {
+        $response->addJavascript($file);
+    }
 }
 
 /**
@@ -666,13 +628,12 @@ function use_javascripts_for_form(sfForm $form)
  */
 function get_stylesheets_for_form(sfForm $form)
 {
-  $html = '';
-  foreach ($form->getStylesheets() as $file => $media)
-  {
-    $html .= stylesheet_tag($file, ['media' => $media]);
-  }
+    $html = '';
+    foreach ($form->getStylesheets() as $file => $media) {
+        $html .= stylesheet_tag($file, ['media' => $media]);
+    }
 
-  return $html;
+    return $html;
 }
 
 /**
@@ -682,7 +643,7 @@ function get_stylesheets_for_form(sfForm $form)
  */
 function include_stylesheets_for_form(sfForm $form)
 {
-  echo get_stylesheets_for_form($form);
+    echo get_stylesheets_for_form($form);
 }
 
 /**
@@ -692,10 +653,9 @@ function include_stylesheets_for_form(sfForm $form)
  */
 function use_stylesheets_for_form(sfForm $form)
 {
-  $response = sfContext::getInstance()->getResponse();
+    $response = sfContext::getInstance()->getResponse();
 
-  foreach ($form->getStylesheets() as $file => $media)
-  {
-    $response->addStylesheet($file, '', ['media' => $media]);
-  }
+    foreach ($form->getStylesheets() as $file => $media) {
+        $response->addStylesheet($file, '', ['media' => $media]);
+    }
 }

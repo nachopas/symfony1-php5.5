@@ -16,61 +16,61 @@
  * (i.e. if it's a text column type).
  *
  */
-class ArticleTableMap extends TableMap {
+class ArticleTableMap extends TableMap
+{
 
-	/**
-	 * The (dot-path) name of this class
-	 */
-	const CLASS_NAME = 'lib.model.map.ArticleTableMap';
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'lib.model.map.ArticleTableMap';
 
-	/**
-	 * Initialize the table attributes, columns and validators
-	 * Relations are not initialized by this method since they are lazy loaded
-	 *
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function initialize()
-	{
-	  // attributes
-		$this->setName('article');
-		$this->setPhpName('Article');
-		$this->setClassname('Article');
-		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(true);
-		// columns
-		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addColumn('TITLE', 'Title', 'VARCHAR', true, 255, null);
-		$this->addColumn('BODY', 'Body', 'LONGVARCHAR', false, null, null);
-		$this->addColumn('ONLINE', 'Online', 'BOOLEAN', false, null, null);
-		$this->addColumn('EXCERPT', 'Excerpt', 'VARCHAR', false, 255, null);
-		$this->addForeignKey('CATEGORY_ID', 'CategoryId', 'INTEGER', 'category', 'ID', true, null, null);
-		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
-		$this->addColumn('END_DATE', 'EndDate', 'TIMESTAMP', false, null, null);
-		$this->addForeignKey('BOOK_ID', 'BookId', 'INTEGER', 'book', 'ID', false, null, null);
-		// validators
-	} // initialize()
+    /**
+     * Initialize the table attributes, columns and validators
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return     void
+     * @throws     PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('article');
+        $this->setPhpName('Article');
+        $this->setClassname('Article');
+        $this->setPackage('lib.model');
+        $this->setUseIdGenerator(true);
+        // columns
+        $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('TITLE', 'Title', 'VARCHAR', true, 255, null);
+        $this->addColumn('BODY', 'Body', 'LONGVARCHAR', false, null, null);
+        $this->addColumn('ONLINE', 'Online', 'BOOLEAN', false, null, null);
+        $this->addColumn('EXCERPT', 'Excerpt', 'VARCHAR', false, 255, null);
+        $this->addForeignKey('CATEGORY_ID', 'CategoryId', 'INTEGER', 'category', 'ID', true, null, null);
+        $this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
+        $this->addColumn('END_DATE', 'EndDate', 'TIMESTAMP', false, null, null);
+        $this->addForeignKey('BOOK_ID', 'BookId', 'INTEGER', 'book', 'ID', false, null, null);
+        // validators
+    } // initialize()
 
-	/**
-	 * Build the RelationMap objects for this table relationships
-	 */
-	public function buildRelations()
-	{
-    $this->addRelation('Category', 'Category', RelationMap::MANY_TO_ONE, ['category_id' => 'id'], null, null);
-    $this->addRelation('Book', 'Book', RelationMap::MANY_TO_ONE, ['book_id' => 'id'], null, null);
-    $this->addRelation('AuthorArticle', 'AuthorArticle', RelationMap::ONE_TO_MANY, ['id' => 'article_id'], null, null);
-    $this->addRelation('Attachment', 'Attachment', RelationMap::ONE_TO_MANY, ['id' => 'article_id'], null, null);
-	} // buildRelations()
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+        $this->addRelation('Category', 'Category', RelationMap::MANY_TO_ONE, ['category_id' => 'id'], null, null);
+        $this->addRelation('Book', 'Book', RelationMap::MANY_TO_ONE, ['book_id' => 'id'], null, null);
+        $this->addRelation('AuthorArticle', 'AuthorArticle', RelationMap::ONE_TO_MANY, ['id' => 'article_id'], null, null);
+        $this->addRelation('Attachment', 'Attachment', RelationMap::ONE_TO_MANY, ['id' => 'article_id'], null, null);
+    } // buildRelations()
 
-	/**
-	 * 
-	 * Gets the list of behaviors registered for this table
-	 * 
-	 * @return array Associative array (name => parameters) of behaviors
-	 */
-	public function getBehaviors()
-	{
-		return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => [], 'symfony_timestampable' => ['create_column' => 'created_at']];
-	} // getBehaviors()
-
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => [], 'symfony_timestampable' => ['create_column' => 'created_at']];
+    } // getBehaviors()
 } // ArticleTableMap

@@ -22,36 +22,31 @@
  */
 function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_lastspace = false)
 {
-  if ('' == $text)
-  {
-    return '';
-  }
-
-  $mbstring = extension_loaded('mbstring');
-  if ($mbstring)
-  {
-    $old_encoding = mb_internal_encoding();
-    @mb_internal_encoding(mb_detect_encoding($text));
-  }
-  $strlen = $mbstring ? 'mb_strlen' : 'strlen';
-  $substr = $mbstring ? 'mb_substr' : 'substr';
-
-  if ($strlen($text) > $length)
-  {
-    $truncate_text = $substr($text, 0, $length - $strlen($truncate_string));
-    if ($truncate_lastspace)
-    {
-      $truncate_text = preg_replace('/\s+?(\S+)?$/', '', $truncate_text);
+    if ('' == $text) {
+        return '';
     }
-    $text = $truncate_text.$truncate_string;
-  }
 
-  if ($mbstring)
-  {
-    @mb_internal_encoding($old_encoding);
-  }
+    $mbstring = extension_loaded('mbstring');
+    if ($mbstring) {
+        $old_encoding = mb_internal_encoding();
+        @mb_internal_encoding(mb_detect_encoding($text));
+    }
+    $strlen = $mbstring ? 'mb_strlen' : 'strlen';
+    $substr = $mbstring ? 'mb_substr' : 'substr';
 
-  return $text;
+    if ($strlen($text) > $length) {
+        $truncate_text = $substr($text, 0, $length - $strlen($truncate_string));
+        if ($truncate_lastspace) {
+            $truncate_text = preg_replace('/\s+?(\S+)?$/', '', $truncate_text);
+        }
+        $text = $truncate_text.$truncate_string;
+    }
+
+    if ($mbstring) {
+        @mb_internal_encoding($old_encoding);
+    }
+
+    return $text;
 }
 
 /**
@@ -68,31 +63,25 @@ function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_
  */
 function highlight_text($text, $phrase, $highlighter = '<strong class="highlight">\\1</strong>')
 {
-  if (empty($text))
-  {
-    return '';
-  }
-
-  if (empty($phrase))
-  {
-    return $text;
-  }
-
-  if (is_array($phrase) or ($phrase instanceof sfOutputEscaperArrayDecorator))
-  {
-    foreach ($phrase as $word)
-    {
-      $pattern[] = '/('.preg_quote($word, '/').')/i';
-      $replacement[] = $highlighter;
+    if (empty($text)) {
+        return '';
     }
-  }
-  else
-  {
-    $pattern = '/('.preg_quote($phrase, '/').')/i';
-    $replacement = $highlighter;
-  }
 
-  return preg_replace($pattern, $replacement, $text);
+    if (empty($phrase)) {
+        return $text;
+    }
+
+    if (is_array($phrase) or ($phrase instanceof sfOutputEscaperArrayDecorator)) {
+        foreach ($phrase as $word) {
+            $pattern[] = '/('.preg_quote($word, '/').')/i';
+            $replacement[] = $highlighter;
+        }
+    } else {
+        $pattern = '/('.preg_quote($phrase, '/').')/i';
+        $replacement = $highlighter;
+    }
+
+    return preg_replace($pattern, $replacement, $text);
 }
 
 /**
@@ -105,53 +94,46 @@ function highlight_text($text, $phrase, $highlighter = '<strong class="highlight
  */
 function excerpt_text($text, $phrase, $radius = 100, $excerpt_string = '...', $excerpt_space = false)
 {
-  if ($text == '' || $phrase == '')
-  {
-    return '';
-  }
-
-  $mbstring = extension_loaded('mbstring');
-  if($mbstring)
-  {
-    $old_encoding = mb_internal_encoding();
-    @mb_internal_encoding(mb_detect_encoding($text));
-  }
-  $strlen = ($mbstring) ? 'mb_strlen' : 'strlen';
-  $strpos = ($mbstring) ? 'mb_strpos' : 'strpos';
-  $strtolower = ($mbstring) ? 'mb_strtolower' : 'strtolower';
-  $substr = ($mbstring) ? 'mb_substr' : 'substr';
-
-  $found_pos = $strpos($strtolower($text), $strtolower($phrase));
-  $return_string = '';
-  if ($found_pos !== false)
-  {
-    $start_pos = max($found_pos - $radius, 0);
-    $end_pos = min($found_pos + $strlen($phrase) + $radius, $strlen($text));
-    $excerpt = $substr($text, $start_pos, $end_pos - $start_pos);
-    $prefix = ($start_pos > 0) ? $excerpt_string : '';
-    $postfix = $end_pos < $strlen($text) ? $excerpt_string : '';
-
-    if ($excerpt_space)
-    {
-      // only cut off at ends where $exceprt_string is added
-      if($prefix)
-      {
-        $excerpt = preg_replace('/^(\S+)?\s+?/', ' ', $excerpt);
-      }
-      if($postfix)
-      {
-        $excerpt = preg_replace('/\s+?(\S+)?$/', ' ', $excerpt);
-      }
+    if ($text == '' || $phrase == '') {
+        return '';
     }
 
-    $return_string = $prefix.$excerpt.$postfix;
-  }
+    $mbstring = extension_loaded('mbstring');
+    if ($mbstring) {
+        $old_encoding = mb_internal_encoding();
+        @mb_internal_encoding(mb_detect_encoding($text));
+    }
+    $strlen = ($mbstring) ? 'mb_strlen' : 'strlen';
+    $strpos = ($mbstring) ? 'mb_strpos' : 'strpos';
+    $strtolower = ($mbstring) ? 'mb_strtolower' : 'strtolower';
+    $substr = ($mbstring) ? 'mb_substr' : 'substr';
 
-  if($mbstring)
-  {
-   @mb_internal_encoding($old_encoding);
-  }
-  return $return_string;
+    $found_pos = $strpos($strtolower($text), $strtolower($phrase));
+    $return_string = '';
+    if ($found_pos !== false) {
+        $start_pos = max($found_pos - $radius, 0);
+        $end_pos = min($found_pos + $strlen($phrase) + $radius, $strlen($text));
+        $excerpt = $substr($text, $start_pos, $end_pos - $start_pos);
+        $prefix = ($start_pos > 0) ? $excerpt_string : '';
+        $postfix = $end_pos < $strlen($text) ? $excerpt_string : '';
+
+        if ($excerpt_space) {
+            // only cut off at ends where $exceprt_string is added
+            if ($prefix) {
+                $excerpt = preg_replace('/^(\S+)?\s+?/', ' ', $excerpt);
+            }
+            if ($postfix) {
+                $excerpt = preg_replace('/\s+?(\S+)?$/', ' ', $excerpt);
+            }
+        }
+
+        $return_string = $prefix.$excerpt.$postfix;
+    }
+
+    if ($mbstring) {
+        @mb_internal_encoding($old_encoding);
+    }
+    return $return_string;
 }
 
 /**
@@ -159,7 +141,7 @@ function excerpt_text($text, $phrase, $radius = 100, $excerpt_string = '...', $e
  */
 function wrap_text($text, $line_width = 80)
 {
-  return preg_replace('/(.{1,'.$line_width.'})(\s+|$)/s', "\\1\n", preg_replace("/\n/", "\n\n", $text));
+    return preg_replace('/(.{1,'.$line_width.'})(\s+|$)/s', "\\1\n", preg_replace("/\n/", "\n\n", $text));
 }
 
 /**
@@ -170,17 +152,17 @@ function wrap_text($text, $line_width = 80)
  */
 function simple_format_text($text, $options = [])
 {
-  $css = (isset($options['class'])) ? ' class="'.$options['class'].'"' : '';
+    $css = (isset($options['class'])) ? ' class="'.$options['class'].'"' : '';
 
-  $text = sfToolkit::pregtr($text, [
+    $text = sfToolkit::pregtr($text, [
       "/(\r\n|\r)/"        => "\n",
       // lets make them newlines crossplatform
       "/\n{2,}/"           => "</p><p$css>",
   ]);    // turn two and more newlines into paragraph
 
-  // turn single newline into <br/>
-  $text = str_replace("\n", "\n<br />", $text);
-  return '<p'.$css.'>'.$text.'</p>'; // wrap the first and last line in paragraphs before we're done
+    // turn single newline into <br/>
+    $text = str_replace("\n", "\n<br />", $text);
+    return '<p'.$css.'>'.$text.'</p>'; // wrap the first and last line in paragraphs before we're done
 }
 
 /**
@@ -194,18 +176,13 @@ function simple_format_text($text, $options = [])
  */
 function auto_link_text($text, $link = 'all', $href_options = [], $truncate = false, $truncate_len = 35, $pad = '...')
 {
-  if ($link == 'all')
-  {
-    return _auto_link_urls(_auto_link_email_addresses($text), $href_options, $truncate, $truncate_len, $pad);
-  }
-  else if ($link == 'email_addresses')
-  {
-    return _auto_link_email_addresses($text);
-  }
-  else if ($link == 'urls')
-  {
-    return _auto_link_urls($text, $href_options, $truncate, $truncate_len, $pad);
-  }
+    if ($link == 'all') {
+        return _auto_link_urls(_auto_link_email_addresses($text), $href_options, $truncate, $truncate_len, $pad);
+    } elseif ($link == 'email_addresses') {
+        return _auto_link_email_addresses($text);
+    } elseif ($link == 'urls') {
+        return _auto_link_urls($text, $href_options, $truncate, $truncate_len, $pad);
+    }
 }
 
 /**
@@ -213,12 +190,11 @@ function auto_link_text($text, $link = 'all', $href_options = [], $truncate = fa
  */
 function strip_links_text($text)
 {
-  return preg_replace('/<a[^>]*>(.*?)<\/a>/s', '\\1', $text);
+    return preg_replace('/<a[^>]*>(.*?)<\/a>/s', '\\1', $text);
 }
 
-if (!defined('SF_AUTO_LINK_RE'))
-{
-  define('SF_AUTO_LINK_RE', '~
+if (!defined('SF_AUTO_LINK_RE')) {
+    define('SF_AUTO_LINK_RE', '~
     (                       # leading text
       <\w+.*?>|             #   leading HTML tag, or
       [^=!:\'"/]|           #   leading punctuation, or
@@ -245,30 +221,28 @@ if (!defined('SF_AUTO_LINK_RE'))
  */
 function _auto_link_urls($text, $href_options = [], $truncate = false, $truncate_len = 40, $pad = '...')
 {
-  $href_options = _tag_options($href_options);
+    $href_options = _tag_options($href_options);
 
-  $callback_function = function($matches) use ($href_options, $truncate, $truncate_len, $pad) {
-      if (preg_match("/<a\s/i", $matches[1]))
-      {
-          return $matches[0];
-      }
+    $callback_function = function ($matches) use ($href_options, $truncate, $truncate_len, $pad) {
+        if (preg_match("/<a\s/i", $matches[1])) {
+            return $matches[0];
+        }
 
-      $text = $matches[2] . $matches[3];
-      $href = ($matches[2] == "www." ? "http://www." : $matches[2]) . $matches[3];
+        $text = $matches[2] . $matches[3];
+        $href = ($matches[2] == "www." ? "http://www." : $matches[2]) . $matches[3];
 
-      if ($truncate && strlen($text) > $truncate_len)
-      {
-          $text = substr($text, 0, $truncate_len).$pad;
-      }
+        if ($truncate && strlen($text) > $truncate_len) {
+            $text = substr($text, 0, $truncate_len).$pad;
+        }
 
-      return sprintf('%s<a href="%s"%s>%s</a>%s', $matches[1], $href, $href_options, $text, $matches[4]);
-  };
+        return sprintf('%s<a href="%s"%s>%s</a>%s', $matches[1], $href, $href_options, $text, $matches[4]);
+    };
 
-  return preg_replace_callback(
-    SF_AUTO_LINK_RE,
-    $callback_function,
-    $text
-  );
+    return preg_replace_callback(
+        SF_AUTO_LINK_RE,
+        $callback_function,
+        $text
+    );
 }
 
 /**
@@ -276,10 +250,10 @@ function _auto_link_urls($text, $href_options = [], $truncate = false, $truncate
  */
 function _auto_link_email_addresses($text)
 {
-  // Taken from http://snippets.dzone.com/posts/show/6156
-  return preg_replace("#(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $text);
+    // Taken from http://snippets.dzone.com/posts/show/6156
+    return preg_replace("#(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $text);
 
-  // Removed since it destroys already linked emails
+    // Removed since it destroys already linked emails
   // Example:   <a href="mailto:me@example.com">bar</a> gets <a href="mailto:me@example.com">bar</a> gets <a href="mailto:<a href="mailto:me@example.com">bar</a>
   //return preg_replace('/([\w\.!#\$%\-+.]+@[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)+)/', '<a href="mailto:\\1">\\1</a>', $text);
 }

@@ -6,7 +6,7 @@
  */
 class ArticleTranslationForm extends BaseArticleTranslationForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

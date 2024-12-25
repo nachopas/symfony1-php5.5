@@ -9,16 +9,15 @@
  */
 abstract class BaseBlogArticleForm extends ArticleForm
 {
-  protected function setupInheritance()
-  {
-    parent::setupInheritance();
+    protected function setupInheritance()
+    {
+        parent::setupInheritance();
 
-    $this->widgetSchema->setNameFormat('blog_article[%s]');
-  }
+        $this->widgetSchema->setNameFormat('blog_article[%s]');
+    }
 
-  public function getModelName()
-  {
-    return 'BlogArticle';
-  }
-
+    public function getModelName()
+    {
+        return 'BlogArticle';
+    }
 }

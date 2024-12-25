@@ -15,50 +15,48 @@
  */
 class sfTimerManager
 {
-  /** @var sfTimer[] */
-  static public $timers = [];
+    /** @var sfTimer[] */
+    public static $timers = [];
 
-  /**
-   * Gets a sfTimer instance.
-   *
-   * It returns the timer named $name or create a new one if it does not exist.
-   *
-   * @param string $name The name of the timer
-   *
-   * @param bool   $reset
-   *
-   * @return sfTimer The timer instance
-   */
-  public static function getTimer($name, $reset=true)
-  {
-    if (!isset(self::$timers[$name]))
+    /**
+     * Gets a sfTimer instance.
+     *
+     * It returns the timer named $name or create a new one if it does not exist.
+     *
+     * @param string $name The name of the timer
+     *
+     * @param bool   $reset
+     *
+     * @return sfTimer The timer instance
+     */
+    public static function getTimer($name, $reset=true)
     {
-      self::$timers[$name] = new sfTimer($name);
+        if (!isset(self::$timers[$name])) {
+            self::$timers[$name] = new sfTimer($name);
+        }
+
+        if ($reset) {
+            self::$timers[$name]->startTimer();
+        }
+
+        return self::$timers[$name];
     }
 
-    if ($reset)
+    /**
+     * Gets all sfTimer instances stored in sfTimerManager.
+     *
+     * @return sfTimer[] An array of all sfTimer instances
+     */
+    public static function getTimers()
     {
-       self::$timers[$name]->startTimer();
+        return self::$timers;
     }
 
-    return self::$timers[$name];
-  }
-
-  /**
-   * Gets all sfTimer instances stored in sfTimerManager.
-   *
-   * @return sfTimer[] An array of all sfTimer instances
-   */
-  public static function getTimers()
-  {
-    return self::$timers;
-  }
-
-  /**
-   * Clears all sfTimer instances stored in sfTimerManager.
-   */
-  public static function clearTimers()
-  {
-    self::$timers = [];
-  }
+    /**
+     * Clears all sfTimer instances stored in sfTimerManager.
+     */
+    public static function clearTimers()
+    {
+        self::$timers = [];
+    }
 }

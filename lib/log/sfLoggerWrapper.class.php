@@ -15,27 +15,26 @@
  */
 class sfLoggerWrapper extends sfLogger
 {
-  protected
-    $logger = null;
+    protected $logger = null;
 
-  /**
-   * Creates a new logger wrapper
-   *
-   * @param sfLoggerInterface $logger The wrapped logger
-   */
-  public function __construct(sfLoggerInterface $logger)
-  {
-    $this->logger = $logger;
-  }
+    /**
+     * Creates a new logger wrapper
+     *
+     * @param sfLoggerInterface $logger The wrapped logger
+     */
+    public function __construct(sfLoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
-  /**
-   * Logs a message.
-   *
-   * @param string $message   Message
-   * @param int    $priority  Message priority
-   */
-  protected function doLog($message, $priority)
-  {
-    $this->logger->log($message, $priority);
-  }
+    /**
+     * Logs a message.
+     *
+     * @param string $message   Message
+     * @param int    $priority  Message priority
+     */
+    protected function doLog($message, $priority)
+    {
+        $this->logger->log($message, $priority);
+    }
 }

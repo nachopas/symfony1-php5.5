@@ -14,7 +14,7 @@ $t = new lime_test(1);
 
 class ProjectConfiguration extends sfProjectConfiguration
 {
-  protected $plugins = ['sfPropelPlugin'];
+    protected $plugins = ['sfPropelPlugin'];
 }
 new ProjectConfiguration();
 

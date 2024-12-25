@@ -7,28 +7,28 @@
  */
 abstract class BaseAuthorFormFilter extends BaseFormFilterDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['name' => new sfWidgetFormFilterInput(), 'type' => new sfWidgetFormFilterInput()]);
+    public function setup()
+    {
+        $this->setWidgets(['name' => new sfWidgetFormFilterInput(), 'type' => new sfWidgetFormFilterInput()]);
 
-    $this->setValidators(['name' => new sfValidatorPass(['required' => false]), 'type' => new sfValidatorPass(['required' => false])]);
+        $this->setValidators(['name' => new sfValidatorPass(['required' => false]), 'type' => new sfValidatorPass(['required' => false])]);
 
-    $this->widgetSchema->setNameFormat('author_filters[%s]');
+        $this->widgetSchema->setNameFormat('author_filters[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'Author';
-  }
+    public function getModelName()
+    {
+        return 'Author';
+    }
 
-  public function getFields()
-  {
-    return ['id'   => 'Number', 'name' => 'Text', 'type' => 'Text'];
-  }
+    public function getFields()
+    {
+        return ['id'   => 'Number', 'name' => 'Text', 'type' => 'Text'];
+    }
 }

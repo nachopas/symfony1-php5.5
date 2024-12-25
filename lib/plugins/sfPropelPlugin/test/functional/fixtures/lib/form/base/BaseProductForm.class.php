@@ -9,32 +9,31 @@
  */
 abstract class BaseProductForm extends BaseFormPropel
 {
-  public function setup()
-  {
-    $this->setWidgets(['id'               => new sfWidgetFormInputHidden(), 'price'            => new sfWidgetFormInputText(), 'a_primary_string' => new sfWidgetFormInputText()]);
+    public function setup()
+    {
+        $this->setWidgets(['id'               => new sfWidgetFormInputHidden(), 'price'            => new sfWidgetFormInputText(), 'a_primary_string' => new sfWidgetFormInputText()]);
 
-    $this->setValidators(['id'               => new sfValidatorChoice(['choices' => [$this->getObject()->getId()], 'empty_value' => $this->getObject()->getId(), 'required' => false]), 'price'            => new sfValidatorNumber(['required' => false]), 'a_primary_string' => new sfValidatorString(['max_length' => 64, 'required' => false])]);
+        $this->setValidators(['id'               => new sfValidatorChoice(['choices' => [$this->getObject()->getId()], 'empty_value' => $this->getObject()->getId(), 'required' => false]), 'price'            => new sfValidatorNumber(['required' => false]), 'a_primary_string' => new sfValidatorString(['max_length' => 64, 'required' => false])]);
 
-    $this->widgetSchema->setNameFormat('product[%s]');
+        $this->widgetSchema->setNameFormat('product[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'Product';
-  }
+    public function getModelName()
+    {
+        return 'Product';
+    }
 
-  public function getI18nModelName()
-  {
-    return 'ProductI18n';
-  }
+    public function getI18nModelName()
+    {
+        return 'ProductI18n';
+    }
 
-  public function getI18nFormClass()
-  {
-    return 'ProductI18nForm';
-  }
-
+    public function getI18nFormClass()
+    {
+        return 'ProductI18nForm';
+    }
 }

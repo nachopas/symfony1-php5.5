@@ -15,13 +15,13 @@
  */
 class sfConsoleLogger extends sfStreamLogger
 {
-  /**
-   * @see sfStreamLogger
-   */
-  public function initialize(sfEventDispatcher $dispatcher, $options = [])
-  {
-    $options['stream'] = defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w');
+    /**
+     * @see sfStreamLogger
+     */
+    public function initialize(sfEventDispatcher $dispatcher, $options = [])
+    {
+        $options['stream'] = defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w');
 
-    return parent::initialize($dispatcher, $options);
-  }
+        return parent::initialize($dispatcher, $options);
+    }
 }

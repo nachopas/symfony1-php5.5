@@ -6,7 +6,7 @@
  */
 class BookForm extends BaseBookForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

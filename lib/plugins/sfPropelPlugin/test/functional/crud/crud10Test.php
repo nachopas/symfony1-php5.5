@@ -10,9 +10,8 @@
 
 $app = 'crud';
 $fixtures = 'fixtures/fixtures.yml';
-if (!include(__DIR__.'/../../bootstrap/functional.php'))
-{
-  return;
+if (!include(__DIR__.'/../../bootstrap/functional.php')) {
+    return;
 }
 
 require_once(__DIR__.'/crudBrowser.class.php');

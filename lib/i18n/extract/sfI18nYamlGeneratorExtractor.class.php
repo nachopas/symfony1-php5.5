@@ -13,94 +13,79 @@
  */
 class sfI18nYamlGeneratorExtractor extends sfI18nYamlExtractor
 {
-  protected $strings = [];
+    protected $strings = [];
 
-  /**
-   * Extract i18n strings for the given content.
-   *
-   * @param  string $content The content
-   *
-   * @return array An array of i18n strings
-   */
-  public function extract($content)
-  {
-    $this->strings = [];
-
-    $config = sfYaml::load($content);
-
-    if (!isset($config['generator']['param']['config']))
+    /**
+     * Extract i18n strings for the given content.
+     *
+     * @param  string $content The content
+     *
+     * @return array An array of i18n strings
+     */
+    public function extract($content)
     {
-      return [];
-    }
+        $this->strings = [];
 
-    $params = $config['generator']['param']['config'];
+        $config = sfYaml::load($content);
 
-    // titles
-    foreach (['list', 'edit', 'new'] as $section)
-    {
-      if (isset($params[$section]['title']))
-      {
-        $this->strings[] = $params[$section]['title'];
-      }
-    }
-
-    // names and help messages
-    if (isset($params['fields']))
-    {
-      $this->getFromFields($params['fields']);
-    }
-
-    if (isset($params['list']['fields']))
-    {
-      $this->getFromFields($params['list']['fields']);
-    }
-
-    if (isset($params['edit']['fields']))
-    {
-      $this->getFromFields($params['edit']['fields']);
-    }
-
-    if (isset($params['new']['fields']))
-    {
-      $this->getFromFields($params['new']['fields']);
-    }
-
-    // form categories
-    foreach (['edit', 'new'] as $section)
-    {
-      if (isset($params[$section]['display']) && !isset($params[$section]['display'][0]))
-      {
-        foreach (array_keys($params[$section]['display']) as $string)
-        {
-          if ('NONE' != $string)
-          {
-            $this->strings[] = $string;
-          }
+        if (!isset($config['generator']['param']['config'])) {
+            return [];
         }
-      }
+
+        $params = $config['generator']['param']['config'];
+
+        // titles
+        foreach (['list', 'edit', 'new'] as $section) {
+            if (isset($params[$section]['title'])) {
+                $this->strings[] = $params[$section]['title'];
+            }
+        }
+
+        // names and help messages
+        if (isset($params['fields'])) {
+            $this->getFromFields($params['fields']);
+        }
+
+        if (isset($params['list']['fields'])) {
+            $this->getFromFields($params['list']['fields']);
+        }
+
+        if (isset($params['edit']['fields'])) {
+            $this->getFromFields($params['edit']['fields']);
+        }
+
+        if (isset($params['new']['fields'])) {
+            $this->getFromFields($params['new']['fields']);
+        }
+
+        // form categories
+        foreach (['edit', 'new'] as $section) {
+            if (isset($params[$section]['display']) && !isset($params[$section]['display'][0])) {
+                foreach (array_keys($params[$section]['display']) as $string) {
+                    if ('NONE' != $string) {
+                        $this->strings[] = $string;
+                    }
+                }
+            }
+        }
+
+        return $this->strings;
     }
 
-    return $this->strings;
-  }
-
-  protected function getFromFields($fields)
-  {
-    foreach ($fields as $field => $options)
+    protected function getFromFields($fields)
     {
-      if (isset($options['name']))
-      {
-        $this->strings[] = $options['name'];
-      }
+        foreach ($fields as $field => $options) {
+            if (isset($options['name'])) {
+                $this->strings[] = $options['name'];
+            }
 
-      if (isset($options['label']))
-      {
-        $this->strings[] = $options['label'];
-      }
+            if (isset($options['label'])) {
+                $this->strings[] = $options['label'];
+            }
 
-      if (isset($options['help']))
-      {
-        $this->strings[] = $options['help'];
-      }
+            if (isset($options['help'])) {
+                $this->strings[] = $options['help'];
+            }
+        }
     }
-  }
 }

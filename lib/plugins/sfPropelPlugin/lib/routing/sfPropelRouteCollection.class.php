@@ -15,6 +15,5 @@
  */
 class sfPropelRouteCollection extends sfObjectRouteCollection
 {
-  protected
-    $routeClass = 'sfPropelRoute';
+    protected $routeClass = 'sfPropelRoute';
 }

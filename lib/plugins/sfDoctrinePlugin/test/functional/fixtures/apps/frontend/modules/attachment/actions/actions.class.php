@@ -7,49 +7,47 @@
  */
 class attachmentActions extends sfActions
 {
- /**
-  * Executes index action
-  *
-  * @param sfRequest $request A request object
-  */
-  public function executeIndex(sfWebRequest $request)
-  {
-    $this->form = new AttachmentForm();
-    unset($this->form['id']);
+    /**
+     * Executes index action
+     *
+     * @param sfRequest $request A request object
+     */
+    public function executeIndex(sfWebRequest $request)
+    {
+        $this->form = new AttachmentForm();
+        unset($this->form['id']);
 
-    if (
+        if (
       $request->isMethod('post')
       &&
       $this->form->bindAndSave(
-        $request->getParameter($this->form->getName()),
-        $request->getFiles($this->form->getName())
+          $request->getParameter($this->form->getName()),
+          $request->getFiles($this->form->getName())
       )
-    )
-    {
-      return sfView::SUCCESS;
+    ) {
+            return sfView::SUCCESS;
+        }
+
+        return sfView::INPUT;
     }
 
-    return sfView::INPUT;
-  }
+    public function executeEditable(sfWebRequest $request)
+    {
+        $attachment = Doctrine_Core::getTable('Attachment')->find($request['id']);
+        $this->forward404Unless($attachment, 'Attachment not found');
 
-  public function executeEditable(sfWebRequest $request)
-  {
-    $attachment = Doctrine_Core::getTable('Attachment')->find($request['id']);
-    $this->forward404Unless($attachment, 'Attachment not found');
-
-    $this->form = new AttachmentForm($attachment);
-    if (
+        $this->form = new AttachmentForm($attachment);
+        if (
       $request->isMethod('post')
       &&
       $this->form->bindAndSave(
-        $request->getParameter($this->form->getName()),
-        $request->getFiles($this->form->getName())
+          $request->getParameter($this->form->getName()),
+          $request->getFiles($this->form->getName())
       )
-    )
-    {
-      return sfView::SUCCESS;
-    }
+    ) {
+            return sfView::SUCCESS;
+        }
 
-    return sfView::INPUT;
-  }
+        return sfView::INPUT;
+    }
 }

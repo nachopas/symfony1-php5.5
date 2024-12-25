@@ -16,53 +16,53 @@
  * (i.e. if it's a text column type).
  *
  */
-class AttachmentTableMap extends TableMap {
+class AttachmentTableMap extends TableMap
+{
 
-	/**
-	 * The (dot-path) name of this class
-	 */
-	const CLASS_NAME = 'lib.model.map.AttachmentTableMap';
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'lib.model.map.AttachmentTableMap';
 
-	/**
-	 * Initialize the table attributes, columns and validators
-	 * Relations are not initialized by this method since they are lazy loaded
-	 *
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function initialize()
-	{
-	  // attributes
-		$this->setName('attachment');
-		$this->setPhpName('Attachment');
-		$this->setClassname('Attachment');
-		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(true);
-		// columns
-		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addForeignKey('ARTICLE_ID', 'ArticleId', 'INTEGER', 'article', 'ID', false, null, null);
-		$this->addColumn('NAME', 'Name', 'VARCHAR', false, 255, null);
-		$this->addColumn('FILE', 'File', 'VARCHAR', false, 255, null);
-		// validators
-	} // initialize()
+    /**
+     * Initialize the table attributes, columns and validators
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return     void
+     * @throws     PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('attachment');
+        $this->setPhpName('Attachment');
+        $this->setClassname('Attachment');
+        $this->setPackage('lib.model');
+        $this->setUseIdGenerator(true);
+        // columns
+        $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+        $this->addForeignKey('ARTICLE_ID', 'ArticleId', 'INTEGER', 'article', 'ID', false, null, null);
+        $this->addColumn('NAME', 'Name', 'VARCHAR', false, 255, null);
+        $this->addColumn('FILE', 'File', 'VARCHAR', false, 255, null);
+        // validators
+    } // initialize()
 
-	/**
-	 * Build the RelationMap objects for this table relationships
-	 */
-	public function buildRelations()
-	{
-    $this->addRelation('Article', 'Article', RelationMap::MANY_TO_ONE, ['article_id' => 'id'], null, null);
-	} // buildRelations()
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+        $this->addRelation('Article', 'Article', RelationMap::MANY_TO_ONE, ['article_id' => 'id'], null, null);
+    } // buildRelations()
 
-	/**
-	 * 
-	 * Gets the list of behaviors registered for this table
-	 * 
-	 * @return array Associative array (name => parameters) of behaviors
-	 */
-	public function getBehaviors()
-	{
-		return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => []];
-	} // getBehaviors()
-
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => []];
+    } // getBehaviors()
 } // AttachmentTableMap

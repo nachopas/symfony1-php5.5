@@ -7,39 +7,37 @@
  */
 class i18nActions extends sfActions
 {
-  public function executeIndex()
-  {
-    $this->getUser()->setCulture('fr');
-
-    $this->movies = MoviePeer::doSelect(new Criteria());
-  }
-
-  public function executeDefault()
-  {
-    $this->movies = MoviePeer::doSelect(new Criteria());
-
-    $this->setTemplate('index');
-  }
-
-  public function executeMovie($request)
-  {
-    $this->form = new MovieForm(MoviePeer::retrieveByPk($request->getParameter('id')));
-
-    if ($request->isMethod(sfRequest::POST))
+    public function executeIndex()
     {
-      $this->form->bind($request->getParameter('movie'));
+        $this->getUser()->setCulture('fr');
 
-      if ($this->form->isValid())
-      {
-        $movie = $this->form->save();
-
-        $this->redirect('i18n/movie?id='.$movie->getId());
-      }
+        $this->movies = MoviePeer::doSelect(new Criteria());
     }
-  }
 
-  public function executeProducts()
-  {
-    $this->products = ProductPeer::doSelect(new Criteria());
-  }
+    public function executeDefault()
+    {
+        $this->movies = MoviePeer::doSelect(new Criteria());
+
+        $this->setTemplate('index');
+    }
+
+    public function executeMovie($request)
+    {
+        $this->form = new MovieForm(MoviePeer::retrieveByPk($request->getParameter('id')));
+
+        if ($request->isMethod(sfRequest::POST)) {
+            $this->form->bind($request->getParameter('movie'));
+
+            if ($this->form->isValid()) {
+                $movie = $this->form->save();
+
+                $this->redirect('i18n/movie?id='.$movie->getId());
+            }
+        }
+    }
+
+    public function executeProducts()
+    {
+        $this->products = ProductPeer::doSelect(new Criteria());
+    }
 }

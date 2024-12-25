@@ -7,7 +7,7 @@
  */
 class SettingForm extends PluginSettingForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

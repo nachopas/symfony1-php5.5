@@ -12,25 +12,24 @@ require_once(__DIR__.'/crudBrowser.class.php');
 
 class RestBrowser extends CrudBrowser
 {
-  protected
-    $urlPrefix = 'articles';
+    protected $urlPrefix = 'articles';
 
-  public function setup($options)
-  {
-    $this->projectDir = __DIR__.'/../fixtures';
-    $this->cleanup();
+    public function setup($options)
+    {
+        $this->projectDir = __DIR__.'/../fixtures';
+        $this->cleanup();
 
-    chdir($this->projectDir);
-    $task = new sfPropelGenerateModuleForRouteTask(new sfEventDispatcher(), new sfFormatter());
-    $options[] = 'env=test';
-    $options[] = '--non-verbose-templates';
-    $task->run(['crud', 'articles'], $options);
+        chdir($this->projectDir);
+        $task = new sfPropelGenerateModuleForRouteTask(new sfEventDispatcher(), new sfFormatter());
+        $options[] = 'env=test';
+        $options[] = '--non-verbose-templates';
+        $task->run(['crud', 'articles'], $options);
 
-    require_once($this->projectDir.'/config/ProjectConfiguration.class.php');
-    sfContext::createInstance(ProjectConfiguration::getApplicationConfiguration('crud', 'test', true, $this->projectDir));
+        require_once($this->projectDir.'/config/ProjectConfiguration.class.php');
+        sfContext::createInstance(ProjectConfiguration::getApplicationConfiguration('crud', 'test', true, $this->projectDir));
 
-    $options['with-show'] = true;
+        $options['with-show'] = true;
 
-    return $options;
-  }
+        return $options;
+    }
 }

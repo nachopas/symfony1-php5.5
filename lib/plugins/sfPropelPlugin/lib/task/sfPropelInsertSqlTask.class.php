@@ -17,18 +17,18 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelInsertSqlTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'cli'), new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', null), new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Do not ask for confirmation'), new sfCommandOption('phing-arg', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Arbitrary phing argument')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'cli'), new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', null), new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Do not ask for confirmation'), new sfCommandOption('phing-arg', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Arbitrary phing argument')]);
 
-    $this->namespace = 'propel';
-    $this->name = 'insert-sql';
-    $this->briefDescription = 'Inserts SQL for current model';
+        $this->namespace = 'propel';
+        $this->name = 'insert-sql';
+        $this->briefDescription = 'Inserts SQL for current model';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:insert-sql|INFO] task creates database tables:
 
   [./symfony propel:insert-sql|INFO]
@@ -51,82 +51,75 @@ an [--application|INFO] or [--env|INFO] option.
 You can also use the [--connection|INFO] option if you want to
 only load SQL statements for a given connection.
 EOF;
-  }
-
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $this->schemaToXML(self::DO_NOT_CHECK_SCHEMA, 'generated-');
-    $this->copyXmlSchemaFromPlugins('generated-');
-
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
-    $properties = $this->getProperties(sfConfig::get('sf_data_dir').'/sql/sqldb.map');
-    $sqls = [];
-    foreach ($properties as $file => $connection)
-    {
-      if (null !== $options['connection'] && $options['connection'] != $connection)
-      {
-        continue;
-      }
-
-      if (!isset($sqls[$connection]))
-      {
-        $sqls[$connection] = [];
-      }
-
-      $sqls[$connection][] = $file;
     }
 
-    if (
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $this->schemaToXML(self::DO_NOT_CHECK_SCHEMA, 'generated-');
+        $this->copyXmlSchemaFromPlugins('generated-');
+
+        $databaseManager = new sfDatabaseManager($this->configuration);
+
+        $properties = $this->getProperties(sfConfig::get('sf_data_dir').'/sql/sqldb.map');
+        $sqls = [];
+        foreach ($properties as $file => $connection) {
+            if (null !== $options['connection'] && $options['connection'] != $connection) {
+                continue;
+            }
+
+            if (!isset($sqls[$connection])) {
+                $sqls[$connection] = [];
+            }
+
+            $sqls[$connection][] = $file;
+        }
+
+        if (
       !$options['no-confirmation']
       &&
       !$this->askConfirmation(['WARNING: The data in the database'.(count($sqls) > 1 ? 's' : '').' related to the connection name'.(count($sqls) > 1 ? 's' : ''), sprintf('         %s will be removed.', implode(', ', array_keys($sqls))), '', 'Are you sure you want to proceed? (y/N)'], 'QUESTION_LARGE', false)
-    )
-    {
-      $this->logSection('propel', 'Task aborted.');
+    ) {
+            $this->logSection('propel', 'Task aborted.');
 
-      return 1;
+            return 1;
+        }
+
+        $this->tmpDir = sys_get_temp_dir().'/propel_insert_sql_'.random_int(11111, 99999);
+        register_shutdown_function([$this, 'removeTmpDir']);
+        mkdir($this->tmpDir, 0777, true);
+        foreach ($sqls as $connection => $files) {
+            $dir = $this->tmpDir.'/'.$connection;
+            mkdir($dir, 0777, true);
+
+            $content = '';
+            foreach ($files as $file) {
+                $content .= "$file=$connection\n";
+                copy(sfConfig::get('sf_data_dir').'/sql/'.$file, $dir.'/'.$file);
+            }
+
+            file_put_contents($dir.'/sqldb.map', $content);
+            $properties = $this->getPhingPropertiesForConnection($databaseManager, $connection);
+            $properties['propel.sql.dir'] = $dir;
+
+            $ret = $this->callPhing('insert-sql', self::CHECK_SCHEMA, $properties);
+        }
+        $this->removeTmpDir();
+
+        $this->cleanup();
+
+        return !$ret;
     }
 
-    $this->tmpDir = sys_get_temp_dir().'/propel_insert_sql_'.random_int(11111, 99999);
-    register_shutdown_function([$this, 'removeTmpDir']);
-    mkdir($this->tmpDir, 0777, true);
-    foreach ($sqls as $connection => $files)
+    public function removeTmpDir()
     {
-      $dir = $this->tmpDir.'/'.$connection;
-      mkdir($dir, 0777, true);
+        if (!is_dir($this->tmpDir)) {
+            return;
+        }
 
-      $content = '';
-      foreach ($files as $file)
-      {
-        $content .= "$file=$connection\n";
-        copy(sfConfig::get('sf_data_dir').'/sql/'.$file, $dir.'/'.$file);
-      }
-
-      file_put_contents($dir.'/sqldb.map', $content);
-      $properties = $this->getPhingPropertiesForConnection($databaseManager, $connection);
-      $properties['propel.sql.dir'] = $dir;
-
-      $ret = $this->callPhing('insert-sql', self::CHECK_SCHEMA, $properties);
+        sfToolkit::clearDirectory($this->tmpDir);
+        rmdir($this->tmpDir);
     }
-    $this->removeTmpDir();
-
-    $this->cleanup();
-
-    return !$ret;
-  }
-
-  public function removeTmpDir()
-  {
-    if (!is_dir($this->tmpDir))
-    {
-      return;
-    }
-
-    sfToolkit::clearDirectory($this->tmpDir);
-    rmdir($this->tmpDir);
-  }
 }

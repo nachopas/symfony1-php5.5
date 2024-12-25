@@ -19,20 +19,20 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
  */
 class sfDoctrineDropDbTask extends sfDoctrineBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addArguments([new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addArguments([new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database')]);
 
-    $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Whether to force dropping of the database')]);
+        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Whether to force dropping of the database')]);
 
-    $this->namespace = 'doctrine';
-    $this->name = 'drop-db';
-    $this->briefDescription = 'Drops database for current model';
+        $this->namespace = 'doctrine';
+        $this->name = 'drop-db';
+        $this->briefDescription = 'Drops database for current model';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [doctrine:drop-db|INFO] task drops one or more databases based on
 configuration in [config/databases.yml|COMMENT]:
 
@@ -47,44 +47,39 @@ You can specify what databases to drop by providing their names:
 
   [./symfony doctrine:drop-db slave1 slave2|INFO]
 EOF;
-  }
+    }
 
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-    $databases = $this->getDoctrineDatabases($databaseManager, count($arguments['database']) ? $arguments['database'] : null);
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $databaseManager = new sfDatabaseManager($this->configuration);
+        $databases = $this->getDoctrineDatabases($databaseManager, count($arguments['database']) ? $arguments['database'] : null);
 
-    $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
+        $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
 
-    if (
+        if (
       !$options['no-confirmation']
       &&
       !$this->askConfirmation(array_merge(
-        [sprintf('This command will remove all data in the following "%s" connection(s):', $environment), ''],
-        array_map(fn($v) => ' - ' . $v, array_keys($databases)),
-        ['', 'Are you sure you want to proceed? (y/N)']
+          [sprintf('This command will remove all data in the following "%s" connection(s):', $environment), ''],
+          array_map(fn ($v) => ' - ' . $v, array_keys($databases)),
+          ['', 'Are you sure you want to proceed? (y/N)']
       ), 'QUESTION_LARGE', false)
-    )
-    {
-      $this->logSection('doctrine', 'task aborted');
+    ) {
+            $this->logSection('doctrine', 'task aborted');
 
-      return 1;
-    }
+            return 1;
+        }
 
-    foreach ($databases as $name => $database)
-    {
-      $this->logSection('doctrine', sprintf('Dropping "%s" database', $name));
-      try
-      {
-        $database->getDoctrineConnection()->dropDatabase();
-      }
-      catch (Exception $e)
-      {
-        $this->logSection('doctrine', $e->getMessage(), null, 'ERROR');
-      }
+        foreach ($databases as $name => $database) {
+            $this->logSection('doctrine', sprintf('Dropping "%s" database', $name));
+            try {
+                $database->getDoctrineConnection()->dropDatabase();
+            } catch (Exception $e) {
+                $this->logSection('doctrine', $e->getMessage(), null, 'ERROR');
+            }
+        }
     }
-  }
 }

@@ -17,15 +17,15 @@
  */
 class sfDoctrineConnectionListener extends Doctrine_EventListener
 {
-  public function __construct($connection, $encoding)
-  {
-    $this->connection = $connection;
-    $this->encoding = $encoding;
-  }
+    public function __construct($connection, $encoding)
+    {
+        $this->connection = $connection;
+        $this->encoding = $encoding;
+    }
 
-  public function postConnect(Doctrine_Event $event)
-  {
-    $this->connection->setCharset($this->encoding);
-    $this->connection->setDateFormat();
-  }
+    public function postConnect(Doctrine_Event $event)
+    {
+        $this->connection->setCharset($this->encoding);
+        $this->connection->setDateFormat();
+    }
 }

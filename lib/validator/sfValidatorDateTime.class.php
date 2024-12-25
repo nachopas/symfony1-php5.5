@@ -15,13 +15,13 @@
  */
 class sfValidatorDateTime extends sfValidatorDate
 {
-  /**
-   * @see sfValidatorDate
-   */
-  protected function configure($options = [], $messages = [])
-  {
-    parent::configure($options, $messages);
+    /**
+     * @see sfValidatorDate
+     */
+    protected function configure($options = [], $messages = [])
+    {
+        parent::configure($options, $messages);
 
-    $this->setOption('with_time', true);
-  }
+        $this->setOption('with_time', true);
+    }
 }

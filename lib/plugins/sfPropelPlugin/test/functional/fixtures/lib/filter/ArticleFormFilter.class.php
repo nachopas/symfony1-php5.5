@@ -7,7 +7,7 @@
  */
 class ArticleFormFilter extends BaseArticleFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

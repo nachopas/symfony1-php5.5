@@ -9,28 +9,27 @@
  */
 abstract class BaseBlogArticleTranslationForm extends BaseFormDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['id'          => new sfWidgetFormInputHidden(), 'title'       => new sfWidgetFormInputText(), 'body'        => new sfWidgetFormInputText(), 'test_column' => new sfWidgetFormInputText(), 'lang'        => new sfWidgetFormInputHidden(), 'slug'        => new sfWidgetFormInputText()]);
+    public function setup()
+    {
+        $this->setWidgets(['id'          => new sfWidgetFormInputHidden(), 'title'       => new sfWidgetFormInputText(), 'body'        => new sfWidgetFormInputText(), 'test_column' => new sfWidgetFormInputText(), 'lang'        => new sfWidgetFormInputHidden(), 'slug'        => new sfWidgetFormInputText()]);
 
-    $this->setValidators(['id'          => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'title'       => new sfValidatorString(['max_length' => 255, 'required' => false]), 'body'        => new sfValidatorString(['max_length' => 255, 'required' => false]), 'test_column' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'lang'        => new sfValidatorChoice(['choices' => [$this->getObject()->get('lang')], 'empty_value' => $this->getObject()->get('lang'), 'required' => false]), 'slug'        => new sfValidatorString(['max_length' => 255, 'required' => false])]);
+        $this->setValidators(['id'          => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'title'       => new sfValidatorString(['max_length' => 255, 'required' => false]), 'body'        => new sfValidatorString(['max_length' => 255, 'required' => false]), 'test_column' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'lang'        => new sfValidatorChoice(['choices' => [$this->getObject()->get('lang')], 'empty_value' => $this->getObject()->get('lang'), 'required' => false]), 'slug'        => new sfValidatorString(['max_length' => 255, 'required' => false])]);
 
-    $this->validatorSchema->setPostValidator(
-      new sfValidatorAnd([new sfValidatorDoctrineUnique(['model' => 'BlogArticleTranslation', 'column' => ['title']]), new sfValidatorDoctrineUnique(['model' => 'BlogArticleTranslation', 'column' => ['slug', 'lang', 'title']])])
-    );
+        $this->validatorSchema->setPostValidator(
+            new sfValidatorAnd([new sfValidatorDoctrineUnique(['model' => 'BlogArticleTranslation', 'column' => ['title']]), new sfValidatorDoctrineUnique(['model' => 'BlogArticleTranslation', 'column' => ['slug', 'lang', 'title']])])
+        );
 
-    $this->widgetSchema->setNameFormat('blog_article_translation[%s]');
+        $this->widgetSchema->setNameFormat('blog_article_translation[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'BlogArticleTranslation';
-  }
-
+    public function getModelName()
+    {
+        return 'BlogArticleTranslation';
+    }
 }

@@ -7,28 +7,28 @@
  */
 abstract class BaseAttachmentFormFilter extends BaseFormFilterDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['file_path' => new sfWidgetFormFilterInput()]);
+    public function setup()
+    {
+        $this->setWidgets(['file_path' => new sfWidgetFormFilterInput()]);
 
-    $this->setValidators(['file_path' => new sfValidatorPass(['required' => false])]);
+        $this->setValidators(['file_path' => new sfValidatorPass(['required' => false])]);
 
-    $this->widgetSchema->setNameFormat('attachment_filters[%s]');
+        $this->widgetSchema->setNameFormat('attachment_filters[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'Attachment';
-  }
+    public function getModelName()
+    {
+        return 'Attachment';
+    }
 
-  public function getFields()
-  {
-    return ['id'        => 'Number', 'file_path' => 'Text'];
-  }
+    public function getFields()
+    {
+        return ['id'        => 'Number', 'file_path' => 'Text'];
+    }
 }

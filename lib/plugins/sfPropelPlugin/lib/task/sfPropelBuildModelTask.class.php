@@ -17,18 +17,18 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelBuildModelTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addOptions([new sfCommandOption('phing-arg', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Arbitrary phing argument')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addOptions([new sfCommandOption('phing-arg', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Arbitrary phing argument')]);
 
-    $this->namespace = 'propel';
-    $this->name = 'build-model';
-    $this->briefDescription = 'Creates classes for the current model';
+        $this->namespace = 'propel';
+        $this->name = 'build-model';
+        $this->briefDescription = 'Creates classes for the current model';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:build-model|INFO] task creates model classes from the schema:
 
   [./symfony propel:build-model|INFO]
@@ -44,20 +44,20 @@ The model classes files are created in [lib/model|COMMENT].
 This task never overrides custom classes in [lib/model|COMMENT].
 It only replaces files in [lib/model/om|COMMENT] and [lib/model/map|COMMENT].
 EOF;
-  }
+    }
 
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $this->schemaToXML(self::DO_NOT_CHECK_SCHEMA, 'generated-');
-    $this->copyXmlSchemaFromPlugins('generated-');
-    $ret = $this->callPhing('om', self::CHECK_SCHEMA);
-    $this->cleanup();
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $this->schemaToXML(self::DO_NOT_CHECK_SCHEMA, 'generated-');
+        $this->copyXmlSchemaFromPlugins('generated-');
+        $ret = $this->callPhing('om', self::CHECK_SCHEMA);
+        $this->cleanup();
 
-    $this->reloadAutoload();
+        $this->reloadAutoload();
 
-    return !$ret;
-  }
+        return !$ret;
+    }
 }

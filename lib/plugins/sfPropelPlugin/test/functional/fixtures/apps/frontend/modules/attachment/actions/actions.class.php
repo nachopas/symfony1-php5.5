@@ -7,42 +7,39 @@
  */
 class attachmentActions extends sfActions
 {
-  public function executeIndex($request)
-  {
-    $this->form = new AttachmentForm();
-    unset($this->form['article_id']);
-
-    if ($request->isMethod(sfRequest::POST))
+    public function executeIndex($request)
     {
-      $this->form->bind($request->getParameter('attachment'), $request->getFiles('attachment'));
+        $this->form = new AttachmentForm();
+        unset($this->form['article_id']);
 
-      if ($this->form->isValid())
-      {
-        $this->form->save();
+        if ($request->isMethod(sfRequest::POST)) {
+            $this->form->bind($request->getParameter('attachment'), $request->getFiles('attachment'));
 
-        $this->redirect('attachment/ok');
-      }
+            if ($this->form->isValid()) {
+                $this->form->save();
+
+                $this->redirect('attachment/ok');
+            }
+        }
     }
-  }
 
-  public function executeEmbedded($request)
-  {
-    $this->form = new ArticleForm(null, ['with_attachment' => true]);
+    public function executeEmbedded($request)
+    {
+        $this->form = new ArticleForm(null, ['with_attachment' => true]);
 
-    if (
+        if (
       $request->isMethod(sfRequest::POST)
       &&
       $this->form->bindAndSave($request->getParameter('article'), $request->getFiles('article'))
-    )
-    {
-      $this->redirect('attachment/ok');
+    ) {
+            $this->redirect('attachment/ok');
+        }
+
+        $this->setTemplate('index');
     }
 
-    $this->setTemplate('index');
-  }
-
-  public function executeOk()
-  {
-    return $this->renderText('ok');
-  }
+    public function executeOk()
+    {
+        return $this->renderText('ok');
+    }
 }

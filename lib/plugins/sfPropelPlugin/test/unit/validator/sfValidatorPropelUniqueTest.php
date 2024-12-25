@@ -23,36 +23,26 @@ $author = new Author();
 $author->setName('==NAME==');
 $author->save();
 
-try
-{
-  $validator->clean(['name' => '==NAME==']);
-  $t->fail('->clean() throws an error on the column');
-}
-catch (sfValidatorErrorSchema $errors)
-{
-  $t->is(isset($errors['name']), true, '->clean() throws an error on the column');
-}
-catch (Exception $e)
-{
-  $t->fail('->clean() throws an error on the column');
-  $t->diag('    '.$e->getMessage());
+try {
+    $validator->clean(['name' => '==NAME==']);
+    $t->fail('->clean() throws an error on the column');
+} catch (sfValidatorErrorSchema $errors) {
+    $t->is(isset($errors['name']), true, '->clean() throws an error on the column');
+} catch (Exception $e) {
+    $t->fail('->clean() throws an error on the column');
+    $t->diag('    '.$e->getMessage());
 }
 
 $validator->setOption('field', 'author_name');
 
-try
-{
-  $validator->clean(['author_name' => '==NAME==']);
-  $t->fail('->clean() throws an error on the field');
-}
-catch (sfValidatorErrorSchema $errors)
-{
-  $t->is(isset($errors['author_name']), true, '->clean() throws an error on the field');
-}
-catch (Exception $e)
-{
-  $t->fail('->clean() throws an error on the field');
-  $t->diag('    '.$e->getMessage());
+try {
+    $validator->clean(['author_name' => '==NAME==']);
+    $t->fail('->clean() throws an error on the field');
+} catch (sfValidatorErrorSchema $errors) {
+    $t->is(isset($errors['author_name']), true, '->clean() throws an error on the field');
+} catch (Exception $e) {
+    $t->fail('->clean() throws an error on the field');
+    $t->diag('    '.$e->getMessage());
 }
 
 $author->delete();

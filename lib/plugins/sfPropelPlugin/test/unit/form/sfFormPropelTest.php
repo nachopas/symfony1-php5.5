@@ -19,10 +19,10 @@ $t->diag('->__construct()');
 
 class DefaultValuesForm extends AuthorForm
 {
-  public function configure()
-  {
-    $this->setDefault('name', 'John Doe');
-  }
+    public function configure()
+    {
+        $this->setDefault('name', 'John Doe');
+    }
 }
 
 $author = new Author();

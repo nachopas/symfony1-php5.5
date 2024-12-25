@@ -1,0 +1,9 @@
+<?php
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/lib')
+;
+
+return PhpCsFixer\Config::create()
+    ->setCacheFile(__DIR__ . '/.php_cs.cache')
+    ->setFinder($finder)
+;

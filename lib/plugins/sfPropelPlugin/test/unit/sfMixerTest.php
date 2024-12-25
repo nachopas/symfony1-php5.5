@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -14,67 +14,67 @@ $t = new lime_test(10);
 
 class myClass
 {
-  public $ret = '';
-  static public $retStatic = '';
+    public $ret = '';
+    public static $retStatic = '';
 
-  public function myMethod()
-  {
-    $this->ret  = "before myMethod\n";
-    sfMixer::callMixins();
-    $this->ret .= "after myMethod\n";
+    public function myMethod()
+    {
+        $this->ret  = "before myMethod\n";
+        sfMixer::callMixins();
+        $this->ret .= "after myMethod\n";
 
-    return $this->ret;
-  }
+        return $this->ret;
+    }
 
-  public function myMethodWithSeveralHooks()
-  {
-    $this->ret  = "before myMethodWithSeveralHooks\n";
-    sfMixer::callMixins('before');
+    public function myMethodWithSeveralHooks()
+    {
+        $this->ret  = "before myMethodWithSeveralHooks\n";
+        sfMixer::callMixins('before');
 
-    $this->ret .= "myMethodWithSeveralHooks\n";
-    sfMixer::callMixins();
+        $this->ret .= "myMethodWithSeveralHooks\n";
+        sfMixer::callMixins();
 
-    $this->ret .= "after myMethodWithSeveralHooks\n";
-    sfMixer::callMixins('after');
+        $this->ret .= "after myMethodWithSeveralHooks\n";
+        sfMixer::callMixins('after');
 
-    return $this->ret;
-  }
+        return $this->ret;
+    }
 
-  public function myMethodWithArgs($arg1, $arg2 = 'default')
-  {
-    $this->ret  = "before myMethodWithArgs\n";
-    sfMixer::callMixins();
-    $this->ret .= "after myMethodWithArgs\n";
+    public function myMethodWithArgs($arg1, $arg2 = 'default')
+    {
+        $this->ret  = "before myMethodWithArgs\n";
+        sfMixer::callMixins();
+        $this->ret .= "after myMethodWithArgs\n";
 
-    return $this->ret;
-  }
+        return $this->ret;
+    }
 
-  static public function myStaticMethod()
-  {
-    self::$retStatic = "before myStaticMethod\n";
-    sfMixer::callMixins();
-    self::$retStatic .= "after myStaticMethod\n";
+    public static function myStaticMethod()
+    {
+        self::$retStatic = "before myStaticMethod\n";
+        sfMixer::callMixins();
+        self::$retStatic .= "after myStaticMethod\n";
 
-    return self::$retStatic;
-  }
+        return self::$retStatic;
+    }
 
-  static public function myStaticMethodWithArgs($arg1, $arg2 = 'default')
-  {
-    self::$retStatic = "before myStaticMethodWithArgs\n";
-    sfMixer::callMixins();
-    self::$retStatic .= "after myStaticMethodWithArgs\n";
+    public static function myStaticMethodWithArgs($arg1, $arg2 = 'default')
+    {
+        self::$retStatic = "before myStaticMethodWithArgs\n";
+        sfMixer::callMixins();
+        self::$retStatic .= "after myStaticMethodWithArgs\n";
 
-    return self::$retStatic;
-  }
+        return self::$retStatic;
+    }
 
-  function __call($method, $arguments)
-  {
-    $r  = "before __call\n";
-    $r .= sfMixer::callMixins();
-    $r .= "after __call\n";
+    public function __call($method, $arguments)
+    {
+        $r  = "before __call\n";
+        $r .= sfMixer::callMixins();
+        $r .= "after __call\n";
 
-    return $r;
-  }
+        return $r;
+    }
 }
 
 $m = new myClass();
@@ -82,68 +82,65 @@ $m = new myClass();
 $t->is($m->myMethod(), "before myMethod\nafter myMethod\n", 'method call without mixins');
 $t->is(myClass::myStaticMethod(), "before myStaticMethod\nafter myStaticMethod\n", 'static method call without mixins');
 
-try
-{
-  $m->newMethod();
-  $t->fail('method call that does not exist');
-}
-catch (Exception $e)
-{
-  $t->pass('method call that does not exist');
+try {
+    $m->newMethod();
+    $t->fail('method call that does not exist');
+} catch (Exception $e) {
+    $t->pass('method call that does not exist');
 }
 
 class myClassMixins
 {
-  public function myMixinMethod($object)
-  {
-    $object->ret .= "in myMethod mixin method\n";
-  }
+    public function myMixinMethod($object)
+    {
+        $object->ret .= "in myMethod mixin method\n";
+    }
 
-  public function myMethodWithSeveralHooks($object)
-  {
-    $object->ret .= "in myMethodWithSeveralHooks mixin method for default hook\n";
-  }
+    public function myMethodWithSeveralHooks($object)
+    {
+        $object->ret .= "in myMethodWithSeveralHooks mixin method for default hook\n";
+    }
 
-  public function myMethodWithSeveralHooksBefore($object)
-  {
-    $object->ret .= "in myMethodWithSeveralHooks mixin method for before hook\n";
-  }
+    public function myMethodWithSeveralHooksBefore($object)
+    {
+        $object->ret .= "in myMethodWithSeveralHooks mixin method for before hook\n";
+    }
 
-  public function myMethodWithSeveralHooksAfter($object)
-  {
-    $object->ret .= "in myMethodWithSeveralHooks mixin method for after hook\n";
-  }
+    public function myMethodWithSeveralHooksAfter($object)
+    {
+        $object->ret .= "in myMethodWithSeveralHooks mixin method for after hook\n";
+    }
 
-// TODO
-  public function myStaticMixinMethod($object)
-  {
-    $object->ret .= "in myStaticMethod mixin method\n";
-  }
+    // TODO
+    public function myStaticMixinMethod($object)
+    {
+        $object->ret .= "in myStaticMethod mixin method\n";
+    }
 
-  public function myMixinMethodWithArgs($object, $arg1, $arg2 = 'default')
-  {
-    $object->ret .= "in myMethodWithArgs mixin method ($arg1, $arg2)\n";
-  }
+    public function myMixinMethodWithArgs($object, $arg1, $arg2 = 'default')
+    {
+        $object->ret .= "in myMethodWithArgs mixin method ($arg1, $arg2)\n";
+    }
 
-  public function myMixinStaticMethod()
-  {
-    myClass::$retStatic .= "in myStaticMethod mixin method\n";
-  }
+    public function myMixinStaticMethod()
+    {
+        myClass::$retStatic .= "in myStaticMethod mixin method\n";
+    }
 
-  public function myMixinStaticMethodWithArgs($class, $arg1, $arg2 = 'default')
-  {
-    myClass::$retStatic .= "in myStaticMethodWithArgs mixin method ($arg1, $arg2)\n";
-  }
+    public function myMixinStaticMethodWithArgs($class, $arg1, $arg2 = 'default')
+    {
+        myClass::$retStatic .= "in myStaticMethodWithArgs mixin method ($arg1, $arg2)\n";
+    }
 
-  public function newMethod($object)
-  {
-    return "in newMethod mixin method\n";
-  }
+    public function newMethod($object)
+    {
+        return "in newMethod mixin method\n";
+    }
 
-  public function newMethodWithArgs($object, $arg1, $arg2 = 'default')
-  {
-    return "in newMethodWithArgs mixin method ($arg1, $arg2)\n";
-  }
+    public function newMethodWithArgs($object, $arg1, $arg2 = 'default')
+    {
+        return "in newMethodWithArgs mixin method ($arg1, $arg2)\n";
+    }
 }
 
 sfMixer::register('myClass:myMethod', ['myClassMixins', 'myMixinMethod']);

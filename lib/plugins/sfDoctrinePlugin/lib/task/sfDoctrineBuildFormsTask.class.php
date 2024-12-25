@@ -17,18 +17,18 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
  */
 class sfDoctrineBuildFormsTask extends sfDoctrineBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('model-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The model dir name', 'model'), new sfCommandOption('form-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The form dir name', 'form'), new sfCommandOption('generator-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The generator class', 'sfDoctrineFormGenerator')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('model-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The model dir name', 'model'), new sfCommandOption('form-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The form dir name', 'form'), new sfCommandOption('generator-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The generator class', 'sfDoctrineFormGenerator')]);
 
-    $this->namespace = 'doctrine';
-    $this->name = 'build-forms';
-    $this->briefDescription = 'Creates form classes for the current model';
+        $this->namespace = 'doctrine';
+        $this->name = 'build-forms';
+        $this->briefDescription = 'Creates form classes for the current model';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [doctrine:build-forms|INFO] task creates form classes from the schema:
 
   [./symfony doctrine:build-forms|INFO]
@@ -39,34 +39,33 @@ in [lib/doctrine/form|COMMENT].
 This task never overrides custom classes in [lib/doctrine/form|COMMENT].
 It only replaces base classes generated in [lib/doctrine/form/base|COMMENT].
 EOF;
-  }
-
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $this->logSection('doctrine', 'generating form classes');
-    $databaseManager = new sfDatabaseManager($this->configuration);
-    $generatorManager = new sfGeneratorManager($this->configuration);
-    $generatorManager->generate($options['generator-class'], ['model_dir_name' => $options['model-dir-name'], 'form_dir_name'  => $options['form-dir-name']]);
-
-    $properties = parse_ini_file(sfConfig::get('sf_config_dir').DIRECTORY_SEPARATOR.'properties.ini', true);
-
-    $constants = ['PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony', 'AUTHOR_NAME'  => $properties['symfony']['author'] ?? 'Your name here'];
-
-    // customize php and yml files
-    $finder = sfFinder::type('file')->name('*.php');
-    $this->getFilesystem()->replaceTokens($finder->in(sfConfig::get('sf_lib_dir').'/form/'), '##', '##', $constants);
-
-    // check for base form class
-    if (!class_exists('BaseForm'))
-    {
-      $file = sfConfig::get('sf_lib_dir').'/'.$options['form-dir-name'].'/BaseForm.class.php';
-      $this->getFilesystem()->copy(sfConfig::get('sf_symfony_lib_dir').'/task/generator/skeleton/project/lib/form/BaseForm.class.php', $file);
-      $this->getFilesystem()->replaceTokens($file, '##', '##', $constants);
     }
 
-    $this->reloadAutoload();
-  }
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $this->logSection('doctrine', 'generating form classes');
+        $databaseManager = new sfDatabaseManager($this->configuration);
+        $generatorManager = new sfGeneratorManager($this->configuration);
+        $generatorManager->generate($options['generator-class'], ['model_dir_name' => $options['model-dir-name'], 'form_dir_name'  => $options['form-dir-name']]);
+
+        $properties = parse_ini_file(sfConfig::get('sf_config_dir').DIRECTORY_SEPARATOR.'properties.ini', true);
+
+        $constants = ['PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony', 'AUTHOR_NAME'  => $properties['symfony']['author'] ?? 'Your name here'];
+
+        // customize php and yml files
+        $finder = sfFinder::type('file')->name('*.php');
+        $this->getFilesystem()->replaceTokens($finder->in(sfConfig::get('sf_lib_dir').'/form/'), '##', '##', $constants);
+
+        // check for base form class
+        if (!class_exists('BaseForm')) {
+            $file = sfConfig::get('sf_lib_dir').'/'.$options['form-dir-name'].'/BaseForm.class.php';
+            $this->getFilesystem()->copy(sfConfig::get('sf_symfony_lib_dir').'/task/generator/skeleton/project/lib/form/BaseForm.class.php', $file);
+            $this->getFilesystem()->replaceTokens($file, '##', '##', $constants);
+        }
+
+        $this->reloadAutoload();
+    }
 }

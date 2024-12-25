@@ -17,107 +17,91 @@
  */
 class sfPropelRoute extends sfObjectRoute
 {
-  protected
-    $criteria = null;
+    protected $criteria = null;
 
-  public function setListCriteria(Criteria $criteria)
-  {
-    if (!$this->isBound())
+    public function setListCriteria(Criteria $criteria)
     {
-      throw new LogicException('The route is not bound.');
-    }
-
-    $this->criteria = $criteria;
-  }
-
-  protected function getObjectForParameters($parameters)
-  {
-    $this->fixOptions();
-
-    if (!isset($this->options['method']))
-    {
-      $this->options['method'] = $this->options['method_for_criteria'] ?? 'doSelectOne';
-
-      $className = $this->options['model'];
-      $criteria = new Criteria();
-      $variables = $this->getRealVariables();
-      if (!count($variables))
-      {
-        return false;
-      }
-
-      foreach ($variables as $variable)
-      {
-        try
-        {
-          $constant = call_user_func([$className, 'translateFieldName'], $variable, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_COLNAME);
-          $criteria->add($constant, $parameters[$variable]);
+        if (!$this->isBound()) {
+            throw new LogicException('The route is not bound.');
         }
-        catch (Exception $e)
-        {
-          // don't add Criteria if the variable cannot be mapped to a column
+
+        $this->criteria = $criteria;
+    }
+
+    protected function getObjectForParameters($parameters)
+    {
+        $this->fixOptions();
+
+        if (!isset($this->options['method'])) {
+            $this->options['method'] = $this->options['method_for_criteria'] ?? 'doSelectOne';
+
+            $className = $this->options['model'];
+            $criteria = new Criteria();
+            $variables = $this->getRealVariables();
+            if (!count($variables)) {
+                return false;
+            }
+
+            foreach ($variables as $variable) {
+                try {
+                    $constant = call_user_func([$className, 'translateFieldName'], $variable, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_COLNAME);
+                    $criteria->add($constant, $parameters[$variable]);
+                } catch (Exception $e) {
+                    // don't add Criteria if the variable cannot be mapped to a column
+                }
+            }
+
+            $parameters = $criteria;
         }
-      }
 
-      $parameters = $criteria;
+        return parent::getObjectForParameters($parameters);
     }
 
-    return parent::getObjectForParameters($parameters);
-  }
-
-  protected function getObjectsForParameters($parameters)
-  {
-    $this->fixOptions();
-
-    if (!isset($this->options['method']))
+    protected function getObjectsForParameters($parameters)
     {
-      $this->options['method'] = $this->options['method_for_criteria'] ?? 'doSelect';
-      $parameters = new Criteria();
+        $this->fixOptions();
+
+        if (!isset($this->options['method'])) {
+            $this->options['method'] = $this->options['method_for_criteria'] ?? 'doSelect';
+            $parameters = new Criteria();
+        }
+
+        if (null !== $this->criteria) {
+            $parameters = $this->criteria;
+        }
+
+        return parent::getObjectForParameters($parameters);
     }
 
-    if (null !== $this->criteria)
+    protected function doConvertObjectToArray($object)
     {
-      $parameters = $this->criteria;
+        $this->fixOptions();
+
+        if (isset($this->options['convert']) || method_exists($object, 'toParams')) {
+            return parent::doConvertObjectToArray($object);
+        }
+
+        $className = $this->options['model'];
+
+        $parameters = [];
+        foreach ($this->getRealVariables() as $variable) {
+            try {
+                $method = 'get'.call_user_func([$className, 'translateFieldName'], $variable, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_PHPNAME);
+            } catch (Exception $e) {
+                $method = 'get'.sfInflector::camelize($variable);
+            }
+
+            $parameters[$variable] = $object->$method();
+        }
+
+        return $parameters;
     }
 
-    return parent::getObjectForParameters($parameters);
-  }
-
-  protected function doConvertObjectToArray($object)
-  {
-    $this->fixOptions();
-
-    if (isset($this->options['convert']) || method_exists($object, 'toParams'))
+    protected function fixOptions()
     {
-      return parent::doConvertObjectToArray($object);
+        if (!isset($this->options['object_model'])) {
+            $this->options['object_model'] = $this->options['model'];
+            $this->options['model'] = constant($this->options['model'].'::PEER');
+        }
     }
-
-    $className = $this->options['model'];
-
-    $parameters = [];
-    foreach ($this->getRealVariables() as $variable)
-    {
-      try
-      {
-        $method = 'get'.call_user_func([$className, 'translateFieldName'], $variable, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_PHPNAME);
-      }
-      catch (Exception $e)
-      {
-        $method = 'get'.sfInflector::camelize($variable);
-      }
-
-      $parameters[$variable] = $object->$method();
-    }
-
-    return $parameters;
-  }
-
-  protected function fixOptions()
-  {
-    if (!isset($this->options['object_model']))
-    {
-      $this->options['object_model'] = $this->options['model'];
-      $this->options['model'] = constant($this->options['model'].'::PEER');
-    }
-  }
 }

@@ -9,82 +9,73 @@
  */
 abstract class BaseAuthorForm extends BaseFormPropel
 {
-  public function setup()
-  {
-    $this->setWidgets(['id'                  => new sfWidgetFormInputHidden(), 'name'                => new sfWidgetFormInputText(), 'author_article_list' => new sfWidgetFormPropelChoice(['multiple' => true, 'model' => 'Article'])]);
-
-    $this->setValidators(['id'                  => new sfValidatorChoice(['choices' => [$this->getObject()->getId()], 'empty_value' => $this->getObject()->getId(), 'required' => false]), 'name'                => new sfValidatorString(['max_length' => 255, 'required' => false]), 'author_article_list' => new sfValidatorPropelChoice(['multiple' => true, 'model' => 'Article', 'required' => false])]);
-
-    $this->widgetSchema->setNameFormat('author[%s]');
-
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
-
-    parent::setup();
-  }
-
-  public function getModelName()
-  {
-    return 'Author';
-  }
-
-
-  public function updateDefaultsFromObject()
-  {
-    parent::updateDefaultsFromObject();
-
-    if (isset($this->widgetSchema['author_article_list']))
+    public function setup()
     {
-      $values = [];
-      foreach ($this->object->getAuthorArticles() as $obj)
-      {
-        $values[] = $obj->getArticleId();
-      }
+        $this->setWidgets(['id'                  => new sfWidgetFormInputHidden(), 'name'                => new sfWidgetFormInputText(), 'author_article_list' => new sfWidgetFormPropelChoice(['multiple' => true, 'model' => 'Article'])]);
 
-      $this->setDefault('author_article_list', $values);
+        $this->setValidators(['id'                  => new sfValidatorChoice(['choices' => [$this->getObject()->getId()], 'empty_value' => $this->getObject()->getId(), 'required' => false]), 'name'                => new sfValidatorString(['max_length' => 255, 'required' => false]), 'author_article_list' => new sfValidatorPropelChoice(['multiple' => true, 'model' => 'Article', 'required' => false])]);
+
+        $this->widgetSchema->setNameFormat('author[%s]');
+
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+
+        parent::setup();
     }
 
-  }
-
-  protected function doSave($con = null)
-  {
-    parent::doSave($con);
-
-    $this->saveAuthorArticleList($con);
-  }
-
-  public function saveAuthorArticleList($con = null)
-  {
-    if (!$this->isValid())
+    public function getModelName()
     {
-      throw $this->getErrorSchema();
+        return 'Author';
     }
 
-    if (!isset($this->widgetSchema['author_article_list']))
+
+    public function updateDefaultsFromObject()
     {
-      // somebody has unset this widget
-      return;
+        parent::updateDefaultsFromObject();
+
+        if (isset($this->widgetSchema['author_article_list'])) {
+            $values = [];
+            foreach ($this->object->getAuthorArticles() as $obj) {
+                $values[] = $obj->getArticleId();
+            }
+
+            $this->setDefault('author_article_list', $values);
+        }
     }
 
-    if (null === $con)
+    protected function doSave($con = null)
     {
-      $con = $this->getConnection();
+        parent::doSave($con);
+
+        $this->saveAuthorArticleList($con);
     }
 
-    $c = new Criteria();
-    $c->add(AuthorArticlePeer::AUTHOR_ID, $this->object->getPrimaryKey());
-    AuthorArticlePeer::doDelete($c, $con);
-
-    $values = $this->getValue('author_article_list');
-    if (is_array($values))
+    public function saveAuthorArticleList($con = null)
     {
-      foreach ($values as $value)
-      {
-        $obj = new AuthorArticle();
-        $obj->setAuthorId($this->object->getPrimaryKey());
-        $obj->setArticleId($value);
-        $obj->save();
-      }
-    }
-  }
+        if (!$this->isValid()) {
+            throw $this->getErrorSchema();
+        }
 
+        if (!isset($this->widgetSchema['author_article_list'])) {
+            // somebody has unset this widget
+            return;
+        }
+
+        if (null === $con) {
+            $con = $this->getConnection();
+        }
+
+        $c = new Criteria();
+        $c->add(AuthorArticlePeer::AUTHOR_ID, $this->object->getPrimaryKey());
+        AuthorArticlePeer::doDelete($c, $con);
+
+        $values = $this->getValue('author_article_list');
+        if (is_array($values)) {
+            foreach ($values as $value) {
+                $obj = new AuthorArticle();
+                $obj->setAuthorId($this->object->getPrimaryKey());
+                $obj->setArticleId($value);
+                $obj->save();
+            }
+        }
+    }
 }

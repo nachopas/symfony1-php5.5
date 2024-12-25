@@ -6,7 +6,7 @@
  */
 class CategoryForm extends BaseCategoryForm
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

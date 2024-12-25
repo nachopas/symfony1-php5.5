@@ -15,11 +15,11 @@
  */
 class sfPluginConfigurationGeneric extends sfPluginConfiguration
 {
-  /**
-   * @see sfPluginConfiguration
-   */
-  public function initialize()
-  {
-    return false;
-  }
+    /**
+     * @see sfPluginConfiguration
+     */
+    public function initialize()
+    {
+        return false;
+    }
 }

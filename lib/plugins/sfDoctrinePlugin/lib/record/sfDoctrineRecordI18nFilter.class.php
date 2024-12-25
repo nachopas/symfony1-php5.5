@@ -16,52 +16,48 @@
  */
 class sfDoctrineRecordI18nFilter extends Doctrine_Record_Filter
 {
-  /**
-   * @see Doctrine_Table::unshiftFilter()
-   */
-  public function init()
-  {
-  }
-
-  /**
-   * Calls set on Translation relationship.
-   *
-   * Allows manipulation of I18n properties from the main object.
-   *
-   * @param Doctrine_Record $record
-   * @param string          $name   Name of the property
-   * @param string          $value  Value of the property
-   */
-  public function filterSet(Doctrine_Record $record, $name, $value)
-  {
-    return $record['Translation'][sfDoctrineRecord::getDefaultCulture()][$name] = $value;
-  }
-
-  /**
-   * Call get on Translation relationship.
-   *
-   * Allow access to I18n properties from the main object.
-   *
-   * @param Doctrine_Record $record
-   * @param string          $name   Name of the property
-   */
-  public function filterGet(Doctrine_Record $record, $name)
-  {
-    if ( $record->hasRelation('Translation') && !isset($record['Translation']) )
+    /**
+     * @see Doctrine_Table::unshiftFilter()
+     */
+    public function init()
     {
-      // has translation, but it is not loaded, yet
-      $record->Translation;
     }
 
-    $culture = sfDoctrineRecord::getDefaultCulture();
-    if (isset($record['Translation'][$culture]))
+    /**
+     * Calls set on Translation relationship.
+     *
+     * Allows manipulation of I18n properties from the main object.
+     *
+     * @param Doctrine_Record $record
+     * @param string          $name   Name of the property
+     * @param string          $value  Value of the property
+     */
+    public function filterSet(Doctrine_Record $record, $name, $value)
     {
-      return $record['Translation'][$culture][$name];
+        return $record['Translation'][sfDoctrineRecord::getDefaultCulture()][$name] = $value;
     }
-    else
+
+    /**
+     * Call get on Translation relationship.
+     *
+     * Allow access to I18n properties from the main object.
+     *
+     * @param Doctrine_Record $record
+     * @param string          $name   Name of the property
+     */
+    public function filterGet(Doctrine_Record $record, $name)
     {
-      $defaultCulture = sfConfig::get('sf_default_culture');
-      return $record['Translation'][$defaultCulture][$name];
+        if ($record->hasRelation('Translation') && !isset($record['Translation'])) {
+            // has translation, but it is not loaded, yet
+            $record->Translation;
+        }
+
+        $culture = sfDoctrineRecord::getDefaultCulture();
+        if (isset($record['Translation'][$culture])) {
+            return $record['Translation'][$culture][$name];
+        } else {
+            $defaultCulture = sfConfig::get('sf_default_culture');
+            return $record['Translation'][$defaultCulture][$name];
+        }
     }
-  }
 }

@@ -15,159 +15,145 @@
  */
 class sfPropelDatabase extends sfPDODatabase
 {
-  /**
-   * Returns the current propel configuration.
-   *
-   * @return array
-   *
-   * @deprecated Use Propel::getConfiguration() instead
-   */
-  static public function getConfiguration()
-  {
-    return ['propel' => Propel::getConfiguration(PropelConfiguration::TYPE_ARRAY)];
-  }
-
-  /**
-   * Configures a Propel datasource.
-   *
-   * @param array  $parameters The datasource parameters
-   * @param string $name       The datasource name
-   */
-  public function initialize($parameters = null, $name = 'propel')
-  {
-    parent::initialize($parameters);
-
-    if (!$this->hasParameter('datasource') && $this->hasParameter('name'))
+    /**
+     * Returns the current propel configuration.
+     *
+     * @return array
+     *
+     * @deprecated Use Propel::getConfiguration() instead
+     */
+    public static function getConfiguration()
     {
-      $this->setParameter('datasource', $this->getParameter('name'));
-    }
-    elseif (!$this->hasParameter('datasource') && !empty($name))
-    {
-      $this->setParameter('datasource', $name);
+        return ['propel' => Propel::getConfiguration(PropelConfiguration::TYPE_ARRAY)];
     }
 
-    $this->addConfig();
-
-    // mark the first connection as the default
-    if (!Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->getParameter('datasources.default'))
+    /**
+     * Configures a Propel datasource.
+     *
+     * @param array  $parameters The datasource parameters
+     * @param string $name       The datasource name
+     */
+    public function initialize($parameters = null, $name = 'propel')
     {
-      $this->setDefaultConfig();
-    }
+        parent::initialize($parameters);
 
-    // for BC
-    if ($this->getParameter('pooling', false))
-    {
-      Propel::enableInstancePooling();
-    }
-    else
-    {
-      Propel::disableInstancePooling();
-    }
-  }
-
-  /**
-   * Connect to the database.
-   *
-   * Stores the PDO connection in $connection.
-   *
-   * @return void
-   */
-  public function connect()
-  {
-    $this->connection = Propel::getConnection($this->getParameter('datasource'));
-  }
-
-  /**
-   * Marks the current database as the default.
-   */
-  public function setDefaultConfig()
-  {
-    Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->setParameter('datasources.default', $this->getParameter('datasource'));
-  }
-
-  /**
-   * Adds configuration for current datasource.
-   */
-  public function addConfig()
-  {
-    if ($dsn = $this->getParameter('dsn'))
-    {
-      $params = $this->parseDsn($dsn);
-
-      $options = ['dsn', 'phptype', 'hostspec', 'database', 'username', 'password', 'port', 'protocol', 'encoding', 'persistent', 'socket', 'compat_assoc_lower', 'compat_rtrim_string'];
-      foreach ($options as $option)
-      {
-        if (!$this->getParameter($option) && isset($params[$option]))
-        {
-          $this->setParameter($option, $params[$option]);
+        if (!$this->hasParameter('datasource') && $this->hasParameter('name')) {
+            $this->setParameter('datasource', $this->getParameter('name'));
+        } elseif (!$this->hasParameter('datasource') && !empty($name)) {
+            $this->setParameter('datasource', $name);
         }
-      }
+
+        $this->addConfig();
+
+        // mark the first connection as the default
+        if (!Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->getParameter('datasources.default')) {
+            $this->setDefaultConfig();
+        }
+
+        // for BC
+        if ($this->getParameter('pooling', false)) {
+            Propel::enableInstancePooling();
+        } else {
+            Propel::disableInstancePooling();
+        }
     }
 
-    if ($this->hasParameter('persistent'))
+    /**
+     * Connect to the database.
+     *
+     * Stores the PDO connection in $connection.
+     *
+     * @return void
+     */
+    public function connect()
     {
-      // for BC
-      $this->setParameter('options', array_merge(
-        $this->getParameter('options', []),
-        ['ATTR_PERSISTENT' => $this->getParameter('persistent')]
-      ));
+        $this->connection = Propel::getConnection($this->getParameter('datasource'));
     }
 
-    $propelConfiguration = Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT);
-
-    if ($this->hasParameter('debug'))
+    /**
+     * Marks the current database as the default.
+     */
+    public function setDefaultConfig()
     {
-      $propelConfiguration->setParameter('debugpdo.logging', sfToolkit::arrayDeepMerge(
-        $propelConfiguration->getParameter('debugpdo.logging', []),
-        $this->getParameter('debug')
-      ));
+        Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->setParameter('datasources.default', $this->getParameter('datasource'));
     }
 
-    $event = new sfEvent($propelConfiguration, 'propel.filter_connection_config', ['name' => $this->getParameter('datasource'), 'database' => $this]);
-    $event = sfProjectConfiguration::getActive()->getEventDispatcher()->filter($event, ['adapter'    => $this->getParameter('phptype'), 'connection' => ['dsn'       => $this->getParameter('dsn'), 'user'      => $this->getParameter('username'), 'password'  => $this->getParameter('password'), 'classname' => $this->getParameter('classname', 'PropelPDO'), 'options'   => $this->getParameter('options', []), 'settings'  => ['charset' => ['value' => $this->getParameter('encoding', sfConfig::get('sf_charset'))], 'queries' => $this->getParameter('queries', [])]]]);
-
-    $propelConfiguration->setParameter('datasources.'.$this->getParameter('datasource'), $event->getReturnValue());
-  }
-
-  /**
-   * Sets database configuration parameter
-   *
-   * @param string $key
-   * @param mixed  $value
-   */
-  public function setConnectionParameter($key, $value)
-  {
-    if ('host' == $key)
+    /**
+     * Adds configuration for current datasource.
+     */
+    public function addConfig()
     {
-      $key = 'hostspec';
+        if ($dsn = $this->getParameter('dsn')) {
+            $params = $this->parseDsn($dsn);
+
+            $options = ['dsn', 'phptype', 'hostspec', 'database', 'username', 'password', 'port', 'protocol', 'encoding', 'persistent', 'socket', 'compat_assoc_lower', 'compat_rtrim_string'];
+            foreach ($options as $option) {
+                if (!$this->getParameter($option) && isset($params[$option])) {
+                    $this->setParameter($option, $params[$option]);
+                }
+            }
+        }
+
+        if ($this->hasParameter('persistent')) {
+            // for BC
+            $this->setParameter('options', array_merge(
+                $this->getParameter('options', []),
+                ['ATTR_PERSISTENT' => $this->getParameter('persistent')]
+            ));
+        }
+
+        $propelConfiguration = Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT);
+
+        if ($this->hasParameter('debug')) {
+            $propelConfiguration->setParameter('debugpdo.logging', sfToolkit::arrayDeepMerge(
+                $propelConfiguration->getParameter('debugpdo.logging', []),
+                $this->getParameter('debug')
+            ));
+        }
+
+        $event = new sfEvent($propelConfiguration, 'propel.filter_connection_config', ['name' => $this->getParameter('datasource'), 'database' => $this]);
+        $event = sfProjectConfiguration::getActive()->getEventDispatcher()->filter($event, ['adapter'    => $this->getParameter('phptype'), 'connection' => ['dsn'       => $this->getParameter('dsn'), 'user'      => $this->getParameter('username'), 'password'  => $this->getParameter('password'), 'classname' => $this->getParameter('classname', 'PropelPDO'), 'options'   => $this->getParameter('options', []), 'settings'  => ['charset' => ['value' => $this->getParameter('encoding', sfConfig::get('sf_charset'))], 'queries' => $this->getParameter('queries', [])]]]);
+
+        $propelConfiguration->setParameter('datasources.'.$this->getParameter('datasource'), $event->getReturnValue());
     }
 
-    Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->setParameter('datasources.'.$this->getParameter('datasource').'.connection.'.$key, $value);
-    $this->setParameter($key, $value);
-  }
-
-  /**
-   * Execute the shutdown procedure.
-   *
-   * @return void
-   */
-  public function shutdown()
-  {
-    if (null !== $this->connection)
+    /**
+     * Sets database configuration parameter
+     *
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function setConnectionParameter($key, $value)
     {
-      @$this->connection = null;
-    }
-  }
+        if ('host' == $key) {
+            $key = 'hostspec';
+        }
 
-  /**
-   * Parses PDO style DSN.
-   *
-   * @param  string $dsn
-   *
-   * @return array the parsed dsn
-   */
-  protected function parseDsn($dsn)
-  {
-    return ['phptype' => substr($dsn, 0, strpos($dsn, ':'))];
-  }
+        Propel::getConfiguration(PropelConfiguration::TYPE_OBJECT)->setParameter('datasources.'.$this->getParameter('datasource').'.connection.'.$key, $value);
+        $this->setParameter($key, $value);
+    }
+
+    /**
+     * Execute the shutdown procedure.
+     *
+     * @return void
+     */
+    public function shutdown()
+    {
+        if (null !== $this->connection) {
+            @$this->connection = null;
+        }
+    }
+
+    /**
+     * Parses PDO style DSN.
+     *
+     * @param  string $dsn
+     *
+     * @return array the parsed dsn
+     */
+    protected function parseDsn($dsn)
+    {
+        return ['phptype' => substr($dsn, 0, strpos($dsn, ':'))];
+    }
 }

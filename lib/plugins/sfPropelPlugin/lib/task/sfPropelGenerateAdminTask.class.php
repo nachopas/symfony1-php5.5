@@ -17,20 +17,20 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelGenerateAdminTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('route_or_model', sfCommandArgument::REQUIRED, 'The route name or the model class')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('route_or_model', sfCommandArgument::REQUIRED, 'The route name or the model class')]);
 
-    $this->addOptions([new sfCommandOption('module', null, sfCommandOption::PARAMETER_REQUIRED, 'The module name', null), new sfCommandOption('theme', null, sfCommandOption::PARAMETER_REQUIRED, 'The theme name', 'admin'), new sfCommandOption('singular', null, sfCommandOption::PARAMETER_REQUIRED, 'The singular name', null), new sfCommandOption('plural', null, sfCommandOption::PARAMETER_REQUIRED, 'The plural name', null), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('actions-base-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The base class for the actions', 'sfActions')]);
+        $this->addOptions([new sfCommandOption('module', null, sfCommandOption::PARAMETER_REQUIRED, 'The module name', null), new sfCommandOption('theme', null, sfCommandOption::PARAMETER_REQUIRED, 'The theme name', 'admin'), new sfCommandOption('singular', null, sfCommandOption::PARAMETER_REQUIRED, 'The singular name', null), new sfCommandOption('plural', null, sfCommandOption::PARAMETER_REQUIRED, 'The plural name', null), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('actions-base-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The base class for the actions', 'sfActions')]);
 
-    $this->namespace = 'propel';
-    $this->name = 'generate-admin';
-    $this->briefDescription = 'Generates a Propel admin module';
+        $this->namespace = 'propel';
+        $this->name = 'generate-admin';
+        $this->briefDescription = 'Generates a Propel admin module';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:generate-admin|INFO] task generates a Propel admin module:
 
   [./symfony propel:generate-admin frontend Article|INFO]
@@ -56,56 +56,50 @@ the [with_wildcard_routes|COMMENT] option to the route:
       model:                Article
       with_wildcard_routes: true
 EOF;
-  }
-
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    // get configuration for the given route
-    if (false !== ($route = $this->getRouteFromName($arguments['route_or_model'])))
-    {
-      $arguments['route'] = $route;
-      $arguments['route_name'] = $arguments['route_or_model'];
-
-      return $this->generateForRoute($arguments, $options);
     }
 
-    // is it a model class name
-    if (!class_exists($arguments['route_or_model']))
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
     {
-      throw new sfCommandException(sprintf('The route "%s" does not exist and there is no "%s" class.', $arguments['route_or_model'], $arguments['route_or_model']));
-    }
+        // get configuration for the given route
+        if (false !== ($route = $this->getRouteFromName($arguments['route_or_model']))) {
+            $arguments['route'] = $route;
+            $arguments['route_name'] = $arguments['route_or_model'];
 
-    $r = new ReflectionClass($arguments['route_or_model']);
-    if (!$r->isSubclassOf('BaseObject'))
-    {
-      throw new sfCommandException(sprintf('"%s" is not a Propel class.', $arguments['route_or_model']));
-    }
+            return $this->generateForRoute($arguments, $options);
+        }
 
-    // create a route
-    $model = $arguments['route_or_model'];
-    $name = strtolower(preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\\1_\\2', $model));
+        // is it a model class name
+        if (!class_exists($arguments['route_or_model'])) {
+            throw new sfCommandException(sprintf('The route "%s" does not exist and there is no "%s" class.', $arguments['route_or_model'], $arguments['route_or_model']));
+        }
 
-    if (isset($options['module']))
-    {
-      $route = $this->getRouteFromName($name);
-      if ($route && !$this->checkRoute($route, $model, $options['module']))
-      {
-        $name .= '_'.$options['module'];
-      }
-    }
+        $r = new ReflectionClass($arguments['route_or_model']);
+        if (!$r->isSubclassOf('BaseObject')) {
+            throw new sfCommandException(sprintf('"%s" is not a Propel class.', $arguments['route_or_model']));
+        }
 
-    $routing = sfConfig::get('sf_app_config_dir').'/routing.yml';
-    $content = file_get_contents($routing);
-    $routesArray = sfYaml::load($content);
+        // create a route
+        $model = $arguments['route_or_model'];
+        $name = strtolower(preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\d])([A-Z])/'], '\\1_\\2', $model));
 
-    if (!isset($routesArray[$name]))
-    {
-      $primaryKey = $this->getPrimaryKey($model);
-      $module = $options['module'] ?: $name;
-      $content = sprintf(<<<EOF
+        if (isset($options['module'])) {
+            $route = $this->getRouteFromName($name);
+            if ($route && !$this->checkRoute($route, $model, $options['module'])) {
+                $name .= '_'.$options['module'];
+            }
+        }
+
+        $routing = sfConfig::get('sf_app_config_dir').'/routing.yml';
+        $content = file_get_contents($routing);
+        $routesArray = sfYaml::load($content);
+
+        if (!isset($routesArray[$name])) {
+            $primaryKey = $this->getPrimaryKey($model);
+            $module = $options['module'] ?: $name;
+            $content = sprintf(<<<EOF
 %s:
   class: sfPropelRouteCollection
   options:
@@ -119,89 +113,85 @@ EOF;
 EOF
       , $name, $model, $module, $options['plural'] ?? $module, $primaryKey).$content;
 
-      $this->logSection('file+', $routing);
+            $this->logSection('file+', $routing);
 
-      if (false === file_put_contents($routing, $content))
-      {
-        throw new sfCommandException(sprintf('Unable to write to file, %s.', $routing));
-      }
+            if (false === file_put_contents($routing, $content)) {
+                throw new sfCommandException(sprintf('Unable to write to file, %s.', $routing));
+            }
+        }
+
+        $arguments['route'] = $this->getRouteFromName($name);
+        $arguments['route_name'] = $name;
+
+        return $this->generateForRoute($arguments, $options);
     }
 
-    $arguments['route'] = $this->getRouteFromName($name);
-    $arguments['route_name'] = $name;
-
-    return $this->generateForRoute($arguments, $options);
-  }
-
-  protected function generateForRoute($arguments, $options)
-  {
-    $routeOptions = $arguments['route']->getOptions();
-
-    if (!$arguments['route'] instanceof sfPropelRouteCollection)
+    protected function generateForRoute($arguments, $options)
     {
-      throw new sfCommandException(sprintf('The route "%s" is not a Propel collection route.', $arguments['route_name']));
+        $routeOptions = $arguments['route']->getOptions();
+
+        if (!$arguments['route'] instanceof sfPropelRouteCollection) {
+            throw new sfCommandException(sprintf('The route "%s" is not a Propel collection route.', $arguments['route_name']));
+        }
+
+        $module = $routeOptions['module'];
+        $model = $routeOptions['model'];
+
+        // execute the propel:generate-module task
+        $task = new sfPropelGenerateModuleTask($this->dispatcher, $this->formatter);
+        $task->setCommandApplication($this->commandApplication);
+        $task->setConfiguration($this->configuration);
+
+        $this->logSection('app', sprintf('Generating admin module "%s" for model "%s"', $module, $model));
+
+        return $task->run([$arguments['application'], $module, $model], ['theme'                 => $options['theme'], 'route-prefix'          => $routeOptions['name'], 'with-propel-route'     => true, 'generate-in-cache'     => true, 'non-verbose-templates' => true, 'singular'              => $options['singular'], 'plural'                => $options['plural'], 'actions-base-class'    => $options['actions-base-class']]);
     }
 
-    $module = $routeOptions['module'];
-    $model = $routeOptions['model'];
-
-    // execute the propel:generate-module task
-    $task = new sfPropelGenerateModuleTask($this->dispatcher, $this->formatter);
-    $task->setCommandApplication($this->commandApplication);
-    $task->setConfiguration($this->configuration);
-
-    $this->logSection('app', sprintf('Generating admin module "%s" for model "%s"', $module, $model));
-
-    return $task->run([$arguments['application'], $module, $model], ['theme'                 => $options['theme'], 'route-prefix'          => $routeOptions['name'], 'with-propel-route'     => true, 'generate-in-cache'     => true, 'non-verbose-templates' => true, 'singular'              => $options['singular'], 'plural'                => $options['plural'], 'actions-base-class'    => $options['actions-base-class']]);
-  }
-
-  protected function getRouteFromName($name)
-  {
-    $config = new sfRoutingConfigHandler();
-    $routes = $config->evaluate($this->configuration->getConfigPaths('config/routing.yml'));
-
-    return $routes[$name] ?? false;
-  }
-
-  /**
-   * Checks whether a route references a model and module.
-   *
-   * @param mixed  $route  A route collection
-   * @param string $model  A model name
-   * @param string $module A module name
-   *
-   * @return boolean
-   */
-  protected function checkRoute($route, $model, $module)
-  {
-    if ($route instanceof sfPropelRouteCollection)
+    protected function getRouteFromName($name)
     {
-      $options = $route->getOptions();
-      return $model == $options['model'] && $module == $options['module'];
+        $config = new sfRoutingConfigHandler();
+        $routes = $config->evaluate($this->configuration->getConfigPaths('config/routing.yml'));
+
+        return $routes[$name] ?? false;
     }
 
-    return false;
-  }
-
-  /**
-   * Returns the name of the model's primary key column.
-   *
-   * @param string $model A model name
-   *
-   * @return string A column name
-   */
-  protected function getPrimaryKey($model)
-  {
-    $peer = constant($model.'::PEER');
-    $map = call_user_func([$peer, 'getTableMap']);
-
-    if (!$pks = $map->getPrimaryKeys())
+    /**
+     * Checks whether a route references a model and module.
+     *
+     * @param mixed  $route  A route collection
+     * @param string $model  A model name
+     * @param string $module A module name
+     *
+     * @return boolean
+     */
+    protected function checkRoute($route, $model, $module)
     {
-      return 'id';
+        if ($route instanceof sfPropelRouteCollection) {
+            $options = $route->getOptions();
+            return $model == $options['model'] && $module == $options['module'];
+        }
+
+        return false;
     }
 
-    $column = array_shift($pks);
+    /**
+     * Returns the name of the model's primary key column.
+     *
+     * @param string $model A model name
+     *
+     * @return string A column name
+     */
+    protected function getPrimaryKey($model)
+    {
+        $peer = constant($model.'::PEER');
+        $map = call_user_func([$peer, 'getTableMap']);
 
-    return call_user_func([$peer, 'translateFieldName'], $column->getPhpName(), BasePeer::TYPE_PHPNAME, BasePeer::TYPE_FIELDNAME);
-  }
+        if (!$pks = $map->getPrimaryKeys()) {
+            return 'id';
+        }
+
+        $column = array_shift($pks);
+
+        return call_user_func([$peer, 'translateFieldName'], $column->getPhpName(), BasePeer::TYPE_PHPNAME, BasePeer::TYPE_FIELDNAME);
+    }
 }

@@ -15,77 +15,64 @@
  */
 class sfTesterPropel extends sfTester
 {
-  /**
-   * Prepares the tester.
-   */
-  public function prepare()
-  {
-  }
-
-  /**
-   * Initializes the tester.
-   */
-  public function initialize()
-  {
-  }
-
-  /**
-   * Tests a model.
-   *
-   * @param string         $model    The model class name
-   * @param array|Criteria $criteria A Criteria object or an array of conditions
-   * @param string         $value    The value to test
-   *
-   * @return sfTestFunctionalBase|sfTester
-   */
-  public function check($model, $criteria, $value = true)
-  {
-    if (null === $criteria)
+    /**
+     * Prepares the tester.
+     */
+    public function prepare()
     {
-      $criteria = new Criteria();
     }
 
-    if (is_array($criteria))
+    /**
+     * Initializes the tester.
+     */
+    public function initialize()
     {
-      $conditions = $criteria;
-      $criteria = new Criteria();
-      foreach ($conditions as $column => $condition)
-      {
-        $column = call_user_func([constant($model.'::PEER'), 'translateFieldName'], $column, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_COLNAME);
-        $operator = Criteria::EQUAL;
-        if ('!' == $condition[0])
-        {
-          $operator = false !== strpos($condition, '%') ? Criteria::NOT_LIKE : Criteria::NOT_EQUAL;
-          $condition = substr($condition, 1);
-        }
-        else if (false !== strpos($condition, '%'))
-        {
-          $operator = Criteria::LIKE;
+    }
+
+    /**
+     * Tests a model.
+     *
+     * @param string         $model    The model class name
+     * @param array|Criteria $criteria A Criteria object or an array of conditions
+     * @param string         $value    The value to test
+     *
+     * @return sfTestFunctionalBase|sfTester
+     */
+    public function check($model, $criteria, $value = true)
+    {
+        if (null === $criteria) {
+            $criteria = new Criteria();
         }
 
-        $criteria->add($column, $condition, $operator);
-      }
-    }
+        if (is_array($criteria)) {
+            $conditions = $criteria;
+            $criteria = new Criteria();
+            foreach ($conditions as $column => $condition) {
+                $column = call_user_func([constant($model.'::PEER'), 'translateFieldName'], $column, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_COLNAME);
+                $operator = Criteria::EQUAL;
+                if ('!' == $condition[0]) {
+                    $operator = false !== strpos($condition, '%') ? Criteria::NOT_LIKE : Criteria::NOT_EQUAL;
+                    $condition = substr($condition, 1);
+                } elseif (false !== strpos($condition, '%')) {
+                    $operator = Criteria::LIKE;
+                }
 
-    $objects = call_user_func([constant($model.'::PEER'), 'doSelect'], $criteria);
+                $criteria->add($column, $condition, $operator);
+            }
+        }
 
-    if (false === $value)
-    {
-      $this->tester->is(count($objects), 0, sprintf('no %s object that matches the criteria has been found', $model));
-    }
-    else if (true === $value)
-    {
-      $this->tester->cmp_ok(count($objects), '>', 0, sprintf('%s objects that matches the criteria have been found', $model));
-    }
-    else if (is_int($value))
-    {
-      $this->tester->is(count($objects), $value, sprintf('"%s" %s objects have been found', $value, $model));
-    }
-    else
-    {
-      throw new InvalidArgumentException('The "check()" method does not takes this kind of argument.');
-    }
+        $objects = call_user_func([constant($model.'::PEER'), 'doSelect'], $criteria);
 
-    return $this->getObjectToReturn();
-  }
+        if (false === $value) {
+            $this->tester->is(count($objects), 0, sprintf('no %s object that matches the criteria has been found', $model));
+        } elseif (true === $value) {
+            $this->tester->cmp_ok(count($objects), '>', 0, sprintf('%s objects that matches the criteria have been found', $model));
+        } elseif (is_int($value)) {
+            $this->tester->is(count($objects), $value, sprintf('"%s" %s objects have been found', $value, $model));
+        } else {
+            throw new InvalidArgumentException('The "check()" method does not takes this kind of argument.');
+        }
+
+        return $this->getObjectToReturn();
+    }
 }

@@ -7,11 +7,11 @@
  */
 class BlogArticleFormFilter extends BaseBlogArticleFormFilter
 {
-  /**
-   * @see ArticleFormFilter
-   */
-  public function configure()
-  {
-    parent::configure();
-  }
+    /**
+     * @see ArticleFormFilter
+     */
+    public function configure()
+    {
+        parent::configure();
+    }
 }

@@ -9,24 +9,23 @@
  */
 abstract class BaseAuthorForm extends BaseFormDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['id'   => new sfWidgetFormInputHidden(), 'name' => new sfWidgetFormInputText(), 'type' => new sfWidgetFormInputText()]);
+    public function setup()
+    {
+        $this->setWidgets(['id'   => new sfWidgetFormInputHidden(), 'name' => new sfWidgetFormInputText(), 'type' => new sfWidgetFormInputText()]);
 
-    $this->setValidators(['id'   => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'name' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'type' => new sfValidatorString(['max_length' => 255, 'required' => false])]);
+        $this->setValidators(['id'   => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'name' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'type' => new sfValidatorString(['max_length' => 255, 'required' => false])]);
 
-    $this->widgetSchema->setNameFormat('author[%s]');
+        $this->widgetSchema->setNameFormat('author[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'Author';
-  }
-
+    public function getModelName()
+    {
+        return 'Author';
+    }
 }

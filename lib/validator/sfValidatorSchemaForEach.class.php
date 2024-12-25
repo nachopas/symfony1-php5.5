@@ -15,32 +15,31 @@
  */
 class sfValidatorSchemaForEach extends sfValidatorSchema
 {
-  /**
-   * Constructor.
-   *
-   * @param sfValidatorBase $validator  Initial validator
-   * @param integer         $count      The number of times to replicate the validator
-   * @param array           $options    An array of options
-   * @param array           $messages   An array of error messages
-   *
-   * @see sfValidatorBase
-   */
-  public function __construct(sfValidatorBase $validator, $count, $options = [], $messages = [])
-  {
-    $fields = [];
-    for ($i = 0; $i < $count; $i++)
+    /**
+     * Constructor.
+     *
+     * @param sfValidatorBase $validator  Initial validator
+     * @param integer         $count      The number of times to replicate the validator
+     * @param array           $options    An array of options
+     * @param array           $messages   An array of error messages
+     *
+     * @see sfValidatorBase
+     */
+    public function __construct(sfValidatorBase $validator, $count, $options = [], $messages = [])
     {
-      $fields[$i] = clone $validator;
+        $fields = [];
+        for ($i = 0; $i < $count; $i++) {
+            $fields[$i] = clone $validator;
+        }
+
+        parent::__construct($fields, $options, $messages);
     }
 
-    parent::__construct($fields, $options, $messages);
-  }
-
-  /**
-   * @see sfValidatorBase
-   */
-  public function asString($indent = 0)
-  {
-    throw new Exception('Unable to convert a sfValidatorSchemaForEach to string.');
-  }
+    /**
+     * @see sfValidatorBase
+     */
+    public function asString($indent = 0)
+    {
+        throw new Exception('Unable to convert a sfValidatorSchemaForEach to string.');
+    }
 }

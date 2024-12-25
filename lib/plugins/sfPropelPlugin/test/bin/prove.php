@@ -12,12 +12,10 @@ require_once __DIR__.'/../../../../../lib/vendor/lime/lime.php';
 require_once __DIR__.'/../../../../../lib/util/sfToolkit.class.php';
 require_once __DIR__.'/../../../../../lib/util/sfFinder.class.php';
 
-if ($files = glob(sfToolkit::getTmpDir().DIRECTORY_SEPARATOR.'/sf_autoload_unit_*'))
-{
-  foreach ($files as $file)
-  {
-    unlink($file);
-  }
+if ($files = glob(sfToolkit::getTmpDir().DIRECTORY_SEPARATOR.'/sf_autoload_unit_*')) {
+    foreach ($files as $file) {
+        unlink($file);
+    }
 }
 
 $h = new lime_harness(new lime_output_color);

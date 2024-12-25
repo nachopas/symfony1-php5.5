@@ -7,28 +7,28 @@
  */
 abstract class BaseFormGeneratorTest2FormFilter extends BaseFormFilterDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['name' => new sfWidgetFormFilterInput()]);
+    public function setup()
+    {
+        $this->setWidgets(['name' => new sfWidgetFormFilterInput()]);
 
-    $this->setValidators(['name' => new sfValidatorPass(['required' => false])]);
+        $this->setValidators(['name' => new sfValidatorPass(['required' => false])]);
 
-    $this->widgetSchema->setNameFormat('form_generator_test2_filters[%s]');
+        $this->widgetSchema->setNameFormat('form_generator_test2_filters[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'FormGeneratorTest2';
-  }
+    public function getModelName()
+    {
+        return 'FormGeneratorTest2';
+    }
 
-  public function getFields()
-  {
-    return ['id'   => 'Number', 'name' => 'Text'];
-  }
+    public function getFields()
+    {
+        return ['id'   => 'Number', 'name' => 'Text'];
+    }
 }

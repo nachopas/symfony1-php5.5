@@ -3,7 +3,7 @@
 /**
  * Subclass for performing query and update operations on the 'product_i18n' table.
  *
- * 
+ *
  *
  */
 class ProductI18nPeer extends BaseProductI18nPeer

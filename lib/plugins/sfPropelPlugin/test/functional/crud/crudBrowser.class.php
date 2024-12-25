@@ -10,44 +10,43 @@
 
 class CrudBrowser extends sfTestBrowser
 {
-  protected
-    $urlPrefix = 'article',
-    $singularName = 'Article',
-    $pluralName = 'Articles',
-    $projectDir = '';
+    protected $urlPrefix = 'article';
+    protected $singularName = 'Article';
+    protected $pluralName = 'Articles';
+    protected $projectDir = '';
 
-  public function setup($options)
-  {
-    $this->projectDir = __DIR__.'/../fixtures';
-    $this->cleanup();
+    public function setup($options)
+    {
+        $this->projectDir = __DIR__.'/../fixtures';
+        $this->cleanup();
 
-    chdir($this->projectDir);
-    $task = new sfPropelGenerateModuleTask(new sfEventDispatcher(), new sfFormatter());
-    $options[] = 'env=test';
-    $options[] = 'singular='.$this->singularName;
-    $options[] = 'plural='.$this->pluralName;
-    $options[] = '--non-verbose-templates';
-    $task->run(['crud', 'article', 'Article'], $options);
+        chdir($this->projectDir);
+        $task = new sfPropelGenerateModuleTask(new sfEventDispatcher(), new sfFormatter());
+        $options[] = 'env=test';
+        $options[] = 'singular='.$this->singularName;
+        $options[] = 'plural='.$this->pluralName;
+        $options[] = '--non-verbose-templates';
+        $task->run(['crud', 'article', 'Article'], $options);
 
-    require_once($this->projectDir.'/config/ProjectConfiguration.class.php');
-    sfContext::createInstance(ProjectConfiguration::getApplicationConfiguration('crud', 'test', true, $this->projectDir));
+        require_once($this->projectDir.'/config/ProjectConfiguration.class.php');
+        sfContext::createInstance(ProjectConfiguration::getApplicationConfiguration('crud', 'test', true, $this->projectDir));
 
-    return $options;
-  }
+        return $options;
+    }
 
-  public function teardown()
-  {
-    $this->cleanup();
+    public function teardown()
+    {
+        $this->cleanup();
 
-    return $this;
-  }
+        return $this;
+    }
 
-  public function browse($options)
-  {
-    $options = $this->setup($options);
+    public function browse($options)
+    {
+        $options = $this->setup($options);
 
-    // list page
-    $this->
+        // list page
+        $this->
       info('list page')->
       get('/'.$this->urlPrefix)->
       with('request')->begin()->
@@ -84,8 +83,8 @@ class CrudBrowser extends sfTestBrowser
       end()
     ;
 
-    // create page
-    $this->
+        // create page
+        $this->
       info('create page')->
       click('New')->
       with('request')->begin()->
@@ -102,14 +101,14 @@ class CrudBrowser extends sfTestBrowser
       checkFormValues(['title'               => '', 'body'                => '', 'Online'              => false, 'category_id'         => 0, 'end_date'            => ['year' => '', 'month' => '', 'day' => '', 'hour' => '', 'minute' => ''], 'book_id'             => 0, 'author_article_list' => []])
     ;
 
-    // save
-    $this->
+        // save
+        $this->
       info('save')->
       saveValues($options, ['title'               => 'my real title', 'body'                => 'my real body', 'Online'              => true, 'category_id'         => 2, 'end_date'            => ['year' => '', 'month' => '', 'day' => '', 'hour' => '', 'minute' => ''], 'book_id'             => null, 'author_article_list' => [1, 2]], 3, true)
     ;
 
-    // go back to the list
-    $this->
+        // go back to the list
+        $this->
       info('go back to the list')->
       click('Back to list')->
       with('request')->begin()->
@@ -119,18 +118,15 @@ class CrudBrowser extends sfTestBrowser
       with('response')->isStatusCode(200)
     ;
 
-    // edit page
-    $this->info('edit page');
-    if (!in_array('with-show', $options) && ($options['with-show'] === true))
-    {
-      $this->click('3');
-    }
-    else
-    {
-      $this->get(sprintf('/%s/3/edit', $this->urlPrefix));
-    }
+        // edit page
+        $this->info('edit page');
+        if (!in_array('with-show', $options) && ($options['with-show'] === true)) {
+            $this->click('3');
+        } else {
+            $this->get(sprintf('/%s/3/edit', $this->urlPrefix));
+        }
 
-    $this->
+        $this->
       with('request')->begin()->
         isParameter('module', $this->urlPrefix)->
         isParameter('action', 'edit')->
@@ -156,17 +152,18 @@ class CrudBrowser extends sfTestBrowser
       end()
     ;
 
-    // save / validation
-    $values = ['id'                  => 1009299, 'title'               => '', 'body'                => 'my body', 'Online'              => true, 'excerpt'             => 'my excerpt', 'category_id'         => null, 'end_date'            => ['year' => 0, 'month' => 0, 'day' => 15, 'hour' => '10', 'minute' => '20'], 'book_id'             => 149999, 'author_article_list' => [0, 5]];
+        // save / validation
+        $values = ['id'                  => 1009299, 'title'               => '', 'body'                => 'my body', 'Online'              => true, 'excerpt'             => 'my excerpt', 'category_id'         => null, 'end_date'            => ['year' => 0, 'month' => 0, 'day' => 15, 'hour' => '10', 'minute' => '20'], 'book_id'             => 149999, 'author_article_list' => [0, 5]];
 
-    $this->
+        $this->
       info('save / validation')->
       click('Save', ['article' => $values])->
       with('request')->begin()->
         isParameter('module', $this->urlPrefix)->
         isParameter('action', 'update')->
       end()->
-      checkFormValues(array_merge($values, ['end_date' => ['year' => null, 'month' => null, 'day' => 15, 'hour' => '10', 'minute' => '20']])
+      checkFormValues(
+          array_merge($values, ['end_date' => ['year' => null, 'month' => null, 'day' => 15, 'hour' => '10', 'minute' => '20']])
       )->
       with('response')->begin()->
         isStatusCode(200)->
@@ -175,14 +172,14 @@ class CrudBrowser extends sfTestBrowser
       end()
     ;
 
-    // save
-    $this->
+        // save
+        $this->
       info('save')->
       saveValues($options, ['id'                  => 3, 'title'               => 'my title', 'body'                => 'my body', 'Online'              => false, 'category_id'         => 1, 'end_date'            => ['year' => date('Y'), 'month' => 10, 'day' => 15, 'hour' => '10', 'minute' => '20'], 'book_id'             => 1, 'author_article_list' => [1, 3]], 3, false)
     ;
 
-    // go back to the list
-    $this->
+        // go back to the list
+        $this->
       info('go back to the list')->
       click('Back to list')->
       with('request')->begin()->
@@ -192,8 +189,8 @@ class CrudBrowser extends sfTestBrowser
       with('response')->isStatusCode(200)
     ;
 
-    // delete
-    $this->
+        // delete
+        $this->
       info('delete')->
       get(sprintf('/%s/3/edit', $this->urlPrefix))->
       click('Delete', [], ['method' => 'delete', '_with_csrf' => true])->
@@ -215,10 +212,9 @@ class CrudBrowser extends sfTestBrowser
       with('response')->isStatusCode(404)
     ;
 
-    if (in_array('with-show', $options))
-    {
-      // show page
-      $this->
+        if (in_array('with-show', $options)) {
+            // show page
+            $this->
         info('show page')->
         get(sprintf('/%s/2', $this->urlPrefix))->
         with('request')->begin()->
@@ -241,20 +237,18 @@ class CrudBrowser extends sfTestBrowser
           checkElement('body table tbody tr:nth(8)', '/Book\:\s+/')->
         end()
       ;
+        } else {
+            $this->get(sprintf('/%s/show/id/2', $this->urlPrefix))->with('response')->isStatusCode(404);
+        }
+
+        $this->teardown();
+
+        return $this;
     }
-    else
+
+    public function saveValues($options, $values, $id, $creation)
     {
-      $this->get(sprintf('/%s/show/id/2', $this->urlPrefix))->with('response')->isStatusCode(404);
-    }
-
-    $this->teardown();
-
-    return $this;
-  }
-
-  public function saveValues($options, $values, $id, $creation)
-  {
-    $this->
+        $this->
       click('Save', ['article' => $values])->
       with('request')->begin()->
         isParameter('module', $this->urlPrefix)->
@@ -275,12 +269,12 @@ class CrudBrowser extends sfTestBrowser
       checkFormValues($values)
     ;
 
-    return $this;
-  }
+        return $this;
+    }
 
-  public function checkFormValues(array $values)
-  {
-    return $this->with('response')->begin()->
+    public function checkFormValues(array $values)
+    {
+        return $this->with('response')->begin()->
       checkElement(sprintf('table tbody td input[id="article_title"][name="article[title]"][value="%s"]', $values['title']))->
 
       checkElement('table tbody td textarea[id="article_body"][name="article[body]"]', $values['body'])->
@@ -303,21 +297,20 @@ class CrudBrowser extends sfTestBrowser
       checkElement('table tbody td select[id="article_end_date_hour"][name="article[end_date][hour]"] option[selected="selected"]', (string) $values['end_date']['hour'])->
       checkElement('table tbody td select[id="article_end_date_minute"][name="article[end_date][minute]"] option[selected="selected"]', (string) $values['end_date']['minute'])->
     end();
-  }
-
-  protected function clearDirectory($dir)
-  {
-    sfToolkit::clearDirectory($dir);
-    if (is_dir($dir))
-    {
-      rmdir($dir);
     }
-  }
 
-  protected function cleanup()
-  {
-    $this->clearDirectory(sprintf($this->projectDir.'/apps/crud/modules/%s', $this->urlPrefix));
-    $this->clearDirectory(sprintf($this->projectDir.'/cache/crud/test/modules/auto%s', ucfirst($this->urlPrefix)));
-    $this->clearDirectory($this->projectDir.'/test/functional/crud');
-  }
+    protected function clearDirectory($dir)
+    {
+        sfToolkit::clearDirectory($dir);
+        if (is_dir($dir)) {
+            rmdir($dir);
+        }
+    }
+
+    protected function cleanup()
+    {
+        $this->clearDirectory(sprintf($this->projectDir.'/apps/crud/modules/%s', $this->urlPrefix));
+        $this->clearDirectory(sprintf($this->projectDir.'/cache/crud/test/modules/auto%s', ucfirst($this->urlPrefix)));
+        $this->clearDirectory($this->projectDir.'/test/functional/crud');
+    }
 }

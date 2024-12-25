@@ -9,32 +9,31 @@
  */
 abstract class BaseMovieForm extends BaseFormPropel
 {
-  public function setup()
-  {
-    $this->setWidgets(['id'       => new sfWidgetFormInputHidden(), 'director' => new sfWidgetFormInputText()]);
+    public function setup()
+    {
+        $this->setWidgets(['id'       => new sfWidgetFormInputHidden(), 'director' => new sfWidgetFormInputText()]);
 
-    $this->setValidators(['id'       => new sfValidatorChoice(['choices' => [$this->getObject()->getId()], 'empty_value' => $this->getObject()->getId(), 'required' => false]), 'director' => new sfValidatorString(['max_length' => 255, 'required' => false])]);
+        $this->setValidators(['id'       => new sfValidatorChoice(['choices' => [$this->getObject()->getId()], 'empty_value' => $this->getObject()->getId(), 'required' => false]), 'director' => new sfValidatorString(['max_length' => 255, 'required' => false])]);
 
-    $this->widgetSchema->setNameFormat('movie[%s]');
+        $this->widgetSchema->setNameFormat('movie[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'Movie';
-  }
+    public function getModelName()
+    {
+        return 'Movie';
+    }
 
-  public function getI18nModelName()
-  {
-    return 'MovieI18n';
-  }
+    public function getI18nModelName()
+    {
+        return 'MovieI18n';
+    }
 
-  public function getI18nFormClass()
-  {
-    return 'MovieI18nForm';
-  }
-
+    public function getI18nFormClass()
+    {
+        return 'MovieI18nForm';
+    }
 }

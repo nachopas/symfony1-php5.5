@@ -9,16 +9,15 @@
  */
 abstract class BaseBlogAuthorForm extends AuthorForm
 {
-  protected function setupInheritance()
-  {
-    parent::setupInheritance();
+    protected function setupInheritance()
+    {
+        parent::setupInheritance();
 
-    $this->widgetSchema->setNameFormat('blog_author[%s]');
-  }
+        $this->widgetSchema->setNameFormat('blog_author[%s]');
+    }
 
-  public function getModelName()
-  {
-    return 'BlogAuthor';
-  }
-
+    public function getModelName()
+    {
+        return 'BlogAuthor';
+    }
 }

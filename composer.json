@@ -1,0 +1,15 @@
+{
+    "name": "welante/symfony1",
+    "authors": [
+        {
+            "name": "Markus Welter",
+            "email": "markus@welante.ch"
+        }
+    ],
+    "scripts": {
+        "pcs": "php php-cs-fixer-v2.phar --config=.php_cs.default fix"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

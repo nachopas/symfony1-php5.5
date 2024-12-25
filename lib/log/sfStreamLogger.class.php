@@ -15,59 +15,54 @@
  */
 class sfStreamLogger extends sfLogger
 {
-  protected
-    $stream = null;
+    protected $stream = null;
 
-  /**
-   * Initializes this logger.
-   *
-   * Available options:
-   *
-   * - stream: A PHP stream
-   *
-   * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-   * @param  array             $options     An array of options.
-   *
-   * @return Boolean      true, if initialization completes successfully, otherwise false.
-   */
-  public function initialize(sfEventDispatcher $dispatcher, $options = [])
-  {
-    if (!isset($options['stream']))
+    /**
+     * Initializes this logger.
+     *
+     * Available options:
+     *
+     * - stream: A PHP stream
+     *
+     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
+     * @param  array             $options     An array of options.
+     *
+     * @return Boolean      true, if initialization completes successfully, otherwise false.
+     */
+    public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
-      throw new sfConfigurationException('You must provide a "stream" option for this logger.');
+        if (!isset($options['stream'])) {
+            throw new sfConfigurationException('You must provide a "stream" option for this logger.');
+        } else {
+            if (is_resource($options['stream']) && 'stream' != get_resource_type($options['stream'])) {
+                throw new sfConfigurationException('The provided "stream" option is not a stream.');
+            }
+        }
+
+        $this->stream = $options['stream'];
+
+        return parent::initialize($dispatcher, $options);
     }
-    else
+
+    /**
+     * Sets the PHP stream to use for this logger.
+     *
+     * @param stream $stream A php stream
+     */
+    public function setStream($stream)
     {
-      if (is_resource($options['stream']) && 'stream' != get_resource_type($options['stream']))
-      {
-        throw new sfConfigurationException('The provided "stream" option is not a stream.');
-      }
+        $this->stream = $stream;
     }
 
-    $this->stream = $options['stream'];
-
-    return parent::initialize($dispatcher, $options);
-  }
-
-  /**
-   * Sets the PHP stream to use for this logger.
-   *
-   * @param stream $stream A php stream
-   */
-  public function setStream($stream)
-  {
-    $this->stream = $stream;
-  }
-
-  /**
-   * Logs a message.
-   *
-   * @param string $message   Message
-   * @param string $priority  Message priority
-   */
-  protected function doLog($message, $priority)
-  {
-    fwrite($this->stream, $message.PHP_EOL);
-    flush();
-  }
+    /**
+     * Logs a message.
+     *
+     * @param string $message   Message
+     * @param string $priority  Message priority
+     */
+    protected function doLog($message, $priority)
+    {
+        fwrite($this->stream, $message.PHP_EOL);
+        flush();
+    }
 }

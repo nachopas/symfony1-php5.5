@@ -19,21 +19,21 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
  */
 class sfDoctrineBuildDbTask extends sfDoctrineBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addArguments([new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addArguments([new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database')]);
 
-    $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
 
-    $this->aliases = ['doctrine:create-db'];
-    $this->namespace = 'doctrine';
-    $this->name = 'build-db';
-    $this->briefDescription = 'Creates database for current model';
+        $this->aliases = ['doctrine:create-db'];
+        $this->namespace = 'doctrine';
+        $this->name = 'build-db';
+        $this->briefDescription = 'Creates database for current model';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [doctrine:build-db|INFO] task creates one or more databases based on
 configuration in [config/databases.yml|COMMENT]:
 
@@ -43,29 +43,25 @@ You can specify what databases to create by providing their names:
 
   [./symfony doctrine:build-db slave1 slave2|INFO]
 EOF;
-  }
-
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-    $databases = $this->getDoctrineDatabases($databaseManager, count($arguments['database']) ? $arguments['database'] : null);
-
-    $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
-
-    foreach ($databases as $name => $database)
-    {
-      $this->logSection('doctrine', sprintf('Creating "%s" environment "%s" database', $environment, $name));
-      try
-      {
-        $database->getDoctrineConnection()->createDatabase();
-      }
-      catch (Exception $e)
-      {
-        $this->logSection('doctrine', $e->getMessage(), null, 'ERROR');
-      }
     }
-  }
+
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $databaseManager = new sfDatabaseManager($this->configuration);
+        $databases = $this->getDoctrineDatabases($databaseManager, count($arguments['database']) ? $arguments['database'] : null);
+
+        $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
+
+        foreach ($databases as $name => $database) {
+            $this->logSection('doctrine', sprintf('Creating "%s" environment "%s" database', $environment, $name));
+            try {
+                $database->getDoctrineConnection()->createDatabase();
+            } catch (Exception $e) {
+                $this->logSection('doctrine', $e->getMessage(), null, 'ERROR');
+            }
+        }
+    }
 }

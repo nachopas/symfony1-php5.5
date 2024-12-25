@@ -16,31 +16,31 @@ $conn = Doctrine_Manager::connection(new Doctrine_Adapter_Mock('mysql'));
 
 class Test extends sfDoctrineRecord
 {
-  public function setTableDefinition()
-  {
-    $this->hasColumn('name', 'string', 255, ['notblank' => true]);
-    $this->hasColumn('test as TEST', 'string', 255);
-    $this->hasColumn('email', 'string', 255, ['email' => true, 'notnull' => true]);
-  }
+    public function setTableDefinition()
+    {
+        $this->hasColumn('name', 'string', 255, ['notblank' => true]);
+        $this->hasColumn('test as TEST', 'string', 255);
+        $this->hasColumn('email', 'string', 255, ['email' => true, 'notnull' => true]);
+    }
 
-  public function setUp()
-  {
-    $this->hasMany('TestRelation as TestRelations', ['local' => 'id', 'foreign' => 'test_id']);
-  }
+    public function setUp()
+    {
+        $this->hasMany('TestRelation as TestRelations', ['local' => 'id', 'foreign' => 'test_id']);
+    }
 }
 
 class TestRelation extends sfDoctrineRecord
 {
-  public function setTableDefinition()
-  {
-    $this->hasColumn('name', 'string', 255);
-    $this->hasColumn('test_id', 'integer');
-  }
+    public function setTableDefinition()
+    {
+        $this->hasColumn('name', 'string', 255);
+        $this->hasColumn('test_id', 'integer');
+    }
 
-  public function setUp()
-  {
-    $this->hasOne('Test', ['local' => 'test_id', 'foreign' => 'id']);
-  }
+    public function setUp()
+    {
+        $this->hasOne('Test', ['local' => 'test_id', 'foreign' => 'id']);
+    }
 }
 
 $column = new sfDoctrineColumn('name', Doctrine_Core::getTable('Test'));

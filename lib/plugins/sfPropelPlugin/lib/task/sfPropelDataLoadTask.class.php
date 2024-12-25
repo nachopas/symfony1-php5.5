@@ -17,20 +17,20 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelDataLoadTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addArguments([new sfCommandArgument('dir_or_file', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'Directory or file to load')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addArguments([new sfCommandArgument('dir_or_file', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'Directory or file to load')]);
 
-    $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'cli'), new sfCommandOption('append', null, sfCommandOption::PARAMETER_NONE, 'Don\'t delete current data in the database'), new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel')]);
+        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'cli'), new sfCommandOption('append', null, sfCommandOption::PARAMETER_NONE, 'Don\'t delete current data in the database'), new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel')]);
 
-    $this->namespace = 'propel';
-    $this->name = 'data-load';
-    $this->briefDescription = 'Loads YAML fixture data';
+        $this->namespace = 'propel';
+        $this->name = 'data-load';
+        $this->briefDescription = 'Loads YAML fixture data';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:data-load|INFO] task loads data fixtures into the database:
 
   [./symfony propel:data-load|INFO]
@@ -57,39 +57,34 @@ the [application|COMMENT] option:
 
   [./symfony propel:data-load --application=frontend|INFO]
 EOF;
-  }
-
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
-    if (count($arguments['dir_or_file']))
-    {
-      $fixturesDirs = $arguments['dir_or_file'];
-    }
-    else
-    {
-      $fixturesDirs = array_merge([sfConfig::get('sf_data_dir').'/fixtures'], $this->configuration->getPluginSubPaths('/data/fixtures'));
     }
 
-    $data = new sfPropelData();
-    $data->setDeleteCurrentData(!$options['append']);
-
-    $dirs = [];
-    foreach ($fixturesDirs as $fixturesDir)
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
     {
-      if (!is_readable($fixturesDir))
-      {
-        continue;
-      }
+        $databaseManager = new sfDatabaseManager($this->configuration);
 
-      $this->logSection('propel', sprintf('load data from "%s"', $fixturesDir));
-      $dirs[] = $fixturesDir;
+        if (count($arguments['dir_or_file'])) {
+            $fixturesDirs = $arguments['dir_or_file'];
+        } else {
+            $fixturesDirs = array_merge([sfConfig::get('sf_data_dir').'/fixtures'], $this->configuration->getPluginSubPaths('/data/fixtures'));
+        }
+
+        $data = new sfPropelData();
+        $data->setDeleteCurrentData(!$options['append']);
+
+        $dirs = [];
+        foreach ($fixturesDirs as $fixturesDir) {
+            if (!is_readable($fixturesDir)) {
+                continue;
+            }
+
+            $this->logSection('propel', sprintf('load data from "%s"', $fixturesDir));
+            $dirs[] = $fixturesDir;
+        }
+
+        $data->loadData($dirs, $options['connection']);
     }
-
-    $data->loadData($dirs, $options['connection']);
-  }
 }

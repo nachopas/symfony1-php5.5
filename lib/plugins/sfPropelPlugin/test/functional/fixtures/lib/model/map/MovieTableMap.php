@@ -16,51 +16,51 @@
  * (i.e. if it's a text column type).
  *
  */
-class MovieTableMap extends TableMap {
+class MovieTableMap extends TableMap
+{
 
-	/**
-	 * The (dot-path) name of this class
-	 */
-	const CLASS_NAME = 'lib.model.map.MovieTableMap';
+    /**
+     * The (dot-path) name of this class
+     */
+    const CLASS_NAME = 'lib.model.map.MovieTableMap';
 
-	/**
-	 * Initialize the table attributes, columns and validators
-	 * Relations are not initialized by this method since they are lazy loaded
-	 *
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function initialize()
-	{
-	  // attributes
-		$this->setName('movie');
-		$this->setPhpName('Movie');
-		$this->setClassname('Movie');
-		$this->setPackage('lib.model');
-		$this->setUseIdGenerator(true);
-		// columns
-		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addColumn('DIRECTOR', 'Director', 'VARCHAR', false, 255, null);
-		// validators
-	} // initialize()
+    /**
+     * Initialize the table attributes, columns and validators
+     * Relations are not initialized by this method since they are lazy loaded
+     *
+     * @return     void
+     * @throws     PropelException
+     */
+    public function initialize()
+    {
+        // attributes
+        $this->setName('movie');
+        $this->setPhpName('Movie');
+        $this->setClassname('Movie');
+        $this->setPackage('lib.model');
+        $this->setUseIdGenerator(true);
+        // columns
+        $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('DIRECTOR', 'Director', 'VARCHAR', false, 255, null);
+        // validators
+    } // initialize()
 
-	/**
-	 * Build the RelationMap objects for this table relationships
-	 */
-	public function buildRelations()
-	{
-    $this->addRelation('MovieI18n', 'MovieI18n', RelationMap::ONE_TO_MANY, ['id' => 'id'], 'CASCADE', null);
-	} // buildRelations()
+    /**
+     * Build the RelationMap objects for this table relationships
+     */
+    public function buildRelations()
+    {
+        $this->addRelation('MovieI18n', 'MovieI18n', RelationMap::ONE_TO_MANY, ['id' => 'id'], 'CASCADE', null);
+    } // buildRelations()
 
-	/**
-	 * 
-	 * Gets the list of behaviors registered for this table
-	 * 
-	 * @return array Associative array (name => parameters) of behaviors
-	 */
-	public function getBehaviors()
-	{
-		return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => [], 'symfony_i18n' => ['i18n_table' => 'movie_i18n']];
-	} // getBehaviors()
-
+    /**
+     *
+     * Gets the list of behaviors registered for this table
+     *
+     * @return array Associative array (name => parameters) of behaviors
+     */
+    public function getBehaviors()
+    {
+        return ['symfony' => ['form' => 'true', 'filter' => 'true'], 'symfony_behaviors' => [], 'symfony_i18n' => ['i18n_table' => 'movie_i18n']];
+    } // getBehaviors()
 } // MovieTableMap

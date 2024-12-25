@@ -17,27 +17,27 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelSchemaToYmlTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->namespace = 'propel';
-    $this->name = 'schema-to-yml';
-    $this->briefDescription = 'Creates schema.yml from schema.xml';
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->namespace = 'propel';
+        $this->name = 'schema-to-yml';
+        $this->briefDescription = 'Creates schema.yml from schema.xml';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:schema-to-yml|INFO] task converts XML schemas to YML:
 
   [./symfony propel:schema-to-yml|INFO]
 EOF;
-  }
+    }
 
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $this->schemaToYML(self::CHECK_SCHEMA);
-  }
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $this->schemaToYML(self::CHECK_SCHEMA);
+    }
 }

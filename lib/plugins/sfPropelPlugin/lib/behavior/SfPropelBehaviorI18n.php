@@ -17,58 +17,53 @@
  */
 class SfPropelBehaviorI18n extends SfPropelBehaviorBase
 {
-  protected $parameters = ['i18n_table' => null];
+    protected $parameters = ['i18n_table' => null];
 
-  /**
-   * Looks for tables marked as I18N and adds behaviors.
-   */
-  public function modifyDatabase()
-  {
-    $translationBehavior = Propel::importClass($this->getBuildProperty('propel.behavior.symfony_i18n_translation.class'));
-
-    foreach ($this->getDatabase()->getTables() as $table)
+    /**
+     * Looks for tables marked as I18N and adds behaviors.
+     */
+    public function modifyDatabase()
     {
-      $behaviors = $table->getBehaviors();
+        $translationBehavior = Propel::importClass($this->getBuildProperty('propel.behavior.symfony_i18n_translation.class'));
 
-      if (!isset($behaviors['symfony_i18n']) && 'true' == $table->getAttribute('isI18N'))
-      {
-        $i18nTable = $this->getDatabase()->getTable($table->getAttribute('i18nTable'));
+        foreach ($this->getDatabase()->getTables() as $table) {
+            $behaviors = $table->getBehaviors();
 
-        // add the current behavior to the translatable model
-        $behavior = clone $this;
-        $behavior->setParameters(['i18n_table' => $i18nTable->getName()]);
-        $table->addBehavior($behavior);
+            if (!isset($behaviors['symfony_i18n']) && 'true' == $table->getAttribute('isI18N')) {
+                $i18nTable = $this->getDatabase()->getTable($table->getAttribute('i18nTable'));
 
-        // add the translation behavior to the translation model
-        $behavior = new $translationBehavior();
-        $behavior->setName('symfony_i18n_translation');
-        $behavior->setParameters(['culture_column' => $this->getCultureColumn($i18nTable)->getName()]);
-        $i18nTable->addBehavior($behavior);
-      }
-    }
-  }
+                // add the current behavior to the translatable model
+                $behavior = clone $this;
+                $behavior->setParameters(['i18n_table' => $i18nTable->getName()]);
+                $table->addBehavior($behavior);
 
-  public function modifyTable()
-  {
-    if ($this->isDisabled())
-    {
-      return;
+                // add the translation behavior to the translation model
+                $behavior = new $translationBehavior();
+                $behavior->setName('symfony_i18n_translation');
+                $behavior->setParameters(['culture_column' => $this->getCultureColumn($i18nTable)->getName()]);
+                $i18nTable->addBehavior($behavior);
+            }
+        }
     }
 
-    if (count($this->getTable()->getPrimaryKey()) > 1)
+    public function modifyTable()
     {
-      throw new Exception('i18n support only works with a single primary key');
-    }
-  }
+        if ($this->isDisabled()) {
+            return;
+        }
 
-  public function objectAttributes()
-  {
-    if ($this->isDisabled())
-    {
-      return;
+        if (count($this->getTable()->getPrimaryKey()) > 1) {
+            throw new Exception('i18n support only works with a single primary key');
+        }
     }
 
-    return <<<EOF
+    public function objectAttributes()
+    {
+        if ($this->isDisabled()) {
+            return;
+        }
+
+        return <<<EOF
 
 /**
  * @var string The value for the culture field
@@ -81,16 +76,15 @@ protected \$culture = null;
 protected \$current_i18n = array();
 
 EOF;
-  }
-
-  public function objectMethods()
-  {
-    if ($this->isDisabled())
-    {
-      return;
     }
 
-    $script = <<<EOF
+    public function objectMethods()
+    {
+        if ($this->isDisabled()) {
+            return;
+        }
+
+        $script = <<<EOF
 
 /**
  * Returns the culture.
@@ -117,18 +111,16 @@ public function setCulture(\$culture)
 
 EOF;
 
-    // add accessors and mutators for each of the i18nTable's columns
-    $foreignKey = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey();
-    $refPhpName = $foreignKey->getRefPhpName() ?: $this->getI18nTable()->getPhpName();
+        // add accessors and mutators for each of the i18nTable's columns
+        $foreignKey = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey();
+        $refPhpName = $foreignKey->getRefPhpName() ?: $this->getI18nTable()->getPhpName();
 
-    foreach ($this->getI18nTable()->getColumns() as $column)
-    {
-      if ($column->isPrimaryKey())
-      {
-        continue;
-      }
+        foreach ($this->getI18nTable()->getColumns() as $column) {
+            if ($column->isPrimaryKey()) {
+                continue;
+            }
 
-      $script .= <<<EOF
+            $script .= <<<EOF
 
 /**
  * Returns the "{$column->getName()}" value from the current {@link {$this->getI18nTable()->getPhpName()}}.
@@ -150,9 +142,9 @@ public function set{$column->getPhpName()}(\$value, \$culture = null)
 }
 
 EOF;
-    }
+        }
 
-    $script .= <<<EOF
+        $script .= <<<EOF
 
 /**
  * Returns the current translation.
@@ -194,9 +186,8 @@ public function set{$refPhpName}ForCulture({$this->getI18nTable()->getPhpName()}
 
 EOF;
 
-    if (!$this->hasPrimaryString($this->getTable()) && $this->hasPrimaryString($this->getI18nTable()))
-    {
-      $script .= <<<EOF
+        if (!$this->hasPrimaryString($this->getTable()) && $this->hasPrimaryString($this->getI18nTable())) {
+            $script .= <<<EOF
 
 /**
  * @see {$this->getI18nTable()->getPhpName()}
@@ -207,19 +198,19 @@ public function __toString()
 }
 
 EOF;
+        }
+
+        return $script;
     }
 
-    return $script;
-  }
+    public function staticMethods()
+    {
+        $foreignKey = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey();
+        $refPhpName = $foreignKey->getRefPhpName() ?: $this->getI18nTable()->getPhpName();
+        $join = in_array($this->getBuildProperty('propel.useLeftJoinsInDoJoinMethods'), [true, null], true) ? 'LEFT' : 'INNER';
 
-  public function staticMethods()
-  {
-    $foreignKey = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey();
-    $refPhpName = $foreignKey->getRefPhpName() ?: $this->getI18nTable()->getPhpName();
-    $join = in_array($this->getBuildProperty('propel.useLeftJoinsInDoJoinMethods'), [true, null], true) ? 'LEFT' : 'INNER';
-
-    $behaviors = $this->getTable()->getBehaviors();
-    $mixerHook = !isset($behaviors['symfony_behaviors']) ? '' : <<<EOF
+        $behaviors = $this->getTable()->getBehaviors();
+        $mixerHook = !isset($behaviors['symfony_behaviors']) ? '' : <<<EOF
 
   foreach (sfMixer::getCallables('Base{$this->getTable()->getPhpName()}:doSelectJoin:doSelectJoin') as \$sf_hook)
   {
@@ -228,7 +219,7 @@ EOF;
 
 EOF;
 
-    return <<<EOF
+        return <<<EOF
 
 /**
  * Returns the i18n model class name.
@@ -308,77 +299,73 @@ static public function doSelectWithI18n(Criteria \$criteria, \$culture = null, \
 }
 
 EOF;
-  }
-
-  /**
-   * Returns the current table's i18n translation table.
-   *
-   * @return Table
-   */
-  public function getI18nTable()
-  {
-    return $this->getDatabase()->getTable($this->getParameter('i18n_table'));
-  }
-
-  /**
-   * Finds the supplied translation table's culture column.
-   *
-   * @return Column
-   *
-   * @throws InvalidArgumentException If there is not a column marked as "isCulture"
-   */
-  protected function getCultureColumn(Table $table)
-  {
-    foreach ($table->getColumns() as $column)
-    {
-      if ('true' == $column->getAttribute('isCulture'))
-      {
-        return $column;
-      }
     }
 
-    throw new InvalidArgumentException(sprintf('The table "%s" does not have a column marked with the "isCulture" attribute.', $table->getName()));
-  }
-
-  /**
-   * Returns the column on the current model referenced by the translation model.
-   *
-   * @return Column
-   */
-  protected function getLocalColumn()
-  {
-    $columns = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey()->getForeignColumns();
-    return $this->getTable()->getColumn($columns[0]);
-  }
-
-  /**
-   * Returns the column on the translation table the references the current model.
-   *
-   * @return Column
-   */
-  protected function getForeignColumn()
-  {
-    $columns = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey()->getLocalColumns();
-    return $this->getI18nTable()->getColumn($columns[0]);
-  }
-
-  /**
-   * Checks whether the supplied table has a primary string defined.
-   *
-   * @param  Table $table
-   *
-   * @return boolean
-   */
-  protected function hasPrimaryString(Table $table)
-  {
-    foreach ($table->getColumns() as $column)
+    /**
+     * Returns the current table's i18n translation table.
+     *
+     * @return Table
+     */
+    public function getI18nTable()
     {
-      if ($column->isPrimaryString())
-      {
-        return true;
-      }
+        return $this->getDatabase()->getTable($this->getParameter('i18n_table'));
     }
 
-    return false;
-  }
+    /**
+     * Finds the supplied translation table's culture column.
+     *
+     * @return Column
+     *
+     * @throws InvalidArgumentException If there is not a column marked as "isCulture"
+     */
+    protected function getCultureColumn(Table $table)
+    {
+        foreach ($table->getColumns() as $column) {
+            if ('true' == $column->getAttribute('isCulture')) {
+                return $column;
+            }
+        }
+
+        throw new InvalidArgumentException(sprintf('The table "%s" does not have a column marked with the "isCulture" attribute.', $table->getName()));
+    }
+
+    /**
+     * Returns the column on the current model referenced by the translation model.
+     *
+     * @return Column
+     */
+    protected function getLocalColumn()
+    {
+        $columns = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey()->getForeignColumns();
+        return $this->getTable()->getColumn($columns[0]);
+    }
+
+    /**
+     * Returns the column on the translation table the references the current model.
+     *
+     * @return Column
+     */
+    protected function getForeignColumn()
+    {
+        $columns = $this->getI18nTable()->getBehavior('symfony_i18n_translation')->getForeignKey()->getLocalColumns();
+        return $this->getI18nTable()->getColumn($columns[0]);
+    }
+
+    /**
+     * Checks whether the supplied table has a primary string defined.
+     *
+     * @param  Table $table
+     *
+     * @return boolean
+     */
+    protected function hasPrimaryString(Table $table)
+    {
+        foreach ($table->getColumns() as $column) {
+            if ($column->isPrimaryString()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

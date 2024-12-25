@@ -7,41 +7,37 @@
  */
 class choiceActions extends sfActions
 {
-  public function executeArticle($request)
-  {
-    $this->form = new ArticleForm();
-
-    if ($request->getParameter('impossible_validator'))
+    public function executeArticle($request)
     {
-      $criteria = new Criteria();
-      $criteria->add(CategoryPeer::ID, null, Criteria::ISNULL);
+        $this->form = new ArticleForm();
 
-      $this->form->getValidator('category_id')->setOption('criteria', $criteria);
+        if ($request->getParameter('impossible_validator')) {
+            $criteria = new Criteria();
+            $criteria->add(CategoryPeer::ID, null, Criteria::ISNULL);
+
+            $this->form->getValidator('category_id')->setOption('criteria', $criteria);
+        }
+
+        if ($request->getParameter('impossible_validator_many')) {
+            $criteria = new Criteria();
+            $criteria->add(AuthorPeer::ID, null, Criteria::ISNULL);
+
+            $this->form->getValidator('author_article_list')->setOption('criteria', $criteria);
+        }
+
+        if ($request->isMethod(sfRequest::POST)) {
+            $this->form->bind($request->getParameter('article'));
+
+            if ($this->form->isValid()) {
+                $this->form->save();
+
+                $this->redirect('choice/ok');
+            }
+        }
     }
 
-    if ($request->getParameter('impossible_validator_many'))
+    public function executeOk()
     {
-      $criteria = new Criteria();
-      $criteria->add(AuthorPeer::ID, null, Criteria::ISNULL);
-
-      $this->form->getValidator('author_article_list')->setOption('criteria', $criteria);
+        return $this->renderText('ok');
     }
-
-    if ($request->isMethod(sfRequest::POST))
-    {
-      $this->form->bind($request->getParameter('article'));
-
-      if ($this->form->isValid())
-      {
-        $this->form->save();
-
-        $this->redirect('choice/ok');
-      }
-    }
-  }
-
-  public function executeOk()
-  {
-    return $this->renderText('ok');
-  }
 }

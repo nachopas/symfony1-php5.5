@@ -5,7 +5,7 @@ sfCoreAutoload::register();
 
 class ProjectConfiguration extends sfProjectConfiguration
 {
-  public function setup()
-  {
-  }
+    public function setup()
+    {
+    }
 }

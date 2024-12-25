@@ -79,12 +79,13 @@ class TGettext
      * @param   string  $format MO or PO
      * @param   string  $file   path to GNU gettext file
      */
-    static function factory($format, $file = '')
+    public static function factory($format, $file = '')
     {
         $format = strtoupper($format);
         $filename = __DIR__.'/'.$format.'.php';
-        if (is_file($filename) == false)
-          throw new Exception ("Class file $file not found");
+        if (is_file($filename) == false) {
+            throw new Exception("Class file $file not found");
+        }
 
         include_once $filename;
         $class = 'TGettext_' . $format;
@@ -104,7 +105,7 @@ class TGettext
      * @param   string  $pofile path to GNU PO file
      * @param   string  $mofile path to GNU MO file
      */
-    function poFile2moFile($pofile, $mofile)
+    public function poFile2moFile($pofile, $mofile)
     {
         if (!is_file($pofile)) {
             throw new Exception("File $pofile doesn't exist.");
@@ -135,14 +136,14 @@ class TGettext
      * @param   string  $string
      * @param   bool    $reverse
      */
-    function prepare($string, $reverse = false)
+    public function prepare($string, $reverse = false)
     {
         if ($reverse) {
             $smap = ['"', "\n", "\t", "\r"];
             $rmap = ['\"', '\\n"' . "\n" . '"', '\\t', '\\r'];
             return (string) str_replace($smap, $rmap, $string);
         } else {
-        	$string = preg_replace('/"\s+"/', '', $string);
+            $string = preg_replace('/"\s+"/', '', $string);
             $smap = ['\\n', '\\r', '\\t', '\"'];
             $rmap = ["\n", "\r", "\t", '"'];
             return (string) str_replace($smap, $rmap, $string);
@@ -157,7 +158,7 @@ class TGettext
      * @return  array
      * @param   string  $meta
      */
-    function meta2array($meta)
+    public function meta2array($meta)
     {
         $array = [];
         foreach (explode("\n", $meta) as $info) {
@@ -193,9 +194,9 @@ class TGettext
      * @access  protected
      * @return  array
      */
-    function toArray()
+    public function toArray()
     {
-      return ['meta' => $this->meta, 'strings' => $this->strings];
+        return ['meta' => $this->meta, 'strings' => $this->strings];
     }
 
     /**
@@ -223,15 +224,15 @@ class TGettext
      * @return  bool
      * @param   array       $array
      */
-    function fromArray($array)
+    public function fromArray($array)
     {
-    	if (!array_key_exists('strings', $array)) {
-    	    if (count($array) != 2) {
+        if (!array_key_exists('strings', $array)) {
+            if (count($array) != 2) {
                 return false;
-    	    } else {
-    	        [$this->meta, $this->strings] = $array;
+            } else {
+                [$this->meta, $this->strings] = $array;
             }
-    	} else {
+        } else {
             $this->meta = @$array['meta'];
             $this->strings = @$array['strings'];
         }
@@ -244,7 +245,7 @@ class TGettext
      * @access  protected
      * @return  object  File_Gettext_MO
      */
-    function toMO()
+    public function toMO()
     {
         include_once __DIR__.'/MO.php';
         $MO = new TGettext_MO;
@@ -258,7 +259,7 @@ class TGettext
      * @access  protected
      * @return  object      File_Gettext_PO
      */
-    function toPO()
+    public function toPO()
     {
         include_once __DIR__.'/PO.php';
         $PO = new TGettext_PO;

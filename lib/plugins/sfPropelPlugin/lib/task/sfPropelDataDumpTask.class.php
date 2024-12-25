@@ -17,20 +17,20 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelDataDumpTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addArguments([new sfCommandArgument('target', sfCommandArgument::OPTIONAL, 'The target filename')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addArguments([new sfCommandArgument('target', sfCommandArgument::OPTIONAL, 'The target filename')]);
 
-    $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environement', 'cli'), new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel'), new sfCommandOption('classes', null, sfCommandOption::PARAMETER_REQUIRED, 'The class names to dump (separated by a colon)', null)]);
+        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environement', 'cli'), new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel'), new sfCommandOption('classes', null, sfCommandOption::PARAMETER_REQUIRED, 'The class names to dump (separated by a colon)', null)]);
 
-    $this->namespace = 'propel';
-    $this->name = 'data-dump';
-    $this->briefDescription = 'Dumps data to the fixtures directory';
+        $this->namespace = 'propel';
+        $this->name = 'data-dump';
+        $this->briefDescription = 'Dumps data to the fixtures directory';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:data-dump|INFO] task dumps database data:
 
   [./symfony propel:data-dump > data/fixtures/dump.yml|INFO]
@@ -60,36 +60,32 @@ the [application|COMMENT] option:
 
   [./symfony propel:data-dump --application=frontend|INFO]
 EOF;
-  }
-
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $databaseManager = new sfDatabaseManager($this->configuration);
-
-    $filename = $arguments['target'];
-    if (null !== $filename && !sfToolkit::isPathAbsolute($filename))
-    {
-      $dir = sfConfig::get('sf_data_dir').DIRECTORY_SEPARATOR.'fixtures';
-      $this->getFilesystem()->mkdirs($dir);
-      $filename = $dir.DIRECTORY_SEPARATOR.$filename;
-
-      $this->logSection('propel', sprintf('dumping data to "%s"', $filename));
     }
 
-    $data = new sfPropelData();
-
-    $classes = null === $options['classes'] ? 'all' : explode(',', $options['classes']);
-
-    if (null !== $filename)
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
     {
-      $data->dumpData($filename, $classes, $options['connection']);
+        $databaseManager = new sfDatabaseManager($this->configuration);
+
+        $filename = $arguments['target'];
+        if (null !== $filename && !sfToolkit::isPathAbsolute($filename)) {
+            $dir = sfConfig::get('sf_data_dir').DIRECTORY_SEPARATOR.'fixtures';
+            $this->getFilesystem()->mkdirs($dir);
+            $filename = $dir.DIRECTORY_SEPARATOR.$filename;
+
+            $this->logSection('propel', sprintf('dumping data to "%s"', $filename));
+        }
+
+        $data = new sfPropelData();
+
+        $classes = null === $options['classes'] ? 'all' : explode(',', $options['classes']);
+
+        if (null !== $filename) {
+            $data->dumpData($filename, $classes, $options['connection']);
+        } else {
+            fwrite(STDOUT, sfYaml::dump($data->getData($classes, $options['connection']), 3));
+        }
     }
-    else
-    {
-      fwrite(STDOUT, sfYaml::dump($data->getData($classes, $options['connection']), 3));
-    }
-  }
 }

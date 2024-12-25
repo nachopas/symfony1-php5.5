@@ -15,43 +15,39 @@
  */
 class SfPropelBehaviorTimestampable extends SfPropelBehaviorBase
 {
-  protected $parameters = ['create_column' => null, 'update_column' => null];
+    protected $parameters = ['create_column' => null, 'update_column' => null];
 
-  public function preInsert()
-  {
-    if ($this->isDisabled())
+    public function preInsert()
     {
-      return;
-    }
+        if ($this->isDisabled()) {
+            return;
+        }
 
-    if ($column = $this->getParameter('create_column'))
-    {
-      return <<<EOF
+        if ($column = $this->getParameter('create_column')) {
+            return <<<EOF
 if (!\$this->isColumnModified({$this->getTable()->getColumn($column)->getConstantName()}))
 {
   \$this->set{$this->getTable()->getColumn($column)->getPhpName()}(time());
 }
 
 EOF;
-    }
-  }
-
-  public function preSave()
-  {
-    if ($this->isDisabled())
-    {
-      return;
+        }
     }
 
-    if ($column = $this->getParameter('update_column'))
+    public function preSave()
     {
-      return <<<EOF
+        if ($this->isDisabled()) {
+            return;
+        }
+
+        if ($column = $this->getParameter('update_column')) {
+            return <<<EOF
 if (\$this->isModified() && !\$this->isColumnModified({$this->getTable()->getColumn($column)->getConstantName()}))
 {
   \$this->set{$this->getTable()->getColumn($column)->getPhpName()}(time());
 }
 
 EOF;
+        }
     }
-  }
 }

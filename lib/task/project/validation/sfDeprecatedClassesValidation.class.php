@@ -15,19 +15,19 @@
  */
 class sfDeprecatedClassesValidation extends sfValidation
 {
-  public function getHeader()
-  {
-    return 'Checking usage of deprecated classes';
-  }
+    public function getHeader()
+    {
+        return 'Checking usage of deprecated classes';
+    }
 
-  public function getExplanation()
-  {
-    return ['', '  The files above use deprecated classes', '  that have been removed in symfony 1.4.', '', '  You can find a list of all deprecated classes under the', '  "Classes" section of the DEPRECATED tutorial:', '', '  http://www.symfony-project.org/tutorial/1_4/en/deprecated', ''];
-  }
+    public function getExplanation()
+    {
+        return ['', '  The files above use deprecated classes', '  that have been removed in symfony 1.4.', '', '  You can find a list of all deprecated classes under the', '  "Classes" section of the DEPRECATED tutorial:', '', '  http://www.symfony-project.org/tutorial/1_4/en/deprecated', ''];
+    }
 
-  public function validate()
-  {
-    $classes = [
+    public function validate()
+    {
+        $classes = [
         'sfDoctrineLogger',
         'sfNoRouting',
         'sfPathInfoRouting',
@@ -92,27 +92,23 @@ class sfDeprecatedClassesValidation extends sfValidation
         'sfMail',
     ];
 
-    $found = [];
-    $files = sfFinder::type('file')->name('*.php')->prune('vendor')->in([sfConfig::get('sf_apps_dir'), sfConfig::get('sf_lib_dir'), sfConfig::get('sf_test_dir'), sfConfig::get('sf_plugins_dir')]);
-    foreach ($files as $file)
-    {
-      $content = sfToolkit::stripComments(file_get_contents($file));
+        $found = [];
+        $files = sfFinder::type('file')->name('*.php')->prune('vendor')->in([sfConfig::get('sf_apps_dir'), sfConfig::get('sf_lib_dir'), sfConfig::get('sf_test_dir'), sfConfig::get('sf_plugins_dir')]);
+        foreach ($files as $file) {
+            $content = sfToolkit::stripComments(file_get_contents($file));
 
-      $matches = [];
-      foreach ($classes as $class)
-      {
-        if (preg_match('#\b'.preg_quote($class, '#').'\b#', $content))
-        {
-          $matches[] = $class;
+            $matches = [];
+            foreach ($classes as $class) {
+                if (preg_match('#\b'.preg_quote($class, '#').'\b#', $content)) {
+                    $matches[] = $class;
+                }
+            }
+
+            if ($matches) {
+                $found[$file] = implode(', ', $matches);
+            }
         }
-      }
 
-      if ($matches)
-      {
-        $found[$file] = implode(', ', $matches);
-      }
+        return $found;
     }
-
-    return $found;
-  }
 }

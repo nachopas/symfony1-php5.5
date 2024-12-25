@@ -7,7 +7,7 @@
  */
 class MovieFormFilter extends BaseMovieFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

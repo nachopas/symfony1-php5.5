@@ -7,7 +7,7 @@
  */
 class AttachmentFormFilter extends BaseAttachmentFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

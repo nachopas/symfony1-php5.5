@@ -13,32 +13,29 @@ require_once(__DIR__.'/../bootstrap/unit.php');
 
 class my_lime_test extends lime_test
 {
-  public function is_array_explicit($test, $target, $prefix = '')
-  {
-    foreach ($test as $key => $value)
+    public function is_array_explicit($test, $target, $prefix = '')
     {
-      if (is_array($value))
-      {
-        $this->is_array_explicit($value, $target[$key], $prefix.' '.$key);
-      }
-      else
-      {
-        $this->is($value, $target[$key], sprintf('%s %s is %s', $prefix, $key, $value));
-      }
+        foreach ($test as $key => $value) {
+            if (is_array($value)) {
+                $this->is_array_explicit($value, $target[$key], $prefix.' '.$key);
+            } else {
+                $this->is($value, $target[$key], sprintf('%s %s is %s', $prefix, $key, $value));
+            }
+        }
     }
-  }
 
-  public function is_line_by_line($exp1, $exp2)
-  {
-    $array_exp1 = explode("\n", $exp1);
-    $array_exp2 = explode("\n", $exp2);
-    $nb_lines = count($array_exp1);
-    for ($i=0; $i < $nb_lines; $i++)
+    public function is_line_by_line($exp1, $exp2)
     {
-      if(!$array_exp1[$i]) continue; // Skip blank lines to avoid testing nothing
-      $this->is(trim($array_exp1[$i]), trim($array_exp2[$i]), sprintf('Line %d matches %s', $i, $array_exp1[$i]));
+        $array_exp1 = explode("\n", $exp1);
+        $array_exp2 = explode("\n", $exp2);
+        $nb_lines = count($array_exp1);
+        for ($i=0; $i < $nb_lines; $i++) {
+            if (!$array_exp1[$i]) {
+                continue;
+            } // Skip blank lines to avoid testing nothing
+            $this->is(trim($array_exp1[$i]), trim($array_exp2[$i]), sprintf('Line %d matches %s', $i, $array_exp1[$i]));
+        }
     }
-  }
 }
 
 require_once(__DIR__.'/../../../../../test/bootstrap/unit.php');

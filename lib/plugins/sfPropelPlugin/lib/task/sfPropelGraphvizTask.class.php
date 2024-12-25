@@ -17,34 +17,34 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelGraphvizTask extends sfPropelBaseTask
 {
-  /**
-   * @see BaseTask::configure()
-   */
-  protected function configure()
-  {
-    $this->addOptions([new sfCommandOption('phing-arg', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Arbitrary phing argument')]);
+    /**
+     * @see BaseTask::configure()
+     */
+    protected function configure()
+    {
+        $this->addOptions([new sfCommandOption('phing-arg', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Arbitrary phing argument')]);
 
-    $this->namespace = 'propel';
-    $this->name = 'graphviz';
-    $this->briefDescription = 'Generates a graphviz chart of current object model';
-    $this->detailedDescription = <<<EOF
+        $this->namespace = 'propel';
+        $this->name = 'graphviz';
+        $this->briefDescription = 'Generates a graphviz chart of current object model';
+        $this->detailedDescription = <<<EOF
 The [propel:graphviz|INFO] task creates a graphviz DOT
 visualization for automatic graph drawing of object model:
 
   [./symfony propel:graphviz|INFO]
 EOF;
-  }
+    }
 
-  /**
-   * @see BaseTask::execute()
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $this->schemaToXML(self::DO_NOT_CHECK_SCHEMA, 'generated-');
-    $this->copyXmlSchemaFromPlugins('generated-');
-    $ret = $this->callPhing('graphviz', self::CHECK_SCHEMA);
-    $this->cleanup();
+    /**
+     * @see BaseTask::execute()
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $this->schemaToXML(self::DO_NOT_CHECK_SCHEMA, 'generated-');
+        $this->copyXmlSchemaFromPlugins('generated-');
+        $ret = $this->callPhing('graphviz', self::CHECK_SCHEMA);
+        $this->cleanup();
 
-    return !$ret;
-  }
+        return !$ret;
+    }
 }

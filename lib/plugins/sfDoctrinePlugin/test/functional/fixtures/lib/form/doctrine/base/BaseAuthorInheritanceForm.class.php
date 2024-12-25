@@ -9,16 +9,15 @@
  */
 abstract class BaseAuthorInheritanceForm extends AuthorForm
 {
-  protected function setupInheritance()
-  {
-    parent::setupInheritance();
+    protected function setupInheritance()
+    {
+        parent::setupInheritance();
 
-    $this->widgetSchema->setNameFormat('author_inheritance[%s]');
-  }
+        $this->widgetSchema->setNameFormat('author_inheritance[%s]');
+    }
 
-  public function getModelName()
-  {
-    return 'AuthorInheritance';
-  }
-
+    public function getModelName()
+    {
+        return 'AuthorInheritance';
+    }
 }

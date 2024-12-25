@@ -7,28 +7,28 @@
  */
 abstract class BaseSubscriptionFormFilter extends BaseFormFilterDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['name'   => new sfWidgetFormFilterInput(), 'status' => new sfWidgetFormChoice(['choices' => ['' => '', 'New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
+    public function setup()
+    {
+        $this->setWidgets(['name'   => new sfWidgetFormFilterInput(), 'status' => new sfWidgetFormChoice(['choices' => ['' => '', 'New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
 
-    $this->setValidators(['name'   => new sfValidatorPass(['required' => false]), 'status' => new sfValidatorChoice(['required' => false, 'choices' => ['New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
+        $this->setValidators(['name'   => new sfValidatorPass(['required' => false]), 'status' => new sfValidatorChoice(['required' => false, 'choices' => ['New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
 
-    $this->widgetSchema->setNameFormat('subscription_filters[%s]');
+        $this->widgetSchema->setNameFormat('subscription_filters[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'Subscription';
-  }
+    public function getModelName()
+    {
+        return 'Subscription';
+    }
 
-  public function getFields()
-  {
-    return ['id'     => 'Number', 'name'   => 'Text', 'status' => 'Enum'];
-  }
+    public function getFields()
+    {
+        return ['id'     => 'Number', 'name'   => 'Text', 'status' => 'Enum'];
+    }
 }

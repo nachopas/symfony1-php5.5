@@ -3,7 +3,7 @@
 /*
  * This file is part of the symfony package.
  * (c) 2004-2006 Fabien Potencier <fabien.potencier@symfony-project.com>
- * 
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
@@ -33,19 +33,19 @@ $article->free(true);
 
 class MyArticleForm extends ArticleForm
 {
-  public function configure()
-  {
-    parent::configure();
+    public function configure()
+    {
+        parent::configure();
 
-    $this->embedI18n(['en', 'fr']);
+        $this->embedI18n(['en', 'fr']);
 
-    $authorForm = new AuthorForm($this->object->Author);
-    unset($authorForm['id']);
+        $authorForm = new AuthorForm($this->object->Author);
+        unset($authorForm['id']);
 
-    $this->embedForm('Author', $authorForm);
+        $this->embedForm('Author', $authorForm);
 
-    unset($this['author_id']);
-  }
+        unset($this['author_id']);
+    }
 }
 
 $article = new Article();
@@ -58,28 +58,28 @@ $t->is($articleForm->isValid(), true);
 
 $data = $articleForm->getValues();
 
-$values = ['is_on_homepage' => true, 'Author' => 
-['name' => 'i18n author test', 'type' => null], 'en' => 
-['title' => 'english title', 'body' => 'english body', 'test_column' => '', 'slug' => ''], 'fr' => 
+$values = ['is_on_homepage' => true, 'Author' =>
+['name' => 'i18n author test', 'type' => null], 'en' =>
+['title' => 'english title', 'body' => 'english body', 'test_column' => '', 'slug' => ''], 'fr' =>
 ['title' => 'french title', 'body' => 'french body', 'test_column' => '', 'slug' => ''], 'id' => null, 'type' => null, 'views' => null, 'created_at' => $data['created_at'], 'updated_at' => $data['updated_at']];
 
 $t->is($articleForm->getValues(), $values);
 
 $articleForm->save();
 
-$expected = ['id' => $article->id, 'author_id' => $article->Author->id, 'is_on_homepage' => true, 'type' => null, 'views' => null, 'created_at' => $article->created_at, 'updated_at' => $article->updated_at, 'Translation' => 
-['en' => 
-['id' => $article->id, 'title' => 'english title', 'body' => 'english body', 'test_column' => '', 'lang' => 'en', 'slug' => 'english-title'], 'fr' => 
-['id' => $article->id, 'title' => 'french title', 'body' => 'french body', 'test_column' => '', 'lang' => 'fr', 'slug' => 'french-title']], 'Author' => 
+$expected = ['id' => $article->id, 'author_id' => $article->Author->id, 'is_on_homepage' => true, 'type' => null, 'views' => null, 'created_at' => $article->created_at, 'updated_at' => $article->updated_at, 'Translation' =>
+['en' =>
+['id' => $article->id, 'title' => 'english title', 'body' => 'english body', 'test_column' => '', 'lang' => 'en', 'slug' => 'english-title'], 'fr' =>
+['id' => $article->id, 'title' => 'french title', 'body' => 'french body', 'test_column' => '', 'lang' => 'fr', 'slug' => 'french-title']], 'Author' =>
 ['id' => $article->Author->id, 'name' => 'i18n author test', 'type' => null]];
 
 $t->is($article->toArray(true), $expected);
 
 $articleForm = new MyArticleForm($article);
 
-$expected = ['id' => $article->id, 'author_id' => $article->author_id, 'is_on_homepage' => true, 'type' => null, 'views' => null, 'created_at' => $article->created_at, 'updated_at' => $article->updated_at, 'en' => 
-['id' => $article->id, 'title' => 'english title', 'body' => 'english body', 'test_column' => '', 'lang' => 'en', 'slug' => 'english-title'], 'fr' => 
-['id' => $article->id, 'title' => 'french title', 'body' => 'french body', 'test_column' => '', 'lang' => 'fr', 'slug' => 'french-title'], 'Author' => 
+$expected = ['id' => $article->id, 'author_id' => $article->author_id, 'is_on_homepage' => true, 'type' => null, 'views' => null, 'created_at' => $article->created_at, 'updated_at' => $article->updated_at, 'en' =>
+['id' => $article->id, 'title' => 'english title', 'body' => 'english body', 'test_column' => '', 'lang' => 'en', 'slug' => 'english-title'], 'fr' =>
+['id' => $article->id, 'title' => 'french title', 'body' => 'french body', 'test_column' => '', 'lang' => 'fr', 'slug' => 'french-title'], 'Author' =>
 ['id' => $article->Author->id, 'name' => 'i18n author test', 'type' => null]];
 
 $t->is($articleForm->getDefaults(), $expected);

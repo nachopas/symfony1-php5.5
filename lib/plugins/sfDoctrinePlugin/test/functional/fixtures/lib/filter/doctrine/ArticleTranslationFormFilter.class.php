@@ -6,7 +6,7 @@
  */
 class ArticleTranslationFormFilter extends BaseArticleTranslationFormFilter
 {
-  public function configure()
-  {
-  }
+    public function configure()
+    {
+    }
 }

@@ -17,18 +17,18 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
  */
 class sfPropelBuildFiltersTask extends sfPropelBaseTask
 {
-  /**
-   * @see sfTask
-   */
-  protected function configure()
-  {
-    $this->addOptions([new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel'), new sfCommandOption('model-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The model dir name', 'model'), new sfCommandOption('filter-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The filter form dir name', 'filter'), new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('generator-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The generator class', 'sfPropelFormFilterGenerator')]);
+    /**
+     * @see sfTask
+     */
+    protected function configure()
+    {
+        $this->addOptions([new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', 'propel'), new sfCommandOption('model-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The model dir name', 'model'), new sfCommandOption('filter-dir-name', null, sfCommandOption::PARAMETER_REQUIRED, 'The filter form dir name', 'filter'), new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('generator-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The generator class', 'sfPropelFormFilterGenerator')]);
 
-    $this->namespace = 'propel';
-    $this->name = 'build-filters';
-    $this->briefDescription = 'Creates filter form classes for the current model';
+        $this->namespace = 'propel';
+        $this->name = 'build-filters';
+        $this->briefDescription = 'Creates filter form classes for the current model';
 
-    $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<EOF
 The [propel:build-filters|INFO] task creates filter form classes from the schema:
 
   [./symfony propel:build-filters|INFO]
@@ -46,26 +46,26 @@ The model filter form classes files are created in [lib/filter|COMMENT].
 This task never overrides custom classes in [lib/filter|COMMENT].
 It only replaces base classes generated in [lib/filter/base|COMMENT].
 EOF;
-  }
+    }
 
-  /**
-   * @see sfTask
-   */
-  protected function execute($arguments = [], $options = [])
-  {
-    $this->logSection('propel', 'generating filter form classes');
+    /**
+     * @see sfTask
+     */
+    protected function execute($arguments = [], $options = [])
+    {
+        $this->logSection('propel', 'generating filter form classes');
 
-    $generatorManager = new sfGeneratorManager($this->configuration);
-    $generatorManager->generate($options['generator-class'], ['connection'      => $options['connection'], 'model_dir_name'  => $options['model-dir-name'], 'filter_dir_name' => $options['filter-dir-name']]);
+        $generatorManager = new sfGeneratorManager($this->configuration);
+        $generatorManager->generate($options['generator-class'], ['connection'      => $options['connection'], 'model_dir_name'  => $options['model-dir-name'], 'filter_dir_name' => $options['filter-dir-name']]);
 
-    $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
+        $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
-    $constants = ['PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony', 'AUTHOR_NAME'  => $properties['symfony']['author'] ?? 'Your name here'];
+        $constants = ['PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony', 'AUTHOR_NAME'  => $properties['symfony']['author'] ?? 'Your name here'];
 
-    // customize php and yml files
-    $finder = sfFinder::type('file')->name('*.php');
-    $this->getFilesystem()->replaceTokens($finder->in(sfConfig::get('sf_lib_dir').'/filter/'), '##', '##', $constants);
+        // customize php and yml files
+        $finder = sfFinder::type('file')->name('*.php');
+        $this->getFilesystem()->replaceTokens($finder->in(sfConfig::get('sf_lib_dir').'/filter/'), '##', '##', $constants);
 
-    $this->reloadAutoload();
-  }
+        $this->reloadAutoload();
+    }
 }

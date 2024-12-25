@@ -7,24 +7,24 @@ $t = new lime_test(16);
 
 class TestFormFilter extends ArticleFormFilter
 {
-  public $processedFields = [];
+    public $processedFields = [];
 
-  public function configure()
-  {
-    $this->setWidgets(['name'        => new sfWidgetFormInputText(), 'nomethod_bc' => new sfWidgetFormInputText(), 'nomethod'    => new sfWidgetFormInputText(), 'author_id'   => new sfWidgetFormInputText()]);
+    public function configure()
+    {
+        $this->setWidgets(['name'        => new sfWidgetFormInputText(), 'nomethod_bc' => new sfWidgetFormInputText(), 'nomethod'    => new sfWidgetFormInputText(), 'author_id'   => new sfWidgetFormInputText()]);
 
-    $this->setValidators(['name'        => new sfValidatorPass(), 'nomethod_bc' => new sfValidatorPass(), 'nomethod'    => new sfValidatorPass(), 'author_id'   => new sfValidatorPass()]);
-  }
+        $this->setValidators(['name'        => new sfValidatorPass(), 'nomethod_bc' => new sfValidatorPass(), 'nomethod'    => new sfValidatorPass(), 'author_id'   => new sfValidatorPass()]);
+    }
 
-  public function addNameColumnQuery($query, $field, $value)
-  {
-    $this->processedFields[] = $field;
-  }
+    public function addNameColumnQuery($query, $field, $value)
+    {
+        $this->processedFields[] = $field;
+    }
 
-  public function getFields()
-  {
-    return array_merge(parent::getFields(), ['body'        => 'Invalid', 'nomethod_bc' => 'Text', 'author_id'   => 'Number']);
-  }
+    public function getFields()
+    {
+        return array_merge(parent::getFields(), ['body'        => 'Invalid', 'nomethod_bc' => 'Text', 'author_id'   => 'Number']);
+    }
 }
 
 $t->diag('->getQuery()');
@@ -43,40 +43,31 @@ $t->ok($filter->getQuery() !== $query, '->getQuery() clones the query option');
 // BC with symfony 1.2
 $filter = new TestFormFilter();
 $filter->bind(['nomethod_bc' => 'nomethod_bc']);
-try
-{
-  $filter->getQuery();
-  $t->fail('->getQuery() throws an exception if a field that is not a real column is specified in getFields() but a column method does not exist');
-}
-catch (Exception $e)
-{
-  $t->pass('->getQuery() throws an exception if a field that is not a real column is specified in getFields() but a column method does not exist');
+try {
+    $filter->getQuery();
+    $t->fail('->getQuery() throws an exception if a field that is not a real column is specified in getFields() but a column method does not exist');
+} catch (Exception $e) {
+    $t->pass('->getQuery() throws an exception if a field that is not a real column is specified in getFields() but a column method does not exist');
 }
 
 // BC with symfony 1.2
 $filter = new TestFormFilter();
 $filter->bind(['body' => 'body']);
-try
-{
-  $filter->getQuery();
-  $t->fail('->getQuery() throws an exception if a field is a real column and neither a column nor type method exists');
-}
-catch (Exception $e)
-{
-  $t->pass('->getQuery() throws an exception if a field is a real column and neither a column nor type method exists');
+try {
+    $filter->getQuery();
+    $t->fail('->getQuery() throws an exception if a field is a real column and neither a column nor type method exists');
+} catch (Exception $e) {
+    $t->pass('->getQuery() throws an exception if a field is a real column and neither a column nor type method exists');
 }
 
 // BC with symfony 1.2
 $filter = new TestFormFilter();
 $filter->bind(['nomethod' => 'nomethod']);
-try
-{
-  $filter->getQuery();
-  $t->pass('->getQuery() does not throw an exception when a value without a query method is passed');
-}
-catch (Exception $e)
-{
-  $t->fail('->getQuery() does not throw an exception when a value without a query method is passed');
+try {
+    $filter->getQuery();
+    $t->pass('->getQuery() does not throw an exception when a value without a query method is passed');
+} catch (Exception $e) {
+    $t->fail('->getQuery() does not throw an exception when a value without a query method is passed');
 }
 
 // new in symfony 1.3

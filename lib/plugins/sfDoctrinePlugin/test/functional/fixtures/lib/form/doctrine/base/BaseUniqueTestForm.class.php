@@ -9,28 +9,27 @@
  */
 abstract class BaseUniqueTestForm extends BaseFormDoctrine
 {
-  public function setup()
-  {
-    $this->setWidgets(['id'           => new sfWidgetFormInputHidden(), 'unique_test1' => new sfWidgetFormInputText(), 'unique_test2' => new sfWidgetFormInputText(), 'unique_test3' => new sfWidgetFormInputText(), 'unique_test4' => new sfWidgetFormInputText()]);
+    public function setup()
+    {
+        $this->setWidgets(['id'           => new sfWidgetFormInputHidden(), 'unique_test1' => new sfWidgetFormInputText(), 'unique_test2' => new sfWidgetFormInputText(), 'unique_test3' => new sfWidgetFormInputText(), 'unique_test4' => new sfWidgetFormInputText()]);
 
-    $this->setValidators(['id'           => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'unique_test1' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'unique_test2' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'unique_test3' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'unique_test4' => new sfValidatorString(['max_length' => 255, 'required' => false])]);
+        $this->setValidators(['id'           => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'unique_test1' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'unique_test2' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'unique_test3' => new sfValidatorString(['max_length' => 255, 'required' => false]), 'unique_test4' => new sfValidatorString(['max_length' => 255, 'required' => false])]);
 
-    $this->validatorSchema->setPostValidator(
-      new sfValidatorAnd([new sfValidatorDoctrineUnique(['model' => 'UniqueTest', 'column' => ['unique_test1']]), new sfValidatorDoctrineUnique(['model' => 'UniqueTest', 'column' => ['unique_test1', 'unique_test2']]), new sfValidatorDoctrineUnique(['model' => 'UniqueTest', 'column' => ['unique_test4']])])
-    );
+        $this->validatorSchema->setPostValidator(
+            new sfValidatorAnd([new sfValidatorDoctrineUnique(['model' => 'UniqueTest', 'column' => ['unique_test1']]), new sfValidatorDoctrineUnique(['model' => 'UniqueTest', 'column' => ['unique_test1', 'unique_test2']]), new sfValidatorDoctrineUnique(['model' => 'UniqueTest', 'column' => ['unique_test4']])])
+        );
 
-    $this->widgetSchema->setNameFormat('unique_test[%s]');
+        $this->widgetSchema->setNameFormat('unique_test[%s]');
 
-    $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setupInheritance();
+        $this->setupInheritance();
 
-    parent::setup();
-  }
+        parent::setup();
+    }
 
-  public function getModelName()
-  {
-    return 'UniqueTest';
-  }
-
+    public function getModelName()
+    {
+        return 'UniqueTest';
+    }
 }
