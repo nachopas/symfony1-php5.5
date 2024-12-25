@@ -27,8 +27,6 @@ include_once 'phing/types/FileSet.php';
  *
  * @author    Manuel Holtgrewe <grin@gmx.net>
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.12 $
- * @package   phing.tasks.system
  */
 class ChmodTask extends Task {
 

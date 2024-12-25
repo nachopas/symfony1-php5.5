@@ -11,10 +11,7 @@
 /**
  * sfValidatorSchemaFilter executes non schema validator on a schema input value.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorSchemaFilter.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfValidatorSchemaFilter extends sfValidatorSchema
 {

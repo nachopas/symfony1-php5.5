@@ -26,12 +26,9 @@
  * across several different php projects and several different authors. The
  * original author names and emails are not known
  *
- * @package     Doctrine
- * @subpackage  Inflector
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 3189 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */

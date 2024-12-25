@@ -11,10 +11,7 @@
 /**
  * sfTesterPropel implements tests for Propel classes.
  *
- * @package    symfony
- * @subpackage test
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTesterPropel.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfTesterPropel extends sfTester
 {

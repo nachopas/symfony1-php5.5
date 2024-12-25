@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormDateRange represents a date range widget.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormDateRange.class.php 33053 2011-09-20 15:31:20Z fabien $
  */
 class sfWidgetFormDateRange extends sfWidgetForm
 {

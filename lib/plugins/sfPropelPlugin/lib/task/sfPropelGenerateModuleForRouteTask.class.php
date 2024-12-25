@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Generates a Propel module for a route definition.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelGenerateModuleForRouteTask.class.php 23194 2009-10-19 16:37:13Z fabien $
  */
 class sfPropelGenerateModuleForRouteTask extends sfPropelBaseTask
 {

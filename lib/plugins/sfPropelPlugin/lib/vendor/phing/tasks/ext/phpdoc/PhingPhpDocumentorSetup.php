@@ -28,8 +28,6 @@
  * PhpDocumentor design. 
  * 
  * @author Hans Lellelid <hans@xmpl.org>@author hans
- * @version $Id$
- * @package phing.tasks.ext.phpdoc
  */
 class PhingPhpDocumentorSetup extends phpDocumentor_setup {
 	

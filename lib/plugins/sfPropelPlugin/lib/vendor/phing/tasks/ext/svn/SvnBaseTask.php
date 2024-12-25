@@ -26,8 +26,6 @@ include_once 'phing/Task.php';
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
  * @author Andrew Eddie <andrew.eddie@jamboworks.com> 
- * @version $Id: SvnBaseTask.php 329 2007-12-22 17:12:59Z mrook $
- * @package phing.tasks.ext.svn
  * @see VersionControl_SVN
  * @since 2.2.0
  */

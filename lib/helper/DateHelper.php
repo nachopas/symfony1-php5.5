@@ -11,10 +11,7 @@
 /**
  * DateHelper.
  *
- * @package    symfony
- * @subpackage helper
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: DateHelper.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 
 function format_daterange($start_date, $end_date, $full_text, $start_text, $end_text, $format = 'd', $culture = null, $charset = null)

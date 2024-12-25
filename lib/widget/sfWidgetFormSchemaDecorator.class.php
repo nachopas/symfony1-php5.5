@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormSchemaDecorator wraps a form schema widget inside a given HTML snippet.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormSchemaDecorator.class.php 30762 2010-08-25 12:33:33Z fabien $
  */
 class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
 {

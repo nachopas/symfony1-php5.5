@@ -23,12 +23,9 @@
  * Easily add longitude and latitude columns to your records and use inherited functionality for 
  * calculating distances
  *
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */

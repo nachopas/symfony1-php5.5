@@ -24,8 +24,6 @@
  * Pre-order node iterator for Node objects.
  *
  * @author     Heltem <heltem@o2php.com>
- * @version    $Revision: 1262 $
- * @package    propel.om
  */
 class NestedSetRecursiveIterator implements RecursiveIterator
 {

@@ -14,11 +14,8 @@
  * as attributes, and parameters. It is also possible to manipulate the
  * request method originally sent by the user.
  *
- * @package    symfony
- * @subpackage request
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfRequest.class.php 28641 2010-03-21 10:20:44Z fabien $
  */
 abstract class sfRequest implements ArrayAccess
 {

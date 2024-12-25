@@ -20,10 +20,7 @@
  * CSRF secret. If the global CSRF secret is also null, then a random one
  * is generated on the fly.
  *
- * @package    symfony
- * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfForm.class.php 33598 2012-11-25 09:57:29Z fabien $
  */
 class sfForm implements ArrayAccess, Iterator, Countable
 {

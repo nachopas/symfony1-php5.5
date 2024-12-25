@@ -23,8 +23,6 @@
  * The generic interface to create a plural form of a name.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.generator
  */
 interface Pluralizer {
 

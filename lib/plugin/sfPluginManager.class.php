@@ -11,10 +11,7 @@
 /**
  * sfPluginManager allows you to manage plugins installation and uninstallation.
  *
- * @package    symfony
- * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPluginManager.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfPluginManager
 {

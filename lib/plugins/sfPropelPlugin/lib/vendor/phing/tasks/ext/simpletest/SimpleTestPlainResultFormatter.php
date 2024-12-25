@@ -25,8 +25,6 @@ require_once 'phing/tasks/ext/simpletest/SimpleTestResultFormatter.php';
  * Prints plain text output of the test to a specified Writer.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: SimpleTestPlainResultFormatter.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.simpletest
  * @since 2.2.0
  */
 class SimpleTestPlainResultFormatter extends SimpleTestResultFormatter

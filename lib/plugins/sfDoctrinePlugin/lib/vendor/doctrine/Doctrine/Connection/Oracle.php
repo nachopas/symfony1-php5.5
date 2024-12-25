@@ -22,12 +22,9 @@
 /**
  * Doctrine_Connection_Oracle
  *
- * @package     Doctrine
- * @subpackage  Connection
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7664 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Connection_Oracle extends Doctrine_Connection_Common

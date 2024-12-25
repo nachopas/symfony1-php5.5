@@ -12,8 +12,6 @@
 /**
  * Makes sure a connection to a POP3 host has been established prior to connecting to SMTP.
  * 
- * @package Swift
- * @subpackage Plugins
  * 
  * @author Chris Corbyn
  */

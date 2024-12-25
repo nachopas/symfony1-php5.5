@@ -12,11 +12,8 @@
 /**
  * sfViewException is thrown when an error occurs in a view.
  *
- * @package    symfony
- * @subpackage exception
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfViewException.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfViewException extends sfException
 {

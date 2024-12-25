@@ -35,8 +35,6 @@ require_once 'phing/Task.php';
  * @author     Tim Stephenson <tim.stephenson@sybase.com> (Torque)
  * @author     Jason van Zyl <jvanzyl@apache.org> (Torque)
  * @author     Martin Poeschl <mpoeschl@marmot.at> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.phing
  */
 class PropelSQLExec extends Task {
 
@@ -667,7 +665,6 @@ class PropelSQLExec extends Task {
  * Transactions allow several files or blocks of statements
  * to be executed using the same Creole connection and commit
  * operation in between.
- * @package    propel.phing
  */
 class PropelSQLExecTransaction {
 

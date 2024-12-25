@@ -26,8 +26,6 @@ require_once 'phing/parser/AbstractHandler.php';
  * A Class that is used to parse an data dump XML file and create SQL using a DataSQLBuilder class.
  *
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.transform
  */
 class XmlToDataSQL extends AbstractHandler {
 
@@ -225,7 +223,6 @@ class XmlToDataSQL extends AbstractHandler {
 
 /**
  * "inner class"
- * @package    propel.engine.database.transform
  */
 class DataRow
 {
@@ -251,7 +248,6 @@ class DataRow
 
 /**
  * "inner" class
- * @package    propel.engine.database.transform
  */
 class ColumnValue {
 

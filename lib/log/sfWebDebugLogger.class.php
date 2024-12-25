@@ -11,10 +11,7 @@
 /**
  * sfWebDebugLogger logs messages into the web debug toolbar.
  *
- * @package    symfony
- * @subpackage log
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWebDebugLogger.class.php 30790 2010-08-31 13:23:50Z Kris.Wallsmith $
  */
 class sfWebDebugLogger extends sfVarLogger
 {

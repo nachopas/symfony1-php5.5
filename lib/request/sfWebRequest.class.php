@@ -14,11 +14,8 @@
  *
  * This class manages web requests. It parses input from the request and store them as parameters.
  *
- * @package    symfony
- * @subpackage request
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfWebRequest.class.php 33544 2012-10-05 10:42:42Z fabien $
  */
 class sfWebRequest extends sfRequest
 {

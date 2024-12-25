@@ -27,8 +27,6 @@
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Frank Y. Kim <frank.kim@clearink.com> (Torque)
  * @author     John D. McNally <jmcnally@collab.net> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.om
  */
 abstract class BaseObject {
 

@@ -11,10 +11,7 @@
 /**
  * Finds deprecated plugins usage.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfDeprecatedPluginsValidation.class.php 25410 2009-12-15 15:19:07Z fabien $
  */
 class sfDeprecatedPluginsValidation extends sfValidation
 {

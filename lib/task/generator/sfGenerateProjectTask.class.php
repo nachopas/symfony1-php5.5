@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfGeneratorBaseTask.class.php');
 /**
  * Generates a new project.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfGenerateProjectTask.class.php 30530 2010-08-04 16:38:41Z fabien $
  */
 class sfGenerateProjectTask extends sfGeneratorBaseTask
 {

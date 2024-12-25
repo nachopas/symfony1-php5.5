@@ -28,7 +28,6 @@ include_once 'propel/engine/database/model/AppData.php';
  * This class uses the new DDLBuilder classes instead of the Capsule PHP templates.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.phing
  */
 class PropelSQLTask extends AbstractPropelDataModelTask {
 

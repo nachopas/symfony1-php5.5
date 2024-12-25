@@ -25,8 +25,6 @@
  * Uses two additional columns storing the creation and update date
  *
  * @author     François Zaninotto
- * @version    $Revision: 1066 $
- * @package    propel.engine.behavior
  */
 class TimestampableBehavior extends Behavior
 {

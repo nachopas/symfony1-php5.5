@@ -37,8 +37,6 @@
  * </code>
  *
  * @author     Michael Aichler <aichler@mediacluster.de>
- * @version    $Revision: 1262 $
- * @package    propel.validator
  */
 class MaxLengthValidator implements BasicValidator
 {

@@ -22,12 +22,9 @@
 /**
  * Extended version of Doctrine_Hydrator_ScalarDriver, passes its _gatherRowData function a value of false for $aliasPrefix in order to cause it to generate the sorts of array keys one would see in a HYDRATE_ARRAY type return.
  * Note: This hydrator will have issues with fields in the return that have the same name (such as 2 fields each called id) -- the second field value will overwrite the first field.
- * @package     Doctrine
- * @subpackage  Hydrate
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.2.3
- * @version     $Revision$
  * @author      Will Ferrer
  */
 class Doctrine_Hydrator_ArrayShallowDriver extends Doctrine_Hydrator_ScalarDriver

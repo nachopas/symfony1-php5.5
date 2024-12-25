@@ -17,10 +17,7 @@
  *   message:    { type: clob }
  *   created_at: ~
  *
- * @package    symfony
- * @subpackage mailer
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: Swift_PropelSpool.class.php 30529 2010-08-04 16:30:29Z fabien $
  */
 class Swift_PropelSpool extends Swift_ConfigurableSpool
 {

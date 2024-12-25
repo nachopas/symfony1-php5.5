@@ -37,7 +37,6 @@ include_once 'phing/types/Path.php';
  * </code>
  *
  * @author Hans Lellelid <hans@xmpl.org>
- * @package phing.types
  */
 class Mapper extends DataType {
 

@@ -30,7 +30,6 @@ include_once 'phing/util/StringHelper.php';
  * 
  * @author Hans Lellelid <hans@xmpl.org> (Phing)
  * @author Bruce Atherton <bruce@callenish.com> (Ant)
- * @package phing.types.selectors
  */
 class ExtendSelector extends BaseSelector {
 

@@ -15,10 +15,7 @@
  * verifies the user has the same credential by calling the hasCredential()
  * method of SecurityUser.
  *
- * @package    symfony
- * @subpackage filter
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfBasicSecurityFilter.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfBasicSecurityFilter extends sfFilter
 {

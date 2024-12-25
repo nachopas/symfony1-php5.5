@@ -29,7 +29,6 @@ require_once 'propel/engine/builder/om/ObjectBuilder.php';
  * the custom-built accessor and setter methods.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.om.php5
  */
 class PHP5ObjectBuilder extends ObjectBuilder {
 
@@ -187,7 +186,6 @@ class PHP5ObjectBuilder extends ObjectBuilder {
  *";
 		}
 		$script .= "
- * @package    ".$this->getPackage()."
  */
 abstract class ".$this->getClassname()." extends ".ClassTools::classname($this->getBaseClass())." ";
 

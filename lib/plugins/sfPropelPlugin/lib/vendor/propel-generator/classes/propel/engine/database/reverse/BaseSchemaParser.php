@@ -25,8 +25,6 @@ require_once 'propel/engine/database/reverse/SchemaParser.php';
  * Base class for reverse engineering a database schema.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.reverse
  */
 abstract class BaseSchemaParser implements SchemaParser {
 

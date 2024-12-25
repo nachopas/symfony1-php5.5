@@ -11,10 +11,7 @@
 /**
  * sfWebDebugPanelSymfonyVersion adds a panel to the web debug toolbar with the symfony version.
  *
- * @package    symfony
- * @subpackage debug
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWebDebugPanelSymfonyVersion.class.php 11726 2008-09-22 12:38:17Z fabien $
  */
 class sfWebDebugPanelSymfonyVersion extends sfWebDebugPanel
 {

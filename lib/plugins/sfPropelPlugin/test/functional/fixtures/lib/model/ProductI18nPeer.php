@@ -5,8 +5,6 @@
  *
  * 
  *
- * @package    lib.model
- * @subpackage model
  */
 class ProductI18nPeer extends BaseProductI18nPeer
 {

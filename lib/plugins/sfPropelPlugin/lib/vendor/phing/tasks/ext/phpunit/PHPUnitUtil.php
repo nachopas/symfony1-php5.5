@@ -23,8 +23,6 @@
  * Various utility functions
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: PHPUnitUtil.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.phpunit
  * @since 2.1.0
  */
 class PHPUnitUtil

@@ -23,12 +23,9 @@
  * Abstract base class for child drivers to hydrate the object graph in to
  * various data types. For example Doctrine_Record instances or PHP arrays
  *
- * @package     Doctrine
- * @subpackage  Hydrate
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Roman Borschel <roman@code-factory.org>
  * @author      Jonathan H. Wage <jonwage@gmail.com>

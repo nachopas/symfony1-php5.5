@@ -24,8 +24,6 @@
  * This is used in order to connect to a SQLite database.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.adapter
  */
 class DBSQLite extends DBAdapter {
 

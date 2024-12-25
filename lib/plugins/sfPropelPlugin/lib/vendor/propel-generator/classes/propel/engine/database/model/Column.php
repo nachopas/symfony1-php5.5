@@ -36,8 +36,6 @@ include_once 'propel/engine/database/model/ColumnDefaultValue.php';
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
  * @author     Byron Foster <byron_foster@yahoo.com> (Torque)
  * @author     Bernd Goldschmidt <bgoldschmidt@rapidsoft.de>
- * @version    $Revision: 1594 $
- * @package    propel.engine.database.model
  */
 class Column extends XMLElement {
 

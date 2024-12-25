@@ -32,8 +32,6 @@ require_once 'phing/util/ExtendedFileStream.php';
  * different packages or testcases since it is a Javadoc like report.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: PHPUnitReportTask.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.phpunit
  * @since 2.1.0
  */
 class PHPUnitReportTask extends Task

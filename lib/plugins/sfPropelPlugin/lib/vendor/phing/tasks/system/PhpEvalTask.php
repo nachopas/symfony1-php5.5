@@ -29,8 +29,6 @@ require_once 'phing/Task.php';
  *        modify internal Phing classes unless you know what you are doing.
  *
  * @author   Hans Lellelid <hans@xmpl.org>
- * @version  $Revision: 1.7 $
- * @package  phing.tasks.system
  *
  * @todo Add support for evaluating expressions
  */

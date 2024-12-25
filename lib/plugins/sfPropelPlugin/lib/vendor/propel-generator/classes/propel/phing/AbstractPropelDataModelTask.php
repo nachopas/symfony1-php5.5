@@ -35,7 +35,6 @@ include_once 'propel/engine/database/transform/XmlToAppData.php';
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Jason van Zyl <jvanzyl@zenplex.com> (Torque)
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
- * @package    propel.phing
  */
 abstract class AbstractPropelDataModelTask extends Task {
 

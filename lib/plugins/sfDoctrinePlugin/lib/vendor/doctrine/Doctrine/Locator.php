@@ -22,15 +22,12 @@
 /**
  * Doctrine_Locator
  *
- * @package     Doctrine
- * @subpackage  Doctrine_Locator
  * @category    Locator
  * @license     http://www.gnu.org/licenses/lgpl.txt LGPL
  * @link        http://www.doctrine-project.org
  * @author      Janne Vanhala <jpvanhal@cc.hut.fi>
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Eevert Saukkokoski <dmnEe0@gmail.com>
- * @version     $Revision$
  * @since       1.0
  */
 class Doctrine_Locator implements Countable, IteratorAggregate

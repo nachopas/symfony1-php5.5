@@ -11,10 +11,7 @@
 /**
  * Represents a command line argument.
  *
- * @package    symfony
- * @subpackage command
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfCommandArgument.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfCommandArgument
 {

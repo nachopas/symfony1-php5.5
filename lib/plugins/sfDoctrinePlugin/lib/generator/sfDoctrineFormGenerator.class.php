@@ -14,11 +14,8 @@
  *
  * This class generates a Doctrine forms.
  *
- * @package    symfony
- * @subpackage generator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineFormGenerator.class.php 32892 2011-08-05 07:53:57Z fabien $
  */
 class sfDoctrineFormGenerator extends sfGenerator
 {

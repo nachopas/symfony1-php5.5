@@ -22,15 +22,12 @@
 /**
  * Oracle connection adapter statement class.
  *
- * @package     Doctrine
- * @subpackage  Adapter
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      vadik56
  * @author      Miloslav Kmet <adrive-nospam@hip-hop.sk>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Rev$
  */
 class Doctrine_Adapter_Statement_Oracle implements Doctrine_Adapter_Statement_Interface
 {

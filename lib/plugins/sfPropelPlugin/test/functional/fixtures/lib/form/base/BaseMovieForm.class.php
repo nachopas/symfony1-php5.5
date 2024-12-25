@@ -5,8 +5,6 @@
  *
  * @method Movie getObject() Returns the current form's model object
  *
- * @package    ##PROJECT_NAME##
- * @subpackage form
  * @author     Your name here
  */
 abstract class BaseMovieForm extends BaseFormPropel

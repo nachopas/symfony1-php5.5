@@ -10,8 +10,6 @@
 
 /**
  * Analyzes characters for a specific character set.
- * @package Swift
- * @subpackage Encoder
  * @author Chris Corbyn
  * @author Xavier De Cock <xdecock@gmail.com>
  */

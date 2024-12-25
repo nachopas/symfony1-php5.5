@@ -12,8 +12,6 @@
 /**
  * Pop3Exception thrown when an error occurs connecting to a POP3 host.
  * 
- * @package Swift
- * @subpackage Transport
  * 
  * @author Chris Corbyn
  */

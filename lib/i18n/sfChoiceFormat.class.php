@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfChoiceFormat.class.php 33251 2011-12-12 16:30:59Z fabien $
- * @package    symfony
- * @subpackage i18n
  */
 
 
@@ -51,9 +48,6 @@
  * are acceptable.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Fri Dec 24 20:46:16 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 class sfChoiceFormat
 {

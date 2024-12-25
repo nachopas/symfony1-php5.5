@@ -13,10 +13,7 @@
  *
  * It parses and generates URLs by delegating the work to an array of sfRoute objects.
  *
- * @package    symfony
- * @subpackage routing
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPatternRouting.class.php 32845 2011-07-28 11:50:48Z fabien $
  */
 class sfPatternRouting extends sfRouting
 {

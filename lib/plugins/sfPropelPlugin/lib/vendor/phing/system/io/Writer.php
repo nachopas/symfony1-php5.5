@@ -22,7 +22,6 @@
 /**
  * Abstract class for writing character streams.
  * 
- * @package   phing.system.io
  */
 abstract class Writer {
 	

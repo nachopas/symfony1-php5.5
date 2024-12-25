@@ -22,12 +22,9 @@
 /**
  * Doctrine_AuditLog_Listener
  *
- * @package     Doctrine
- * @subpackage  AuditLog
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Lukas Smith <smith@pooteeweet.org>
  */
 class Doctrine_AuditLog_Listener_Microtime extends Doctrine_AuditLog_Listener

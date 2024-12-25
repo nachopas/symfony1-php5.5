@@ -11,10 +11,7 @@
 /**
  * sfValidatorBoolean validates a boolean. It also converts the input value to a valid boolean.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorBoolean.class.php 10306 2008-07-15 22:12:35Z Carl.Vondrick $
  */
 class sfValidatorBoolean extends sfValidatorBase
 {

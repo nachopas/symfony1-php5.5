@@ -25,12 +25,9 @@
  * loaded from the database or retrieved from the cache
  *
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @package     Doctrine
- * @subpackage  Table
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  */
 class Doctrine_Table_Repository implements Countable, IteratorAggregate
 {

@@ -11,10 +11,7 @@
 /**
  * A View to render partials.
  *
- * @package    symfony
- * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPartialView.class.php 31928 2011-01-29 16:02:51Z Kris.Wallsmith $
  */
 class sfPartialView extends sfPHPView
 {

@@ -22,14 +22,11 @@
 /**
  * Doctrine_Migration_Builder
  *
- * @package     Doctrine
- * @subpackage  Migration
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jwage@mac.com>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 2939 $
  */
 class Doctrine_Migration_Builder extends Doctrine_Builder
 {

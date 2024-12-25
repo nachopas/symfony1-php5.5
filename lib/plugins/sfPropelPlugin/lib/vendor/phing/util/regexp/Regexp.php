@@ -22,8 +22,6 @@
 /**
  * A factory class for regex functions.
  * @author Hans Lellelid <hans@xmpl.org>
- * @package  phing.util.regexp
- * @version $Revision: 1.5 $
  */
 class Regexp {
 

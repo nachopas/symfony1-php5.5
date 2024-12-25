@@ -25,12 +25,9 @@
  * Import builder is responsible of building Doctrine_Record classes
  * based on a database schema.
  *
- * @package     Doctrine
- * @subpackage  Import
  * @link        www.doctrine-project.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jukka Hassinen <Jukka.Hassinen@BrainAlliance.com>
  * @author      Nicolas Bérard-Nault <nicobn@php.net>

@@ -26,7 +26,6 @@ include_once 'phing/types/AbstractFileSet.php';
  * Subclass as hint for supporting tasks that the included directories
  * instead of files should be used.
  *
- * @package phing.types
  */
 class DirSet extends AbstractFileSet {
     

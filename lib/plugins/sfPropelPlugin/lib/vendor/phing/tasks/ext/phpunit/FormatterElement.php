@@ -25,8 +25,6 @@ require_once 'phing/system/io/PhingFile.php';
  * A wrapper for the implementations of PHPUnit2ResultFormatter.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: FormatterElement.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.phpunit
  * @since 2.1.0
  */
 class FormatterElement

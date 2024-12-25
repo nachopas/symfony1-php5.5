@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Generates code based on your schema.
  *
- * @package    sfPropelPlugin
- * @subpackage task
  * @author     Kris Wallsmith <kris.wallsmith@symfony-project.com>
- * @version    SVN: $Id: sfPropelBuildTask.class.php 23308 2009-10-24 14:43:25Z Kris.Wallsmith $
  */
 class sfPropelBuildTask extends sfPropelBaseTask
 {

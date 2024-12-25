@@ -12,11 +12,8 @@
 /**
  * sfToolkit provides basic utility methods.
  *
- * @package    symfony
- * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfToolkit.class.php 29525 2010-05-19 13:01:43Z fabien $
  */
 class sfToolkit
 {

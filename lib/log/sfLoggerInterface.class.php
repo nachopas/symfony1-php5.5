@@ -11,10 +11,7 @@
 /**
  * sfLoggerInterface is the interface all symfony loggers must implement.
  *
- * @package    symfony
- * @subpackage log
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfLoggerInterface.class.php 9081 2008-05-20 00:47:12Z Carl.Vondrick $
  */
 interface sfLoggerInterface
 {

@@ -29,9 +29,7 @@ require_once __DIR__.'/TGettext.class.php';
  * GNU MO file reader and writer.
  *
  * @author      Michael Wallner <mike@php.net>
- * @version     $Revision: 9856 $
  * @access      public
- * @package System.I18N.core
  */
 class TGettext_MO extends TGettext
 {

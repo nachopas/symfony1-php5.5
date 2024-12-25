@@ -8,7 +8,6 @@
  * classpaths.  (e.g. "phing.util.StringHelper").
  *
  * @author Hans Lellelid <hans@xmpl.org>
- * @package phing.system.util
  */
 class StringHelper {
 

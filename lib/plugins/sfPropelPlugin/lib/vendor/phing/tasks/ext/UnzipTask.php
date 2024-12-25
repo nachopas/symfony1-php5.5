@@ -27,8 +27,6 @@ require_once 'phing/lib/Zip.php';
  * and included with Phing).
  *
  * @author    Joakim Bodin <joakim.bodin+phing@gmail.com>
- * @version   $Revision: 1.0 $
- * @package   phing.tasks.ext
  * @since     2.2.0
  */
 class UnzipTask extends ExtractBaseTask {

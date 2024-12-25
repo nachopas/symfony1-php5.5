@@ -11,10 +11,7 @@
 /**
  * sfValidatorOr validates an input value if at least one validator passes.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorOr.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfValidatorOr extends sfValidatorBase
 {

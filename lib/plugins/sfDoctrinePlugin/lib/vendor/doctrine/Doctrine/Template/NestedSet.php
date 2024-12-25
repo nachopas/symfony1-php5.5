@@ -22,12 +22,9 @@
 /**
  * Doctrine template which implements the custom NestedSet implementation
  *
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Roman Borschel <roman@code-factory.org>
  */
 class Doctrine_Template_NestedSet extends Doctrine_Template

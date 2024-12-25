@@ -22,13 +22,10 @@
 /**
  * Doctrine_Record_Listener
  *
- * @package     Doctrine
- * @subpackage  Record
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  */
 class Doctrine_Record_Listener implements Doctrine_Record_Listener_Interface
 {

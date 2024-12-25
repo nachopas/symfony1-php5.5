@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormFilterDate represents a date filter widget.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormFilterDate.class.php 30762 2010-08-25 12:33:33Z fabien $
  */
 class sfWidgetFormFilterDate extends sfWidgetFormDateRange
 {

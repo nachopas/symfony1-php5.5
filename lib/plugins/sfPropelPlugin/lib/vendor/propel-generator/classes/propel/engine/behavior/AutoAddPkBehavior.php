@@ -24,8 +24,6 @@
  * Adds a primary key to models defined without one
  *
  * @author     François Zaninotto
- * @version    $Revision: 1066 $
- * @package    propel.engine.behavior
  */
 class AutoAddPkBehavior extends Behavior
 {

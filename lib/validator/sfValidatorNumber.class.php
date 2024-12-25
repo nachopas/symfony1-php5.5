@@ -11,10 +11,7 @@
 /**
  * sfValidatorNumber validates a number (integer or float). It also converts the input value to a float.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorNumber.class.php 22018 2009-09-14 16:56:28Z fabien $
  */
 class sfValidatorNumber extends sfValidatorBase
 {

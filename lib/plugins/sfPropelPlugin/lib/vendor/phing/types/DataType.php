@@ -31,7 +31,6 @@ include_once 'phing/BuildException.php';
  * circular references that is appropriate for types that can not be
  * nested inside elements of the same type (i.e. patternset but not path)
  *
- * @package   phing.types
  */
 class DataType extends ProjectComponent {
 

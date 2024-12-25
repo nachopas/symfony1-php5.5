@@ -32,8 +32,6 @@ include_once 'phing/system/io/PhingFile.php';
  * - mapper stuff
  * - filter stuff
  *
- * @package  phing.util
- * @version  $Revision: 1.10 $
  */
 class FileUtils {
         

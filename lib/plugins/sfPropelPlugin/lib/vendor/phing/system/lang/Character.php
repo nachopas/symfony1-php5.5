@@ -20,7 +20,6 @@
  */
 
 /**
- * @package phing.system.lang
  */
 class Character {
 

@@ -12,8 +12,6 @@
  * An abstract means of writing data.
  * Classes implementing this interface may use a subsystem which requires less
  * memory than working with large strings of data.
- * @package Swift
- * @subpackage ByteStream
  * @author Chris Corbyn
  */
 interface Swift_InputByteStream

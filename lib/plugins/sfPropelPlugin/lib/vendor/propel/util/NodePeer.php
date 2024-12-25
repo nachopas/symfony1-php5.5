@@ -23,8 +23,6 @@
  * This is a utility interface for all generated NodePeer classes in the system.
  *
  * @author     Heltem <heltem@o2php.com> (Propel)
- * @version    $Revision: 1262 $
- * @package    propel.util
  */
 interface NodePeer {
 	/**

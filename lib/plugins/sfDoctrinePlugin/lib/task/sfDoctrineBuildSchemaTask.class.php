@@ -14,11 +14,8 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Creates a schema.yml from an existing database.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineBuildSchemaTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfDoctrineBuildSchemaTask extends sfDoctrineBaseTask
 {

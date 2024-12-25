@@ -29,7 +29,6 @@
  * @author     Alan Pinstein
  * @author     Soenke Ruempler
  * @author     Hans Lellelid
- * @package    propel.util
  */
 class PropelDateTime extends DateTime
 {

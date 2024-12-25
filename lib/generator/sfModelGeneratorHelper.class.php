@@ -3,10 +3,7 @@
 /**
  * Model generator helper.
  *
- * @package    symfony
- * @subpackage generator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfModelGeneratorHelper.class.php 22914 2009-10-10 12:24:29Z Kris.Wallsmith $
  */
 abstract class sfModelGeneratorHelper
 {

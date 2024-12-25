@@ -22,12 +22,9 @@
 /**
  * Provides array access and property overload interface for Doctrine subclasses
  *
- * @package     Doctrine
- * @subpackage  Access
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 abstract class Doctrine_Access extends Doctrine_Locator_Injectable implements ArrayAccess

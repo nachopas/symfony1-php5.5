@@ -26,8 +26,6 @@ require_once 'phing/tasks/ext/dbdeploy/DbmsSyntax.php';
  *  Factory for generating dbms-specific syntax-generating objects
  *
  *  @author   Luke Crouch at SourceForge (http://sourceforge.net)
- *  @version  $Revision: 1.1 $
- *  @package  phing.tasks.ext.dbdeploy
  */
 
 class DbmsSyntaxFactory

@@ -12,11 +12,8 @@
 /**
  * sfActions executes all the logic for the current request.
  *
- * @package    symfony
- * @subpackage action
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfActions.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 abstract class sfActions extends sfAction
 {

@@ -11,10 +11,7 @@
 /**
  * sfValidatorSchemaForEach wraps a validator multiple times in a single validator.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorSchemaForEach.class.php 9048 2008-05-19 09:11:23Z FabianLange $
  */
 class sfValidatorSchemaForEach extends sfValidatorSchema
 {

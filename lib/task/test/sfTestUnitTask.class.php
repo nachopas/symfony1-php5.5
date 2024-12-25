@@ -11,10 +11,7 @@
 /**
  * Launches unit tests.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTestUnitTask.class.php 29415 2010-05-12 06:24:54Z fabien $
  */
 class sfTestUnitTask extends sfTestBaseTask
 {

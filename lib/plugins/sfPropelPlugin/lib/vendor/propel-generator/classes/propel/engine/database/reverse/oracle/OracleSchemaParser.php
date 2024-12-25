@@ -26,8 +26,6 @@ require_once 'propel/engine/database/reverse/BaseSchemaParser.php';
  *
  * @author     Hans Lellelid <hans@xmpl.org>
  * @author     Guillermo Gutierrez <ggutierrez@dailycosas.net> (Adaptation)
- * @version    $Revision: 1010 $
- * @package    propel.engine.database.reverse.oracle
  */
 class OracleSchemaParser extends BaseSchemaParser {
 

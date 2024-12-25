@@ -11,10 +11,7 @@
 /**
  * sfTesterForm implements tests for forms submitted by the user.
  *
- * @package    symfony
- * @subpackage test
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTesterForm.class.php 24217 2009-11-22 06:47:54Z fabien $
  */
 class sfTesterForm extends sfTester
 {

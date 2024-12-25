@@ -11,10 +11,7 @@
 /**
  * CacheHelper.
  *
- * @package    symfony
- * @subpackage helper
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: CacheHelper.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 
 /* Usage

@@ -14,11 +14,8 @@
  *
  * A Doctrine route can represent a single Doctrine object or a list of objects.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineRoute.class.php 28633 2010-03-20 14:35:57Z Kris.Wallsmith $
  */
 class sfDoctrineRoute extends sfObjectRoute
 {

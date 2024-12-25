@@ -11,10 +11,7 @@
 /**
  * sfSimpleYamlConfigHandler allows you to load simple configuration files formatted as YAML.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfSimpleYamlConfigHandler.class.php 9085 2008-05-20 01:53:23Z Carl.Vondrick $
  */
 class sfSimpleYamlConfigHandler extends sfYamlConfigHandler
 {

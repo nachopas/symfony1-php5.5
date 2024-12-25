@@ -12,8 +12,6 @@
 /**
  * Does real time logging of Transport level information.
  * 
- * @package Swift
- * @subpackage Plugins
  * 
  * @author Chris Corbyn
  */

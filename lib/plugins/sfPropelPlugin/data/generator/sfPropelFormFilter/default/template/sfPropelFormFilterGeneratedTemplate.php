@@ -3,8 +3,6 @@
 /**
  * <?php echo $this->table->getClassname() ?> filter form base class.
  *
- * @package    ##PROJECT_NAME##
- * @subpackage filter
  * @author     ##AUTHOR_NAME##
  */
 abstract class Base<?php echo $this->table->getClassname() ?>FormFilter extends BaseFormFilterPropel

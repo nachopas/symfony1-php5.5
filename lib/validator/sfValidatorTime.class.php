@@ -11,11 +11,8 @@
 /**
  * sfValidatorTime validates a time. It also converts the input value to a valid time.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Fabian Lange <fabian.lange@symfony-project.com>
- * @version    SVN: $Id: sfValidatorTime.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfValidatorTime extends sfValidatorBase
 {

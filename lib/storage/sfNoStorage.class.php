@@ -16,10 +16,7 @@
  *   storage:
  *    class: sfNoStorage
  *
- * @package    symfony
- * @subpackage storage
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfNoStorage.class.php 9942 2008-06-27 18:00:49Z fabien $
  */
 class sfNoStorage extends sfStorage
 {

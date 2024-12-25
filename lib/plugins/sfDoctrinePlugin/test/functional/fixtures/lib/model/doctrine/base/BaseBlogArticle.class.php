@@ -10,10 +10,7 @@
  * @method BlogAuthor  getAuthor() Returns the current record's "Author" value
  * @method BlogArticle setAuthor() Sets the current record's "Author" value
  * 
- * @package    symfony12
- * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseBlogArticle extends Article
 {

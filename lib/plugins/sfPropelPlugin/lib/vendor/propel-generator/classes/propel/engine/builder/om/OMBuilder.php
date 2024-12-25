@@ -30,7 +30,6 @@ require_once 'propel/engine/builder/DataModelBuilder.php';
  * Node classes, Nested Set classes, etc.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.om
  */
 abstract class OMBuilder extends DataModelBuilder {
 

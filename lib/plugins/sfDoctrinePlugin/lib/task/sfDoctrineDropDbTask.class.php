@@ -14,11 +14,8 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Drops database for current model.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineDropDbTask.class.php 24341 2009-11-24 15:01:58Z Kris.Wallsmith $
  */
 class sfDoctrineDropDbTask extends sfDoctrineBaseTask
 {

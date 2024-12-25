@@ -14,11 +14,8 @@
  * the module and action names and the module directory. References to the
  * main symfony instances are also provided.
  *
- * @package    symfony
- * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfContext.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfContext implements ArrayAccess
 {

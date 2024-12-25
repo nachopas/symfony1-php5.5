@@ -31,8 +31,6 @@
  * These classes in themselves do not do any database metadata lookups.
  *
  * @author     Francois Zaninotto
- * @version    $Revision: 1153 $
- * @package    propel.map
  */
 class RelationMap {
 

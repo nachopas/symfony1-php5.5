@@ -29,8 +29,6 @@ include_once 'phing/system/io/FileWriter.php';
  * FIXME
  *        - Add support for arrays (separated by ',')
  *
- * @package    phing.system.util
- * @version $Revision: 1.13 $
  */
 class Properties {
 

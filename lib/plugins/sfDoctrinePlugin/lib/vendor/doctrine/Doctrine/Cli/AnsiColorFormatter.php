@@ -31,14 +31,11 @@
  * Doctrine_AnsiColorFormatter provides methods to colorize text to be displayed on a console.
  * This class was taken from the symfony-project source
  *
- * @package    Doctrine
- * @subpackage Cli
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 4252 $
  */
 class Doctrine_Cli_AnsiColorFormatter extends Doctrine_Cli_Formatter
 {

@@ -22,7 +22,6 @@
 /**
  * Wrapper class for PHP stream that supports write operations.
  * 
- * @package   phing.system.io
  */
 class OutputStream {
 	

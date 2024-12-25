@@ -11,10 +11,7 @@
 /**
  * sfPearRestTest is a class to be able to test a PEAR channel without the HTTP layer.
  *
- * @package    symfony
- * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPearRestTest.class.php 5250 2007-09-24 08:11:50Z fabien $
  */
 class sfPearRestTest extends sfPearRest
 {

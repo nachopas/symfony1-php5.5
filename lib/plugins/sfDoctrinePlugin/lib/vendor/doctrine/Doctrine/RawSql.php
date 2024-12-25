@@ -28,12 +28,9 @@
  * in a RawSql query is the SELECT part, which has a special syntax that provides Doctrine
  * with the necessary information to properly hydrate the query results.
  *
- * @package     Doctrine
- * @subpackage  RawSql
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_RawSql extends Doctrine_Query_Abstract

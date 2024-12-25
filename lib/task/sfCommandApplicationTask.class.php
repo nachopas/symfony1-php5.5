@@ -11,10 +11,7 @@
 /**
  * Base class for tasks that depends on a sfCommandApplication object.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfCommandApplicationTask.class.php 23651 2009-11-06 08:08:54Z fabien $
  */
 abstract class sfCommandApplicationTask extends sfTask
 {

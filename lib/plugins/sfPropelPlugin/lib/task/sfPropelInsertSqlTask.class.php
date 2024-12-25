@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Inserts SQL for current model.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelInsertSqlTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPropelInsertSqlTask extends sfPropelBaseTask
 {

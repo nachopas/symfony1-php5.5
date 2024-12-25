@@ -28,8 +28,6 @@ include_once 'phing/system/io/ConsoleReader.php';
  *
  * @author Hans Lellelid <hans@xmpl.org> (Phing)
  * @author Stefan Bodewig <stefan.bodewig@epost.de> (Ant)
- * @version $Revision: 1.6 $
- * @package phing.input
  */
 class DefaultInputHandler implements InputHandler {
     

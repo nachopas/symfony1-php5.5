@@ -22,13 +22,10 @@
 /**
  * Doctrine_Connection_Statement
  *
- * @package     Doctrine
- * @subpackage  Connection
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 1532 $
  */
 class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interface
 {

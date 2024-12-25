@@ -15,12 +15,9 @@
  *
  * <b>parameters:</b> see sfDatabaseSessionStorage
  *
- * @package    symfony
- * @subpackage storage
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
  * @author     Julien Garand <julien.garand@gmail.com>
- * @version    SVN: $Id: sfMySQLiSessionStorage.class.php 24590 2009-11-30 18:28:13Z FabianLange $
  */
 class sfMySQLiSessionStorage extends sfMySQLSessionStorage
 {

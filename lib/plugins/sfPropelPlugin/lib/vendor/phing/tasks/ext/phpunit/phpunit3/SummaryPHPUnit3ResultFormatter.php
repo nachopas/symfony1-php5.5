@@ -25,8 +25,6 @@ require_once 'phing/tasks/ext/phpunit/phpunit3/PHPUnit3ResultFormatter.php';
  * Prints short summary output of the test to Phing's logging system.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: SummaryPHPUnit2ResultFormatter.php 142 2007-02-04 14:06:00Z mrook $
- * @package phing.tasks.ext.phpunit
  * @since 2.1.0
  */	
 class SummaryPHPUnit3ResultFormatter extends PHPUnit3ResultFormatter

@@ -24,12 +24,9 @@
  * Doctrine_Manager is the base component of all doctrine based projects.
  * It opens and keeps track of all connections (database connections).
  *
- * @package     Doctrine
- * @subpackage  Manager
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7657 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Manager extends Doctrine_Configurable implements Countable, IteratorAggregate

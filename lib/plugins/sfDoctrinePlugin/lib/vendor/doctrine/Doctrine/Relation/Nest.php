@@ -22,12 +22,9 @@
 /**
  * Doctrine_Relation_Association_Self
  *
- * @package     Doctrine
- * @subpackage  Relation
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 1434 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Relation_Nest extends Doctrine_Relation_Association

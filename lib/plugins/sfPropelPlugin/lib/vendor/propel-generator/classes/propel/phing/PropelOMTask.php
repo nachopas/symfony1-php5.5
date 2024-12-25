@@ -28,7 +28,6 @@ require_once 'propel/engine/builder/om/OMBuilder.php';
  * This Task creates the OM classes based on the XML schema file.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.phing
  */
 class PropelOMTask extends AbstractPropelDataModelTask {
 

@@ -22,15 +22,12 @@
 /**
  * Doctrine_Export_Mssql
  *
- * @package     Doctrine
- * @subpackage  Export
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
  * @author      Frank M. Kromann <frank@kromann.info> (PEAR MDB2 Mssql driver)
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7660 $
  */
 class Doctrine_Export_Mssql extends Doctrine_Export
 {

@@ -31,8 +31,6 @@ require_once 'phing/tasks/ext/phpdoc/PhpDocumentorTask.php';
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
  * @author Markus Fischer <markus@fischer.name>
- * @version $Id: PhpDocumentorExternalTask.php 352 2008-02-06 15:26:43Z mrook $
- * @package phing.tasks.ext.phpdoc
  */	
 class PhpDocumentorExternalTask extends PhpDocumentorTask
 {

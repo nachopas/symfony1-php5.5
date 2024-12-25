@@ -11,8 +11,6 @@
 /**
  * Creates a task skeleton
  *
- * @package    symfony
- * @subpackage task
  * @author     Francois Zaninotto <francois.zaninotto@symfony-project.com>
  */
 class sfGenerateTaskTask extends sfBaseTask

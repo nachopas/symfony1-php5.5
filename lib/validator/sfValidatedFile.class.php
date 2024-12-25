@@ -11,10 +11,7 @@
 /**
  * sfValidatedFile represents a validated uploaded file.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatedFile.class.php 30915 2010-09-15 17:10:37Z Kris.Wallsmith $
  */
 class sfValidatedFile
 {

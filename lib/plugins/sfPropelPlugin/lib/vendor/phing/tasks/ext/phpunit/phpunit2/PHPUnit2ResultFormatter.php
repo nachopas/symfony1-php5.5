@@ -27,8 +27,6 @@ require_once 'phing/system/io/Writer.php';
  * This abstract class describes classes that format the results of a PHPUnit2 testrun.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: PHPUnit2ResultFormatter.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.phpunit.phpunit2
  * @since 2.1.0
  */
 abstract class PHPUnit2ResultFormatter implements PHPUnit2_Framework_TestListener

@@ -36,9 +36,7 @@
  * #################################################################
  *
  * @author      Michael Wallner <mike@php.net>
- * @version     $Revision: 9856 $
  * @access      public
- * @package System.I18N.core
  */
 class TGettext
 {

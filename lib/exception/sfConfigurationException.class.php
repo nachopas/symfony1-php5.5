@@ -13,11 +13,8 @@
  * sfConfigurationException is thrown when the framework finds an error in a
  * configuration setting.
  *
- * @package    symfony
- * @subpackage exception
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfConfigurationException.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfConfigurationException extends sfException
 {

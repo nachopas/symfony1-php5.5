@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Generates a Propel admin module.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelGenerateAdminTask.class.php 28809 2010-03-26 17:19:58Z Jonathan.Wage $
  */
 class sfPropelGenerateAdminTask extends sfPropelBaseTask
 {

@@ -13,10 +13,7 @@
  *
  * This class manages web responses. It supports cookies and headers management.
  *
- * @package    symfony
- * @subpackage response
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWebResponse.class.php 31399 2010-11-15 16:48:22Z fabien $
  */
 class sfWebResponse extends sfResponse
 {

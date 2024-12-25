@@ -12,7 +12,6 @@
 /**
  * Swift Mailer class.
  * 
- * @package Swift
  * @author Chris Corbyn
  */
 class Swift_Mailer

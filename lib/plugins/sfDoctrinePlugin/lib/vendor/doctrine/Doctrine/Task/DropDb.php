@@ -22,12 +22,9 @@
 /**
  * Doctrine_Task_DropDb
  *
- * @package     Doctrine
- * @subpackage  Task
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 2761 $
  * @author      Jonathan H. Wage <jwage@mac.com>
  */
 class Doctrine_Task_DropDb extends Doctrine_Task

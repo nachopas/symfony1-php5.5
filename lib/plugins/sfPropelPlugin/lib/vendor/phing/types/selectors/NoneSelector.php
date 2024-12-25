@@ -28,7 +28,6 @@ require_once 'phing/types/selectors/BaseSelectorContainer.php';
  *
  * @author Hans Lellelid <hans@xmpl.org>
  * @author Bruce Atherton <bruce@callenish.com> (Ant)
- * @package phing.types.selectors
  */
 class NoneSelector extends BaseSelectorContainer {
 

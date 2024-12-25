@@ -12,10 +12,7 @@
  * sfRootConfigHandler allows you to specify configuration handlers for the
  * application or on a module level.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfRootConfigHandler.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfRootConfigHandler extends sfYamlConfigHandler
 {

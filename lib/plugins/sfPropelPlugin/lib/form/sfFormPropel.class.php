@@ -13,10 +13,7 @@
  *
  * This class extends BaseForm, a class generated automatically with each new project.
  *
- * @package    symfony
- * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFormPropel.class.php 27915 2010-02-11 18:12:56Z Kris.Wallsmith $
  */
 abstract class sfFormPropel extends sfFormObject
 {

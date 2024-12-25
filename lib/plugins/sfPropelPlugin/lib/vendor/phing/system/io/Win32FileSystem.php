@@ -22,7 +22,6 @@
 include_once 'phing/system/io/FileSystem.php';
 
 /**
- *  @package   phing.system.io
  */
 class Win32FileSystem extends FileSystem {
 

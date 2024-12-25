@@ -11,10 +11,7 @@
 /**
  * Base class for all symfony tasks.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfBaseTask.class.php 24341 2009-11-24 15:01:58Z Kris.Wallsmith $
  */
 abstract class sfBaseTask extends sfCommandApplicationTask
 {

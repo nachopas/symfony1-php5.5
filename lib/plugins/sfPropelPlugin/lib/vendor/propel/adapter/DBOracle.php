@@ -29,8 +29,6 @@
  * @author     Brett McLaughlin <bmclaugh@algx.net> (Torque)
  * @author     Bill Schneider <bschneider@vecna.com> (Torque)
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.adapter
  */
 class DBOracle extends DBAdapter {
 

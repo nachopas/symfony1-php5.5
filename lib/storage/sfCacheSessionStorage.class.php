@@ -6,8 +6,6 @@
  * This class stores the session data in via sfCache instance and with an id issued in a
  * signed cookie. Useful when you don't want to store the session.
  *
- * @package    symfony
- * @subpackage storage
  * @author     Dustin Whittle <dustin.whittle@symfony-project.com>
  */
 class sfCacheSessionStorage extends sfStorage

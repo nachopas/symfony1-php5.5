@@ -25,11 +25,8 @@
  * @author      Paul Cooper <pgc@ucecom.com> (PEAR MDB2 Pgsql driver)
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @package     Doctrine
- * @subpackage  Transaction
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  */
 class Doctrine_Transaction_Pgsql extends Doctrine_Transaction
 {

@@ -23,8 +23,6 @@
  * Interface for reverse engineering schema parsers.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.reverse
  */
 interface SchemaParser {
 

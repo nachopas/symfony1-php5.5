@@ -11,10 +11,7 @@
 /**
  * sfFormField represents a widget bind to a name and a value.
  *
- * @package    symfony
- * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFormField.class.php 22401 2009-09-25 03:49:27Z Kris.Wallsmith $
  */
 class sfFormField
 {

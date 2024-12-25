@@ -11,8 +11,6 @@
 
 /**
  * Sends Messages over SMTP with ESMTP support.
- * @package Swift
- * @subpackage Transport
  * @author Chris Corbyn
  */
 class Swift_Transport_EsmtpTransport

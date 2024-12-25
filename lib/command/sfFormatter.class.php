@@ -11,10 +11,7 @@
 /**
  * sfFormatter provides methods to format text to be displayed on a console.
  *
- * @package    symfony
- * @subpackage command
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFormatter.class.php 30008 2010-06-28 09:48:15Z fabien $
  */
 class sfFormatter
 {

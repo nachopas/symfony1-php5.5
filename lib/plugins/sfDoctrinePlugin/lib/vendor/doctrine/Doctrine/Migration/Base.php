@@ -22,12 +22,9 @@
 /**
  * Base migration class. All migration classes must extend from this base class
  *
- * @package     Doctrine
- * @subpackage  Migration
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.1
- * @version     $Revision: 1080 $
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */
 abstract class Doctrine_Migration_Base

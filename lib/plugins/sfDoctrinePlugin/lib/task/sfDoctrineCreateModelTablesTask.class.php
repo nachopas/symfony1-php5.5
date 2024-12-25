@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Create tables for specified list of models
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineCreateModelTablesTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfDoctrineCreateModelTables extends sfDoctrineBaseTask
 {

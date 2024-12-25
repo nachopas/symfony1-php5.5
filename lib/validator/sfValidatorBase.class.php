@@ -13,10 +13,7 @@
  *
  * It also implements the required option for all validators.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorBase.class.php 32653 2011-06-15 18:32:02Z fabien $
  */
 abstract class sfValidatorBase
 {

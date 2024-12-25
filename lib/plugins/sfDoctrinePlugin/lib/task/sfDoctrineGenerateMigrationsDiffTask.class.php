@@ -14,11 +14,8 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Generate migration classes by producing a diff between your old and new schema.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineGenerateMigrationsDiffTask.class.php 28871 2010-03-29 17:28:03Z Jonathan.Wage $
  */
 class sfDoctrineGenerateMigrationsDiffTask extends sfDoctrineBaseTask
 {

@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfMessageFormat.class.php 24622 2009-11-30 23:49:47Z FabianLange $
- * @package    symfony
- * @subpackage i18n
  */
 
 /**
@@ -39,9 +36,6 @@
  * </code>
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Fri Dec 24 20:46:16 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 class sfMessageFormat
 {

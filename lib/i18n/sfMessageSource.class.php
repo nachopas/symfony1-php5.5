@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfMessageSource.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
- * @package    symfony
- * @subpackage i18n
  */
 
 /**
@@ -57,9 +54,6 @@
  * </code>
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Fri Dec 24 19:55:49 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 abstract class sfMessageSource implements sfIMessageSource
 {

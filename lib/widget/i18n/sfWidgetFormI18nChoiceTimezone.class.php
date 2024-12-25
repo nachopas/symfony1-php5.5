@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormI18nChoiceTimezone represents a timezone choice widget.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormI18nChoiceTimezone.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfWidgetFormI18nChoiceTimezone extends sfWidgetFormChoice
 {

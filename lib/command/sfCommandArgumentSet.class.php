@@ -11,10 +11,7 @@
 /**
  * Represent a set of command line arguments.
  *
- * @package    symfony
- * @subpackage command
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfCommandArgumentSet.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfCommandArgumentSet
 {

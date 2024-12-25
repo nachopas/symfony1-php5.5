@@ -3,7 +3,6 @@
 /**
  * MSSQL Server returns datetimes in a format that strtotime doesn't handle so we need to extend DateTime
  *
- * @package    propel.adapter.MSSQL
  */
 class MssqlDateTime extends DateTime
 {

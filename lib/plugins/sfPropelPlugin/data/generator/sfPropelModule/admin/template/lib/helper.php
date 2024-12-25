@@ -3,8 +3,6 @@
 /**
  * <?php echo $this->getModuleName() ?> module configuration.
  *
- * @package    ##PROJECT_NAME##
- * @subpackage <?php echo $this->getModuleName()."\n" ?>
  * @author     ##AUTHOR_NAME##
  */
 abstract class Base<?php echo ucfirst($this->getModuleName()) ?>GeneratorHelper extends sfModelGeneratorHelper

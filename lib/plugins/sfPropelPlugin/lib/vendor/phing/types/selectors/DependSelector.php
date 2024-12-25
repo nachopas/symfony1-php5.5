@@ -30,8 +30,6 @@ require_once 'phing/types/selectors/BaseSelector.php';
  *
  * @author    Hans Lellelid <hans@xmpl.org> (Phing)
  * @author    Bruce Atherton <bruce@callenish.com> (Ant)
- * @version   $Revision: 1.8 $
- * @package   phing.types.selectors
  */
 class DependSelector extends BaseSelector {
 

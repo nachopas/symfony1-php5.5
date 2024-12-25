@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Delete all generated files associated with a Doctrine model. Forms, filters, etc.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineDeleteModelFilesTask.class.php 29677 2010-05-30 14:19:33Z Kris.Wallsmith $
  */
 class sfDoctrineDeleteModelFilesTask extends sfDoctrineBaseTask
 {

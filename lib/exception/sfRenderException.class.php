@@ -12,11 +12,8 @@
 /**
  * sfRenderException is thrown when a view's pre-render check fails.
  *
- * @package    symfony
- * @subpackage exception
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfRenderException.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfRenderException extends sfException
 {

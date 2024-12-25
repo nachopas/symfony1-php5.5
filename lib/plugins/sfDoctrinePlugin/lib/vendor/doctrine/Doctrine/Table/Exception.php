@@ -23,12 +23,9 @@
  * thrown when user tries to initialize a new instance of Doctrine_Table,
  * while there already exists an instance of that table
  *
- * @package     Doctrine
- * @subpackage  Table
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Table_Exception extends Doctrine_Exception

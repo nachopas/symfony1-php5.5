@@ -23,12 +23,9 @@
  * Doctrine_Configurable
  * the base for Doctrine_Table, Doctrine_Manager and Doctrine_Connection
  *
- * @package     Doctrine
- * @subpackage  Configurable
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable

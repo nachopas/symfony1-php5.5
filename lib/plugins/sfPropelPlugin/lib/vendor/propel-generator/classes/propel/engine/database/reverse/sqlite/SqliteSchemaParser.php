@@ -25,8 +25,6 @@ require_once 'propel/engine/database/reverse/BaseSchemaParser.php';
  * SQLite database schema parser.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.reverse.mysql
  */
 class SqliteSchemaParser extends BaseSchemaParser {
 

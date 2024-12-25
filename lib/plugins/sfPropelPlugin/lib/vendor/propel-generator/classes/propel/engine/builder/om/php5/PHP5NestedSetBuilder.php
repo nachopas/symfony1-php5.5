@@ -28,7 +28,6 @@ require_once 'propel/engine/builder/om/ObjectBuilder.php';
  * the custom-built accessor and setter methods.
  *
  * @author     Heltem <heltem@o2php.com>
- * @package    propel.engine.builder.om.php5
  */
 class PHP5NestedSetBuilder extends ObjectBuilder {
 
@@ -87,7 +86,6 @@ require '".$this->getObjectBuilder()->getClassFilePath()."';
  *";
 		}
 		$script .= "
- * @package    ".$this->getPackage()."
  */
 abstract class ".$this->getClassname()." extends ".$this->getObjectBuilder()->getClassname()." implements NodeObject {
 ";

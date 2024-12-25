@@ -28,7 +28,6 @@ include_once 'phing/types/DataType.php';
  *
  * @author    Manuel Holtgrewe
  * @author    <a href="mailto:yl@seasonfive.com">Yannick Lecaillez</a>
- * @package   phing.types
 */
 class Parameter extends DataType {
 

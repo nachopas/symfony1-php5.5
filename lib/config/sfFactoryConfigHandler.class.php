@@ -13,11 +13,8 @@
  * sfFactoryConfigHandler allows you to specify which factory implementation the
  * system will use.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfFactoryConfigHandler.class.php 33299 2011-12-30 17:42:47Z fabien $
  */
 class sfFactoryConfigHandler extends sfYamlConfigHandler
 {

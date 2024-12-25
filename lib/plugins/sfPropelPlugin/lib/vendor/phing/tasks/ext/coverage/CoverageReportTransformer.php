@@ -29,8 +29,6 @@ require_once 'phing/util/ExtendedFileStream.php';
  * The default transformation generates an html report in framed style.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: CoverageReportTransformer.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.coverage
  * @since 2.1.0
  */
 class CoverageReportTransformer

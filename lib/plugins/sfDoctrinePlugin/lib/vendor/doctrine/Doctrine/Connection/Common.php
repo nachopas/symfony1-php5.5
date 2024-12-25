@@ -22,12 +22,9 @@
 /**
  * standard connection, the parent of pgsql, mysql and sqlite
  *
- * @package     Doctrine
- * @subpackage  Connection
  * @link        www.doctrine-project.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Connection_Common extends Doctrine_Connection

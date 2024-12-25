@@ -25,10 +25,7 @@
  * @method User                setPermissions() Sets the current record's "Permissions" collection
  * @method User                setProfile()     Sets the current record's "Profile" value
  * 
- * @package    symfony12
- * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseUser extends myDoctrineRecord
 {

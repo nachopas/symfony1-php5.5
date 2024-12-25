@@ -28,7 +28,6 @@ include_once 'phing/types/selectors/BaseExtendSelector.php';
  * 
  * @author Hans Lellelid <hans@xmpl.org> (Phing)
  * @author Bruce Atherton <bruce@callenish.com> (Ant)
- * @package phing.types.selectors
  */
 class ContainsSelector extends BaseExtendSelector {
 

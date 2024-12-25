@@ -23,10 +23,7 @@
  * Doctrine_Template_Searchable
  *
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision$
  * @link        www.doctrine-project.org
  * @since       1.0
  */

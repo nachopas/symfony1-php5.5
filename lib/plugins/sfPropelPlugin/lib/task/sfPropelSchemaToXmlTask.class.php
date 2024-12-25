@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Creates schema.yml from schema.xml.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelSchemaToXmlTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPropelSchemaToXmlTask extends sfPropelBaseTask
 {

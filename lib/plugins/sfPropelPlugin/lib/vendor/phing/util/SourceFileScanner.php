@@ -26,7 +26,6 @@
  *  The only method returns an array of source files. The array is a
  *  subset of the files given as a parameter and holds only those that
  *  are newer than their corresponding target files.
- *  @package   phing.util
  */
 class SourceFileScanner {
 

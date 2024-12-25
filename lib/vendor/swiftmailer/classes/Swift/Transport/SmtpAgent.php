@@ -10,8 +10,6 @@
 
 /**
  * Wraps an IoBuffer to send/receive SMTP commands/responses.
- * @package Swift
- * @subpackage Transport
  * @author Chris Corbyn
  */
 interface Swift_Transport_SmtpAgent

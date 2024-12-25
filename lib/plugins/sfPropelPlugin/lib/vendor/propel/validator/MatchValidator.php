@@ -45,8 +45,6 @@
  *
  * @author     Michael Aichler <aichler@mediacluster.de>
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.validator
  */
 class MatchValidator implements BasicValidator
 {

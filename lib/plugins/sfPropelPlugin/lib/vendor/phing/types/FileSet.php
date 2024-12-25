@@ -33,7 +33,6 @@ require_once 'phing/types/AbstractFileSet.php';
  * @author Jon S. Stevens <jon@clearink.com> (Ant)
  * @author Stefan Bodewig <stefan.bodewig@epost.de> (Ant)
  * @author Magesh Umasankar (Ant)
- * @package phing.types
  */
 class FileSet extends AbstractFileSet {
     

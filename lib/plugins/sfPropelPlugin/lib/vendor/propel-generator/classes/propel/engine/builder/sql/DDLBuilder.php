@@ -28,7 +28,6 @@ require_once 'propel/engine/builder/DataModelBuilder.php';
  * DDL-building classes are those that build all the SQL DDL for a single table.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.sql
  */
 abstract class DDLBuilder extends DataModelBuilder {
 

@@ -11,10 +11,7 @@
 /**
  * Cache class that stores cached content in memcache.
  *
- * @package    symfony
- * @subpackage cache
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfMemcacheCache.class.php 29490 2010-05-17 13:09:00Z fabien $
  */
 class sfMemcacheCache extends sfCache
 {

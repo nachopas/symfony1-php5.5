@@ -26,7 +26,6 @@ require_once 'propel/engine/builder/sql/DataSQLBuilder.php';
  * Oracle class for building data dump SQL.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.sql.oracle
  */
 class OracleDataSQLBuilder extends DataSQLBuilder {
 

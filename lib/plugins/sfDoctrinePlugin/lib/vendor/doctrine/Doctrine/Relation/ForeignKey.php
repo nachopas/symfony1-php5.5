@@ -23,13 +23,10 @@
  * Doctrine_Relation_ForeignKey
  * This class represents a foreign key relation
  *
- * @package     Doctrine
- * @subpackage  Relation
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  */
 class Doctrine_Relation_ForeignKey extends Doctrine_Relation
 {

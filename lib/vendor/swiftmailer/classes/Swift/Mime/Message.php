@@ -12,8 +12,6 @@
 /**
  * A Message (RFC 2822) object.
  * 
- * @package Swift
- * @subpackage Mime
  * 
  * @author Chris Corbyn
  */

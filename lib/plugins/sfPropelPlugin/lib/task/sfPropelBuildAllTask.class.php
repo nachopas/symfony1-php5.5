@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Generates Propel model, SQL and initializes the database.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelBuildAllTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPropelBuildAllTask extends sfPropelBaseTask
 {

@@ -27,7 +27,6 @@ require_once 'phing/types/selectors/BaseSelectorContainer.php';
  *
  * @author Hans Lellelid, hans@xmpl.org (Phing)
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a> (Ant)
- * @package phing.types.selectors
  */
 class AndSelector extends BaseSelectorContainer {
 

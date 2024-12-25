@@ -5,8 +5,6 @@
  *
  * @method Category getObject() Returns the current form's model object
  *
- * @package    ##PROJECT_NAME##
- * @subpackage form
  * @author     Your name here
  */
 abstract class BaseCategoryForm extends BaseFormPropel

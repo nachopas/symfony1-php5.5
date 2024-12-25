@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormFilterInput represents an HTML input tag used for filtering text.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormFilterInput.class.php 30762 2010-08-25 12:33:33Z fabien $
  */
 class sfWidgetFormFilterInput extends sfWidgetForm
 {

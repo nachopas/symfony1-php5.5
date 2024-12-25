@@ -25,12 +25,9 @@
  * reading to a reader object and passes the result to a builder object which
  * builds a Doctrine data model.
  *
- * @package     Doctrine
- * @subpackage  Import
  * @link        www.doctrine-project.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jukka Hassinen <Jukka.Hassinen@BrainAlliance.com>
  */

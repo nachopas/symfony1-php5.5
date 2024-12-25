@@ -10,7 +10,6 @@
 
 /**
  * Pretends messages have been sent, but just ignores them.
- * @package Swift
  * @author  Fabien Potencier
  */
 class Swift_NullTransport extends Swift_Transport_NullTransport

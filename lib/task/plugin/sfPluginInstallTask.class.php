@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPluginBaseTask.class.php');
 /**
  * Installs a plugin.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPluginInstallTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPluginInstallTask extends sfPluginBaseTask
 {

@@ -5,8 +5,6 @@
  *
  * 
  *
- * @package    lib.model
- * @subpackage model
  */
 class Product extends BaseProduct
 {

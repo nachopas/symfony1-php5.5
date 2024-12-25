@@ -26,8 +26,6 @@ include_once 'propel/engine/EngineException.php';
  * Object to hold vendor-specific info.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class VendorInfo extends XMLElement {
 

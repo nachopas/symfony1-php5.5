@@ -27,7 +27,5 @@ require_once 'phing/BuildException.php';
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Daniel Rall <dlr@collab.net> (Torque)
  * @author     Jason van Zyl <jvz@apache.org> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine
  */
 class EngineException extends BuildException {}

@@ -25,11 +25,8 @@
  * This class is used to analyze (ie tokenize) an input $text in 
  * $encoding encoding, and return an array of words to be indexed.
  *
- * @package     Doctrine
- * @subpackage  Search
  * @author      Brice Figureau <brice+doctrine@daysofwonder.com>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision$
  * @link        www.doctrine-project.org
  * @since       1.0
  */

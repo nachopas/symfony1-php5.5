@@ -11,10 +11,7 @@
 /**
  * sfClassManipulator manipulates class code.
  *
- * @package    symfony
- * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfClassManipulator.class.php 25063 2009-12-08 06:02:07Z Kris.Wallsmith $
  */
 class sfClassManipulator
 {

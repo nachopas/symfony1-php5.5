@@ -11,10 +11,7 @@
 /**
  * This class can be used to cache the result and output of any PHP callable (function and method calls).
  *
- * @package    symfony
- * @subpackage cache
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFunctionCache.class.php 23939 2009-11-14 17:46:14Z fabien $
  */
 class sfFunctionCache
 {

@@ -23,9 +23,7 @@
  * PropelConfigurationIterator is used internally by PropelConfiguration to
  * build a flat array from nesting configuration arrays.
  *
- * @author     Veikko Mäkinen <veikko@veikko.fi>
- * @version    $Revision: 1262 $
- * @package    propel
+ * @author     Veikko Mï¿½kinen <veikko@veikko.fi>
  */
 class PropelConfigurationIterator extends RecursiveIteratorIterator
 {

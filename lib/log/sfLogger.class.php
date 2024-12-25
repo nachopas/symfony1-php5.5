@@ -21,10 +21,7 @@
  * - INFO:    Informational
  * - DEBUG:   Debug-level messages
  *
- * @package    symfony
- * @subpackage log
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfLogger.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 abstract class sfLogger
 {

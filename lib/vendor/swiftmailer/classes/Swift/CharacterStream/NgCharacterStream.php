@@ -22,8 +22,6 @@
 
 /**
  * A CharacterStream implementation which stores characters in an internal array.
- * @package Swift
- * @subpackage CharacterStream
  * @author Xavier De Cock <xdecock@gmail.com>
  */
 

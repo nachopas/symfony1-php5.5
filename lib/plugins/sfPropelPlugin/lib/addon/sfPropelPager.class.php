@@ -12,10 +12,7 @@
  * This class is the Propel implementation of sfPager.  It interacts with the propel record set and
  * manages criteria.
  *
- * @package    sfPropelPlugin
- * @subpackage addon
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelPager.class.php 27747 2010-02-08 18:02:19Z Kris.Wallsmith $
  */
 class sfPropelPager extends sfPager
 {

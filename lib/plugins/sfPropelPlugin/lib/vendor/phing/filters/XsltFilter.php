@@ -31,9 +31,7 @@ include_once 'phing/filters/ChainableReader.php';
  * @author    Hans Lellelid <hans@velum.net>
  * @author    Yannick Lecaillez <yl@seasonfive.com>
  * @author    Andreas Aderhold <andi@binarycloud.com>
- * @version   $Revision$
  * @see       FilterReader
- * @package   phing.filters
  */
 class XsltFilter extends BaseParamFilterReader implements ChainableReader {
 

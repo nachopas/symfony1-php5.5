@@ -25,8 +25,6 @@ require_once 'propel/engine/builder/util/Pluralizer.php';
  * The default Enlglish pluralizer class.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.generator
  */
 class DefaultEnglishPluralizer implements Pluralizer {
 

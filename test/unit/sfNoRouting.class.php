@@ -11,10 +11,7 @@
 /**
  * sfNoRouting class is a very simple routing class that uses GET parameters.
  *
- * @package    symfony
- * @subpackage routing
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfNoRouting.class.php 20566 2009-07-29 07:04:01Z fabien $
  */
 class sfNoRouting extends sfRouting
 {

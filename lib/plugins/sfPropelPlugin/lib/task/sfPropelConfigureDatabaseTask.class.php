@@ -11,10 +11,7 @@
 /**
  * Configures the database connection.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelConfigureDatabaseTask.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 class sfPropelConfigureDatabaseTask extends sfBaseTask
 {

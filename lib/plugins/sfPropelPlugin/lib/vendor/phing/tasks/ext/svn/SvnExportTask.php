@@ -28,8 +28,6 @@ require_once 'phing/tasks/ext/svn/SvnBaseTask.php';
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
  * @author Andrew Eddie <andrew.eddie@jamboworks.com> 
- * @version $Id: SvnExportTask.php 363 2008-04-10 16:06:37Z tiddy $
- * @package phing.tasks.ext.svn
  * @since 2.2.0
  */
 class SvnExportTask extends SvnBaseTask

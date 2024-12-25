@@ -26,8 +26,6 @@
  *
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Daniel Rall <dlr@collab.net> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 interface IDMethod {
 

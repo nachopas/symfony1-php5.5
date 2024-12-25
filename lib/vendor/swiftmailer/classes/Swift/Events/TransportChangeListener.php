@@ -12,8 +12,6 @@
 /**
  * Listens for changes within the Transport system.
  * 
- * @package Swift
- * @subpackage Events
  * 
  * @author Chris Corbyn
  */

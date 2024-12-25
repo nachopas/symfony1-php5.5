@@ -11,10 +11,7 @@
 /**
  * sfPearRestPlugin interacts with a symfony plugin channel.
  *
- * @package    symfony
- * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPearRestPlugin.class.php 31396 2010-11-15 16:08:26Z fabien $
  */
 class sfPearRestPlugin extends sfPearRest11
 {

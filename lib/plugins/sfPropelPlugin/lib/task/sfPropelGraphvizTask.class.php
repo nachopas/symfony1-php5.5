@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Generates a graphviz chart of current object model.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelGraphvizTask.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfPropelGraphvizTask extends sfPropelBaseTask
 {

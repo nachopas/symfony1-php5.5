@@ -13,10 +13,7 @@ require_once 'PEAR/REST.php';
 /**
  * sfPearRest interacts with a PEAR channel.
  *
- * @package    symfony
- * @subpackage plugin
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPearRest.class.php 10677 2008-08-05 19:11:48Z fabien $
  */
 class sfPearRest extends PEAR_REST
 {

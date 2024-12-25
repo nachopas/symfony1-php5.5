@@ -20,8 +20,6 @@
 
 /**
  * A basic KeyCache backed by an array.
- * @package Swift
- * @subpackage KeyCache
  * @author Xavier De Cock <xdecock@gmail.com>
  */
 class Swift_KeyCache_DummyKeyCache implements Swift_KeyCache

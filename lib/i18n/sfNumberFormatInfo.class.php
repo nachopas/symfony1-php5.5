@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfNumberFormatInfo.class.php 28725 2010-03-23 16:56:48Z FabianLange $
- * @package    symfony
- * @subpackage i18n
  */
  
 /**
@@ -38,9 +35,6 @@
  *
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Sun Dec 05 14:48:26 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 class sfNumberFormatInfo
 {

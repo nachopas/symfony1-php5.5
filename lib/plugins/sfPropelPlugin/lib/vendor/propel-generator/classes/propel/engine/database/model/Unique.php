@@ -31,8 +31,6 @@ include_once 'propel/engine/database/model/Index.php';
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Jason van Zyl <jvanzyl@apache.org> (Torque)
  * @author     Daniel Rall <dlr@collab.net> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class Unique extends Index {
 

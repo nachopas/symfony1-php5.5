@@ -11,10 +11,7 @@
 /**
  * sfWidgetForm is the base class for all form widgets.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetForm.class.php 33596 2012-11-21 14:14:21Z fabien $
  */
 abstract class sfWidgetForm extends sfWidget
 {

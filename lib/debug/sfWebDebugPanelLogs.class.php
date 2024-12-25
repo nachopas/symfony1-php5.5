@@ -11,10 +11,7 @@
 /**
  * sfWebDebugPanelLogs adds a panel to the web debug toolbar with log messages.
  *
- * @package    symfony
- * @subpackage debug
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWebDebugPanelLogs.class.php 22182 2009-09-19 18:51:53Z Kris.Wallsmith $
  */
 class sfWebDebugPanelLogs extends sfWebDebugPanel
 {

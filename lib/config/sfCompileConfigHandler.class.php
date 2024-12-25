@@ -13,11 +13,8 @@
  * sfCompileConfigHandler gathers multiple files and puts them into a single file.
  * Upon creation of the new file, all comments and blank lines are removed.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfCompileConfigHandler.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfCompileConfigHandler extends sfYamlConfigHandler
 {

@@ -26,8 +26,6 @@ require_once 'phing/types/FileSet.php';
  * all subclasses of PHPUnit(2)_Framework_TestCase / PHPUnit(2)_Framework_TestSuite.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: BatchTest.php 350 2008-02-06 15:06:57Z mrook $
- * @package phing.tasks.ext.phpunit
  * @since 2.1.0
  */
 class BatchTest

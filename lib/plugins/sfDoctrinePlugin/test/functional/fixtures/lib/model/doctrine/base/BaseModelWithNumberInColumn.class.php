@@ -16,10 +16,7 @@
  * @method ModelWithNumberInColumn setColumn2()   Sets the current record's "column2" value
  * @method ModelWithNumberInColumn setColumn3()   Sets the current record's "column__3" value
  * 
- * @package    symfony12
- * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseModelWithNumberInColumn extends myDoctrineRecord
 {

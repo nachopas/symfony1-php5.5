@@ -23,13 +23,10 @@
  * Doctrine_Sequence
  * The base class for sequence handling drivers.
  *
- * @package     Doctrine
- * @subpackage  Sequence
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  */
 class Doctrine_Sequence extends Doctrine_Connection_Module
 {

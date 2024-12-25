@@ -24,12 +24,9 @@
  * sets a delete flag instead of actually deleting the record and all queries automatically
  * include a check for the deleted flag to exclude deleted records.
  *
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */

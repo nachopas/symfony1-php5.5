@@ -27,8 +27,6 @@
  * is valid.
  *
  * @author     Michael Aichler <aichler@mediacluster.de>
- * @version    $Revision: 1262 $
- * @package    propel.validator
  */
 interface BasicValidator
 {

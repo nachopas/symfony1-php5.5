@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormInput represents an HTML text input tag.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormInputText.class.php 30762 2010-08-25 12:33:33Z fabien $
  */
 class sfWidgetFormInputText extends sfWidgetFormInput
 {

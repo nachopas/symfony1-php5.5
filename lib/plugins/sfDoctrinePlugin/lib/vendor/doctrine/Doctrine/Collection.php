@@ -23,12 +23,9 @@
  * Doctrine_Collection
  * Collection of Doctrine_Record objects.
  *
- * @package     Doctrine
- * @subpackage  Collection
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7686 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Collection extends Doctrine_Access implements Countable, IteratorAggregate, Serializable

@@ -11,10 +11,7 @@
 /**
  * Abstract class for all tasks.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTask.class.php 33151 2011-10-24 08:55:03Z fabien $
  */
 abstract class sfTask
 {

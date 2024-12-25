@@ -14,11 +14,8 @@
  *
  * This class extends BaseForm, a class generated automatically with each new project.
  *
- * @package    symfony
- * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfFormDoctrine.class.php 32740 2011-07-09 09:24:03Z fabien $
  */
 abstract class sfFormDoctrine extends sfFormObject
 {

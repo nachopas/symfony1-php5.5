@@ -5,7 +5,6 @@
  *
  * 
  *
- * @package lib.model
  */ 
 class MoviePeer extends BaseMoviePeer
 {

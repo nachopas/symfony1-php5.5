@@ -12,11 +12,8 @@
 /**
  * sfWebDebugPanelDoctrine adds a panel to the web debug toolbar with Doctrine information.
  *
- * @package    symfony
- * @subpackage debug
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfWebDebugPanelDoctrine.class.php 28999 2010-04-06 17:42:14Z Kris.Wallsmith $
  */
 class sfWebDebugPanelDoctrine extends sfWebDebugPanel
 {

@@ -11,10 +11,7 @@
 /**
  * Manages behaviors for propel. Implements hooks for propel objects.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelBehavior.class.php 12809 2008-11-09 09:14:58Z fabien $
  */
 class sfPropelBehavior
 {

@@ -31,8 +31,6 @@ include_once 'phing/types/Reference.php';
  * @author    Jeff Martin <jeff@custommonkey.org> (Ant)
  * @author    Michael McCallum <gholam@xtra.co.nz> (Ant)
  * @author    Tim Stephenson <tim.stephenson@sybase.com> (Ant)
- * @version   $Revision: 1.13 $
- * @package   phing.tasks.system
  */
 abstract class CreoleTask extends Task {
 

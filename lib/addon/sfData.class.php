@@ -12,10 +12,7 @@
  * This class defines the interface for interacting with data, as well
  * as default implementations.
  *
- * @package    symfony
- * @subpackage addon
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfData.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 abstract class sfData
 {

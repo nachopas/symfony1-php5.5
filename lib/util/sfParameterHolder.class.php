@@ -15,11 +15,8 @@
  * Parameters, in this case, are used to extend classes with additional data
  * that requires no additional logic to manage.
  *
- * @package    symfony
- * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfParameterHolder.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfParameterHolder implements Serializable
 {

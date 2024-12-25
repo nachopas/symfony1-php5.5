@@ -32,7 +32,6 @@ require_once 'propel/engine/builder/om/PeerBuilder.php';
  * to customize (through extending & overriding).
  *
  * @author     heltem <heltem@o2php.com>
- * @package    propel.engine.builder.om.php5
  */
 class PHP5NestedSetPeerBuilder extends PeerBuilder {
 
@@ -91,7 +90,6 @@ require '".$this->getPeerBuilder()->getClassFilePath()."';
  *";
 		}
 		$script .= "
- * @package    ".$this->getPackage()."
  */
 abstract class ".$this->getClassname()." extends ".$this->getPeerBuilder()->getClassName()." implements NodePeer {
 ";

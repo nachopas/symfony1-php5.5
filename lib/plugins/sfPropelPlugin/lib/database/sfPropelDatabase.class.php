@@ -11,10 +11,7 @@
 /**
  * A symfony database driver for Propel.
  *
- * @package    sfPropelPlugin
- * @subpackage database
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelDatabase.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfPropelDatabase extends sfPDODatabase
 {

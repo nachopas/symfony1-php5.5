@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfNumberFormat.class.php 32678 2011-06-29 16:43:32Z fabien $
- * @package    symfony
- * @subpackage i18n
  */
 
 /**
@@ -57,9 +54,6 @@
  * For each culture, the symbol for each currency may be different.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Fri Dec 10 18:10:20 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 class sfNumberFormat
 {

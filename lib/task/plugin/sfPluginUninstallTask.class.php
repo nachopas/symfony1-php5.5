@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPluginBaseTask.class.php');
 /**
  * Uninstall a plugin.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPluginUninstallTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPluginUninstallTask extends sfPluginBaseTask
 {

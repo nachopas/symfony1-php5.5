@@ -13,10 +13,7 @@
  *
  * A Propel route can represent a single Propel object or a list of objects.
  *
- * @package    symfony
- * @subpackage routing
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelRoute.class.php 21924 2009-09-11 14:59:26Z fabien $
  */
 class sfPropelRoute extends sfObjectRoute
 {

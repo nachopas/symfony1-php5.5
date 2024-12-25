@@ -36,10 +36,8 @@ include_once 'phing/filters/ChainableReader.php';
  *
  * @author    <a href="mailto:yl@seasonfive.com">Yannick Lecaillez</a>
  * @author    hans lellelid, hans@velum.net
- * @version   $Revision: 1.8 $ $Date: 2007-12-20 16:44:58 +0100 (Thu, 20 Dec 2007) $
  * @access    public
  * @see       BaseParamFilterReader
- * @package   phing.filters
  */
 class StripLineBreaks extends BaseParamFilterReader implements ChainableReader {
 

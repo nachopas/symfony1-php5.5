@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormInputFile represents an upload HTML input tag.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormInputFile.class.php 30762 2010-08-25 12:33:33Z fabien $
  */
 class sfWidgetFormInputFile extends sfWidgetFormInput
 {

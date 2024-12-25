@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Generates a Doctrine module.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfDoctrineGenerateModuleTask.class.php 24637 2009-12-01 05:06:21Z Kris.Wallsmith $
  */
 class sfDoctrineGenerateModuleTask extends sfDoctrineBaseTask
 {

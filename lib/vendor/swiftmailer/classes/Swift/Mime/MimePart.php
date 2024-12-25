@@ -12,8 +12,6 @@
 /**
  * A MIME part, in a multipart message.
  * 
- * @package Swift
- * @subpackage Mime
  * @author Chris Corbyn
  */
 class Swift_Mime_MimePart extends Swift_Mime_SimpleMimeEntity

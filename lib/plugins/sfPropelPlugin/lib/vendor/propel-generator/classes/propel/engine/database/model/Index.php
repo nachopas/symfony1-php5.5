@@ -28,8 +28,6 @@ include_once 'propel/engine/EngineException.php';
  *
  * @author     Jason van Zyl <vanzyl@apache.org>
  * @author     Daniel Rall <dlr@finemaltcoding.com>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class Index extends XMLElement {
 

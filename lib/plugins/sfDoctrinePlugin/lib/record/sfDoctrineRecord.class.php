@@ -13,11 +13,8 @@
  * Base sfDoctrineRecord extends the base Doctrine_Record in Doctrine to provide some
  * symfony specific functionality to Doctrine_Records
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineRecord.class.php 29659 2010-05-28 16:49:48Z Kris.Wallsmith $
  */
 abstract class sfDoctrineRecord extends Doctrine_Record
 {

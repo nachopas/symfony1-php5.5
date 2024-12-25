@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfCultureInfo.class.php 33361 2012-03-08 13:48:42Z fabien $
- * @package    symfony
- * @subpackage i18n
  */
 
 /**
@@ -45,9 +42,6 @@
  * For example, Australian English is "en_AU".
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Sat Dec 04 13:41:46 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 class sfCultureInfo
 {

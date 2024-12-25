@@ -11,8 +11,6 @@
 
 /**
  * A generic IoBuffer implementation supporting remote sockets and local processes.
- * @package Swift
- * @subpackage Transport
  * @author Chris Corbyn
  */
 class Swift_Transport_StreamBuffer

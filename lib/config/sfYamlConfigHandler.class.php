@@ -12,10 +12,7 @@
  * sfYamlConfigHandler is a base class for YAML (.yml) configuration handlers. This class
  * provides a central location for parsing YAML files.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfYamlConfigHandler.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 abstract class sfYamlConfigHandler extends sfConfigHandler
 {

@@ -13,10 +13,7 @@
  *
  * A field is a named validator.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorSchema.class.php 22446 2009-09-26 07:55:47Z fabien $
  */
 class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
 {

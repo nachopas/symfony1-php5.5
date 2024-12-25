@@ -11,10 +11,7 @@
 /**
  * sfValidatorI18nChoiceLanguage validates than the value is a valid timezone.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorI18nChoiceTimezone.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfValidatorI18nChoiceTimezone extends sfValidatorChoice
 {

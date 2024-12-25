@@ -28,8 +28,6 @@ include_once 'propel/engine/database/model/Rule.php';
  * Validator.
  *
  * @author     Michael Aichler <aichler@mediacluster.de> (Propel)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class Validator extends XMLElement {
 

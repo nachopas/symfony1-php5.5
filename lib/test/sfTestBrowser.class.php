@@ -16,10 +16,7 @@ require_once(__DIR__.'/../vendor/lime/lime.php');
  * sfTestFunctional is backward compatible class for symfony 1.0, and 1.1.
  * For new code, you can use the sfTestFunctional class directly.
  *
- * @package    symfony
- * @subpackage test
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTestBrowser.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfTestBrowser extends sfTestFunctional
 {

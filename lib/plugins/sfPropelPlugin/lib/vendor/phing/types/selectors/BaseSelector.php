@@ -28,7 +28,6 @@ require_once 'phing/types/selectors/FileSelector.php';
  * they implement FileSelector.
  *
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a>
- * @package phing.types.selectors
  */
 abstract class BaseSelector extends DataType implements FileSelector {
 

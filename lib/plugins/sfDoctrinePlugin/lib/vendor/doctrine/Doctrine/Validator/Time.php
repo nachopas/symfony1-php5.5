@@ -22,12 +22,9 @@
 /**
  * Doctrine_Validator_Time
  *
- * @package     Doctrine
- * @subpackage  Validator
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 3884 $
  * @author      Mark Pearson <mark.pearson0@googlemail.com>
  */
 class Doctrine_Validator_Time extends Doctrine_Validator_Driver

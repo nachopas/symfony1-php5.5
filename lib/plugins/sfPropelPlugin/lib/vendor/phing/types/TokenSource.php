@@ -44,7 +44,6 @@ include_once 'phing/util/StringHelper.php';
  * </filterreader>
  *
  * @author    <a href="mailto:yl@seasonfive.com">Yannick Lecaillez</a>
- * @package   phing.types
  */
 class TokenSource extends DataType {
 

@@ -5,8 +5,6 @@
  *
  * @method ProductI18n getObject() Returns the current form's model object
  *
- * @package    ##PROJECT_NAME##
- * @subpackage form
  * @author     Your name here
  */
 abstract class BaseProductI18nForm extends BaseFormPropel

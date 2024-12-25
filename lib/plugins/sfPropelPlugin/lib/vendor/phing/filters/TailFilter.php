@@ -37,10 +37,8 @@ require_once 'phing/filters/BaseParamFilterReader.php';
  *
  * @author    <a href="mailto:yl@seasonfive.com">Yannick Lecaillez</a>
  * @author    hans lellelid, hans@velum.net
- * @copyright © 2003 seasonfive. All rights reserved
- * @version   $Revision: 1.7 $
+ * @copyright ï¿½ 2003 seasonfive. All rights reserved
  * @see       BaseParamFilterReader
- * @package   phing.filters
  */
 class TailFilter extends BaseParamFilterReader implements ChainableReader {
 

@@ -27,8 +27,6 @@ include_once 'propel/engine/database/model/AppData.php';
  * A task to generate Graphviz dot files from Propel datamodel.
  *
  * @author     Mark Kimsal
- * @version    $Revision: 1262 $
- * @package    propel.phing
  */
 class PropelGraphvizTask extends AbstractPropelDataModelTask {
 

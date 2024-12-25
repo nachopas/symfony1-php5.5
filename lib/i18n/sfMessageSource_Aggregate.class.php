@@ -11,10 +11,7 @@
 /**
  * sfMessageSource_Aggregate aggregates several message source objects.
  *
- * @package    symfony
- * @subpackage i18n
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfMessageSource_Aggregate.class.php 33249 2011-12-12 15:50:45Z fabien $
  */
 class sfMessageSource_Aggregate extends sfMessageSource
 {

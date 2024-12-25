@@ -24,12 +24,9 @@
  * 
  * Interface for easily executing Doctrine_Task classes from a command line interface
  *
- * @package     Doctrine
- * @subpackage  Cli
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 2761 $
  * @author      Jonathan H. Wage <jwage@mac.com>
  */
 class Doctrine_Cli

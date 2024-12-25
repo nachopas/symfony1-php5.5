@@ -32,7 +32,6 @@ require_once 'propel/engine/builder/om/ObjectBuilder.php';
  * to customize (through extending & overriding).
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.om.php5
  */
 class PHP5NodeBuilder extends ObjectBuilder {
 
@@ -88,7 +87,6 @@ class PHP5NodeBuilder extends ObjectBuilder {
  *";
 		}
 		$script .= "
- * @package    ".$this->getPackage()."
  */
 abstract class ".$this->getClassname()." implements IteratorAggregate {
 ";

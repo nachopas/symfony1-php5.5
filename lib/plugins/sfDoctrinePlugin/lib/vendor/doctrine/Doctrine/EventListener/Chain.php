@@ -25,12 +25,9 @@
  * useful for having multiple listeners listening the events at the same time
  *
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @package     Doctrine
- * @subpackage  EventListener
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  */
 class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_EventListener_Interface
 {

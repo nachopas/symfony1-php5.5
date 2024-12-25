@@ -12,11 +12,8 @@
 /**
  * sfSecurityException is thrown when a security related error occurs.
  *
- * @package    symfony
- * @subpackage exception
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfSecurityException.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfSecurityException extends sfException
 {

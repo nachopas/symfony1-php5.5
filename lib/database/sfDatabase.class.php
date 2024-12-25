@@ -13,11 +13,8 @@
  * sfDatabase is a base abstraction class that allows you to setup any type of
  * database connection via a configuration file.
  *
- * @package    symfony
- * @subpackage database
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfDatabase.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 abstract class sfDatabase
 {

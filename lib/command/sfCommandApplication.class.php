@@ -11,10 +11,7 @@
 /**
  * sfCommandApplication manages the lifecycle of a CLI application.
  *
- * @package    symfony
- * @subpackage command
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfCommandApplication.class.php 33151 2011-10-24 08:55:03Z fabien $
  */
 abstract class sfCommandApplication
 {

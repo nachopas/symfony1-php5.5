@@ -19,10 +19,7 @@
  * @method UniqueTest setUniqueTest3()  Sets the current record's "unique_test3" value
  * @method UniqueTest setUniqueTest4()  Sets the current record's "unique_test4" value
  * 
- * @package    symfony12
- * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseUniqueTest extends myDoctrineRecord
 {

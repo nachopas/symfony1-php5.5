@@ -28,8 +28,6 @@ include_once 'propel/engine/database/model/NameGenerator.php';
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
  * @author     Byron Foster <byron_foster@yahoo.com> (Torque)
  * @author     Bernd Goldschmidt <bgoldschmidt@rapidsoft.de>
- * @version    $Revision: 1514 $
- * @package    propel.engine.database.model
  */
 class PhpNameGenerator implements NameGenerator {
 

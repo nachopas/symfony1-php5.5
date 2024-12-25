@@ -22,13 +22,10 @@
 /**
  * Doctrine_Data_Import
  *
- * @package     Doctrine
- * @package     Data
  * @author      Jonathan H. Wage <jwage@mac.com>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 2552 $
  */
 class Doctrine_Data_Import extends Doctrine_Data
 {

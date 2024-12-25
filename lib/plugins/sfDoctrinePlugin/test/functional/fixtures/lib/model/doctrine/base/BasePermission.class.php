@@ -16,10 +16,7 @@
  * @method Permission          setUsers()  Sets the current record's "Users" collection
  * @method Permission          setGroups() Sets the current record's "Groups" collection
  * 
- * @package    symfony12
- * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BasePermission extends myDoctrineRecord
 {

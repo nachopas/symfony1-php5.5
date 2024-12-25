@@ -23,10 +23,8 @@
  * Stores the file name and line number of a XML file
  *
  * @author      Andreas Aderhold <andi@binarycloud.com>
- * @copyright © 2001,2002 THYRELL. All rights reserved
- * @version   $Revision: 1.6 $ $Date: 2006-09-14 22:19:08 +0200 (Thu, 14 Sep 2006) $
+ * @copyright ï¿½ 2001,2002 THYRELL. All rights reserved
  * @access    public
- * @package   phing.parser
  */
 
 class Location {

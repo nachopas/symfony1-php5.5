@@ -31,8 +31,6 @@ include_once 'phing/util/StringHelper.php';
  * @author    Stefano Mazzocchi <stefano@apache.org> (Ant)
  * @author    Stefan Bodewig <stefan.bodewig@epost.de> (Ant)
  * @author    Magesh Umasankar
- * @version   $Revision: 1.10 $
- * @package   phing.tasks.ext
  */
 class TarTask extends MatchingTask {
     

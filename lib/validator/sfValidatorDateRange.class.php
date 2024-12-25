@@ -11,10 +11,7 @@
 /**
  * sfValidatorDateRange validates a range of date. It also converts the input values to valid dates.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorDateRange.class.php 32810 2011-07-21 05:18:56Z fabien $
  */
 class sfValidatorDateRange extends sfValidatorBase
 {

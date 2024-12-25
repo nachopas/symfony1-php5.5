@@ -12,11 +12,8 @@
 /**
  * Manages propel database schemas as YAML and XML.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     François Zaninotto <francois.zaninotto@symfony-project.com>
- * @version    SVN: $Id: sfPropelDatabaseSchema.class.php 24392 2009-11-25 18:35:39Z FabianLange $
  */
 class sfPropelDatabaseSchema
 {

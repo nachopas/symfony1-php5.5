@@ -11,10 +11,7 @@
 /**
  * Cache class that stores cached content in APC.
  *
- * @package    symfony
- * @subpackage cache
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfAPCCache.class.php 21990 2009-09-13 21:09:18Z FabianLange $
  */
 class sfAPCCache extends sfCache
 {

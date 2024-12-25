@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormI18nDateTime represents a date and time widget.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormI18nDateTime.class.php 15086 2009-01-30 00:23:45Z FabianLange $
  */
 class sfWidgetFormI18nDateTime extends sfWidgetFormDateTime
 {

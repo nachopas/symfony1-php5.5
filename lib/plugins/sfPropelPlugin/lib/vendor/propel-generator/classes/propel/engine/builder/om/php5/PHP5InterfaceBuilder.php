@@ -32,7 +32,6 @@ require_once 'propel/engine/builder/om/ObjectBuilder.php';
  * to customize (through extending & overriding).
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.om.php5
  */
 class PHP5InterfaceBuilder extends ObjectBuilder {
 
@@ -86,7 +85,6 @@ class PHP5InterfaceBuilder extends ObjectBuilder {
  * application requirements.  This interface will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    ".$this->getPackage()."
  */
 interface ".$this->getClassname()." {
 ";

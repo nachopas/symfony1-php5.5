@@ -25,8 +25,6 @@ require_once 'propel/engine/database/reverse/BaseSchemaParser.php';
  * Postgresql database schema parser.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1397 $
- * @package    propel.engine.database.reverse.pgsql
  */
 class PgsqlSchemaParser extends BaseSchemaParser {
 

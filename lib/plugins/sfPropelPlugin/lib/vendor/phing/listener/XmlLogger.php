@@ -30,8 +30,6 @@ require_once 'phing/system/util/Timer.php';
  * with the property <code>XmlLogger.file</code>.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: XmlLogger.php 291 2007-11-04 15:23:03Z hans $
- * @package phing.listener
  */	
 class XmlLogger implements BuildLogger {
 	

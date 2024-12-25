@@ -37,7 +37,6 @@
  * @author     Hans Lellelid <hans@xmpl.org>
  * @author     Christian Abegg <abegg.ch@gmail.com>
  * @since      2006-09-22
- * @package    propel.util
  */
 class PropelPDO extends PDO {
 

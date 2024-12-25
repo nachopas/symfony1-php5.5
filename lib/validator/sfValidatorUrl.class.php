@@ -11,10 +11,7 @@
 /**
  * sfValidatorUrl validates Urls.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorUrl.class.php 22149 2009-09-18 14:09:53Z Kris.Wallsmith $
  */
 class sfValidatorUrl extends sfValidatorRegex
 {

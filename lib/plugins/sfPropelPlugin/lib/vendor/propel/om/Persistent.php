@@ -25,8 +25,6 @@
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     John D. McNally <jmcnally@collab.net> (Torque)
  * @author     Fedor K. <fedor@apache.org> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.om
  */
 interface Persistent {
 

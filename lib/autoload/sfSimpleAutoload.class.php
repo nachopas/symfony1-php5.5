@@ -14,10 +14,7 @@
  * This class is a singleton as PHP seems to be unable to register 2 autoloaders that are instances
  * of the same class (why?).
  *
- * @package    symfony
- * @subpackage autoload
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfSimpleAutoload.class.php 23205 2009-10-20 13:20:17Z Kris.Wallsmith $
  */
 class sfSimpleAutoload
 {

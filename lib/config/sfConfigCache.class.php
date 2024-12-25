@@ -14,11 +14,8 @@
  * make it easy-to-use, yet still provide a PHP formatted result for direct
  * inclusion into your modules.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfConfigCache.class.php 32639 2011-06-11 13:28:46Z fabien $
  */
 class sfConfigCache
 {

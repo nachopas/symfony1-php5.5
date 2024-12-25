@@ -32,7 +32,6 @@ require_once 'propel/engine/builder/om/PeerBuilder.php';
  * to customize (through extending & overriding).
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.om.php5
  */
 class PHP5ExtensionNodePeerBuilder extends PeerBuilder {
 
@@ -89,7 +88,6 @@ require '".$this->getNodePeerBuilder()->getClassFilePath()."';
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  *
- * @package    ".$this->getPackage()."
  */
 class ".$this->getClassname()." extends $baseClassname {
 ";

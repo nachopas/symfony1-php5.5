@@ -29,8 +29,6 @@ require_once 'phing/tasks/ext/dbdeploy/DbmsSyntaxFactory.php';
  *  <dbdeploy url="mysql:host=localhost;dbname=test" userid="dbdeploy" password="dbdeploy" dir="db" outputfile=""> 
  * 
  *  @author   Luke Crouch at SourceForge (http://sourceforge.net)
- *  @version  $Revision: 1.1 $
- *  @package  phing.tasks.ext.dbdeploy
  */
 
 class DbDeployTask extends Task {

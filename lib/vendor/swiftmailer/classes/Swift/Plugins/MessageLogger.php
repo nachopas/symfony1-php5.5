@@ -10,8 +10,6 @@
 
 /**
  * Stores all sent emails for further usage.
- * @package Swift
- * @subpackage Plugins
  * @author Fabien Potencier
  */
 class Swift_Plugins_MessageLogger

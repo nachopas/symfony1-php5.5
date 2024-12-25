@@ -12,11 +12,8 @@
 /**
  * TextHelper.
  *
- * @package    symfony
- * @subpackage helper
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     David Heinemeier Hansson
- * @version    SVN: $Id: TextHelper.php 33022 2011-09-15 05:27:12Z fabien $
  */
 
 /**

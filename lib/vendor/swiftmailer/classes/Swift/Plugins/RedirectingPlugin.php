@@ -10,8 +10,6 @@
 
 /**
  * Redirects all email to a single recipient.
- * @package Swift
- * @subpackage Plugins
  * @author Fabien Potencier
  */
 class Swift_Plugins_RedirectingPlugin

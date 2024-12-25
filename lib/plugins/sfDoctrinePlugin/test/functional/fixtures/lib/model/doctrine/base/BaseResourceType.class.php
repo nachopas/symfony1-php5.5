@@ -13,10 +13,7 @@
  * @method ResourceType setId()   Sets the current record's "id" value
  * @method ResourceType setName() Sets the current record's "name" value
  * 
- * @package    symfony12
- * @subpackage model
  * @author     Your name here
- * @version    SVN: $Id: Builder.php 7490 2010-03-29 19:53:27Z jwage $
  */
 abstract class BaseResourceType extends myDoctrineRecord
 {

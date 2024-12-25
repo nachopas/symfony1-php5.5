@@ -14,11 +14,8 @@
  * configuration file that will be created for you automatically upon first
  * request.
  *
- * @package    symfony
- * @subpackage config
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfDatabaseConfigHandler.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfDatabaseConfigHandler extends sfYamlConfigHandler
 {

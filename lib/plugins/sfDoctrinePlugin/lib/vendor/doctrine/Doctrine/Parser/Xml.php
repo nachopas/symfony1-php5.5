@@ -22,12 +22,9 @@
 /**
  * Doctrine_Parser_Xml
  *
- * @package     Doctrine
- * @subpackage  Parser
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 1080 $
  * @author      Jonathan H. Wage <jwage@mac.com>
  */
 class Doctrine_Parser_Xml extends Doctrine_Parser

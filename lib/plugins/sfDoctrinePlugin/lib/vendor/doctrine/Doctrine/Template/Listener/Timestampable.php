@@ -23,12 +23,9 @@
  * Listener for the Timestampable behavior which automatically sets the created
  * and updated columns when a record is inserted and updated.
  *
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Template_Listener_Timestampable extends Doctrine_Record_Listener

@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Create form classes for the current model.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelBuildFormsTask.class.php 23927 2009-11-14 16:10:57Z fabien $
  */
 class sfPropelBuildFormsTask extends sfPropelBaseTask
 {

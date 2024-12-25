@@ -27,8 +27,6 @@ include_once 'propel/engine/database/model/PropelTypes.php';
  * Default implementation for the Platform interface.
  *
  * @author     Martin Poeschl <mpoeschl@marmot.at> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine.platform
  */
 class DefaultPlatform implements Platform {
 

@@ -11,10 +11,7 @@
 /**
  * sfI18N wraps the core i18n classes for a symfony context.
  *
- * @package    symfony
- * @subpackage i18n
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfI18N.class.php 29520 2010-05-19 11:47:08Z fabien $
  */
 class sfI18N
 {

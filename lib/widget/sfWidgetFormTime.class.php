@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormTime represents a time widget.
  *
- * @package    symfony
- * @subpackage widget
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfWidgetFormTime.class.php 30762 2010-08-25 12:33:33Z fabien $
  */
 class sfWidgetFormTime extends sfWidgetForm
 {

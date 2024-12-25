@@ -14,8 +14,6 @@ require_once __DIR__ . '/../../Encoder/Base64Encoder.php';
 
 /**
  * Handles Base64 (B) Header Encoding in Swift Mailer.
- * @package Swift
- * @subpackage Mime
  * @author Chris Corbyn
  */
 class Swift_Mime_HeaderEncoder_Base64HeaderEncoder

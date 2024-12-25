@@ -17,10 +17,7 @@
 /**
  * Extracts i18n strings from php files.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfI18nExtractTask.class.php 9883 2008-06-26 09:04:13Z FabianLange $
  */
 class sfI18nExtractTask extends sfBaseTask
 {

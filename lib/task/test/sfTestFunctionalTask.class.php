@@ -11,10 +11,7 @@
 /**
  * Launches functional tests.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTestFunctionalTask.class.php 29415 2010-05-12 06:24:54Z fabien $
  */
 class sfTestFunctionalTask extends sfTestBaseTask
 {

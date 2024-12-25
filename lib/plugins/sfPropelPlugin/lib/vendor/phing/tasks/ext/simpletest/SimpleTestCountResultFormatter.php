@@ -25,8 +25,6 @@ require_once 'phing/tasks/ext/simpletest/SimpleTestResultFormatter.php';
  * Dummy result formatter used to count SimpleTest results
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: SimpleTestCountResultFormatter.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.simpletest
  * @since 2.2.0
  */
 class SimpleTestCountResultFormatter extends SimpleTestResultFormatter

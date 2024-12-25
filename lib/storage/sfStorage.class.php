@@ -12,11 +12,8 @@
 /**
  * sfStorage allows you to customize the way symfony stores its persistent data.
  *
- * @package    symfony
- * @subpackage storage
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfStorage.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 abstract class sfStorage
 {

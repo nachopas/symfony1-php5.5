@@ -3,9 +3,6 @@
 /**
  * Article form.
  *
- * @package    form
- * @subpackage article
- * @version    SVN: $Id: ArticleForm.class.php 14010 2008-12-13 14:27:57Z Kris.Wallsmith $
  */
 class ArticleForm extends BaseArticleForm
 {

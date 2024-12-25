@@ -12,11 +12,8 @@
 /**
  * Base class for all sfStorage that uses a sfDatabase object as a storage.
  *
- * @package    symfony
- * @subpackage storage
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfDatabaseSessionStorage.class.php 22037 2009-09-15 11:00:20Z fabien $
  */
 abstract class sfDatabaseSessionStorage extends sfSessionStorage
 {

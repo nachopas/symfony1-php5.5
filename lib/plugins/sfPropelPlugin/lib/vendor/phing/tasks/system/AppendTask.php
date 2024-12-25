@@ -47,8 +47,6 @@ include_once 'phing/types/FileSet.php';
  *     <filelist dir="book/" listfile="book/PhingGuide.book"/>            
  * </append>
  * </code>
- * @package phing.tasks.system
- * @version $Revision: 1.14 $
  */
 class AppendTask extends Task {
     

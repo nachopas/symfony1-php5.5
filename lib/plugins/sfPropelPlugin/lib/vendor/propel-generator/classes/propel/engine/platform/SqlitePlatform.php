@@ -25,8 +25,6 @@ require_once 'propel/engine/platform/DefaultPlatform.php';
  * SQLite Platform implementation.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.platform
  */
 class SqlitePlatform extends DefaultPlatform {
 

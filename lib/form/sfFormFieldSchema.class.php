@@ -11,10 +11,7 @@
 /**
  * sfFormFieldSchema represents an array of widgets bind to names and values.
  *
- * @package    symfony
- * @subpackage form
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFormFieldSchema.class.php 23214 2009-10-20 18:11:23Z Kris.Wallsmith $
  */
 class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Countable
 {

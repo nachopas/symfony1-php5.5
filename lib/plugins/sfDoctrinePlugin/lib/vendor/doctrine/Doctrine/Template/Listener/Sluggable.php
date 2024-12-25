@@ -22,12 +22,9 @@
 /**
  * Easily create a slug for each record based on a specified set of fields
  *
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Template_Listener_Sluggable extends Doctrine_Record_Listener

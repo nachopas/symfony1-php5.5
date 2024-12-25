@@ -17,11 +17,8 @@
  * # <b>auto_start</b>   - [Yes]     - Should session_start() automatically be called?
  * # <b>session_name</b> - [symfony] - The name of the session.
  *
- * @package    symfony
- * @subpackage storage
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfSessionStorage.class.php 31471 2010-11-22 19:32:02Z fabien $
  */
 class sfSessionStorage extends sfStorage
 {

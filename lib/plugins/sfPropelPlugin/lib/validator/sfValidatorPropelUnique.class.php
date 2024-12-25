@@ -15,10 +15,7 @@
  * To avoid this issue, wrap the validation process and the model saving
  * inside a transaction.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorPropelUnique.class.php 27940 2010-02-12 13:31:30Z Kris.Wallsmith $
  */
 class sfValidatorPropelUnique extends sfValidatorSchema
 {

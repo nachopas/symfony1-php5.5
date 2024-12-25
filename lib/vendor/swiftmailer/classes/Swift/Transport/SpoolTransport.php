@@ -10,7 +10,6 @@
 
 /**
  * Stores Messages in a queue.
- * @package Swift
  * @author  Fabien Potencier
  */
 class Swift_Transport_SpoolTransport implements Swift_Transport

@@ -12,8 +12,6 @@
 /**
  * A collection of MIME headers.
  * 
- * @package Swift
- * @subpackage Mime
  * 
  * @author Chris Corbyn
  */

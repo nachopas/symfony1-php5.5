@@ -12,10 +12,7 @@
 /**
  * sfDoctrine pager class.
  *
- * @package    sfDoctrinePlugin
- * @subpackage pager
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrinePager.class.php 28897 2010-03-30 20:30:24Z Jonathan.Wage $
  */
 class sfDoctrinePager extends sfPager implements Serializable
 {

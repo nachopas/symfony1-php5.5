@@ -20,8 +20,6 @@
 /**
  * Doctrine_Validator_Readonly
  *
- * @package     Doctrine
- * @subpackage  Validator
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @author      Adam Huttler <ahuttler@geminisbs.com>

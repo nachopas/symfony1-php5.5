@@ -73,8 +73,6 @@ include_once 'phing/types/FileSet.php';
  * see a more complete example of how to call this script.
  * 
  * @author   Hans Lellelid <hans@xmpl.org>
- * @package  phing.tasks.ext
- * @version  $Revision: 1.9 $
  */
 class PearPackageTask extends MatchingTask {
     

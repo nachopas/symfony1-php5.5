@@ -28,10 +28,8 @@ require_once 'phing/tasks/system/condition/ConditionBase.php';
  *  and vice versa.
  *
  *  @author    Andreas Aderhold <andi@binarycloud.com>
- *  @copyright © 2001,2002 THYRELL. All rights reserved
- *  @version   $Revision: 1.6 $ $Date: 2006-03-10 15:31:51 +0100 (Fri, 10 Mar 2006) $
+ *  @copyright ï¿½ 2001,2002 THYRELL. All rights reserved
  *  @access    public
- *  @package   phing.tasks.system.condition
  */
 class NotCondition extends ConditionBase implements Condition {
 

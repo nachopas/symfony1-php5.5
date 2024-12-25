@@ -30,8 +30,6 @@ require_once 'phing/tasks/ext/phpunit/phpunit2/PHPUnit2ResultFormatter.php';
  * Prints XML output of the test to a specified Writer
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: XMLPHPUnit2ResultFormatter.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.phpunit.phpunit2
  * @since 2.1.0
  */
 class XMLPHPUnit2ResultFormatter extends PHPUnit2ResultFormatter

@@ -32,8 +32,6 @@
  * @author     Eric Dobbs <eric@dobbse.net> (Torque)
  * @author     Henning P. Schmiedehausen <hps@intermeta.de> (Torque)
  * @author     Sam Joseph <sam@neurogrid.com> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.util
  */
 class Criteria implements IteratorAggregate {
 
@@ -1215,7 +1213,6 @@ class Criteria implements IteratorAggregate {
  * to doing it this way, but it makes sense -- and simpler code.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.util
  */
 class CriterionIterator implements Iterator {
 
@@ -1262,7 +1259,6 @@ class CriterionIterator implements Iterator {
  * In Torque this is an inner class of the Criteria class.
  *
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
- * @package    propel.util
  */
 class Criterion  {
 

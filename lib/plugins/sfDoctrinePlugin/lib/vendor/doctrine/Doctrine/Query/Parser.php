@@ -22,12 +22,9 @@
 /**
  * Doctrine_Query_Parser
  *
- * @package     Doctrine
- * @subpackage  Query
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  */
 class Doctrine_Query_Parser 
 {

@@ -22,12 +22,9 @@
 /**
  * Doctrine_Expression_Pgsql
  *
- * @package     Doctrine
- * @subpackage  Expression
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7685 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_Expression_Pgsql extends Doctrine_Expression_Driver

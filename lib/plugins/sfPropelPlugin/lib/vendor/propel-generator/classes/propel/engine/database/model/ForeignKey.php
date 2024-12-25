@@ -27,8 +27,6 @@ require_once 'propel/engine/database/model/XMLElement.php';
  * @author     Hans Lellelid <hans@xmpl.org>
  * @author     Fedor <fedor.karpelevitch@home.com>
  * @author     Daniel Rall <dlr@finemaltcoding.com>
- * @version    $Revision: 1448 $
- * @package    propel.engine.database.model
  */
 class ForeignKey extends XMLElement {
 

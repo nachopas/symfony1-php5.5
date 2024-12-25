@@ -11,10 +11,7 @@
 /**
  * sfError404Exception is thrown when a 404 error occurs in an action.
  *
- * @package    symfony
- * @subpackage exception
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfError404Exception.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfError404Exception extends sfException
 {

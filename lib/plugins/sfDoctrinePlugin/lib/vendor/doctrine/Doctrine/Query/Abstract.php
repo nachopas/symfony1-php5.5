@@ -22,12 +22,9 @@
 /**
  * Doctrine_Query_Abstract
  *
- * @package     Doctrine
- * @subpackage  Query
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 1393 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @todo        See {@link Doctrine_Query}
  */

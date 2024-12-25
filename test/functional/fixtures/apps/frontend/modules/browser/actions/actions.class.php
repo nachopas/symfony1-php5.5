@@ -3,10 +3,7 @@
 /**
  * browser actions.
  *
- * @package    project
- * @subpackage browser
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: actions.class.php 24992 2009-12-06 20:48:52Z Kris.Wallsmith $
  */
 class browserActions extends sfActions
 {

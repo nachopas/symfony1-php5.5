@@ -16,11 +16,8 @@
  * Parameters, in this case, are used to extend classes with additional data
  * that requires no additional logic to manage.
  *
- * @package    symfony
- * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfNamespacedParameterHolder.class.php 29521 2010-05-19 11:47:56Z fabien $
  */
 class sfNamespacedParameterHolder extends sfParameterHolder
 {

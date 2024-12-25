@@ -26,8 +26,6 @@
 	 * Extended file stream wrapper class which auto-creates directories
 	 *
 	 * @author Michiel Rook <michiel.rook@gmail.com>
-	 * @version $Id: ExtendedFileStream.php 325 2007-12-20 15:44:58Z hans $
-	 * @package phing.util
 	 */
 	class ExtendedFileStream
 	{

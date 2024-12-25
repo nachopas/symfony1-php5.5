@@ -11,10 +11,7 @@
 /**
  * Abstract class that provides an interface for escaping of output.
  *
- * @package    symfony
- * @subpackage view
  * @author     Mike Squire <mike@somosis.co.uk>
- * @version    SVN: $Id: sfOutputEscaper.class.php 21908 2009-09-11 12:06:21Z fabien $
  */
 abstract class sfOutputEscaper
 {

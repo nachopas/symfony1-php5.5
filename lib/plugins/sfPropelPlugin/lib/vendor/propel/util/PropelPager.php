@@ -97,9 +97,7 @@
  *
  * @author     Rob Halff <info@rhalff.com>
  * @author	   Niklas Närhinen <niklas@narhinen.net>
- * @version    $Revision: 1262 $
  * @copyright  Copyright (c) 2004 Rob Halff: LGPL - See LICENCE
- * @package    propel.util
  */
 class PropelPager implements Countable, Iterator {
 

@@ -25,8 +25,6 @@ include_once 'propel/engine/database/model/VendorInfo.php';
  * An abstract class for elements represented by XML tags (e.g. Column, Table).
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 abstract class XMLElement {
 

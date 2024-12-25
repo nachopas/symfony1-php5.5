@@ -13,11 +13,8 @@
  * sfExecutionFilter is the last filter registered for each filter chain. This
  * filter does all action and view execution.
  *
- * @package    symfony
- * @subpackage filter
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfExecutionFilter.class.php 29523 2010-05-19 12:50:54Z fabien $
  */
 class sfExecutionFilter extends sfFilter
 {

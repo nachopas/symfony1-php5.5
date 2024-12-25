@@ -28,8 +28,6 @@ require_once 'phing/tasks/ext/phpunit/FormatterElement.php';
  * formatter classes for SimpleTest
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: SimpleTestFormatterElement.php 357 2008-02-26 08:51:59Z mrook $
- * @package phing.tasks.ext.simpletest
  * @since 2.2.0
  */
 class SimpleTestFormatterElement extends FormatterElement

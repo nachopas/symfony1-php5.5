@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Dumps data to the fixtures directory.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelDataDumpTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPropelDataDumpTask extends sfPropelBaseTask
 {

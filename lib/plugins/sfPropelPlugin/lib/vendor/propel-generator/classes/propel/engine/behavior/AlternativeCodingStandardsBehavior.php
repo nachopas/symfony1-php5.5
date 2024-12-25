@@ -45,8 +45,6 @@
  *   - comments are stripped (optional)
  *
  * @author     François Zaninotto
- * @version    $Revision: 1066 $
- * @package    propel.engine.behavior
  */
 class AlternativeCodingStandardsBehavior extends Behavior
 {

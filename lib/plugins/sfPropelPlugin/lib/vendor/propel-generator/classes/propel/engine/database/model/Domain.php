@@ -26,8 +26,6 @@ require_once 'propel/engine/database/model/XMLElement.php';
  *
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Martin Poeschl <mpoeschl@marmot.at> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class Domain extends XMLElement {
 

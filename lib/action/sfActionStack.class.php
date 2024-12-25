@@ -13,11 +13,8 @@
  * sfActionStack keeps a list of all requested actions and provides accessor
  * methods for retrieving individual entries.
  *
- * @package    symfony
- * @subpackage action
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfActionStack.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfActionStack
 {

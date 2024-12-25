@@ -24,8 +24,6 @@
  * business objects within the system to handle Node object.
  *
  * @author     Heltem <heltem@o2php.com> (Propel)
- * @version    $Revision: 1262 $
- * @package    propel.om
  */
 interface NodeObject extends IteratorAggregate {
 	/**

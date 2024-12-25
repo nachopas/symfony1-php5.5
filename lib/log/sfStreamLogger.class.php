@@ -11,10 +11,7 @@
 /**
  * sfStreamLogger logs messages to a PHP stream.
  *
- * @package    symfony
- * @subpackage log
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfStreamLogger.class.php 9081 2008-05-20 00:47:12Z Carl.Vondrick $
  */
 class sfStreamLogger extends sfLogger
 {

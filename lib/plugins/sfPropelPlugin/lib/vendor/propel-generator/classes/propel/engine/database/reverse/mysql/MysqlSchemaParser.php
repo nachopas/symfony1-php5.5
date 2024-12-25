@@ -25,8 +25,6 @@ require_once 'propel/engine/database/reverse/BaseSchemaParser.php';
  * Mysql database schema parser.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.reverse.mysql
  */
 class MysqlSchemaParser extends BaseSchemaParser {
 

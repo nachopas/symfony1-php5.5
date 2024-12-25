@@ -9,7 +9,6 @@
  *
  * Thu Oct 27 07:31:26 2011
  *
- * @package    lib.model.om
  */
 abstract class BaseArticle extends BaseObject  implements Persistent {
 

@@ -14,11 +14,8 @@
  * customized by supplying attributes, which a template can manipulate and
  * display.
  *
- * @package    symfony
- * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfView.class.php 28713 2010-03-23 15:08:22Z fabien $
  */
 abstract class sfView
 {

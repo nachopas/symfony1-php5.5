@@ -14,11 +14,8 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Inserts SQL for current model.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
- * @version    SVN: $Id: sfDoctrineMigrateTask.class.php 33338 2012-02-15 16:02:28Z fabien $
  */
 class sfDoctrineMigrateTask extends sfDoctrineBaseTask
 {

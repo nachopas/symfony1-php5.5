@@ -22,12 +22,9 @@
 /**
  * Doctrine_Hydrator_Abstract
  *
- * @package     Doctrine
- * @subpackage  Hydrate
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 3192 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 abstract class Doctrine_Hydrator_Abstract extends Doctrine_Locator_Injectable

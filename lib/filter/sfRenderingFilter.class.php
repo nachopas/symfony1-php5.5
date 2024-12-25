@@ -12,10 +12,7 @@
  * sfRenderingFilter is the last filter registered for each filter chain. This
  * filter does the rendering.
  *
- * @package    symfony
- * @subpackage filter
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfRenderingFilter.class.php 29524 2010-05-19 12:55:30Z fabien $
  */
 class sfRenderingFilter extends sfFilter
 {

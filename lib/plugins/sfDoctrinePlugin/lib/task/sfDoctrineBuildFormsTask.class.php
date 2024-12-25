@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 /**
  * Create form classes for the current model.
  *
- * @package    symfony
- * @subpackage doctrine
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfDoctrineBuildFormsTask.class.php 23927 2009-11-14 16:10:57Z fabien $
  */
 class sfDoctrineBuildFormsTask extends sfDoctrineBaseTask
 {

@@ -24,10 +24,7 @@
  * This class represents a database column
  *
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @package     Doctrine
- * @subpackage  Column
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision: 7663 $
  * @link        www.doctrine-project.org
  * @since       1.0
  */

@@ -30,8 +30,6 @@ include_once 'propel/engine/database/model/PropelTypes.php';
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Jason van Zyl <jvanzyl@periapt.com> (Torque)
  * @author     Fedor Karpelevitch <fedor.karpelevitch@barra.com> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.phing
  */
 class PropelCreoleTransformTask extends Task {
 

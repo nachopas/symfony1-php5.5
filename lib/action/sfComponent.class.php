@@ -11,10 +11,7 @@
 /**
  * sfComponent.
  *
- * @package    symfony
- * @subpackage action
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfComponent.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 abstract class sfComponent
 {

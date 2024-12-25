@@ -13,10 +13,7 @@
  *
  * It can also escape variables with an escaping method.
  *
- * @package    symfony
- * @subpackage view
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfViewParameterHolder.class.php 21884 2009-09-11 07:38:24Z fabien $
  */
 class sfViewParameterHolder extends sfParameterHolder
 {

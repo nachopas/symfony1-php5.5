@@ -12,10 +12,7 @@
  * Output escaping decorator class for arrays.
  *
  * @see        sfOutputEscaper
- * @package    symfony
- * @subpackage view
  * @author     Mike Squire <mike@somosis.co.uk>
- * @version    SVN: $Id: sfOutputEscaperArrayDecorator.class.php 27752 2010-02-08 19:21:22Z Kris.Wallsmith $
  */
 class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator implements Iterator, ArrayAccess, Countable
 {

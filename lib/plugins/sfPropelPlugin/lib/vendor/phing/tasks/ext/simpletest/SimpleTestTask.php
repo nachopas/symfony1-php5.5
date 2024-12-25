@@ -28,8 +28,6 @@ require_once 'phing/util/LogWriter.php';
  * Runs SimpleTest tests.
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
- * @version $Id: SimpleTestTask.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.simpletest
  * @since 2.2.0
  */
 class SimpleTestTask extends Task

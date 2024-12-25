@@ -11,10 +11,7 @@
 /**
  * Autoload again for dev environments.
  * 
- * @package    symfony
- * @subpackage autoload
  * @author     Kris Wallsmith <kris.wallsmith@symfony-project.com>
- * @version    SVN: $Id: sfAutoloadAgain.class.php 33561 2012-10-18 11:42:28Z fabien $
  */
 class sfAutoloadAgain
 {

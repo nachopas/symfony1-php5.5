@@ -23,12 +23,9 @@
  * Base abstract class for defining templates which are the base of all behaviors that can be attached
  * to your Doctrine models
  *
- * @package     Doctrine
- * @subpackage  Template
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 abstract class Doctrine_Template extends Doctrine_Record_Abstract

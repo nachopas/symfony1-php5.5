@@ -11,8 +11,6 @@
 
 /**
  * Reduces network flooding when sending large amounts of mail.
- * @package Swift
- * @subpackage Plugins
  * @author Chris Corbyn
  */
 class Swift_Plugins_BandwidthMonitorPlugin

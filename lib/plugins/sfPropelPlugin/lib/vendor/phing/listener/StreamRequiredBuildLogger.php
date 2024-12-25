@@ -29,10 +29,8 @@ require_once 'phing/BuildLogger.php';
  * -listener.
  *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.6 $
  * @see       BuildEvent
  * @see       Project::addBuildListener()
- * @package   phing
  */
 interface StreamRequiredBuildLogger extends BuildLogger {
 

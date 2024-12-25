@@ -11,7 +11,6 @@
 
 /**
  * DependencyException thrown when a requested dependeny is missing.
- * @package Swift
  * @author Chris Corbyn
  */
 class Swift_DependencyException extends Swift_SwiftException

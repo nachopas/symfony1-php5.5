@@ -24,11 +24,8 @@
  * 
  * Used for exporting a schema to a yaml file
  *
- * @package     Doctrine
- * @subpackage  Export
  * @link        www.doctrine-project.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision: 1838 $
  * @author      Nicolas Bérard-Nault <nicobn@gmail.com>
  * @author      Jonathan H. Wage <jwage@mac.com>
  */

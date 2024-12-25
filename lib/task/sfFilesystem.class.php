@@ -11,10 +11,7 @@
 /**
  * sfFilesystem provides basic utility to manipulate the file system.
  *
- * @package    symfony
- * @subpackage util
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfFilesystem.class.php 31247 2010-10-26 12:26:15Z fabien $
  */
 class sfFilesystem
 {

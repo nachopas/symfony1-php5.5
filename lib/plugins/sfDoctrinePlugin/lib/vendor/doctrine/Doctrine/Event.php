@@ -24,11 +24,8 @@
  *
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @package     Doctrine
- * @subpackage  Event
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  */
 class Doctrine_Event
 {

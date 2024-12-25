@@ -14,11 +14,8 @@
  * provides an additional method for printing up a detailed view of an
  * exception.
  *
- * @package    symfony
- * @subpackage exception
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfException.class.php 33539 2012-09-19 05:36:02Z fabien $
  */
 class sfException extends Exception
 {

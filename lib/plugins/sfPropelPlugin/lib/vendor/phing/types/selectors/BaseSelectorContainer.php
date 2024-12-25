@@ -27,7 +27,6 @@ require_once 'phing/types/selectors/BaseSelector.php';
  * This is the base class for selectors that can contain other selectors.
  *
  * @author <a href="mailto:bruce@callenish.com">Bruce Atherton</a> (Ant)
- * @package phing.types.selectors
  */
 abstract class BaseSelectorContainer extends BaseSelector implements SelectorContainer {
 

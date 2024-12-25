@@ -24,7 +24,6 @@ require_once 'phing/system/io/FileInputStream.php';
 
 /**
  * Convenience class for reading files.
- * @package   phing.system.io
  */
 class FileReader extends InputStreamReader {
 

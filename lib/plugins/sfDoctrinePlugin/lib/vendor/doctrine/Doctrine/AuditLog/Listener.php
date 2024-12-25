@@ -22,12 +22,9 @@
 /**
  * Doctrine_AuditLog_Listener
  *
- * @package     Doctrine
- * @subpackage  AuditLog
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision$
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 class Doctrine_AuditLog_Listener extends Doctrine_Record_Listener

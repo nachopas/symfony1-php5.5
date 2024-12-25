@@ -20,13 +20,10 @@
  */
 
 /**
- * @package     Doctrine
- * @subpackage  Import
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Paul Cooper <pgc@ucecom.com>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
- * @version     $Revision: 7689 $
  * @link        www.doctrine-project.org
  * @since       1.0
  */

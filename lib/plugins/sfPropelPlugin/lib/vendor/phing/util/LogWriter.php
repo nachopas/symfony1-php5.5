@@ -27,8 +27,6 @@
 	 * Extends the Writer class to output messages to Phing's log
 	 *
 	 * @author Michiel Rook <michiel.rook@gmail.com>
-	 * @version $Id: LogWriter.php 325 2007-12-20 15:44:58Z hans $
-	 * @package phing.util
 	 */
 	class LogWriter extends Writer
 	{

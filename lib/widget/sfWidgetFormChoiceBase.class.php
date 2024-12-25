@@ -11,10 +11,7 @@
 /**
  * sfWidgetFormChoiceBase is the base class for all choice/select widgets
  *
- * @package    symfony
- * @subpackage widget
  * @author     Bernhard Schussek <bernhard.schussek@symfony-project.com>
- * @version    SVN: $Id$
  */
 abstract class sfWidgetFormChoiceBase extends sfWidgetForm
 {

@@ -59,7 +59,6 @@ require_once 'phing/Task.php';
  * <b>expr-unused</b> - Expression result is never used
  *
  * @author   Knut Urdalen <knut.urdalen@gmail.com>
- * @package  phing.tasks.ext
  */
 class ZendCodeAnalyzerTask extends Task {
   

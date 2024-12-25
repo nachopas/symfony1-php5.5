@@ -25,13 +25,10 @@
  * Base Doctrine_Data class for dumping and loading data to and from fixtures files.
  * Support formats are based on what formats are available in Doctrine_Parser such as yaml, xml, json, etc.
  *
- * @package     Doctrine
- * @subpackage  Data
  * @author      Jonathan H. Wage <jwage@mac.com>
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 2552 $
  */
 class Doctrine_Data
 {

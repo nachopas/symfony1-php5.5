@@ -13,9 +13,7 @@
  *
  * Usage: php data/bin/changelog.php -r12345:67890 /branches/1.3
  *
- * @package    symfony
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: changelog.php 30952 2010-09-22 02:22:51Z Kris.Wallsmith $
  */
 require_once dirname(__FILE__).'/../../lib/task/sfFilesystem.class.php';
 

@@ -31,8 +31,6 @@ include_once 'phing/system/io/IOException.php';
  *
  * If the file to touch doesn't exist, an empty one is created.
  *
- * @version $Revision: 1.12 $
- * @package phing.tasks.system
  */
 class TouchTask extends Task {
 

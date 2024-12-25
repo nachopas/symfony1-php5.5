@@ -3,10 +3,7 @@
 /**
  * format actions.
  *
- * @package    project
- * @subpackage format
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: actions.class.php 11805 2008-09-26 18:08:49Z fabien $
  */
 class formatActions extends sfActions
 {

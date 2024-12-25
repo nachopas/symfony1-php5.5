@@ -20,11 +20,8 @@
  */
 
 /**
- * @package     Doctrine
- * @subpackage  Import
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
- * @version     $Revision: 7490 $
  * @link        www.doctrine-project.org
  * @since       1.0
  */

@@ -24,11 +24,8 @@
  *
  * Class for importing Doctrine_Record classes from a yaml schema definition
  *
- * @package     Doctrine
- * @subpackage  Import
  * @link        www.doctrine-project.org
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version     $Revision: 1838 $
  * @author      Nicolas Bérard-Nault <nicobn@gmail.com>
  * @author      Jonathan H. Wage <jonwage@gmail.com>
  */

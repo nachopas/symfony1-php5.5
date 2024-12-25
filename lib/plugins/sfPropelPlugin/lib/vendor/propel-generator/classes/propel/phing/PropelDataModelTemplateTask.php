@@ -33,8 +33,6 @@ include_once 'propel/engine/database/transform/XmlToAppData.php';
  * datamodel-based transformations (by allowing you to put the logic in the templates).
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.phing
- * @version    $Revision: 1262 $
  */
 class PropelDataModelTemplateTask extends AbstractPropelDataModelTask {
 

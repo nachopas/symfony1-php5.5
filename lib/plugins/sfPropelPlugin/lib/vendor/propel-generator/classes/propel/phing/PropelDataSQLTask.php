@@ -32,8 +32,6 @@ include_once 'propel/engine/builder/util/transform/XmlToDataSQL.php';
  * @author     Jason van Zyl  <jvanzyl@periapt.com> (Torque)
  * @author     John McNally  <jmcnally@collab.net> (Torque)
  * @author     Fedor Karpelevitch  <fedor.karpelevitch@home.com> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.phing
  */
 class PropelDataSQLTask extends AbstractPropelDataModelTask {
 

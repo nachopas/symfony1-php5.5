@@ -11,10 +11,7 @@
 /**
  * Base class for all symfony Propel tasks.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelBaseTask.class.php 29001 2010-04-06 18:02:32Z Kris.Wallsmith $
  */
 abstract class sfPropelBaseTask extends sfBaseTask
 {

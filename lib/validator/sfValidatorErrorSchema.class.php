@@ -11,10 +11,7 @@
 /**
  * sfValidatorErrorSchema represents a validation schema error.
  *
- * @package    symfony
- * @subpackage validator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfValidatorErrorSchema.class.php 22446 2009-09-26 07:55:47Z fabien $
  */
 class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, Iterator, Countable
 {

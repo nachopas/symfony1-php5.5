@@ -25,7 +25,6 @@ require_once 'phing/system/io/PhingFile.php';
 /**
  * Input stream subclass for file streams.
  * 
- * @package   phing.system.io
  */
 class FileInputStream extends InputStream {
 	

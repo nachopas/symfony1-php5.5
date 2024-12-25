@@ -27,8 +27,6 @@ require_once 'phing/tasks/ext/ioncube/IoncubeComment.php';
  *
  * @author Michiel Rook <michiel.rook@gmail.com>
  * @author Andrew Eddie <andrew.eddie@jamboworks.com> 
- * @version $Id: IoncubeEncoderTask.php 325 2007-12-20 15:44:58Z hans $
- * @package phing.tasks.ext.ioncube
  * @since 2.2.0
  */
 class IoncubeEncoderTask extends Task

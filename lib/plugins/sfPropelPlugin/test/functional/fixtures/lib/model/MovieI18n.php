@@ -5,7 +5,6 @@
  *
  * 
  *
- * @package lib.model
  */ 
 class MovieI18n extends BaseMovieI18n
 {

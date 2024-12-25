@@ -12,8 +12,6 @@
 
 /**
  * A CharacterStream implementation which stores characters in an internal array.
- * @package Swift
- * @subpackage CharacterStream
  * @author Chris Corbyn
  */
 class Swift_CharacterStream_ArrayCharacterStream

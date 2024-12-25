@@ -61,7 +61,6 @@ include_once 'phing/types/FileSet.php';
  * @author Hans Lellelid <hans@xmpl.org> (Phing)
  * @author Thomas.Haas@softwired-inc.com (Ant)
  * @author Stefan Bodewig <stefan.bodewig@epost.de> (Ant)
- * @package phing.types
  */
 class Path extends DataType {
 

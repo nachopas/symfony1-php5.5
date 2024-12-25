@@ -30,8 +30,6 @@ include_once 'propel/engine/database/model/ConstraintNameGenerator.php';
  *
  * @author     Hans Lellelid <hans@xmpl.org> (Propel)
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class NameFactory {
 

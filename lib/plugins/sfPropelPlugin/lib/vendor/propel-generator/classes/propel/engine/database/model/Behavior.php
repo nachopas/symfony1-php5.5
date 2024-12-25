@@ -25,8 +25,6 @@ include_once 'propel/engine/database/model/Index.php';
  * Information about behaviors of a table.
  *
  * @author     François Zaninotto
- * @version    $Revision: 989 $
- * @package    propel.engine.database.model
  */
 class Behavior extends XMLElement {
 

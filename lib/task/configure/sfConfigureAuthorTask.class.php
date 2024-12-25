@@ -11,10 +11,7 @@
 /**
  * Configures the main author of the project.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfConfigureAuthorTask.class.php 6978 2008-01-06 18:53:47Z fabien $
  */
 class sfConfigureAuthorTask extends sfBaseTask
 {

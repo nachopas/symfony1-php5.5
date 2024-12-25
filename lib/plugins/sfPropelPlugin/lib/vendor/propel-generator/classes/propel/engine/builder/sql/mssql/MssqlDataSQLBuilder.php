@@ -26,7 +26,6 @@ require_once 'propel/engine/builder/sql/DataSQLBuilder.php';
  * MS SQL Server class for building data dump SQL.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @package    propel.engine.builder.sql.mssql
  */
 class MssqlDataSQLBuilder extends DataSQLBuilder {
 

@@ -11,10 +11,7 @@
 /**
  * Finds non "i18n ready" strings in an application.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfI18nFindTask.class.php 8453 2008-04-14 16:39:14Z fabien $
  */
 class sfI18nFindTask extends sfBaseTask
 {

@@ -27,9 +27,7 @@
  * configuration can also be retrieved as a nested arrays, flat array or as a
  * PropelConfiguration instance.
  *
- * @author     Veikko Mäkinen <veikko@veikko.fi>
- * @version    $Revision: 1262 $
- * @package    propel
+ * @author     Veikko Mï¿½kinen <veikko@veikko.fi>
  */
 class PropelConfiguration implements ArrayAccess
 {

@@ -29,8 +29,6 @@ include_once 'propel/engine/database/model/PropelTypes.php';
  * the database metadata.
  *
  * @author     Hans Lellelid <hans@xmpl.org>
- * @version    $Revision: 945 $
- * @package    propel.phing
  */
 class PropelSchemaReverseTask extends PDOTask {
 
@@ -490,7 +488,6 @@ class PropelSchemaReverseTask extends PDOTask {
 
 /**
  * A helper class to store validator sets indexed by column.
- * @package    propel.phing
  */
 class PropelSchemaReverse_ValidatorSet {
 

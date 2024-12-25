@@ -13,10 +13,7 @@ require_once(__DIR__.'/sfPropelBaseTask.class.php');
 /**
  * Creates a schema.xml from an existing database.
  *
- * @package    symfony
- * @subpackage propel
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelBuildSchemaTask.class.php 23922 2009-11-14 14:58:38Z fabien $
  */
 class sfPropelBuildSchemaTask extends sfPropelBaseTask
 {

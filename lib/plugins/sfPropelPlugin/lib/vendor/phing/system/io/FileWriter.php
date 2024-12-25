@@ -25,7 +25,6 @@ require_once 'phing/system/io/FileOutputStream.php';
 /**
  * Convenience class for performing file write operations.
  *
- * @package   phing.system.io
  */
 class FileWriter extends OutputStreamWriter {
     

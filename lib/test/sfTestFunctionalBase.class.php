@@ -13,10 +13,7 @@ require_once(__DIR__.'/../vendor/lime/lime.php');
 /**
  * sfTestFunctional tests an application by using a browser simulator.
  *
- * @package    symfony
- * @subpackage test
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfTestFunctionalBase.class.php 28641 2010-03-21 10:20:44Z fabien $
  */
 abstract class sfTestFunctionalBase
 {

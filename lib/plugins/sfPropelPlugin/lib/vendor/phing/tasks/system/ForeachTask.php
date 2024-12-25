@@ -43,8 +43,6 @@ include_once 'phing/tasks/system/PhingTask.php';
  *
  * @author    Jason Hines <jason@greenhell.com>
  * @author    Hans Lellelid <hans@xmpl.org>
- * @version   $Revision: 1.9 $
- * @package   phing.tasks.system
  */
 class ForeachTask extends Task {
     

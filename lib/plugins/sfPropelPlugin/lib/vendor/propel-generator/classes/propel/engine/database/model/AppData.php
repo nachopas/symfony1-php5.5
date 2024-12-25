@@ -29,8 +29,6 @@ include_once 'propel/engine/database/model/Database.php';
  * @author     Leon Messerschmidt <leon@opticode.co.za> (Torque)
  * @author     John McNally <jmcnally@collab.net> (Torque)
  * @author     Daniel Rall <dlr@finemaltcoding.com> (Torque)
- * @version    $Revision: 1262 $
- * @package    propel.engine.database.model
  */
 class AppData {
 

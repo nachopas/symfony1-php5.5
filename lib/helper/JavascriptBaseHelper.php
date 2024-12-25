@@ -12,13 +12,10 @@
 /**
  * JavascriptBaseHelper.
  *
- * @package    symfony
- * @subpackage helper
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     John Christopher <john.christopher@symfony-project.com>
  * @author     David Heinemeier Hansson
  * @author     Fabian Lange <fabian.lange@symfony-project.com>
- * @version    SVN: $Id: JavascriptBaseHelper.php 24499 2009-11-28 14:12:02Z FabianLange $
  */
 
 /*

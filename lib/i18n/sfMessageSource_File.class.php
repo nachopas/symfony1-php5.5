@@ -13,9 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version    $Id: sfMessageSource_File.class.php 9128 2008-05-21 00:58:19Z Carl.Vondrick $
- * @package    symfony
- * @subpackage i18n
  */
 
 /**
@@ -24,9 +21,6 @@
  * This is the base class for file based message sources like XLIFF or gettext.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- * @version v1.0, last update on Fri Dec 24 16:18:44 EST 2004
- * @package    symfony
- * @subpackage i18n
  */
 abstract class sfMessageSource_File extends sfMessageSource
 {

@@ -11,10 +11,7 @@
 /**
  * Initialization for propel and i18n propel integration.
  *
- * @package    sfPropelPlugin
- * @subpackage addon
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropel.class.php 23737 2009-11-09 23:23:25Z Kris.Wallsmith $
  */
 class sfPropel
 {

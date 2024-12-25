@@ -11,10 +11,7 @@
 /**
  * Launches the symfony test suite.
  *
- * @package    symfony
- * @subpackage task
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfSymfonyTestTask.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
  */
 class sfSymfonyTestTask extends sfTask
 {

@@ -23,8 +23,6 @@
  *  Utility class for generating necessary server-specific SQL commands
  *
  *  @author   Luke Crouch at SourceForge (http://sourceforge.net)
- *  @version  $Revision: 1.1 $
- *  @package  phing.tasks.ext.dbdeploy
  */
 
 abstract class DbmsSyntax

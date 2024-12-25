@@ -23,12 +23,9 @@
  * Doctrine_Collection_Iterator
  * iterates through Doctrine_Collection
  *
- * @package     Doctrine
- * @subpackage  Collection
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7490 $
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  */
 abstract class Doctrine_Collection_Iterator implements Iterator

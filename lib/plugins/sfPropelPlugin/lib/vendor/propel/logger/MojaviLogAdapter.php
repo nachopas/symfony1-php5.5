@@ -23,8 +23,6 @@
  * Mojavi logging adapter for propel
  *
  * @author     Brandon Keepers <brandon@opensoul.org>
- * @version    $Revision: 1262 $
- * @package    propel.logger
  */
 class MojaviLogAdapter implements BasicLogger {
 

@@ -12,11 +12,8 @@
 /**
  * sfBasicSecurityUser will handle any type of data as a credential.
  *
- * @package    symfony
- * @subpackage user
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
- * @version    SVN: $Id: sfBasicSecurityUser.class.php 33466 2012-05-30 07:33:03Z fabien $
  */
 class sfBasicSecurityUser extends sfUser implements sfSecurityUser
 {

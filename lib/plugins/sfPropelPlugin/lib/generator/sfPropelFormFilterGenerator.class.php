@@ -13,10 +13,7 @@
  *
  * This class generates a Propel filter forms.
  *
- * @package    symfony
- * @subpackage generator
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
- * @version    SVN: $Id: sfPropelFormFilterGenerator.class.php 33137 2011-10-18 13:05:25Z fabien $
  */
 class sfPropelFormFilterGenerator extends sfPropelFormGenerator
 {

@@ -22,14 +22,11 @@
 /**
  * Doctrine_Export
  *
- * @package     Doctrine
- * @subpackage  Export
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
  * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link        www.doctrine-project.org
  * @since       1.0
- * @version     $Revision: 7653 $
  */
 class Doctrine_Export extends Doctrine_Connection_Module
 {
