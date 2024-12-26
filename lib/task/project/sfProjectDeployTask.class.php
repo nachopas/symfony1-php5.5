@@ -23,15 +23,21 @@ class sfProjectDeployTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('server', sfCommandArgument::REQUIRED, 'The server name')]);
+        $this->addArguments([
+            new sfCommandArgument('server', sfCommandArgument::REQUIRED, 'The server name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('go', null, sfCommandOption::PARAMETER_NONE, 'Do the deployment'), new sfCommandOption('rsync-dir', null, sfCommandOption::PARAMETER_REQUIRED, 'The directory where to look for rsync*.txt files', 'config'), new sfCommandOption('rsync-options', null, sfCommandOption::PARAMETER_OPTIONAL, 'To options to pass to the rsync executable', '-azC --force --delete --progress')]);
+        $this->addOptions([
+            new sfCommandOption('go', null, sfCommandOption::PARAMETER_NONE, 'Do the deployment'),
+            new sfCommandOption('rsync-dir', null, sfCommandOption::PARAMETER_REQUIRED, 'The directory where to look for rsync*.txt files', 'config'),
+            new sfCommandOption('rsync-options', null, sfCommandOption::PARAMETER_OPTIONAL, 'To options to pass to the rsync executable', '-azC --force --delete --progress'),
+        ]);
 
         $this->namespace = 'project';
         $this->name = 'deploy';
         $this->briefDescription = 'Deploys a project to another server';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:deploy|INFO] task deploys a project on a server:
 
   [./symfony project:deploy production|INFO]
@@ -105,10 +111,10 @@ EOF;
         }
 
         $host = $properties['host'];
-        $dir  = $properties['dir'];
+        $dir = $properties['dir'];
         $user = isset($properties['user']) ? $properties['user'].'@' : '';
 
-        if (substr($dir, -1) != '/') {
+        if ('/' != substr($dir, -1)) {
             $dir .= '/';
         }
 
@@ -137,11 +143,13 @@ EOF;
         }
 
         $dryRun = $options['go'] ? '' : '--dry-run';
-        $command = "rsync $dryRun $parameters -e $ssh ./ $user$host:$dir";
+        $command = "rsync {$dryRun} {$parameters} -e {$ssh} ./ {$user}{$host}:{$dir}";
 
         $this->getFilesystem()->execute($command, $options['trace'] ? [$this, 'logOutput'] : null, [$this, 'logErrors']);
 
         $this->clearBuffers();
+
+        return 0;
     }
 
     public function logOutput($output)

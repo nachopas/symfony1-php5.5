@@ -28,8 +28,8 @@ class sfValidatorInteger extends sfValidatorBase
      *  * max
      *  * min
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -49,9 +49,9 @@ class sfValidatorInteger extends sfValidatorBase
      */
     protected function doClean($value)
     {
-        $clean = intval($value);
+        $clean = (int) $value;
 
-        if (strval($clean) != $value) {
+        if ((string) $clean != $value) {
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 

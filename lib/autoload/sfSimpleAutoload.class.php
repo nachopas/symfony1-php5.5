@@ -19,15 +19,15 @@
 class sfSimpleAutoload
 {
     protected static $registered = false;
-    protected static $instance   = null;
+    protected static $instance;
 
-    protected $cacheFile    = null;
-    protected $cacheLoaded  = false;
+    protected $cacheFile;
+    protected $cacheLoaded = false;
     protected $cacheChanged = false;
-    protected $dirs         = [];
-    protected $files        = [];
-    protected $classes      = [];
-    protected $overriden    = [];
+    protected $dirs = [];
+    protected $files = [];
+    protected $classes = [];
+    protected $overriden = [];
 
     protected function __construct($cacheFile = null)
     {
@@ -41,9 +41,9 @@ class sfSimpleAutoload
     /**
      * Retrieves the singleton instance of this class.
      *
-     * @param  string $cacheFile  The file path to save the cache
+     * @param string $cacheFile The file path to save the cache
      *
-     * @return sfSimpleAutoload   A sfSimpleAutoload implementation instance.
+     * @return sfSimpleAutoload a sfSimpleAutoload implementation instance
      */
     public static function getInstance($cacheFile = null)
     {
@@ -57,7 +57,7 @@ class sfSimpleAutoload
     /**
      * Register sfSimpleAutoload in spl autoloader.
      *
-     * @return void
+     * @throws sfException
      */
     public static function register()
     {
@@ -79,8 +79,6 @@ class sfSimpleAutoload
 
     /**
      * Unregister sfSimpleAutoload from spl autoloader.
-     *
-     * @return void
      */
     public static function unregister()
     {
@@ -91,9 +89,9 @@ class sfSimpleAutoload
     /**
      * Handles autoloading of classes.
      *
-     * @param  string $class A class name.
+     * @param string $class a class name
      *
-     * @return boolean Returns true if the class has been loaded
+     * @return bool Returns true if the class has been loaded
      */
     public function autoload($class)
     {
@@ -129,7 +127,7 @@ class sfSimpleAutoload
             return;
         }
 
-        [$this->classes, $this->dirs, $this->files] = unserialize(file_get_contents($this->cacheFile));
+        list($this->classes, $this->dirs, $this->files) = unserialize(file_get_contents($this->cacheFile));
 
         $this->cacheLoaded = true;
         $this->cacheChanged = false;
@@ -213,8 +211,8 @@ class sfSimpleAutoload
     /**
      * Adds files to the autoloading system.
      *
-     * @param array   $files    An array of files
-     * @param Boolean $register Whether to register those files as single entities (used when reloading)
+     * @param array $files    An array of files
+     * @param bool  $register Whether to register those files as single entities (used when reloading)
      */
     public function addFiles(array $files, $register = true)
     {
@@ -226,8 +224,8 @@ class sfSimpleAutoload
     /**
      * Adds a file to the autoloading system.
      *
-     * @param string  $file     A file path
-     * @param Boolean $register Whether to register those files as single entities (used when reloading)
+     * @param string $file     A file path
+     * @param bool   $register Whether to register those files as single entities (used when reloading)
      */
     public function addFile($file, $register = true)
     {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Loads YAML fixture data.
@@ -24,15 +24,22 @@ class sfDoctrineDataLoadTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('dir_or_file', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'Directory or file to load')]);
+        $this->addArguments([
+            new sfCommandArgument('dir_or_file', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'Directory or file to load'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('append', null, sfCommandOption::PARAMETER_NONE, 'Don\'t delete current data in the database')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('append', null, sfCommandOption::PARAMETER_NONE, 'Don\'t delete current data in the database'),
+            new sfCommandOption('charset', null, sfCommandOption::PARAMETER_OPTIONAL, 'Specify charset'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'data-load';
         $this->briefDescription = 'Loads YAML fixture data';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:data-load|INFO] task loads data fixtures into the database:
 
   [./symfony doctrine:data-load|INFO]
@@ -64,7 +71,11 @@ EOF;
             $arguments['dir_or_file'] = $config['data_fixtures_path'];
         }
 
-        $doctrineArguments = ['data_fixtures_path' => $arguments['dir_or_file'], 'append'             => $options['append']];
+        $doctrineArguments = [
+            'data_fixtures_path' => $arguments['dir_or_file'],
+            'append' => $options['append'],
+            'charset' => $options['charset'],
+        ];
 
         foreach ($arguments['dir_or_file'] as $target) {
             $this->logSection('doctrine', sprintf('Loading data fixtures from "%s"', $target));

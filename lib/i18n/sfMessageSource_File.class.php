@@ -13,6 +13,8 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
+ * @version    $Id$
  */
 
 /**
@@ -21,11 +23,14 @@
  * This is the base class for file based message sources like XLIFF or gettext.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
+ * @version v1.0, last update on Fri Dec 24 16:18:44 EST 2004
  */
 abstract class sfMessageSource_File extends sfMessageSource
 {
     /**
      * Separator between culture name and source.
+     *
      * @var string
      */
     protected $dataSeparator = '.';
@@ -33,7 +38,8 @@ abstract class sfMessageSource_File extends sfMessageSource
     /**
      * Constructor.
      *
-     * @param string $source the directory where the messages are stored.
+     * @param string $source the directory where the messages are stored
+     *
      * @see MessageSource::factory();
      */
     public function __construct($source)
@@ -46,7 +52,8 @@ abstract class sfMessageSource_File extends sfMessageSource
      * Just use the file modified time.
      *
      * @param string $source catalogue+variant
-     * @return int last modified in unix-time format.
+     *
+     * @return int last modified in unix-time format
      */
     public function getLastModified($source)
     {
@@ -57,7 +64,8 @@ abstract class sfMessageSource_File extends sfMessageSource
      * Gets the message file for a specific message catalogue and cultural variant.
      *
      * @param string $variant message catalogue
-     * @return string full path to the message file.
+     *
+     * @return string full path to the message file
      */
     public function getSource($variant)
     {
@@ -68,7 +76,8 @@ abstract class sfMessageSource_File extends sfMessageSource
      * Determines if the message file source is valid.
      *
      * @param string $source message file
-     * @return boolean true if valid, false otherwise.
+     *
+     * @return bool true if valid, false otherwise
      */
     public function isValidSource($source)
     {
@@ -79,7 +88,8 @@ abstract class sfMessageSource_File extends sfMessageSource
      * Gets all the variants of a particular catalogue.
      *
      * @param string $catalogue catalogue name
-     * @return array list of all variants for this catalogue.
+     *
+     * @return array list of all variants for this catalogue
      */
     public function getCatalogueList($catalogue)
     {
@@ -90,7 +100,7 @@ abstract class sfMessageSource_File extends sfMessageSource
 
         $variant = null;
 
-        for ($i = 0, $max = count($variants); $i < $max; $i++) {
+        for ($i = 0, $max = count($variants); $i < $max; ++$i) {
             if (strlen($variants[$i]) > 0) {
                 $variant .= $variant ? '_'.$variants[$i] : $variants[$i];
                 $catalogues[] = $catalogue.$this->dataSeparator.$variant.$this->dataExt;
@@ -98,17 +108,18 @@ abstract class sfMessageSource_File extends sfMessageSource
         }
 
         $byDir = $this->getCatalogueByDir($catalogue);
-        $catalogues = array_merge($byDir, array_reverse($catalogues));
 
-        return $catalogues;
+        return array_merge($byDir, array_reverse($catalogues));
     }
 
     /**
      * Traverses through the directory structure to find the catalogues.
-     * This should only be called by getCatalogueList()
+     * This should only be called by getCatalogueList().
      *
-     * @param string $catalogue a particular catalogue.
-     * @return array a list of catalogues.
+     * @param string $catalogue a particular catalogue
+     *
+     * @return array a list of catalogues
+     *
      * @see getCatalogueList()
      */
     protected function getCatalogueByDir($catalogue)
@@ -118,7 +129,7 @@ abstract class sfMessageSource_File extends sfMessageSource
 
         $variant = null;
 
-        for ($i = 0, $max = count($variants); $i < $max; $i++) {
+        for ($i = 0, $max = count($variants); $i < $max; ++$i) {
             if (strlen($variants[$i]) > 0) {
                 $variant .= $variant ? '_'.$variants[$i] : $variants[$i];
                 $catalogues[] = $variant.'/'.$catalogue.$this->dataExt;
@@ -130,9 +141,10 @@ abstract class sfMessageSource_File extends sfMessageSource
 
     /**
      * Returns a list of catalogue and its culture ID.
-     * E.g. array('messages', 'en_AU')
+     * E.g. array('messages', 'en_AU').
      *
      * @return array list of catalogues
+     *
      * @see getCatalogues()
      */
     public function catalogues()
@@ -143,7 +155,10 @@ abstract class sfMessageSource_File extends sfMessageSource
     /**
      * Returns a list of catalogue and its culture ID. This takes care
      * of directory structures.
-     * E.g. array('messages', 'en_AU')
+     * E.g. array('messages', 'en_AU').
+     *
+     * @param mixed|null $dir
+     * @param mixed|null $variant
      *
      * @return array list of catalogues
      */

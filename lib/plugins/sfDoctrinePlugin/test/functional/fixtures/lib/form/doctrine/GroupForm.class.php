@@ -2,7 +2,6 @@
 
 /**
  * Group form.
- *
  */
 class GroupForm extends BaseGroupForm
 {

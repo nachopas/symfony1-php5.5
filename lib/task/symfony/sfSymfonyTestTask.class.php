@@ -20,16 +20,21 @@ class sfSymfonyTestTask extends sfTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('update-autoloader', 'u', sfCommandOption::PARAMETER_NONE, 'Update the sfCoreAutoload class'), new sfCommandOption('only-failed', 'f', sfCommandOption::PARAMETER_NONE, 'Only run tests that failed last time'), new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file'), new sfCommandOption('rebuild-all', null, sfCommandOption::PARAMETER_NONE, 'Rebuild all generated fixture files')]);
+        $this->addOptions([
+            new sfCommandOption('update-autoloader', 'u', sfCommandOption::PARAMETER_NONE, 'Update the sfCoreAutoload class'),
+            new sfCommandOption('only-failed', 'f', sfCommandOption::PARAMETER_NONE, 'Only run tests that failed last time'),
+            new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file'),
+            new sfCommandOption('rebuild-all', null, sfCommandOption::PARAMETER_NONE, 'Rebuild all generated fixture files'),
+        ]);
 
         $this->namespace = 'symfony';
         $this->name = 'test';
         $this->briefDescription = 'Launches the symfony test suite';
 
         $this->detailedDescription = <<<EOF
-The [test:all|INFO] task launches the symfony test suite:
+The [{$this->getFullName()}|INFO] task launches the symfony test suite:
 
-  [./symfony symfony:test|INFO]
+  [./symfony {$this->getFullName()}|INFO]
 EOF;
     }
 
@@ -38,11 +43,12 @@ EOF;
      */
     protected function execute($arguments = [], $options = [])
     {
-        require_once(__DIR__.'/../../vendor/lime/lime.php');
-        require_once(__DIR__.'/lime_symfony.php');
+        require_once __DIR__.'/../../vendor/lime/lime.php';
+
+        require_once __DIR__.'/lime_symfony.php';
 
         // cleanup
-        require_once(__DIR__.'/../../util/sfToolkit.class.php');
+        require_once __DIR__.'/../../util/sfToolkit.class.php';
         if ($files = glob(sys_get_temp_dir().DIRECTORY_SEPARATOR.'/sf_autoload_unit_*')) {
             foreach ($files as $file) {
                 unlink($file);
@@ -51,7 +57,7 @@ EOF;
 
         // update sfCoreAutoload
         if ($options['update-autoloader']) {
-            require_once(__DIR__.'/../../autoload/sfCoreAutoload.class.php');
+            require_once __DIR__.'/../../autoload/sfCoreAutoload.class.php';
             sfCoreAutoload::make();
         }
 
@@ -80,16 +86,16 @@ EOF;
             }
         } else {
             $h->register(sfFinder::type('file')->prune('fixtures')->name('*Test.php')->in(array_merge(
-        // unit tests
-        [$h->base_dir.'/unit'],
+                // unit tests
+                [$h->base_dir.'/unit'],
                 glob($h->base_dir.'/../lib/plugins/*/test/unit'),
 
-        // functional tests
-        [$h->base_dir.'/functional'],
+                // functional tests
+                [$h->base_dir.'/functional'],
                 glob($h->base_dir.'/../lib/plugins/*/test/functional'),
 
-        // other tests
-        [$h->base_dir.'/other']
+                // other tests
+                [$h->base_dir.'/other']
             )));
         }
 

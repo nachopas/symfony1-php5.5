@@ -24,13 +24,16 @@ class sfDoctrineInsertSqlTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'insert-sql';
         $this->briefDescription = 'Inserts SQL for current model';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:insert-sql|INFO] task creates database tables:
 
   [./symfony doctrine:insert-sql|INFO]

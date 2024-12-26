@@ -13,7 +13,6 @@
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-
 function use_helper()
 {
     $context = sfContext::getInstance();

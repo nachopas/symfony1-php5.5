@@ -28,8 +28,8 @@ class sfValidatorNumber extends sfValidatorBase
      *  * max
      *  * min
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -53,7 +53,7 @@ class sfValidatorNumber extends sfValidatorBase
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 
-        $clean = floatval($value);
+        $clean = (float) $value;
 
         if ($this->hasOption('max') && $clean > $this->getOption('max')) {
             throw new sfValidatorError($this, 'max', ['value' => $value, 'max' => $this->getOption('max')]);

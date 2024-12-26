@@ -19,13 +19,16 @@
  */
 class sfDatabaseManager
 {
-    protected $configuration = null;
-    protected $databases     = [];
+    /** @var sfProjectConfiguration */
+    protected $configuration;
+    protected $databases = [];
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $options
      */
     public function __construct(sfProjectConfiguration $configuration, $options = [])
     {
@@ -37,13 +40,11 @@ class sfDatabaseManager
     }
 
     /**
-     * Initializes this sfDatabaseManager object
+     * Initializes this sfDatabaseManager object.
      *
      * @param sfProjectConfiguration $configuration A sfProjectConfiguration instance
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfDatabaseManager object
+     * @throws sfInitializationException If an error occurs while initializing this sfDatabaseManager object
      */
     public function initialize(sfProjectConfiguration $configuration)
     {
@@ -58,7 +59,7 @@ class sfDatabaseManager
     public function loadConfiguration()
     {
         if ($this->configuration instanceof sfApplicationConfiguration) {
-            $databases = include($this->configuration->getConfigCache()->checkConfig('config/databases.yml'));
+            $databases = include $this->configuration->getConfigCache()->checkConfig('config/databases.yml');
         } else {
             $configHandler = new sfDatabaseConfigHandler();
             $databases = $configHandler->evaluate([$this->configuration->getRootDir().'/config/databases.yml']);
@@ -87,7 +88,7 @@ class sfDatabaseManager
      *
      * @return mixed A Database instance
      *
-     * @throws <b>sfDatabaseException</b> If the requested database name does not exist
+     * @throws sfDatabaseException If the requested database name does not exist
      */
     public function getDatabase($name = 'default')
     {
@@ -110,11 +111,9 @@ class sfDatabaseManager
     }
 
     /**
-     * Executes the shutdown procedure
+     * Executes the shutdown procedure.
      *
-     * @return void
-     *
-     * @throws <b>sfDatabaseException</b> If an error occurs while shutting down this DatabaseManager
+     * @throws sfDatabaseException If an error occurs while shutting down this DatabaseManager
      */
     public function shutdown()
     {

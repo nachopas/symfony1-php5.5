@@ -14,9 +14,9 @@ require_once(__DIR__.'/../bootstrap/functional.php');
 $t = new lime_test(23);
 
 $total = 50;
-for ($i = 0; $i < $total; $i++) {
+for ($i = 0; $i < $total; ++$i) {
     $author = new Author();
-    $author->name = 'Author #' . $i;
+    $author->name = 'Author #'.$i;
     $author->save();
 }
 

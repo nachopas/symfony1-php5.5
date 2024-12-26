@@ -22,9 +22,9 @@
  */
 class Swift_DoctrineSpool extends Swift_ConfigurableSpool
 {
-    protected $model = null;
-    protected $column = null;
-    protected $method = null;
+    protected $model;
+    protected $column;
+    protected $method;
 
     /**
      * Constructor.
@@ -43,7 +43,7 @@ class Swift_DoctrineSpool extends Swift_ConfigurableSpool
     /**
      * Tests if this Transport mechanism has started.
      *
-     * @return boolean
+     * @return bool
      */
     public function isStarted()
     {
@@ -71,7 +71,7 @@ class Swift_DoctrineSpool extends Swift_ConfigurableSpool
      */
     public function queueMessage(Swift_Mime_Message $message)
     {
-        $object = new $this->model;
+        $object = new $this->model();
 
         if (!$object instanceof Doctrine_Record) {
             throw new InvalidArgumentException('The mailer message object must be a Doctrine_Record object.');
@@ -79,7 +79,7 @@ class Swift_DoctrineSpool extends Swift_ConfigurableSpool
 
         $object->{$this->column} = serialize($message);
         $object->save();
-    
+
         $object->free(true);
     }
 

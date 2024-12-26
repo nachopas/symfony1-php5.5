@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
- * Create tables for specified list of models
+ * Create tables for specified list of models.
  *
  * @author     Jonathan H. Wage <jonwage@gmail.com>
  */
@@ -19,15 +19,21 @@ class sfDoctrineCreateModelTables extends sfDoctrineBaseTask
 {
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('models', sfCommandArgument::IS_ARRAY, 'The list of models', [])]);
+        $this->addArguments([
+            new sfCommandArgument('models', sfCommandArgument::IS_ARRAY, 'The list of models', []),
+        ]);
 
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', 'frontend'), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', 'frontend'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('skip-build', null, sfCommandOption::PARAMETER_NONE, 'Skip the doctrine:build-model task.'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'create-model-tables';
         $this->briefDescription = 'Drop and recreate tables for specified models.';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:create-model-tables|INFO] Drop and recreate tables for specified models:
 
   [./symfony doctrine:create-model-tables User|INFO]
@@ -38,10 +44,12 @@ EOF;
     {
         $databaseManager = new sfDatabaseManager($this->configuration);
 
-        $buildModel = new sfDoctrineBuildModelTask($this->dispatcher, $this->formatter);
-        $buildModel->setCommandApplication($this->commandApplication);
-        $buildModel->setConfiguration($this->configuration);
-        $ret = $buildModel->run();
+        if (!$options['skip-build']) {
+            $buildModel = new sfDoctrineBuildModelTask($this->dispatcher, $this->formatter);
+            $buildModel->setCommandApplication($this->commandApplication);
+            $buildModel->setConfiguration($this->configuration);
+            $buildModel->run();
+        }
 
         $connections = [];
         $models = $arguments['models'];

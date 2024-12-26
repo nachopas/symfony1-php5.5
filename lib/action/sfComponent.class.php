@@ -15,19 +15,38 @@
  */
 abstract class sfComponent
 {
-    protected $moduleName             = '';
-    protected $actionName             = '';
-    protected $context                = null;
-    protected $dispatcher             = null;
-    protected $request                = null;
-    protected $response               = null;
-    protected $varHolder              = null;
-    protected $requestParameterHolder = null;
+    /** @var string */
+    protected $moduleName = '';
+
+    /** @var string */
+    protected $actionName = '';
+
+    /** @var sfContext */
+    protected $context;
+
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var sfRequest */
+    protected $request;
+
+    /** @var sfResponse */
+    protected $response;
+
+    /** @var sfParameterHolder */
+    protected $varHolder;
+
+    /** @var sfParameterHolder */
+    protected $requestParameterHolder;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param sfContext $context
+     * @param string    $moduleName
+     * @param string    $actionName
      */
     public function __construct($context, $moduleName, $actionName)
     {
@@ -37,21 +56,19 @@ abstract class sfComponent
     /**
      * Initializes this component.
      *
-     * @param sfContext $context    The current application context.
-     * @param string    $moduleName The module name.
-     * @param string    $actionName The action name.
-     *
-     * @return boolean true, if initialization completes successfully, otherwise false
+     * @param sfContext $context    the current application context
+     * @param string    $moduleName the module name
+     * @param string    $actionName the action name
      */
     public function initialize($context, $moduleName, $actionName)
     {
-        $this->moduleName             = $moduleName;
-        $this->actionName             = $actionName;
-        $this->context                = $context;
-        $this->dispatcher             = $context->getEventDispatcher();
-        $this->varHolder              = new sfParameterHolder();
-        $this->request                = $context->getRequest();
-        $this->response               = $context->getResponse();
+        $this->moduleName = $moduleName;
+        $this->actionName = $actionName;
+        $this->context = $context;
+        $this->dispatcher = $context->getEventDispatcher();
+        $this->varHolder = new sfParameterHolder();
+        $this->request = $context->getRequest();
+        $this->response = $context->getResponse();
         $this->requestParameterHolder = $this->request->getParameterHolder();
     }
 
@@ -68,7 +85,7 @@ abstract class sfComponent
      *
      * @param sfRequest $request The current sfRequest object
      *
-     * @return mixed     A string containing the view name associated with this action
+     * @return mixed A string containing the view name associated with this action
      */
     abstract public function execute($request);
 
@@ -154,7 +171,8 @@ abstract class sfComponent
      * <code>$this->getRequest()->getParameterHolder()->has($name)</code>
      *
      * @param string $name The parameter name
-     * @return boolean true if the request parameter exists, false otherwise
+     *
+     * @return bool true if the request parameter exists, false otherwise
      */
     public function hasRequestParameter($name)
     {
@@ -210,11 +228,11 @@ abstract class sfComponent
      *
      * <code>$this->getContext()->getRouting()->generate(...)</code>
      *
-     * @param string  The route name
-     * @param array   An array of parameters for the route
-     * @param Boolean Whether to generate an absolute URL or not
+     * @param string $route    The route name
+     * @param array  $params   An array of parameters for the route
+     * @param bool   $absolute Whether to generate an absolute URL or not
      *
-     * @return string  The URL
+     * @return string The URL
      */
     public function generateUrl($route, $params = [], $absolute = false)
     {
@@ -252,9 +270,9 @@ abstract class sfComponent
      * by symfony, so this is your responsability to ensure that the
      * value is escaped properly.
      *
-     * @param string  $name  The variable name
-     * @param mixed   $value The variable value
-     * @param Boolean $safe  true if the value is safe for output (false by default)
+     * @param string $name  The variable name
+     * @param mixed  $value The variable value
+     * @param bool   $safe  true if the value is safe for output (false by default)
      */
     public function setVar($name, $value, $safe = false)
     {
@@ -266,7 +284,7 @@ abstract class sfComponent
      *
      * @param string $name The variable name
      *
-     * @return mixed  The variable value
+     * @return mixed The variable value
      */
     public function getVar($name)
     {
@@ -276,7 +294,7 @@ abstract class sfComponent
     /**
      * Gets the sfParameterHolder object that stores the template variables.
      *
-     * @return sfParameterHolder The variable holder.
+     * @return sfParameterHolder the variable holder
      */
     public function getVarHolder()
     {
@@ -293,7 +311,7 @@ abstract class sfComponent
      * @param string $key   The variable name
      * @param string $value The variable value
      *
-     * @return boolean always true
+     * @return bool always true
      *
      * @see setVar()
      */
@@ -315,7 +333,7 @@ abstract class sfComponent
      *
      * @see getVar()
      */
-    public function & __get($key)
+    public function &__get($key)
     {
         return $this->varHolder->get($key);
     }
@@ -329,7 +347,7 @@ abstract class sfComponent
      *
      * @param string $name The variable name
      *
-     * @return boolean true if the variable is set
+     * @return bool true if the variable is set
      */
     public function __isset($name)
     {
@@ -353,7 +371,7 @@ abstract class sfComponent
     /**
      * Calls methods defined via sfEventDispatcher.
      *
-     * @param string $method The method name
+     * @param string $method    The method name
      * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
@@ -368,5 +386,19 @@ abstract class sfComponent
         }
 
         return $event->getReturnValue();
+    }
+
+    /**
+     * Gets the translation for the given string.
+     *
+     * @param string $string    The string to translate
+     * @param array  $args      An array of arguments for the translation
+     * @param string $catalogue The catalogue name
+     *
+     * @return string The translated string
+     */
+    public function __($string, $args = [], $catalogue = 'messages')
+    {
+        return $this->context->getI18N()->__($string, $args, $catalogue);
     }
 }

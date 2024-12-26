@@ -15,8 +15,8 @@
  */
 class sfMailerMessageLoggerPlugin implements Swift_Events_SendListener
 {
-    protected $messages   = [];
-    protected $dispatcher = null;
+    protected $messages = [];
+    protected $dispatcher;
 
     /**
      * Constructor.
@@ -58,8 +58,6 @@ class sfMailerMessageLoggerPlugin implements Swift_Events_SendListener
 
     /**
      * Invoked immediately before the Message is sent.
-     *
-     * @param Swift_Events_SendEvent $evt
      */
     public function beforeSendPerformed(Swift_Events_SendEvent $evt)
     {
@@ -72,8 +70,6 @@ class sfMailerMessageLoggerPlugin implements Swift_Events_SendListener
 
     /**
      * Invoked immediately after the Message is sent.
-     *
-     * @param Swift_Events_SendEvent $evt
      */
     public function sendPerformed(Swift_Events_SendEvent $evt)
     {

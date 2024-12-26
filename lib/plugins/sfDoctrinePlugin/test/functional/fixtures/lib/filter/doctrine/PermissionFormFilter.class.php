@@ -2,7 +2,6 @@
 
 /**
  * Permission filter form.
- *
  */
 class PermissionFormFilter extends BasePermissionFormFilter
 {

@@ -80,17 +80,15 @@ class sfDateTimeFormatInfo
     /**
      * Allows functions that begins with 'set' to be called directly
      * as an attribute/property to retrieve the value.
-     *
-     * @return mixed
      */
     public function __get($name)
     {
         $getProperty = 'get'.$name;
         if (in_array($getProperty, $this->properties)) {
-            return $this->$getProperty();
-        } else {
-            throw new sfException(sprintf('Property %s does not exists.', $name));
+            return $this->{$getProperty}();
         }
+
+        throw new sfException(sprintf('Property %s does not exists.', $name));
     }
 
     /**
@@ -101,7 +99,7 @@ class sfDateTimeFormatInfo
     {
         $setProperty = 'set'.$name;
         if (in_array($setProperty, $this->properties)) {
-            $this->$setProperty($value);
+            $this->{$setProperty}($value);
         } else {
             throw new sfException(sprintf('Property %s can not be set.', $name));
         }
@@ -114,7 +112,8 @@ class sfDateTimeFormatInfo
      * unless you know what you are doing. Please use use
      * sfDateTimeFormatInfo::getInstance() to create an instance.
      *
-     * @param array   $data ICU data for date time formatting.
+     * @param array $data ICU data for date time formatting
+     *
      * @see getInstance()
      */
     public function __construct($data = [])
@@ -131,7 +130,7 @@ class sfDateTimeFormatInfo
     /**
      * Gets the internal ICU data for date time formatting.
      *
-     * @return array ICU date time formatting data.
+     * @return array ICU date time formatting data
      */
     protected function getData()
     {
@@ -141,7 +140,7 @@ class sfDateTimeFormatInfo
     /**
      * Gets the default sfDateTimeFormatInfo that is culture-independent (invariant).
      *
-     * @return sfDateTimeFormatInfo default sfDateTimeFormatInfo.
+     * @return sfDateTimeFormatInfo default sfDateTimeFormatInfo
      */
     public static function getInvariantInfo()
     {
@@ -157,19 +156,21 @@ class sfDateTimeFormatInfo
     /**
      * Returns the sfDateTimeFormatInfo associated with the specified culture.
      *
-     * @param sfCultureInfo   $culture  the culture that gets the sfDateTimeFormat property.
+     * @param sfCultureInfo $culture the culture that gets the sfDateTimeFormat property
+     *
      * @return sfDateTimeFormatInfo sfDateTimeFormatInfo for the specified
-     * culture.
+     *                              culture
      */
     public static function getInstance($culture = null)
     {
         if ($culture instanceof sfCultureInfo) {
             return $culture->DateTimeFormat;
-        } elseif (is_string($culture)) {
-            return sfCultureInfo::getInstance($culture)->DateTimeFormat;
-        } else {
-            return sfCultureInfo::getInvariantCulture()->DateTimeFormat;
         }
+        if (is_string($culture)) {
+            return sfCultureInfo::getInstance($culture)->DateTimeFormat;
+        }
+
+        return sfCultureInfo::getInvariantCulture()->DateTimeFormat;
     }
 
     /**
@@ -189,9 +190,9 @@ class sfDateTimeFormatInfo
      * Sets the abbreviated day names. The value should be
      * an array of string starting with Sunday and ends in Saturady.
      * For example,
-     * <code>array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");</code>
+     * <code>array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");</code>.
      *
-     * @param array $value abbreviated day names.
+     * @param array $value abbreviated day names
      */
     public function setAbbreviatedDayNames($value)
     {
@@ -215,9 +216,9 @@ class sfDateTimeFormatInfo
      * Sets the narrow day names. The value should be
      * an array of string starting with Sunday and ends in Saturady.
      * For example,
-     * <code>array("S", "M", "T", "W", "T", "F", "S");</code>
+     * <code>array("S", "M", "T", "W", "T", "F", "S");</code>.
      *
-     * @param array $value narrow day names.
+     * @param array $value narrow day names
      */
     public function setNarrowDayNames($value)
     {
@@ -242,9 +243,9 @@ class sfDateTimeFormatInfo
      * an array of string starting with Sunday and ends in Saturady.
      * For example,
      * <code>array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-     * "Friday", "Saturday".);</code>
+     * "Friday", "Saturday".);</code>.
      *
-     * @param array $value day names.
+     * @param array $value day names
      */
     public function setDayNames($value)
     {
@@ -257,7 +258,7 @@ class sfDateTimeFormatInfo
      * for InvariantInfo contains "J", "F", "M", "A", "M", "J",
      * "J", "A", "S", "O", "N", and "D".
      *
-     * @return array narrow month names.
+     * @return array narrow month names
      */
     public function getNarrowMonthNames()
     {
@@ -268,9 +269,9 @@ class sfDateTimeFormatInfo
      * Sets the narrow month names. The value should be
      * an array of string starting with J and ends in D.
      * For example,
-     * <code>array("J","F","M","A","M","J","J","A","S","O","N","D");</code>
+     * <code>array("J","F","M","A","M","J","J","A","S","O","N","D");</code>.
      *
-     * @param array $value month names.
+     * @param array $value month names
      */
     public function setNarrowMonthNames($value)
     {
@@ -285,15 +286,15 @@ class sfDateTimeFormatInfo
      *
      * Returns wide names if abbreviated names doesn't exist.
      *
-     * @return array abbreviated month names.
+     * @return array abbreviated month names
      */
     public function getAbbreviatedMonthNames()
     {
         if (isset($this->data['monthNames']['format']['abbreviated'])) {
             return $this->data['monthNames']['format']['abbreviated'];
-        } else {
-            return $this->data['monthNames']['format']['wide'];
         }
+
+        return $this->data['monthNames']['format']['wide'];
     }
 
     /**
@@ -301,9 +302,9 @@ class sfDateTimeFormatInfo
      * an array of string starting with Jan and ends in Dec.
      * For example,
      * <code>array("Jan", "Feb", "Mar", "Apr", "May", "Jun",
-     * "Jul", "Aug", "Sep","Oct","Nov","Dec");</code>
+     * "Jul", "Aug", "Sep","Oct","Nov","Dec");</code>.
      *
-     * @param array $value month names.
+     * @param array $value month names
      */
     public function setAbbreviatedMonthNames($value)
     {
@@ -315,9 +316,9 @@ class sfDateTimeFormatInfo
      * culture-specific full names of the months. The array for
      * InvariantInfo contains "January", "February", "March", "April",
      * "May", "June", "July", "August", "September", "October", "November",
-     * and "December"
+     * and "December".
      *
-     * @return array month names.
+     * @return array month names
      */
     public function getMonthNames()
     {
@@ -329,9 +330,9 @@ class sfDateTimeFormatInfo
      * an array of string starting with Janurary and ends in December.
      * For example,
      * <code>array("January", "February", "March", "April", "May", "June",
-     * "July", "August", "September","October","November","December");</code>
+     * "July", "August", "September","October","November","December");</code>.
      *
-     * @param array $value month names.
+     * @param array $value month names
      */
     public function setMonthNames($value)
     {
@@ -341,8 +342,9 @@ class sfDateTimeFormatInfo
     /**
      * A string containing the name of the era.
      *
-     * @param int $era era The integer representing the era.
-     * @return string the era name.
+     * @param int $era era The integer representing the era
+     *
+     * @return string the era name
      */
     public function getEra($era)
     {
@@ -353,7 +355,7 @@ class sfDateTimeFormatInfo
      * The string designator for hours that are "ante meridiem" (before noon).
      * The default for InvariantInfo is "AM".
      *
-     * @return string AM designator.
+     * @return string AM designator
      */
     public function getAMDesignator()
     {
@@ -365,7 +367,7 @@ class sfDateTimeFormatInfo
     /**
      * Sets the AM Designator. For example, 'AM'.
      *
-     * @param string $value AM designator.
+     * @param string $value AM designator
      */
     public function setAMDesignator($value)
     {
@@ -378,7 +380,7 @@ class sfDateTimeFormatInfo
      * The string designator for hours that are "post meridiem" (after noon).
      * The default for InvariantInfo is "PM".
      *
-     * @return string PM designator.
+     * @return string PM designator
      */
     public function getPMDesignator()
     {
@@ -390,7 +392,7 @@ class sfDateTimeFormatInfo
     /**
      * Sets the PM Designator. For example, 'PM'.
      *
-     * @param string $value PM designator.
+     * @param string $value PM designator
      */
     public function setPMDesignator($value)
     {
@@ -401,7 +403,7 @@ class sfDateTimeFormatInfo
 
     /**
      * Gets the AM and PM markers array.
-     * Default InvariantInfo for AM and PM is <code>array('AM','PM');</code>
+     * Default InvariantInfo for AM and PM is <code>array('AM','PM');</code>.
      *
      * @return array AM and PM markers
      */
@@ -412,7 +414,7 @@ class sfDateTimeFormatInfo
 
     /**
      * Sets the AM and PM markers array.
-     * For example <code>array('AM','PM');</code>
+     * For example <code>array('AM','PM');</code>.
      *
      * @param array $value AM and PM markers
      */
@@ -425,7 +427,7 @@ class sfDateTimeFormatInfo
      * Returns the full time pattern "HH:mm:ss z" (default).
      * This is culture sensitive.
      *
-     * @return string pattern "HH:mm:ss z".
+     * @return string pattern "HH:mm:ss z"
      */
     public function getFullTimePattern()
     {
@@ -436,7 +438,7 @@ class sfDateTimeFormatInfo
      * Returns the long time pattern "HH:mm:ss z" (default).
      * This is culture sensitive.
      *
-     * @return string pattern "HH:mm:ss z".
+     * @return string pattern "HH:mm:ss z"
      */
     public function getLongTimePattern()
     {
@@ -447,7 +449,7 @@ class sfDateTimeFormatInfo
      * Returns the medium time pattern "HH:mm:ss" (default).
      * This is culture sensitive.
      *
-     * @return string pattern "HH:mm:ss".
+     * @return string pattern "HH:mm:ss"
      */
     public function getMediumTimePattern()
     {
@@ -458,7 +460,7 @@ class sfDateTimeFormatInfo
      * Returns the short time pattern "HH:mm" (default).
      * This is culture sensitive.
      *
-     * @return string pattern "HH:mm".
+     * @return string pattern "HH:mm"
      */
     public function getShortTimePattern()
     {
@@ -468,7 +470,8 @@ class sfDateTimeFormatInfo
     /**
      * Returns the full date pattern "EEEE, yyyy MMMM dd" (default).
      * This is culture sensitive.
-     * @return string pattern "EEEE, yyyy MMMM dd".
+     *
+     * @return string pattern "EEEE, yyyy MMMM dd"
      */
     public function getFullDatePattern()
     {
@@ -478,7 +481,8 @@ class sfDateTimeFormatInfo
     /**
      * Returns the long date pattern "yyyy MMMM d" (default).
      * This is culture sensitive.
-     * @return string pattern "yyyy MMMM d".
+     *
+     * @return string pattern "yyyy MMMM d"
      */
     public function getLongDatePattern()
     {
@@ -488,7 +492,8 @@ class sfDateTimeFormatInfo
     /**
      * Returns the medium date pattern "yyyy MMMM d" (default).
      * This is culture sensitive.
-     * @return string pattern "yyyy MMM d".
+     *
+     * @return string pattern "yyyy MMM d"
      */
     public function getMediumDatePattern()
     {
@@ -499,7 +504,7 @@ class sfDateTimeFormatInfo
      * Returns the short date pattern "yy/MM/dd" (default).
      * This is culture sensitive.
      *
-     * @return string pattern "yy/MM/dd".
+     * @return string pattern "yy/MM/dd"
      */
     public function getShortDatePattern()
     {
@@ -510,7 +515,7 @@ class sfDateTimeFormatInfo
      * Returns the date time order pattern, "{1} {0}" (default).
      * This is culture sensitive.
      *
-     * @return string pattern "{1} {0}".
+     * @return string pattern "{1} {0}"
      */
     public function getDateTimeOrderPattern()
     {

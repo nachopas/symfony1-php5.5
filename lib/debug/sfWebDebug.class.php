@@ -15,10 +15,10 @@
  */
 class sfWebDebug
 {
-    protected $dispatcher = null;
-    protected $logger     = null;
-    protected $options    = [];
-    protected $panels     = [];
+    protected $dispatcher;
+    protected $logger;
+    protected $options = [];
+    protected $panels = [];
 
     /**
      * Constructor.
@@ -35,8 +35,8 @@ class sfWebDebug
     public function __construct(sfEventDispatcher $dispatcher, sfVarLogger $logger, array $options = [])
     {
         $this->dispatcher = $dispatcher;
-        $this->logger     = $logger;
-        $this->options    = $options;
+        $this->logger = $logger;
+        $this->options = $options;
 
         if (!isset($this->options['image_root_path'])) {
             $this->options['image_root_path'] = '';
@@ -127,7 +127,8 @@ class sfWebDebug
     /**
      * Gets an option value by name.
      *
-     * @param string $name The option name
+     * @param string     $name    The option name
+     * @param mixed|null $default
      *
      * @return mixed The option value
      */
@@ -227,7 +228,7 @@ class sfWebDebug
     /**
      * Converts a priority value to a string.
      *
-     * @param integer $value The priority value
+     * @param int $value The priority value
      *
      * @return string The priority as a string
      */
@@ -235,21 +236,22 @@ class sfWebDebug
     {
         if ($value >= sfLogger::INFO) {
             return 'info';
-        } elseif ($value >= sfLogger::WARNING) {
-            return 'warning';
-        } else {
-            return 'error';
         }
+        if ($value >= sfLogger::WARNING) {
+            return 'warning';
+        }
+
+        return 'error';
     }
 
     /**
      * Gets the javascript code to inject in the head tag.
      *
-     * @param string The javascript code
+     * @return string The javascript code
      */
     public function getJavascript()
     {
-        return <<<EOF
+        return <<<'EOF'
 /* <![CDATA[ */
 function sfWebDebugGetElementsByClassName(strClass, strTag, objContElm)
 {
@@ -399,11 +401,11 @@ EOF;
     /**
      * Gets the stylesheet code to inject in the head tag.
      *
-     * @param string The stylesheet code
+     * @return string The stylesheet code
      */
     public function getStylesheet()
     {
-        return <<<EOF
+        return <<<'EOF'
 #sfWebDebug
 {
   padding: 0;

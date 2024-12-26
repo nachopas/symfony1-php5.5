@@ -15,9 +15,14 @@
  */
 class sfWebDebugLogger extends sfVarLogger
 {
-    protected $context       = null;
-    protected $webDebugClass = null;
-    protected $webDebug      = null;
+    /** @var sfContext */
+    protected $context;
+
+    /** @var string */
+    protected $webDebugClass;
+
+    /** @var sfWebDebug */
+    protected $webDebug;
 
     /**
      * Initializes this logger.
@@ -26,10 +31,8 @@ class sfWebDebugLogger extends sfVarLogger
      *
      *  * web_debug_class: The web debug class (sfWebDebug by default)
      *
-     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param  array             $options     An array of options.
-     *
-     * @return Boolean           true, if initialization completes successfully, otherwise false.
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      *
      * @see sfVarLogger
      */
@@ -64,11 +67,13 @@ class sfWebDebugLogger extends sfVarLogger
      * E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING,
      * and most of E_STRICT.
      *
-     * @param string $errno      The level of the error raised, as an integer.
-     * @param string $errstr     The error message, as a string.
-     * @param string $errfile    The filename that the error was raised in, as a string.
-     * @param string $errline    The line number the error was raised at, as an integer.
-     * @param array  $errcontext An array that points to the active symbol table at the point the error occurred.
+     * @param string $errno      the level of the error raised, as an integer
+     * @param string $errstr     the error message, as a string
+     * @param string $errfile    the filename that the error was raised in, as a string
+     * @param string $errline    the line number the error was raised at, as an integer
+     * @param array  $errcontext an array that points to the active symbol table at the point the error occurred
+     *
+     * @return bool
      */
     public function handlePhpError($errno, $errstr, $errfile, $errline, $errcontext = [])
     {
@@ -77,44 +82,53 @@ class sfWebDebugLogger extends sfVarLogger
         }
 
         $message = sprintf(' %%s at %s on line %s (%s)', $errfile, $errline, str_replace('%', '%%', $errstr));
+
         switch ($errno) {
-      case E_STRICT:
-        $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::ERR, sprintf($message, 'Strict notice')]));
-        break;
-      case E_NOTICE:
-        $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::NOTICE, sprintf($message, 'Notice')]));
-        break;
-      case E_WARNING:
-        $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::WARNING, sprintf($message, 'Warning')]));
-        break;
-      case E_RECOVERABLE_ERROR:
-        $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::ERR, sprintf($message, 'Error')]));
-        break;
-    }
+            case E_STRICT:
+                $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::ERR, sprintf($message, 'Strict notice')]));
+
+                break;
+
+            case E_NOTICE:
+                $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::NOTICE, sprintf($message, 'Notice')]));
+
+                break;
+
+            case E_WARNING:
+                $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::WARNING, sprintf($message, 'Warning')]));
+
+                break;
+
+            case E_RECOVERABLE_ERROR:
+                $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::ERR, sprintf($message, 'Error')]));
+
+                break;
+        }
 
         return false; // do not prevent default error handling
     }
 
     /**
      * Listens for the context.load_factories event.
-     *
-     * @param sfEvent $event
      */
     public function listenForLoadFactories(sfEvent $event)
     {
         $path = sprintf('%s/%s/images', $event->getSubject()->getRequest()->getRelativeUrlRoot(), sfConfig::get('sf_web_debug_web_dir'));
         $path = str_replace('//', '/', $path);
 
-        $this->webDebug = new $this->webDebugClass($this->dispatcher, $this, ['image_root_path'    => $path, 'request_parameters' => $event->getSubject()->getRequest()->getParameterHolder()->getAll()]);
+        $this->webDebug = new $this->webDebugClass($this->dispatcher, $this, [
+            'image_root_path' => $path,
+            'request_parameters' => $event->getSubject()->getRequest()->getParameterHolder()->getAll(),
+        ]);
     }
 
     /**
      * Listens to the response.filter_content event.
      *
-     * @param  sfEvent $event   The sfEvent instance
-     * @param  string  $content The response content
+     * @param sfEvent $event   The sfEvent instance
+     * @param string  $content The response content
      *
-     * @return string  The filtered response content
+     * @return string The filtered response content
      */
     public function filterResponseContent(sfEvent $event, $content)
     {
@@ -135,26 +149,20 @@ class sfWebDebugLogger extends sfVarLogger
         // * if not rendering to the client
         // * if HTTP headers only
         $response = $event->getSubject();
-        $request  = $this->context->getRequest();
+
+        /** @var sfWebRequest $request */
+        $request = $this->context->getRequest();
         if (
-      null === $this->webDebug
-      ||
-      !$this->context->has('request')
-      ||
-      !$this->context->has('response')
-      ||
-      !$this->context->has('controller')
-      ||
-      $request->isXmlHttpRequest()
-      ||
-      strpos($response->getContentType(), 'html') === false
-      ||
-      '3' == substr($response->getStatusCode(), 0, 1)
-      ||
-      $this->context->getController()->getRenderMode() != sfView::RENDER_CLIENT
-      ||
-      $response->isHeaderOnly()
-    ) {
+            null === $this->webDebug
+            || !$this->context->has('request')
+            || !$this->context->has('response')
+            || !$this->context->has('controller')
+            || $request->isXmlHttpRequest()
+            || false === strpos($response->getContentType(), 'html')
+            || '3' == substr($response->getStatusCode(), 0, 1)
+            || sfView::RENDER_CLIENT != $this->context->getController()->getRenderMode()
+            || $response->isHeaderOnly()
+        ) {
             return $content;
         }
 

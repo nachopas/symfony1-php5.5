@@ -9,36 +9,37 @@
  */
 
 $app = 'frontend';
+
 require_once __DIR__.'/../bootstrap/functional.php';
 
-$browser = new sfTestFunctional(new sfBrowser(), null, ['doctrine' => 'sfTesterDoctrine']);
+$browser = new sfTestFunctional(new sfBrowser(), null, [
+    'doctrine' => 'sfTesterDoctrine',
+]);
 
 $browser
-  ->get('/attachment/index')
-
-  ->setField('attachment[file_path]', sfConfig::get('sf_config_dir').'/databases.yml')
-  ->click('submit')
-
-  ->with('response')->begin()
+    ->get('/attachment/index')
+    ->setField('attachment[file_path]', sfConfig::get('sf_config_dir').'/databases.yml')
+    ->click('submit')
+    ->with('response')->begin()
     ->checkElement('h1:contains("ok")')
-  ->end()
-
-  ->with('doctrine')->check('Attachment', ['file_path' => AttachmentForm::TEST_GENERATED_FILENAME], 1)
+    ->end()
+    ->with('doctrine')->check('Attachment', [
+        'file_path' => AttachmentForm::TEST_GENERATED_FILENAME,
+    ], 1)
 ;
 
 $browser->test()->is(file_exists(sfConfig::get('sf_cache_dir').'/'.AttachmentForm::TEST_GENERATED_FILENAME), true, 'uploaded file is named correctly');
 
 $browser
-  ->get('/attachment/editable?id=1')
-
-  ->setField('attachment[file_path_delete]', 1)
-  ->click('submit')
-
-  ->with('response')->begin()
+    ->get('/attachment/editable?id=1')
+    ->setField('attachment[file_path_delete]', 1)
+    ->click('submit')
+    ->with('response')->begin()
     ->checkElement('h1', 'ok')
-  ->end()
-
-  ->with('doctrine')->check('Attachment', ['file_path' => AttachmentForm::TEST_GENERATED_FILENAME], false)
+    ->end()
+    ->with('doctrine')->check('Attachment', [
+        'file_path' => AttachmentForm::TEST_GENERATED_FILENAME,
+    ], false)
 ;
 
 $browser->test()->is(file_exists(sfConfig::get('sf_cache_dir').'/'.AttachmentForm::TEST_GENERATED_FILENAME), false, 'uploaded file is removed');

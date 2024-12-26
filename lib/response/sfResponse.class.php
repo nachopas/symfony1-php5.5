@@ -16,14 +16,21 @@
  */
 abstract class sfResponse implements Serializable
 {
-    protected $options    = [];
-    protected $dispatcher = null;
-    protected $content    = '';
+    /** @var array */
+    protected $options = [];
+
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var string */
+    protected $content = '';
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $options
      */
     public function __construct(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -37,12 +44,10 @@ abstract class sfResponse implements Serializable
      *
      *  * logging: Whether to enable logging or not (false by default)
      *
-     * @param  sfEventDispatcher  $dispatcher  An sfEventDispatcher instance
-     * @param  array              $options     An array of options
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
+     * @param array             $options    An array of options
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfResponse
+     * @throws sfInitializationException If an error occurs while initializing this sfResponse
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -57,7 +62,7 @@ abstract class sfResponse implements Serializable
     /**
      * Sets the event dispatcher.
      *
-     * @param sfEventDispatcher $dispatcher  An sfEventDispatcher instance
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
      */
     public function setEventDispatcher(sfEventDispatcher $dispatcher)
     {
@@ -65,7 +70,7 @@ abstract class sfResponse implements Serializable
     }
 
     /**
-     * Sets the response content
+     * Sets the response content.
      *
      * @param string $content
      */
@@ -75,7 +80,7 @@ abstract class sfResponse implements Serializable
     }
 
     /**
-     * Gets the current response content
+     * Gets the current response content.
      *
      * @return string Content
      */
@@ -85,7 +90,7 @@ abstract class sfResponse implements Serializable
     }
 
     /**
-     * Outputs the response content
+     * Outputs the response content.
      */
     public function sendContent()
     {
@@ -110,7 +115,7 @@ abstract class sfResponse implements Serializable
     /**
      * Returns the options.
      *
-     * @return array The options.
+     * @return array the options
      */
     public function getOptions()
     {
@@ -120,12 +125,12 @@ abstract class sfResponse implements Serializable
     /**
      * Calls methods defined via sfEventDispatcher.
      *
-     * @param string $method     The method name
-     * @param array  $arguments  The method arguments
+     * @param string $method    The method name
+     * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
      *
-     * @throws <b>sfException</b> If the calls fails
+     * @throws sfException If the calls fails
      */
     public function __call($method, $arguments)
     {
@@ -140,7 +145,7 @@ abstract class sfResponse implements Serializable
     /**
      * Serializes the current instance.
      *
-     * @return array Objects instance
+     * @return string Objects instance
      */
     public function serialize()
     {
@@ -152,11 +157,30 @@ abstract class sfResponse implements Serializable
      *
      * You need to inject a dispatcher after unserializing a sfResponse instance.
      *
-     * @param string $serialized  A serialized sfResponse instance
-     *
+     * @param string $serialized A serialized sfResponse instance
      */
     public function unserialize($serialized)
     {
         $this->content = unserialize($serialized);
+    }
+
+    /**
+     * Serializes the current instance for php 7.4+.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return ['content' => $this->content];
+    }
+
+    /**
+     * Unserializes a sfResponse instance for php 7.4+.
+     *
+     * @param array $data
+     */
+    public function __unserialize($data)
+    {
+        $this->content = $data['content'];
     }
 }

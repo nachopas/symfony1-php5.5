@@ -15,7 +15,7 @@
  */
 class sfWebDebugPanelTimer extends sfWebDebugPanel
 {
-    protected static $startTime = null;
+    protected static $startTime;
 
     /**
      * Constructor.

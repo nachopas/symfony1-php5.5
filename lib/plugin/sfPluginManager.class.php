@@ -15,15 +15,15 @@
  */
 class sfPluginManager
 {
-    protected $dispatcher  = null;
-    protected $environment = null;
-    protected $installing  = [];
+    protected $dispatcher;
+    protected $environment;
+    protected $installing = [];
 
     /**
      * Constructs a new sfPluginManager.
      *
-     * @param sfEventDispatcher $dispatcher   An event dispatcher instance
-     * @param sfPearEnvironment $environment  A sfPearEnvironment instance
+     * @param sfEventDispatcher $dispatcher  An event dispatcher instance
+     * @param sfPearEnvironment $environment A sfPearEnvironment instance
      */
     public function __construct(sfEventDispatcher $dispatcher, sfPearEnvironment $environment)
     {
@@ -35,12 +35,12 @@ class sfPluginManager
      *
      * see sfPearEnvironment for available options.
      *
-     * @param sfEventDispatcher $dispatcher   An event dispatcher instance
-     * @param sfPearEnvironment $environment  A sfPearEnvironment instance
+     * @param sfEventDispatcher $dispatcher  An event dispatcher instance
+     * @param sfPearEnvironment $environment A sfPearEnvironment instance
      */
     public function initialize(sfEventDispatcher $dispatcher, sfPearEnvironment $environment)
     {
-        $this->dispatcher  = $dispatcher;
+        $this->dispatcher = $dispatcher;
         $this->environment = $environment;
 
         // configure this plugin manager
@@ -97,7 +97,7 @@ class sfPluginManager
      * @param string $plugin  The plugin name
      * @param array  $options An array of options
      *
-     * @return Boolean|string true if the plugin is already installed, the name of the installed plugin otherwise
+     * @return bool|string true if the plugin is already installed, the name of the installed plugin otherwise
      */
     public function installPlugin($plugin, $options = [])
     {
@@ -107,7 +107,7 @@ class sfPluginManager
     }
 
     /**
-     * Installs a plugin
+     * Installs a plugin.
      *
      * @see installPlugin()
      */
@@ -123,10 +123,10 @@ class sfPluginManager
                 throw new sfPluginException("You try to install a symfony 1.0 plugin.\nPlease read the help message of this task to know how to install a plugin for the current version of symfony.");
             }
 
-            $download  = $plugin;
+            $download = $plugin;
             $isPackage = false;
         } elseif (false !== strpos($plugin, '/')) {
-            [$channel, $plugin] = explode('/', $plugin);
+            list($channel, $plugin) = explode('/', $plugin);
         }
 
         $this->dispatcher->notify(new sfEvent($this, 'plugin.pre_install', ['channel' => $channel, 'plugin' => $plugin, 'is_package' => $isPackage]));
@@ -151,7 +151,7 @@ class sfPluginManager
             }
 
             $existing = $this->environment->getRegistry()->packageInfo($plugin, 'version', $channel);
-            if (version_compare($existing, $version) === 0) {
+            if (0 === version_compare($existing, $version)) {
                 $this->dispatcher->notify(new sfEvent($this, 'application.log', ['Plugin is already installed']));
 
                 return true;
@@ -176,7 +176,10 @@ class sfPluginManager
         $this->installing[$channel.'/'.$plugin] = true;
 
         if ($isPackage) {
-            $this->checkPluginDependencies($plugin, $version, ['install_deps' => isset($options['install_deps']) ? (bool) $options['install_deps'] : false, 'stability'    => $stability]);
+            $this->checkPluginDependencies($plugin, $version, [
+                'install_deps' => isset($options['install_deps']) ? (bool) $options['install_deps'] : false,
+                'stability' => $stability,
+            ]);
         }
 
         // download the actual URL to the plugin
@@ -206,6 +209,7 @@ class sfPluginManager
         $err = $installer->setDownloadedPackages($packages);
         if (PEAR::isError($err)) {
             PEAR::staticPopErrorHandling();
+
             throw new sfPluginException($err->getMessage());
         }
 
@@ -223,9 +227,9 @@ class sfPluginManager
             unset($this->installing[$channel.'/'.$plugin]);
 
             return $pluginPackage->getPackage();
-        } else {
-            throw new sfPluginException(sprintf('Installation of "%s" plugin failed', $plugin));
         }
+
+        throw new sfPluginException(sprintf('Installation of "%s" plugin failed', $plugin));
     }
 
     /**
@@ -237,7 +241,7 @@ class sfPluginManager
     public function uninstallPlugin($plugin, $channel = null)
     {
         if (false !== strpos($plugin, '/')) {
-            [$channel, $plugin] = explode('/', $plugin);
+            list($channel, $plugin) = explode('/', $plugin);
         }
 
         $channel ??= $this->environment->getConfig()->get('default_channel');
@@ -319,8 +323,8 @@ class sfPluginManager
     /**
      * Gets the "best" version available for a given plugin.
      *
-     * @param  string $plugin     The plugin name
-     * @param  string $stability  The stability name
+     * @param string $plugin    The plugin name
+     * @param string $stability The stability name
      *
      * @return string The version
      */
@@ -341,10 +345,10 @@ class sfPluginManager
     /**
      * Returns true if the plugin is comptatible with your environment.
      *
-     * @param  string $plugin   The plugin name
-     * @param  string $version  The plugin version
+     * @param string $plugin  The plugin name
+     * @param string $version The plugin version
      *
-     * @return Boolean true if the plugin is compatible, false otherwise
+     * @return bool true if the plugin is compatible, false otherwise
      */
     public function isPluginCompatible($plugin, $version)
     {
@@ -371,8 +375,8 @@ class sfPluginManager
     /**
      * Returns the license for a given plugin.
      *
-     * @param string $plugin    The plugin name
-     * @param array  $options   An array of options
+     * @param string $plugin  The plugin name
+     * @param array  $options An array of options
      *
      * @return string The license
      *
@@ -406,9 +410,9 @@ class sfPluginManager
     /**
      * Returns true if the plugin is comptatible with the dependency.
      *
-     * @param  array   $dependency An dependency array
+     * @param array $dependency An dependency array
      *
-     * @return Boolean true if the plugin is compatible, false otherwise
+     * @return bool true if the plugin is compatible, false otherwise
      */
     protected function isPluginCompatibleWithDependency($dependency)
     {
@@ -418,9 +422,9 @@ class sfPluginManager
     /**
      * Checks that the dependency is valid.
      *
-     * @param  array   $dependency A dependency array
+     * @param array $dependency A dependency array
      *
-     * @return Boolean true if the dependency is valid, false otherwise
+     * @return bool true if the dependency is valid, false otherwise
      */
     protected function checkDependency($dependency)
     {

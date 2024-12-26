@@ -15,12 +15,25 @@
  */
 class sfCommandManager
 {
-    protected $arguments            = '';
-    protected $errors               = [];
-    protected $optionSet            = null;
-    protected $argumentSet          = [];
-    protected $optionValues         = [];
-    protected $argumentValues       = [];
+    /** @var array */
+    protected $arguments = '';
+
+    /** @var string[] */
+    protected $errors = [];
+
+    /** @var sfCommandOptionSet */
+    protected $optionSet;
+
+    /** @var sfCommandArgumentSet */
+    protected $argumentSet = [];
+
+    /** @var array */
+    protected $optionValues = [];
+
+    /** @var array */
+    protected $argumentValues = [];
+
+    /** @var array */
     protected $parsedArgumentValues = [];
 
     /**
@@ -29,7 +42,7 @@ class sfCommandManager
      * @param sfCommandArgumentSet $argumentSet A sfCommandArgumentSet object
      * @param sfCommandOptionSet   $optionSet   A setOptionSet object
      */
-    public function __construct(sfCommandArgumentSet $argumentSet = null, sfCommandOptionSet $optionSet = null)
+    public function __construct(?sfCommandArgumentSet $argumentSet = null, ?sfCommandOptionSet $optionSet = null)
     {
         if (null === $argumentSet) {
             $argumentSet = new sfCommandArgumentSet();
@@ -98,25 +111,24 @@ class sfCommandManager
             }
         } elseif (!is_array($arguments)) {
             // hack to split arguments with spaces : --test="with some spaces"
-            $arguments = preg_replace_callback(
-                '/(\'|")(.+?)\\1/',
-                fn ($matches) => str_replace(' ', '=PLACEHOLDER=', $matches[2]),
-                $arguments
-            );
+            $arguments = preg_replace_callback('/(\'|")(.+?)\\1/', function ($match) {
+                return str_replace(' ', '=PLACEHOLDER=', $match[2]);
+            }, $arguments);
             $arguments = preg_split('/\s+/', $arguments);
             $arguments = str_replace('=PLACEHOLDER=', ' ', $arguments);
         }
 
-        $this->arguments            = $arguments;
-        $this->optionValues         = $this->optionSet->getDefaults();
-        $this->argumentValues       = $this->argumentSet->getDefaults();
+        $this->arguments = $arguments;
+        $this->optionValues = $this->optionSet->getDefaults();
+        $this->argumentValues = $this->argumentSet->getDefaults();
         $this->parsedArgumentValues = [];
-        $this->errors               = [];
+        $this->errors = [];
 
         while (!in_array($argument = array_shift($this->arguments), ['', null])) {
             if ('--' == $argument) {
                 // stop options parsing
                 $this->parsedArgumentValues = array_merge($this->parsedArgumentValues, $this->arguments);
+
                 break;
             }
 
@@ -134,10 +146,11 @@ class sfCommandManager
             if (array_key_exists($position, $this->parsedArgumentValues)) {
                 if ($argument->isArray()) {
                     $this->argumentValues[$argument->getName()] = array_slice($this->parsedArgumentValues, $position);
+
                     break;
-                } else {
-                    $this->argumentValues[$argument->getName()] = $this->parsedArgumentValues[$position];
                 }
+
+                $this->argumentValues[$argument->getName()] = $this->parsedArgumentValues[$position];
             }
             ++$position;
         }
@@ -187,6 +200,8 @@ class sfCommandManager
      * @param string $name The argument name
      *
      * @return mixed The argument value
+     *
+     * @throws sfCommandException
      */
     public function getArgumentValue($name)
     {
@@ -213,6 +228,8 @@ class sfCommandManager
      * @param string $name The option name
      *
      * @return mixed The option value
+     *
+     * @throws sfCommandException
      */
     public function getOptionValue($name)
     {
@@ -231,12 +248,13 @@ class sfCommandManager
     protected function parseShortOption($argument)
     {
         // short option can be aggregated like in -vd (== -v -d)
-        for ($i = 0, $count = strlen($argument); $i < $count; $i++) {
+        for ($i = 0, $count = strlen($argument); $i < $count; ++$i) {
             $shortcut = $argument[$i];
-            $value    = true;
+            $value = true;
 
             if (!$this->optionSet->hasShortcut($shortcut)) {
                 $this->errors[] = sprintf('The option "-%s" does not exist.', $shortcut);
+
                 continue;
             }
 
@@ -247,24 +265,26 @@ class sfCommandManager
                 if ($i + 1 < strlen($argument)) {
                     $value = substr($argument, $i + 1);
                     $this->setOption($option, $value);
+
                     break;
-                } else {
-                    // take next element as argument (if it doesn't start with a -)
-                    if (count($this->arguments) && $this->arguments[0][0] != '-') {
-                        $value = array_shift($this->arguments);
-                        $this->setOption($option, $value);
-                        break;
-                    } else {
-                        $this->errors[] = sprintf('Option "-%s" requires an argument', $shortcut);
-                        $value = null;
-                    }
                 }
+
+                // take next element as argument (if it doesn't start with a -)
+                if (count($this->arguments) && '-' != $this->arguments[0][0]) {
+                    $value = array_shift($this->arguments);
+                    $this->setOption($option, $value);
+
+                    break;
+                }
+
+                $this->errors[] = sprintf('Option "-%s" requires an argument', $shortcut);
+                $value = null;
             } elseif ($option->isParameterOptional()) {
-                if (substr($argument, $i + 1) != '') {
+                if ('' != substr($argument, $i + 1)) {
                     $value = substr($argument, $i + 1);
                 } else {
                     // take next element as argument (if it doesn't start with a -)
-                    if (count($this->arguments) && $this->arguments[0][0] != '-') {
+                    if (count($this->arguments) && '-' != $this->arguments[0][0]) {
                         $value = array_shift($this->arguments);
                     } else {
                         $value = $option->getDefault();
@@ -272,6 +292,7 @@ class sfCommandManager
                 }
 
                 $this->setOption($option, $value);
+
                 break;
             }
 
@@ -287,10 +308,11 @@ class sfCommandManager
     protected function parseLongOption($argument)
     {
         if (false !== strpos($argument, '=')) {
-            [$name, $value] = explode('=', $argument, 2);
+            list($name, $value) = explode('=', $argument, 2);
 
             if (!$this->optionSet->hasOption($name)) {
                 $this->errors[] = sprintf('The "--%s" option does not exist.', $name);
+
                 return;
             }
 
@@ -305,6 +327,7 @@ class sfCommandManager
 
             if (!$this->optionSet->hasOption($name)) {
                 $this->errors[] = sprintf('The "--%s" option does not exist.', $name);
+
                 return;
             }
 

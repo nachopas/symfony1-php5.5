@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Generates a Doctrine module.
@@ -22,15 +22,30 @@ class sfDoctrineGenerateModuleTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('module', sfCommandArgument::REQUIRED, 'The module name'), new sfCommandArgument('model', sfCommandArgument::REQUIRED, 'The model class name')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('module', sfCommandArgument::REQUIRED, 'The module name'),
+            new sfCommandArgument('model', sfCommandArgument::REQUIRED, 'The model class name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('theme', null, sfCommandOption::PARAMETER_REQUIRED, 'The theme name', 'default'), new sfCommandOption('generate-in-cache', null, sfCommandOption::PARAMETER_NONE, 'Generate the module in cache'), new sfCommandOption('non-verbose-templates', null, sfCommandOption::PARAMETER_NONE, 'Generate non verbose templates'), new sfCommandOption('with-show', null, sfCommandOption::PARAMETER_NONE, 'Generate a show method'), new sfCommandOption('singular', null, sfCommandOption::PARAMETER_REQUIRED, 'The singular name', null), new sfCommandOption('plural', null, sfCommandOption::PARAMETER_REQUIRED, 'The plural name', null), new sfCommandOption('route-prefix', null, sfCommandOption::PARAMETER_REQUIRED, 'The route prefix', null), new sfCommandOption('with-doctrine-route', null, sfCommandOption::PARAMETER_NONE, 'Whether you will use a Doctrine route'), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('actions-base-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The base class for the actions', 'sfActions')]);
+        $this->addOptions([
+            new sfCommandOption('theme', null, sfCommandOption::PARAMETER_REQUIRED, 'The theme name', 'default'),
+            new sfCommandOption('generate-in-cache', null, sfCommandOption::PARAMETER_NONE, 'Generate the module in cache'),
+            new sfCommandOption('non-verbose-templates', null, sfCommandOption::PARAMETER_NONE, 'Generate non verbose templates'),
+            new sfCommandOption('with-show', null, sfCommandOption::PARAMETER_NONE, 'Generate a show method'),
+            new sfCommandOption('singular', null, sfCommandOption::PARAMETER_REQUIRED, 'The singular name', null),
+            new sfCommandOption('plural', null, sfCommandOption::PARAMETER_REQUIRED, 'The plural name', null),
+            new sfCommandOption('route-prefix', null, sfCommandOption::PARAMETER_REQUIRED, 'The route prefix', null),
+            new sfCommandOption('with-doctrine-route', null, sfCommandOption::PARAMETER_NONE, 'Whether you will use a Doctrine route'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('actions-base-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The base class for the actions', 'sfActions'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'generate-module';
         $this->briefDescription = 'Generates a Doctrine module';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:generate-module|INFO] task generates a Doctrine module:
 
   [./symfony doctrine:generate-module frontend article Article|INFO]
@@ -63,22 +78,40 @@ EOF;
     protected function execute($arguments = [], $options = [])
     {
         $databaseManager = new sfDatabaseManager($this->configuration);
-    
+
         $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
-        $this->constants = ['PROJECT_NAME'   => $properties['symfony']['name'] ?? 'symfony', 'APP_NAME'       => $arguments['application'], 'MODULE_NAME'    => $arguments['module'], 'UC_MODULE_NAME' => ucfirst($arguments['module']), 'MODEL_CLASS'    => $arguments['model'], 'AUTHOR_NAME'    => $properties['symfony']['author'] ?? 'Your name here'];
+        $this->constants = [
+            'PROJECT_NAME' => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony',
+            'APP_NAME' => $arguments['application'],
+            'MODULE_NAME' => $arguments['module'],
+            'UC_MODULE_NAME' => ucfirst($arguments['module']),
+            'MODEL_CLASS' => $arguments['model'],
+            'AUTHOR_NAME' => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here',
+        ];
 
         $method = $options['generate-in-cache'] ? 'executeInit' : 'executeGenerate';
 
-        $this->$method($arguments, $options);
+        $this->{$method}($arguments, $options);
     }
 
     protected function executeGenerate($arguments = [], $options = [])
     {
         // generate module
-        $tmpDir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.md5(uniqid(random_int(0, mt_getrandmax()), true));
+        $tmpDir = sfConfig::get('sf_cache_dir').DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.md5(uniqid(rand(), true));
         $generatorManager = new sfGeneratorManager($this->configuration, $tmpDir);
-        $generatorManager->generate('sfDoctrineGenerator', ['model_class'           => $arguments['model'], 'moduleName'            => $arguments['module'], 'theme'                 => $options['theme'], 'non_verbose_templates' => $options['non-verbose-templates'], 'with_show'             => $options['with-show'], 'singular'              => $options['singular'] ?: sfInflector::underscore($arguments['model']), 'plural'                => $options['plural'] ?: sfInflector::underscore($arguments['model'].'s'), 'route_prefix'          => $options['route-prefix'], 'with_doctrine_route'   => $options['with-doctrine-route'], 'actions_base_class'    => $options['actions-base-class']]);
+        $generatorManager->generate('sfDoctrineGenerator', [
+            'model_class' => $arguments['model'],
+            'moduleName' => $arguments['module'],
+            'theme' => $options['theme'],
+            'non_verbose_templates' => $options['non-verbose-templates'],
+            'with_show' => $options['with-show'],
+            'singular' => $options['singular'] ? $options['singular'] : sfInflector::underscore($arguments['model']),
+            'plural' => $options['plural'] ? $options['plural'] : sfInflector::underscore($arguments['model'].'s'),
+            'route_prefix' => $options['route-prefix'],
+            'with_doctrine_route' => $options['with-doctrine-route'],
+            'actions_base_class' => $options['actions-base-class'],
+        ]);
 
         $moduleDir = sfConfig::get('sf_app_module_dir').'/'.$arguments['module'];
 
@@ -118,6 +151,7 @@ EOF;
         foreach ($dirs as $dir) {
             if (is_dir($dir)) {
                 $this->getFilesystem()->mirror($dir, $moduleDir, $finder);
+
                 break;
             }
         }
@@ -149,7 +183,7 @@ EOF;
         // customize php and yml files
         $finder = sfFinder::type('file')->name('*.php', '*.yml');
         $this->constants['CONFIG'] = sprintf(
-            <<<EOF
+            <<<'EOF'
     model_class:           %s
     theme:                 %s
     non_verbose_templates: %s
@@ -160,7 +194,7 @@ EOF;
     with_doctrine_route:   %s
     actions_base_class:    %s
 EOF
-    ,
+            ,
             $arguments['model'],
             $options['theme'],
             $options['non-verbose-templates'] ? 'true' : 'false',

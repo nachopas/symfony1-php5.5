@@ -30,8 +30,9 @@ class sfWidgetFormChoice extends sfWidgetFormChoiceBase
      *  * renderer_options: The options to pass to the renderer constructor
      *  * renderer:         A renderer widget (overrides the expanded and renderer_options options)
      *                      The choices option must be: new sfCallable($thisWidgetInstance, 'getChoices')
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     *
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormChoiceBase
      */
@@ -50,22 +51,24 @@ class sfWidgetFormChoice extends sfWidgetFormChoiceBase
      * Sets the format for HTML id attributes. This is made avaiable to the renderer,
      * as this widget does not render itself, but delegates to the renderer instead.
      *
-     * @param string $format  The format string (must contain a %s for the id placeholder)
+     * @param string $format The format string (must contain a %s for the id placeholder)
      *
      * @see sfWidgetForm
      */
     public function setIdFormat($format)
     {
         $this->options['renderer_options']['id_format'] = $format;
+
+        return $this;
     }
 
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The value selected in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The value selected in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *

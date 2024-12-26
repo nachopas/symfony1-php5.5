@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Generates a Doctrine admin module.
@@ -22,15 +22,25 @@ class sfDoctrineGenerateAdminTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('route_or_model', sfCommandArgument::REQUIRED, 'The route name or the model class')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('route_or_model', sfCommandArgument::REQUIRED, 'The route name or the model class'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('module', null, sfCommandOption::PARAMETER_REQUIRED, 'The module name', null), new sfCommandOption('theme', null, sfCommandOption::PARAMETER_REQUIRED, 'The theme name', 'admin'), new sfCommandOption('singular', null, sfCommandOption::PARAMETER_REQUIRED, 'The singular name', null), new sfCommandOption('plural', null, sfCommandOption::PARAMETER_REQUIRED, 'The plural name', null), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('actions-base-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The base class for the actions', 'sfActions')]);
+        $this->addOptions([
+            new sfCommandOption('module', null, sfCommandOption::PARAMETER_REQUIRED, 'The module name', null),
+            new sfCommandOption('theme', null, sfCommandOption::PARAMETER_REQUIRED, 'The theme name', 'admin'),
+            new sfCommandOption('singular', null, sfCommandOption::PARAMETER_REQUIRED, 'The singular name', null),
+            new sfCommandOption('plural', null, sfCommandOption::PARAMETER_REQUIRED, 'The plural name', null),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('actions-base-class', null, sfCommandOption::PARAMETER_REQUIRED, 'The base class for the actions', 'sfActions'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'generate-admin';
         $this->briefDescription = 'Generates a Doctrine admin module';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:generate-admin|INFO] task generates a Doctrine admin module:
 
   [./symfony doctrine:generate-admin frontend Article|INFO]
@@ -100,7 +110,7 @@ EOF;
             $databaseManager = new sfDatabaseManager($this->configuration);
             $primaryKey = Doctrine_Core::getTable($model)->getIdentifier();
             $module = $options['module'] ?: $name;
-            $content = sprintf(<<<EOF
+            $content = sprintf(<<<'EOF'
 %s:
   class: sfDoctrineRouteCollection
   options:
@@ -145,7 +155,16 @@ EOF
 
         $this->logSection('app', sprintf('Generating admin module "%s" for model "%s"', $module, $model));
 
-        return $task->run([$arguments['application'], $module, $model], ['theme'                 => $options['theme'], 'route-prefix'          => $routeOptions['name'], 'with-doctrine-route'   => true, 'generate-in-cache'     => true, 'non-verbose-templates' => true, 'singular'              => $options['singular'], 'plural'                => $options['plural'], 'actions-base-class'    => $options['actions-base-class']]);
+        return $task->run([$arguments['application'], $module, $model], [
+            'theme' => $options['theme'],
+            'route-prefix' => $routeOptions['name'],
+            'with-doctrine-route' => true,
+            'generate-in-cache' => true,
+            'non-verbose-templates' => true,
+            'singular' => $options['singular'],
+            'plural' => $options['plural'],
+            'actions-base-class' => $options['actions-base-class'],
+        ]);
     }
 
     protected function getRouteFromName($name)
@@ -163,12 +182,13 @@ EOF
      * @param string $model  A model name
      * @param string $module A module name
      *
-     * @return boolean
+     * @return bool
      */
     protected function checkRoute($route, $model, $module)
     {
         if ($route instanceof sfDoctrineRouteCollection) {
             $options = $route->getOptions();
+
             return $model == $options['model'] && $module == $options['module'];
         }
 

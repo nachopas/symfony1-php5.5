@@ -16,13 +16,19 @@ class ProjectConfiguration extends sfProjectConfiguration
 
         $task = new sfDoctrineBuildTask($this->dispatcher, new sfFormatter());
         $task->setConfiguration($this);
-        $task->run([], ['no-confirmation' => true, 'db'              => true, 'model'           => true, 'forms'           => true, 'filters'         => true]);
+        $task->run([], [
+            'no-confirmation' => true,
+            'db' => true,
+            'model' => true,
+            'forms' => true,
+            'filters' => true,
+        ]);
     }
 
     public function loadFixtures($fixtures)
     {
-        $path = sfConfig::get('sf_data_dir') . '/' . $fixtures;
-        if (! file_exists($path)) {
+        $path = sfConfig::get('sf_data_dir').'/'.$fixtures;
+        if (!file_exists($path)) {
             throw new sfException('Invalid data fixtures file');
         }
         chdir(sfConfig::get('sf_root_dir'));

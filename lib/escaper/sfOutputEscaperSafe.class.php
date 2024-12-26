@@ -15,12 +15,12 @@
  */
 class sfOutputEscaperSafe extends ArrayIterator
 {
-    protected $value = null;
+    protected $value;
 
     /**
      * Constructor.
      *
-     * @param mixed $value  The value to mark as safe
+     * @param mixed $value The value to mark as safe
      */
     public function __construct($value)
     {
@@ -38,12 +38,12 @@ class sfOutputEscaperSafe extends ArrayIterator
 
     public function __get($key)
     {
-        return $this->value->$key;
+        return $this->value->{$key};
     }
 
     public function __set($key, $value)
     {
-        $this->value->$key = $value;
+        $this->value->{$key} = $value;
     }
 
     public function __call($method, $arguments)
@@ -53,12 +53,12 @@ class sfOutputEscaperSafe extends ArrayIterator
 
     public function __isset($key)
     {
-        return isset($this->value->$key);
+        return isset($this->value->{$key});
     }
 
     public function __unset($key)
     {
-        unset($this->value->$key);
+        unset($this->value->{$key});
     }
 
     /**

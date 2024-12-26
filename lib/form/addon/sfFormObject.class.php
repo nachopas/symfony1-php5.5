@@ -15,8 +15,8 @@
  */
 abstract class sfFormObject extends BaseForm
 {
-    protected $isNew  = true;
-    protected $object = null;
+    protected $isNew = true;
+    protected $object;
 
     /**
      * Returns the current model name.
@@ -45,7 +45,7 @@ abstract class sfFormObject extends BaseForm
     /**
      * Processes cleaned up values.
      *
-     * @param  array $values An array of values
+     * @param array $values An array of values
      *
      * @return array An array of cleaned up values
      */
@@ -54,7 +54,7 @@ abstract class sfFormObject extends BaseForm
     /**
      * Returns true if the current form embeds a new object.
      *
-     * @return Boolean true if the current form embeds a new object, false otherwise
+     * @return bool true if the current form embeds a new object, false otherwise
      */
     public function isNew()
     {
@@ -74,11 +74,11 @@ abstract class sfFormObject extends BaseForm
     /**
      * Binds the current form and saves the object to the database in one step.
      *
-     * @param  array An array of tainted values to use to bind the form
-     * @param  array An array of uploaded files (in the $_FILES or $_GET format)
-     * @param  mixed An optional connection object
+     * @param array $taintedValues An array of tainted values to use to bind the form
+     * @param array $taintedFiles  An array of uploaded files (in the $_FILES or $_GET format)
+     * @param mixed $con           An optional connection object
      *
-     * @return Boolean true if the form is valid, false otherwise
+     * @return bool true if the form is valid, false otherwise
      */
     public function bindAndSave($taintedValues, $taintedFiles = null, $con = null)
     {
@@ -92,7 +92,6 @@ abstract class sfFormObject extends BaseForm
         return false;
     }
 
-
     /**
      * Saves the current object to the database.
      *
@@ -102,9 +101,10 @@ abstract class sfFormObject extends BaseForm
      *
      * @return mixed The current saved object
      *
-     * @see doSave()
+     * @throws Exception
+     * @throws sfValidatorErrorSchema
      *
-     * @throws sfValidatorError If the form is not valid
+     * @see doSave()
      */
     public function save($con = null)
     {
@@ -155,7 +155,7 @@ abstract class sfFormObject extends BaseForm
     /**
      * Updates the values of the object with the cleaned up values.
      *
-     * @param  array $values An array of values
+     * @param array $values An array of values
      *
      * @return mixed The current updated object
      */
@@ -234,8 +234,8 @@ abstract class sfFormObject extends BaseForm
      *  * if the object is new, the method is POST
      *  * if the object already exists, the method is PUT
      *
-     * @param  string $url         The URL for the action
-     * @param  array  $attributes  An array of HTML attributes
+     * @param string $url        The URL for the action
+     * @param array  $attributes An array of HTML attributes
      *
      * @return string An HTML representation of the opening form tag
      *

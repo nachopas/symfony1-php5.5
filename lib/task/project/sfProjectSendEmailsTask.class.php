@@ -20,14 +20,19 @@ class sfProjectSendEmailsTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('message-limit', null, sfCommandOption::PARAMETER_OPTIONAL, 'The maximum number of messages to send', 0), new sfCommandOption('time-limit', null, sfCommandOption::PARAMETER_OPTIONAL, 'The time limit for sending messages (in seconds)', 0)]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('message-limit', null, sfCommandOption::PARAMETER_OPTIONAL, 'The maximum number of messages to send', 0),
+            new sfCommandOption('time-limit', null, sfCommandOption::PARAMETER_OPTIONAL, 'The time limit for sending messages (in seconds)', 0),
+        ]);
 
         $this->namespace = 'project';
         $this->name = 'send-emails';
 
         $this->briefDescription = 'Sends emails stored in a queue';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:send-emails|INFO] sends emails stored in a queue:
 
   [php symfony project:send-emails|INFO]
@@ -53,5 +58,7 @@ EOF;
         $sent = $this->getMailer()->flushQueue();
 
         $this->logSection('project', sprintf('sent %s emails', $sent));
+
+        return 0;
     }
 }

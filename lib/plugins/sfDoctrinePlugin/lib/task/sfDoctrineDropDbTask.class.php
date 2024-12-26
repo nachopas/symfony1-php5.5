@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Drops database for current model.
@@ -24,15 +24,21 @@ class sfDoctrineDropDbTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database')]);
+        $this->addArguments([
+            new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Whether to force dropping of the database')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Whether to force dropping of the database'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'drop-db';
         $this->briefDescription = 'Drops database for current model';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:drop-db|INFO] task drops one or more databases based on
 configuration in [config/databases.yml|COMMENT]:
 
@@ -60,14 +66,15 @@ EOF;
         $environment = $this->configuration instanceof sfApplicationConfiguration ? $this->configuration->getEnvironment() : 'all';
 
         if (
-      !$options['no-confirmation']
-      &&
-      !$this->askConfirmation(array_merge(
-          [sprintf('This command will remove all data in the following "%s" connection(s):', $environment), ''],
-          array_map(fn ($v) => ' - ' . $v, array_keys($databases)),
-          ['', 'Are you sure you want to proceed? (y/N)']
-      ), 'QUESTION_LARGE', false)
-    ) {
+            !$options['no-confirmation']
+            && !$this->askConfirmation(array_merge(
+                [sprintf('This command will remove all data in the following "%s" connection(s):', $environment), ''],
+                array_map(function ($v) {
+                    return ' - '.$v;
+                }, array_keys($databases)),
+                ['', 'Are you sure you want to proceed? (y/N)']
+            ), 'QUESTION_LARGE', false)
+        ) {
             $this->logSection('doctrine', 'task aborted');
 
             return 1;
@@ -75,6 +82,7 @@ EOF;
 
         foreach ($databases as $name => $database) {
             $this->logSection('doctrine', sprintf('Dropping "%s" database', $name));
+
             try {
                 $database->getDoctrineConnection()->dropDatabase();
             } catch (Exception $e) {

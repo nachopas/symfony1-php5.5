@@ -67,12 +67,12 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
             $this->table = Doctrine_Core::getTable($model);
             $this->modelName = $model;
 
-            $baseDir = sfConfig::get('sf_lib_dir') . '/filter/doctrine';
+            $baseDir = sfConfig::get('sf_lib_dir').'/filter/doctrine';
 
             $isPluginModel = $this->isPluginModel($model);
             if ($isPluginModel) {
                 $pluginName = $this->getPluginNameForModel($model);
-                $baseDir .= '/' . $pluginName;
+                $baseDir .= '/'.$pluginName;
             }
 
             if (!is_dir($baseDir.'/base')) {
@@ -103,26 +103,33 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
     /**
      * Returns a sfWidgetForm class name for a given column.
      *
-     * @param  sfDoctrineColumn $column
-     * @return string    The name of a subclass of sfWidgetForm
+     * @param sfDoctrineColumn $column
+     *
+     * @return string The name of a subclass of sfWidgetForm
      */
     public function getWidgetClassForColumn($column)
     {
         switch ($column->getDoctrineType()) {
-      case 'boolean':
-        $name = 'Choice';
-        break;
-      case 'date':
-      case 'datetime':
-      case 'timestamp':
-        $name = 'FilterDate';
-        break;
-      case 'enum':
-        $name = 'Choice';
-        break;
-      default:
-        $name = 'FilterInput';
-    }
+            case 'boolean':
+                $name = 'Choice';
+
+                break;
+
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                $name = 'FilterDate';
+
+                break;
+
+            case 'enum':
+                $name = 'Choice';
+
+                break;
+
+            default:
+                $name = 'FilterInput';
+        }
 
         if ($column->isForeignKey()) {
             $name = 'DoctrineChoice';
@@ -134,33 +141,41 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
     /**
      * Returns a PHP string representing options to pass to a widget for a given column.
      *
-     * @param  sfDoctrineColumn $column
-     * @return string    The options to pass to the widget as a PHP string
+     * @param sfDoctrineColumn $column
+     *
+     * @return string The options to pass to the widget as a PHP string
      */
     public function getWidgetOptionsForColumn($column)
     {
         $options = [];
 
         $withEmpty = $column->isNotNull() && !$column->isForeignKey() ? ["'with_empty' => false"] : [];
+
         switch ($column->getDoctrineType()) {
-      case 'boolean':
-        $options[] = "'choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no')";
-        break;
-      case 'date':
-      case 'datetime':
-      case 'timestamp':
-        $options[] = "'from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate()";
-        $options = array_merge($options, $withEmpty);
-        break;
-      case 'enum':
-        $values = ['' => ''];
-        $values = array_merge($values, $column['values']);
-        $values = array_combine($values, $values);
-        $options[] = "'choices' => ".$this->arrayExport($values);
-        break;
-      default:
-        $options = array_merge($options, $withEmpty);
-    }
+            case 'boolean':
+                $options[] = "'choices' => array('' => 'yes or no', 1 => 'yes', 0 => 'no')";
+
+                break;
+
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                $options[] = "'from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate()";
+                $options = array_merge($options, $withEmpty);
+
+                break;
+
+            case 'enum':
+                $values = ['' => ''];
+                $values = array_merge($values, $column['values']);
+                $values = array_combine($values, $values);
+                $options[] = "'choices' => ".$this->arrayExport($values);
+
+                break;
+
+            default:
+                $options = array_merge($options, $withEmpty);
+        }
 
         if ($column->isForeignKey()) {
             $options[] = sprintf('\'model\' => $this->getRelatedModelName(\'%s\'), \'add_empty\' => true', $column->getRelationKey('alias'));
@@ -172,33 +187,44 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
     /**
      * Returns a sfValidator class name for a given column.
      *
-     * @param  sfDoctrineColumn $column
-     * @return string    The name of a subclass of sfValidator
+     * @param sfDoctrineColumn $column
+     *
+     * @return string The name of a subclass of sfValidator
      */
     public function getValidatorClassForColumn($column)
     {
         switch ($column->getDoctrineType()) {
-      case 'boolean':
-        $name = 'Choice';
-        break;
-      case 'float':
-      case 'decimal':
-        $name = 'Number';
-        break;
-      case 'integer':
-        $name = 'Integer';
-        break;
-      case 'date':
-      case 'datetime':
-      case 'timestamp':
-        $name = 'DateRange';
-        break;
-      case 'enum':
-        $name = 'Choice';
-        break;
-      default:
-        $name = 'Pass';
-    }
+            case 'boolean':
+                $name = 'Choice';
+
+                break;
+
+            case 'float':
+            case 'decimal':
+                $name = 'Number';
+
+                break;
+
+            case 'integer':
+                $name = 'Integer';
+
+                break;
+
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                $name = 'DateRange';
+
+                break;
+
+            case 'enum':
+                $name = 'Choice';
+
+                break;
+
+            default:
+                $name = 'Pass';
+        }
 
         if ($column->isPrimarykey() || $column->isForeignKey()) {
             $name = 'DoctrineChoice';
@@ -210,8 +236,9 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
     /**
      * Returns a PHP string representing options to pass to a validator for a given column.
      *
-     * @param  sfDoctrineColumn $column
-     * @return string    The options to pass to the validator as a PHP string
+     * @param sfDoctrineColumn $column
+     *
+     * @return string The options to pass to the validator as a PHP string
      */
     public function getValidatorOptionsForColumn($column)
     {
@@ -230,21 +257,28 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
             $options[] = sprintf('\'model\' => \'%s\', \'column\' => \'%s\'', $this->table->getOption('name'), $column->getFieldName());
         } else {
             switch ($column->getDoctrineType()) {
-        case 'boolean':
-          $options[] = "'choices' => array('', 1, 0)";
-          break;
-        case 'date':
-          $options[] = "'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDateTime(array('required' => false))";
-          break;
-        case 'datetime':
-        case 'timestamp':
-          $options[] = "'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59'))";
-          break;
-        case 'enum':
-          $values = array_combine($column['values'], $column['values']);
-          $options[] = "'choices' => ".$this->arrayExport($values);
-          break;
-      }
+                case 'boolean':
+                    $options[] = "'choices' => array('', 1, 0)";
+
+                    break;
+
+                case 'date':
+                    $options[] = "'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDateTime(array('required' => false))";
+
+                    break;
+
+                case 'datetime':
+                case 'timestamp':
+                    $options[] = "'from_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 00:00:00')), 'to_date' => new sfValidatorDateTime(array('required' => false, 'datetime_output' => 'Y-m-d 23:59:59'))";
+
+                    break;
+
+                case 'enum':
+                    $values = array_combine($column['values'], $column['values']);
+                    $options[] = "'choices' => ".$this->arrayExport($values);
+
+                    break;
+            }
         }
 
         return count($options) ? sprintf('array(%s)', implode(', ', $options)) : '';
@@ -268,27 +302,32 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
         }
 
         switch ($column->getDoctrineType()) {
-      case 'enum':
-        return 'Enum';
-      case 'boolean':
-        return 'Boolean';
-      case 'date':
-      case 'datetime':
-      case 'timestamp':
-        return 'Date';
-      case 'integer':
-      case 'decimal':
-      case 'float':
-        return 'Number';
-      default:
-        return 'Text';
-    }
+            case 'enum':
+                return 'Enum';
+
+            case 'boolean':
+                return 'Boolean';
+
+            case 'date':
+            case 'datetime':
+            case 'timestamp':
+                return 'Date';
+
+            case 'integer':
+            case 'decimal':
+            case 'float':
+                return 'Number';
+
+            default:
+                return 'Text';
+        }
     }
 
     /**
-     * Array export. Export array to formatted php code
+     * Array export. Export array to formatted php code.
      *
      * @param array $values
+     *
      * @return string $php
      */
     protected function arrayExport($values)
@@ -297,12 +336,12 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
         $php = str_replace("\n", '', $php);
         $php = str_replace('array (  ', 'array(', $php);
         $php = str_replace(',)', ')', $php);
-        $php = str_replace('  ', ' ', $php);
-        return $php;
+
+        return str_replace('  ', ' ', $php);
     }
 
     /**
-     * Filter out models that have disabled generation of form classes
+     * Filter out models that have disabled generation of form classes.
      *
      * @return array $models Array of models to generate forms for
      */
@@ -325,7 +364,7 @@ class sfDoctrineFormFilterGenerator extends sfDoctrineFormGenerator
     }
 
     /**
-     * Get the name of the form class to extend based on the inheritance of the model
+     * Get the name of the form class to extend based on the inheritance of the model.
      *
      * @return string
      */

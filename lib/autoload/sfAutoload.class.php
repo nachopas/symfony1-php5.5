@@ -19,10 +19,10 @@
 class sfAutoload
 {
     protected static $freshCache = false;
-    protected static $instance   = null;
+    protected static $instance;
 
     protected $overriden = [];
-    protected $classes   = [];
+    protected $classes = [];
 
     protected function __construct()
     {
@@ -31,7 +31,7 @@ class sfAutoload
     /**
      * Retrieves the singleton instance of this class.
      *
-     * @return sfCoreAutoload A sfCoreAutoload implementation instance.
+     * @return sfAutoload a sfAutoload implementation instance
      */
     public static function getInstance()
     {
@@ -45,7 +45,7 @@ class sfAutoload
     /**
      * Register sfAutoload in spl autoloader.
      *
-     * @return void
+     * @throws sfException
      */
     public static function register()
     {
@@ -58,8 +58,6 @@ class sfAutoload
 
     /**
      * Unregister sfAutoload from spl autoloader.
-     *
-     * @return void
      */
     public static function unregister()
     {
@@ -98,9 +96,9 @@ class sfAutoload
     /**
      * Reloads the autoloader.
      *
-     * @param  boolean $force Whether to force a reload
+     * @param bool $force Whether to force a reload
      *
-     * @return boolean True if the reload was successful, otherwise false
+     * @return bool True if the reload was successful, otherwise false
      */
     public function reloadClasses($force = false)
     {
@@ -115,16 +113,18 @@ class sfAutoload
         }
 
         self::$freshCache = true;
-        if (file_exists($configuration->getConfigCache()->getCacheName('config/autoload.yml'))) {
+        if (is_file($configuration->getConfigCache()->getCacheName('config/autoload.yml'))) {
             self::$freshCache = false;
             if ($force) {
-                unlink($configuration->getConfigCache()->getCacheName('config/autoload.yml'));
+                if (file_exists($configuration->getConfigCache()->getCacheName('config/autoload.yml'))) {
+                    unlink($configuration->getConfigCache()->getCacheName('config/autoload.yml'));
+                }
             }
         }
 
         $file = $configuration->getConfigCache()->checkConfig('config/autoload.yml');
 
-        $this->classes = include($file);
+        $this->classes = include $file;
 
         foreach ($this->overriden as $class => $path) {
             $this->classes[$class] = $path;
@@ -136,9 +136,9 @@ class sfAutoload
     /**
      * Handles autoloading of classes that have been specified in autoload.yml.
      *
-     * @param  string  $class  A class name.
+     * @param string $class a class name
      *
-     * @return boolean Returns true if the class has been loaded
+     * @return bool Returns true if the class has been loaded
      */
     public function autoload($class)
     {
@@ -153,16 +153,16 @@ class sfAutoload
     /**
      * Tries to load a class that has been specified in autoload.yml.
      *
-     * @param  string  $class  A class name.
+     * @param string $class a class name
      *
-     * @return boolean Returns true if the class has been loaded
+     * @return bool Returns true if the class has been loaded
      */
     public function loadClass($class)
     {
         $class = strtolower($class);
 
         // class already exists
-        if (class_exists($class, false) || interface_exists($class, false)) {
+        if (class_exists($class, false) || interface_exists($class, false) || (function_exists('trait_exists') && trait_exists($class, false))) {
             return true;
         }
 
@@ -181,12 +181,12 @@ class sfAutoload
 
         // see if the file exists in the current module lib directory
         if (
-      sfContext::hasInstance()
-      &&
-      ($module = sfContext::getInstance()->getModuleName())
-      &&
-      isset($this->classes[$module.'/'.$class])
-    ) {
+            sfContext::hasInstance()
+            &&
+            ($module = sfContext::getInstance()->getModuleName())
+            &&
+            isset($this->classes[$module.'/'.$class])
+        ) {
             try {
                 require $this->classes[$module.'/'.$class];
             } catch (sfException $e) {

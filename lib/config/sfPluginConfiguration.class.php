@@ -15,10 +15,10 @@
  */
 abstract class sfPluginConfiguration
 {
-    protected $configuration = null;
-    protected $dispatcher    = null;
-    protected $name          = null;
-    protected $rootDir       = null;
+    protected $configuration;
+    protected $dispatcher;
+    protected $name;
+    protected $rootDir;
 
     /**
      * Constructor.
@@ -32,7 +32,7 @@ abstract class sfPluginConfiguration
         $this->configuration = $configuration;
         $this->dispatcher = $configuration->getEventDispatcher();
         $this->rootDir = null === $rootDir ? $this->guessRootDir() : realpath($rootDir);
-        $this->name = $name ?? $this->guessName();
+        $this->name = null === $name ? $this->guessName() : $name;
 
         $this->setup();
         $this->configure();
@@ -66,7 +66,7 @@ abstract class sfPluginConfiguration
      *
      * This method is called after the plugin's classes have been added to sfAutoload.
      *
-     * @return boolean|null If false sfApplicationConfiguration will look for a config.php (maintains BC with symfony < 1.2)
+     * @return bool|null If false sfApplicationConfiguration will look for a config.php (maintains BC with symfony < 1.2)
      */
     public function initialize()
     {
@@ -119,20 +119,28 @@ abstract class sfPluginConfiguration
     /**
      * Filters sfAutoload configuration values.
      *
-     * @param sfEvent $event
-     * @param array   $config
-     *
      * @return array
      */
     public function filterAutoloadConfig(sfEvent $event, array $config)
     {
         // use array_merge so config is added to the front of the autoload array
         if (!isset($config['autoload'][$this->name.'_lib'])) {
-            $config['autoload'] = array_merge([$this->name.'_lib' => ['path'      => $this->rootDir.'/lib', 'recursive' => true]], $config['autoload']);
+            $config['autoload'] = array_merge([
+                $this->name.'_lib' => [
+                    'path' => $this->rootDir.'/lib',
+                    'recursive' => true,
+                ],
+            ], $config['autoload']);
         }
 
         if (!isset($config['autoload'][$this->name.'_module_libs'])) {
-            $config['autoload'] = array_merge([$this->name.'_module_libs' => ['path'      => $this->rootDir.'/modules/*/lib', 'recursive' => true, 'prefix'    => 1]], $config['autoload']);
+            $config['autoload'] = array_merge([
+                $this->name.'_module_libs' => [
+                    'path' => $this->rootDir.'/modules/*/lib',
+                    'recursive' => true,
+                    'prefix' => 1,
+                ],
+            ], $config['autoload']);
         }
 
         return $config;
@@ -149,8 +157,7 @@ abstract class sfPluginConfiguration
     /**
      * Listens for the "task.test.filter_test_files" event and adds tests from the current plugin.
      *
-     * @param  sfEvent $event
-     * @param  array   $files
+     * @param array $files
      *
      * @return array An array of files with the appropriate tests from the current plugin merged in
      */
@@ -189,7 +196,8 @@ abstract class sfPluginConfiguration
     protected function guessRootDir()
     {
         $r = new ReflectionClass(get_class($this));
-        return realpath(dirname($r->getFilename()).'/..');
+
+        return realpath(dirname($r->getFileName()).'/..');
     }
 
     /**

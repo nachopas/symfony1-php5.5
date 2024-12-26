@@ -37,8 +37,8 @@ class sfWidgetFormInputFileEditable extends sfWidgetFormInputFile
      * file upload widget with a "_delete" suffix. So, when creating a form,
      * don't forget to add a validator for this additional field.
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormInputFile
      */
@@ -60,10 +60,10 @@ class sfWidgetFormInputFileEditable extends sfWidgetFormInputFile
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The value displayed in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The value displayed in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -95,8 +95,8 @@ class sfWidgetFormInputFileEditable extends sfWidgetFormInputFile
     {
         if ($this->getOption('is_image')) {
             return false !== $this->getOption('file_src') ? $this->renderTag('img', array_merge(['src' => $this->getOption('file_src')], $attributes)) : '';
-        } else {
-            return $this->getOption('file_src');
         }
+
+        return $this->getOption('file_src');
     }
 }

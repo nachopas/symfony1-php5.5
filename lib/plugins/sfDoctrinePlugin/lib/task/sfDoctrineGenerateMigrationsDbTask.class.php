@@ -12,7 +12,7 @@
 require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 
 /**
- * Generate migrations from database
+ * Generate migrations from database.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
@@ -24,13 +24,16 @@ class sfDoctrineGenerateMigrationsDbTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'generate-migrations-db';
         $this->briefDescription = 'Generate migration classes from existing database connections';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:generate-migrations-db|INFO] task generates migration classes from
 existing database connections:
 
@@ -52,6 +55,8 @@ EOF;
             $this->getFilesystem()->mkdirs($config['migrations_path']);
         }
 
-        $this->callDoctrineCli('generate-migrations-db', ['yaml_schema_path' => $this->prepareSchemaFile($config['yaml_schema_path'])]);
+        $this->callDoctrineCli('generate-migrations-db', [
+            'yaml_schema_path' => $this->prepareSchemaFile($config['yaml_schema_path']),
+        ]);
     }
 }

@@ -12,22 +12,22 @@
 // | Copyright (c) 2004 Michael Wallner <mike@iworks.at>                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: TGettext.class.php 23810 2009-11-12 11:07:44Z Kris.Wallsmith $
+// $Id$
 
 /**
- * File::Gettext
+ * File::Gettext.
  *
  * @author      Michael Wallner <mike@php.net>
  * @license     PHP License
  */
 
 /**
- * Use PHPs builtin error messages
+ * Use PHPs builtin error messages.
  */
-//ini_set('track_errors', true);
+// ini_set('track_errors', true);
 
 /**
- * File_Gettext
+ * File_Gettext.
  *
  * GNU gettext file reader and writer.
  *
@@ -36,79 +36,79 @@
  * #################################################################
  *
  * @author      Michael Wallner <mike@php.net>
- * @access      public
+ *
+ * @version     $Revision: 9856 $
  */
 class TGettext
 {
     /**
-     * strings
+     * strings.
      *
      * associative array with all [msgid => msgstr] entries
      *
-     * @access  protected
-     * @var     array
-    */
+     * @var array
+     */
     protected $strings = [];
 
     /**
-     * meta
+     * meta.
      *
      * associative array containing meta
      * information like project name or content type
      *
-     * @access  protected
-     * @var     array
+     * @var array
      */
     protected $meta = [];
 
     /**
-     * file path
+     * file path.
      *
-     * @access  protected
-     * @var     string
+     * @var string
      */
     protected $file = '';
 
     /**
-     * Factory
+     * Factory.
      *
      * @static
-     * @access  public
-     * @return  object  Returns File_Gettext_PO or File_Gettext_MO on success
-     *                  or PEAR_Error on failure.
-     * @param   string  $format MO or PO
-     * @param   string  $file   path to GNU gettext file
+     *
+     * @param string $format MO or PO
+     * @param string $file   path to GNU gettext file
+     *
+     * @return object returns File_Gettext_PO or File_Gettext_MO on success
+     *                or PEAR_Error on failure
      */
     public static function factory($format, $file = '')
     {
         $format = strtoupper($format);
         $filename = __DIR__.'/'.$format.'.php';
-        if (is_file($filename) == false) {
-            throw new Exception("Class file $file not found");
+        if (false == is_file($filename)) {
+            throw new Exception("Class file {$file} not found");
         }
 
         include_once $filename;
-        $class = 'TGettext_' . $format;
+        $class = 'TGettext_'.$format;
 
         return new $class($file);
     }
 
     /**
-     * poFile2moFile
+     * poFile2moFile.
      *
      * That's a simple fake of the 'msgfmt' console command.  It reads the
      * contents of a GNU PO file and saves them to a GNU MO file.
      *
      * @static
-     * @access  public
-     * @return  mixed   Returns true on success or PEAR_Error on failure.
-     * @param   string  $pofile path to GNU PO file
-     * @param   string  $mofile path to GNU MO file
+     *
+     * @param string $pofile path to GNU PO file
+     * @param string $mofile path to GNU MO file
+     *
+     * @return mixed returns true on success or PEAR_Error on failure
      */
     public function poFile2moFile($pofile, $mofile)
     {
         if (!is_file($pofile)) {
-            throw new Exception("File $pofile doesn't exist.");
+            throw new Exception("File {$pofile} doesn't exist.");
         }
 
         include_once __DIR__.'/PO.php';
@@ -128,50 +128,54 @@ class TGettext
     }
 
     /**
-     * prepare
+     * prepare.
      *
      * @static
-     * @access  protected
-     * @return  string
-     * @param   string  $string
-     * @param   bool    $reverse
+     *
+     * @param string $string
+     * @param bool   $reverse
+     *
+     * @return string
      */
     public function prepare($string, $reverse = false)
     {
         if ($reverse) {
             $smap = ['"', "\n", "\t", "\r"];
-            $rmap = ['\"', '\\n"' . "\n" . '"', '\\t', '\\r'];
-            return (string) str_replace($smap, $rmap, $string);
-        } else {
-            $string = preg_replace('/"\s+"/', '', $string);
-            $smap = ['\\n', '\\r', '\\t', '\"'];
-            $rmap = ["\n", "\r", "\t", '"'];
+            $rmap = ['\"', '\\n"'."\n".'"', '\\t', '\\r'];
+
             return (string) str_replace($smap, $rmap, $string);
         }
+        $string = preg_replace('/"\s+"/', '', $string);
+        $smap = ['\\n', '\\r', '\\t', '\"'];
+        $rmap = ["\n", "\r", "\t", '"'];
+
+        return (string) str_replace($smap, $rmap, $string);
     }
 
     /**
-     * meta2array
+     * meta2array.
      *
      * @static
-     * @access  public
-     * @return  array
-     * @param   string  $meta
+     *
+     * @param string $meta
+     *
+     * @return array
      */
     public function meta2array($meta)
     {
         $array = [];
         foreach (explode("\n", $meta) as $info) {
             if ($info = trim($info)) {
-                [$key, $value] = explode(':', $info, 2);
+                list($key, $value) = explode(':', $info, 2);
                 $array[trim($key)] = trim($value);
             }
         }
+
         return $array;
     }
 
     /**
-     * toArray
+     * toArray.
      *
      * Returns meta info and strings as an array of a structure like that:
      * <code>
@@ -191,8 +195,8 @@ class TGettext
      * </code>
      *
      * @see     fromArray()
-     * @access  protected
-     * @return  array
+     *
+     * @return array
      */
     public function toArray()
     {
@@ -200,7 +204,7 @@ class TGettext
     }
 
     /**
-     * fromArray
+     * fromArray.
      *
      * Assigns meta info and strings from an array of a structure like that:
      * <code>
@@ -220,50 +224,51 @@ class TGettext
      * </code>
      *
      * @see     toArray()
-     * @access  protected
-     * @return  bool
-     * @param   array       $array
+     *
+     * @param array $array
+     *
+     * @return bool
      */
     public function fromArray($array)
     {
         if (!array_key_exists('strings', $array)) {
-            if (count($array) != 2) {
+            if (2 != count($array)) {
                 return false;
-            } else {
-                [$this->meta, $this->strings] = $array;
             }
+            list($this->meta, $this->strings) = $array;
         } else {
             $this->meta = @$array['meta'];
             $this->strings = @$array['strings'];
         }
+
         return true;
     }
 
     /**
-     * toMO
+     * toMO.
      *
-     * @access  protected
-     * @return  object  File_Gettext_MO
+     * @return object File_Gettext_MO
      */
     public function toMO()
     {
         include_once __DIR__.'/MO.php';
-        $MO = new TGettext_MO;
+        $MO = new TGettext_MO();
         $MO->fromArray($this->toArray());
+
         return $MO;
     }
 
     /**
-     * toPO
+     * toPO.
      *
-     * @access  protected
-     * @return  object      File_Gettext_PO
+     * @return object File_Gettext_PO
      */
     public function toPO()
     {
         include_once __DIR__.'/PO.php';
-        $PO = new TGettext_PO;
+        $PO = new TGettext_PO();
         $PO->fromArray($this->toArray());
+
         return $PO;
     }
 }

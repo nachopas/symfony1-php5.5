@@ -17,16 +17,19 @@
  */
 class sfObjectRoute extends sfRequestRoute
 {
-    protected $object  = false;
+    /** @var bool|object */
+    protected $object = false;
+
+    /** @var array|bool */
     protected $objects = false;
 
     /**
      * Constructor.
      *
-     * @param string $pattern       The pattern to match
-     * @param array  $defaults      An array of default parameter values
-     * @param array  $requirements  An array of requirements for parameters (regexes)
-     * @param array  $options       An array of options
+     * @param string $pattern      The pattern to match
+     * @param array  $defaults     An array of default parameter values
+     * @param array  $requirements An array of requirements for parameters (regexes)
+     * @param array  $options      An array of options
      *
      * @see sfRoute
      */
@@ -50,10 +53,10 @@ class sfObjectRoute extends sfRequestRoute
     /**
      * Returns true if the parameters matches this route, false otherwise.
      *
-     * @param  mixed  $params  The parameters
-     * @param  array  $context The context
+     * @param mixed $params  The parameters
+     * @param array $context The context
      *
-     * @return Boolean         true if the parameters matches this route, false otherwise.
+     * @return bool true if the parameters matches this route, false otherwise
      */
     public function matchesParameters($params, $context = [])
     {
@@ -63,9 +66,9 @@ class sfObjectRoute extends sfRequestRoute
     /**
      * Generates a URL from the given parameters.
      *
-     * @param  mixed   $params    The parameter values
-     * @param  array   $context   The context
-     * @param  Boolean $absolute  Whether to generate an absolute URL
+     * @param mixed $params   The parameter values
+     * @param array $context  The context
+     * @param bool  $absolute Whether to generate an absolute URL
      *
      * @return string The generated URL
      */
@@ -79,7 +82,9 @@ class sfObjectRoute extends sfRequestRoute
      *
      * This method is only accessible if the route is bound and of type "object".
      *
-     * @return Object The related object
+     * @return object The related object
+     *
+     * @throws sfError404Exception
      */
     public function getObject()
     {
@@ -109,6 +114,8 @@ class sfObjectRoute extends sfRequestRoute
      * This method is only accessible if the route is bound and of type "list".
      *
      * @return array And array of related objects
+     *
+     * @throws sfError404Exception
      */
     public function getObjects()
     {
@@ -194,7 +201,7 @@ class sfObjectRoute extends sfRequestRoute
     {
         $method = $this->options['convert'] ?? 'toParams';
 
-        return $object->$method();
+        return $object->{$method}();
     }
 
     protected function getRealVariables()

@@ -24,13 +24,16 @@ class sfDoctrineBuildSchemaTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'build-schema';
         $this->briefDescription = 'Creates a schema from an existing database';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:build-schema|INFO] task introspects a database to create a schema:
 
   [./symfony doctrine:build-schema|INFO]

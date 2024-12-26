@@ -15,19 +15,21 @@
  */
 class sfBrowser extends sfBrowserBase
 {
-    protected $listeners        = [];
-    protected $context          = null;
-    protected $currentException = null;
+    protected $listeners = [];
+    protected $context;
+    protected $currentException;
+    protected $rawConfiguration = [];
 
     /**
      * Calls a request to a uri.
      */
     protected function doCall()
     {
+        // Before getContext, it can trigger some
+        sfConfig::set('sf_test', true);
+
         // recycle our context object
         $this->context = $this->getContext(true);
-
-        sfConfig::set('sf_test', true);
 
         // we register a fake rendering filter
         sfConfig::set('sf_rendering_filter', ['sfFakeRenderingFilter', null]);
@@ -52,7 +54,7 @@ class sfBrowser extends sfBrowserBase
     /**
      * Returns the current application context.
      *
-     * @param  bool $forceReload  true to force context reload, false otherwise
+     * @param bool $forceReload true to force context reload, false otherwise
      *
      * @return sfContext
      */
@@ -123,9 +125,7 @@ class sfBrowser extends sfBrowserBase
     }
 
     /**
-     * Shutdown function to clean up and remove sessions
-     *
-     * @return void
+     * Shutdown function to clean up and remove sessions.
      */
     public function shutdown()
     {
@@ -136,11 +136,9 @@ class sfBrowser extends sfBrowserBase
     }
 
     /**
-     * Listener for exceptions
+     * Listener for exceptions.
      *
-     * @param  sfEvent $event  The event to handle
-     *
-     * @return void
+     * @param sfEvent $event The event to handle
      */
     public function listenToException(sfEvent $event)
     {

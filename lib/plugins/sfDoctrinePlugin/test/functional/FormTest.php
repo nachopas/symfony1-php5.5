@@ -9,7 +9,8 @@
  */
 
 $app = 'frontend';
-require_once(__DIR__.'/../bootstrap/functional.php');
+
+require_once __DIR__.'/../bootstrap/functional.php';
 
 $t = new lime_test(17);
 
@@ -23,7 +24,12 @@ unset($profileForm['id'], $profileForm['user_id']);
 
 $userForm->embedForm('Profile', $profileForm);
 
-$data = ['username' => 'jwage', 'password' => 'changeme', 'Profile'  => ['first_name' => 'Jonathan', 'last_name'  => 'Wage']];
+$data = ['username' => 'jwage',
+    'password' => 'changeme',
+    'Profile' => [
+        'first_name' => 'Jonathan',
+        'last_name' => 'Wage',
+    ]];
 
 $userForm->bind($data);
 $userForm->save();
@@ -34,14 +40,16 @@ $t->is($user->getUsername(), 'jwage');
 $t->is($profile->getFirstName(), 'Jonathan');
 
 $userCount = Doctrine_Query::create()
-  ->from('User u')
-  ->count();
+    ->from('User u')
+    ->count()
+;
 
 $t->is($userCount, 1);
 
 $profileCount = Doctrine_Query::create()
-  ->from('Profile p')
-  ->count();
+    ->from('Profile p')
+    ->count()
+;
 
 $t->is($profileCount, 1);
 
@@ -54,7 +62,11 @@ $t->is($widget->getChoices(), ['jwage' => '4cb9c8a8048fd02294477fcb1a41191a']);
 $widget = new sfWidgetFormDoctrineChoice(['model' => 'User', 'key_method' => 'getUsername', 'method' => 'getPassword']);
 $t->is($widget->getChoices(), ['jwage' => '4cb9c8a8048fd02294477fcb1a41191a']);
 
-$methods = ['widgetChoiceTableMethod1', 'widgetChoiceTableMethod2', 'widgetChoiceTableMethod3'];
+$methods = [
+    'widgetChoiceTableMethod1',
+    'widgetChoiceTableMethod2',
+    'widgetChoiceTableMethod3',
+];
 
 foreach ($methods as $method) {
     $widget = new sfWidgetFormDoctrineChoice(['model' => 'User', 'table_method' => $method]);
@@ -80,7 +92,18 @@ class UserGroupForm extends GroupForm
 $userForm = new UserForm($user);
 $userForm->embedRelation('Groups', 'UserGroupForm');
 
-$data = ['username' => 'jonwage', 'password' => 'changeme', 'Groups'  => [0 => ['name' => 'New User Group 1 Name'], 1 => ['name' => 'New User Group 2 Name']]];
+$data = [
+    'username' => 'jonwage',
+    'password' => 'changeme',
+    'Groups' => [
+        0 => [
+            'name' => 'New User Group 1 Name',
+        ],
+        1 => [
+            'name' => 'New User Group 2 Name',
+        ],
+    ],
+];
 
 $userForm->bind($data);
 $t->is($userForm->isValid(), true);

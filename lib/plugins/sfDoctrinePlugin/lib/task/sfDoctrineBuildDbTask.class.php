@@ -24,16 +24,21 @@ class sfDoctrineBuildDbTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database')]);
+        $this->addArguments([
+            new sfCommandArgument('database', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'A specific database'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->aliases = ['doctrine:create-db'];
         $this->namespace = 'doctrine';
         $this->name = 'build-db';
         $this->briefDescription = 'Creates database for current model';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:build-db|INFO] task creates one or more databases based on
 configuration in [config/databases.yml|COMMENT]:
 
@@ -57,6 +62,7 @@ EOF;
 
         foreach ($databases as $name => $database) {
             $this->logSection('doctrine', sprintf('Creating "%s" environment "%s" database', $environment, $name));
+
             try {
                 $database->getDoctrineConnection()->createDatabase();
             } catch (Exception $e) {

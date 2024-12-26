@@ -23,8 +23,8 @@ class sfPearRestPlugin extends sfPearRest11
     /**
      * Constructs a new sfRestPlugin instance.
      *
-     * @param PEAR_Config $config   The PEAR Config object
-     * @param array       $options  An array of options
+     * @param PEAR_Config $config  The PEAR Config object
+     * @param array       $options An array of options
      */
     public function __construct(PEAR_Config $config, $options = [])
     {
@@ -97,10 +97,10 @@ class sfPearRestPlugin extends sfPearRest11
     /**
      * Gets the all available versions for a given plugin.
      *
-     * @param  string $plugin     The plugin name
-     * @param  string $stability  The stability name
+     * @param string $plugin    The plugin name
+     * @param string $stability The stability name
      *
-     * @return array  An array of versions
+     * @return array An array of versions
      */
     public function getPluginVersions($plugin, $stability = null)
     {
@@ -140,7 +140,7 @@ class sfPearRestPlugin extends sfPearRest11
      * @param string $plugin  The plugin name
      * @param string $version The plugin version
      *
-     * @return array  An array of depedencies
+     * @return array An array of depedencies
      */
     public function getPluginDependencies($plugin, $version)
     {
@@ -155,9 +155,9 @@ class sfPearRestPlugin extends sfPearRest11
     /**
      * Gets the plugin download URL.
      *
-     * @param  string $plugin     The plugin name
-     * @param  string $version    The plugin version
-     * @param  string $stability  The stability
+     * @param string $plugin    The plugin name
+     * @param string $version   The plugin version
+     * @param string $stability The stability
      *
      * @return string The URL for the plugin
      */
@@ -183,9 +183,9 @@ class sfPearRestPlugin extends sfPearRest11
     /**
      * Returns an array of set of possible states sorted from most to least stable.
      *
-     * @param  string $stability Stability name
+     * @param string $stability Stability name
      *
-     * @return array  An array of stability names
+     * @return array An array of stability names
      */
     protected function getAllowedStates($stability = null)
     {

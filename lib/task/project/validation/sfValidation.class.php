@@ -15,7 +15,7 @@
  */
 abstract class sfValidation extends sfBaseTask
 {
-    protected $task = null;
+    protected $task;
 
     /**
      * Validates the current project.
@@ -32,7 +32,7 @@ abstract class sfValidation extends sfBaseTask
     /**
      * Returns a finder that exclude upgrade scripts from being upgraded!
      *
-     * @param  string $type String directory or file or any (for both file and directory)
+     * @param string $type String directory or file or any (for both file and directory)
      *
      * @return sfFinder A sfFinder instance
      */
@@ -81,7 +81,10 @@ abstract class sfValidation extends sfBaseTask
         return array_merge(
             glob(sfConfig::get('sf_apps_dir').'/*/modules/*/lib'.$subdirectory),
             glob(sfConfig::get('sf_apps_dir').'/*/lib'.$subdirectory),
-            [sfConfig::get('sf_apps_dir').'/lib'.$subdirectory, sfConfig::get('sf_lib_dir').$subdirectory]
+            [
+                sfConfig::get('sf_apps_dir').'/lib'.$subdirectory,
+                sfConfig::get('sf_lib_dir').$subdirectory,
+            ]
         );
     }
 

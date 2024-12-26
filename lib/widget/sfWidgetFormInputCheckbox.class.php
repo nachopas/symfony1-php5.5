@@ -22,8 +22,8 @@ class sfWidgetFormInputCheckbox extends sfWidgetFormInput
      *
      *  - value_attribute_value: The "value" attribute value to set for the checkbox
      *
-     * @param array  $options     An array of options
-     * @param array  $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormInput
      */
@@ -35,8 +35,8 @@ class sfWidgetFormInputCheckbox extends sfWidgetFormInput
     }
 
     /**
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormInput
      */
@@ -54,10 +54,10 @@ class sfWidgetFormInputCheckbox extends sfWidgetFormInput
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The this widget is checked if value is not null
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The this widget is checked if value is not null
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -65,7 +65,7 @@ class sfWidgetFormInputCheckbox extends sfWidgetFormInput
      */
     public function render($name, $value = null, $attributes = [], $errors = [])
     {
-        if (null !== $value && $value !== false) {
+        if (null !== $value && false !== $value) {
             $attributes['checked'] = 'checked';
         }
 

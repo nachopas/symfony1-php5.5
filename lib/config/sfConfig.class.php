@@ -71,7 +71,7 @@ class sfConfig
     /**
      * Retrieves all configuration parameters.
      *
-     * @return array An associative array of configuration parameters.
+     * @return array an associative array of configuration parameters
      */
     public static function getAll()
     {

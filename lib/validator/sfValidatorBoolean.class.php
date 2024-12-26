@@ -23,8 +23,8 @@ class sfValidatorBoolean extends sfValidatorBase
      *  * true_values:  The list of true values
      *  * false_values: The list of false values
      *
-     * @param array $options    An array of options
-     * @param array $messages   An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -42,11 +42,12 @@ class sfValidatorBoolean extends sfValidatorBase
      */
     protected function doClean($value)
     {
-        if (in_array($value, $this->getOption('true_values'))) {
+        $checkValue = 0 === $value ? '0' : $value;
+        if (in_array($checkValue, $this->getOption('true_values'))) {
             return true;
         }
 
-        if (in_array($value, $this->getOption('false_values'))) {
+        if (in_array($checkValue, $this->getOption('false_values'))) {
             return false;
         }
 

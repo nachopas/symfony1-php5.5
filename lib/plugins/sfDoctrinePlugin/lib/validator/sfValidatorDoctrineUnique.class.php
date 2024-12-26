@@ -71,9 +71,9 @@ class sfValidatorDoctrineUnique extends sfValidatorSchema
             $this->setOption('column', [$this->getOption('column')]);
         }
 
-        //if $values isn't an array, make it one
+        // if $values isn't an array, make it one
         if (!is_array($values)) {
-            //use first column for key
+            // use first column for key
             $columns = $this->getOption('column');
             $values = [$columns[0] => $values];
         }
@@ -86,7 +86,7 @@ class sfValidatorDoctrineUnique extends sfValidatorSchema
                 return $originalValues;
             }
 
-            $q->addWhere('a.' . $colName . ' = ?', $values[$column]);
+            $q->addWhere('a.'.$colName.' = ?', $values[$column]);
         }
 
         $object = $q->fetchOne();
@@ -104,7 +104,10 @@ class sfValidatorDoctrineUnique extends sfValidatorSchema
 
         $columns = $this->getOption('column');
 
-        throw new sfValidatorErrorSchema($this, [$columns[0] => $error]);
+        $errorSchema = new sfValidatorErrorSchema($this);
+        $errorSchema->addError($error, $columns[0]);
+
+        throw $errorSchema;
     }
 
     /**
@@ -112,14 +115,13 @@ class sfValidatorDoctrineUnique extends sfValidatorSchema
      *
      * @param BaseObject  A Doctrine object
      * @param array       An array of values
-     *
-     * @param Boolean     true if the object is being updated, false otherwise
+     * @param bool     true if the object is being updated, false otherwise
      */
     protected function isUpdate(Doctrine_Record $object, $values)
     {
         // check each primary key column
         foreach ($this->getPrimaryKeys() as $column) {
-            if (!isset($values[$column]) || $object->$column != $values[$column]) {
+            if (!isset($values[$column]) || $object->{$column} != $values[$column]) {
                 return false;
             }
         }

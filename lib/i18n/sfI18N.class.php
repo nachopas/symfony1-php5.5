@@ -15,20 +15,20 @@
  */
 class sfI18N
 {
-    protected $configuration = null;
-    protected $dispatcher    = null;
-    protected $cache         = null;
-    protected $options       = [];
-    protected $culture       = 'en';
-    protected $messageSource = null;
-    protected $messageFormat = null;
+    protected $configuration;
+    protected $dispatcher;
+    protected $cache;
+    protected $options = [];
+    protected $culture = 'en';
+    protected $messageSource;
+    protected $messageFormat;
 
     /**
      * Class constructor.
      *
      * @see initialize()
      */
-    public function __construct(sfApplicationConfiguration $configuration, sfCache $cache = null, $options = [])
+    public function __construct(sfApplicationConfiguration $configuration, ?sfCache $cache = null, $options = [])
     {
         $this->initialize($configuration, $cache, $options);
     }
@@ -45,11 +45,11 @@ class sfI18N
      *  * untranslated_prefix: The prefix to use when a message is not translated
      *  * untranslated_suffix: The suffix to use when a message is not translated
      *
-     * @param sfApplicationConfiguration $configuration   A sfApplicationConfiguration instance
-     * @param sfCache                    $cache           A sfCache instance
-     * @param array                      $options         An array of options
+     * @param sfApplicationConfiguration $configuration A sfApplicationConfiguration instance
+     * @param sfCache                    $cache         A sfCache instance
+     * @param array                      $options       An array of options
      */
-    public function initialize(sfApplicationConfiguration $configuration, sfCache $cache = null, $options = [])
+    public function initialize(sfApplicationConfiguration $configuration, ?sfCache $cache = null, $options = [])
     {
         $this->configuration = $configuration;
         $this->dispatcher = $configuration->getEventDispatcher();
@@ -60,7 +60,13 @@ class sfI18N
             unset($options['culture']);
         }
 
-        $this->options = array_merge(['source'              => 'XLIFF', 'debug'               => false, 'database'            => 'default', 'untranslated_prefix' => '[T]', 'untranslated_suffix' => '[/T]'], $options);
+        $this->options = array_merge([
+            'source' => 'XLIFF',
+            'debug' => false,
+            'database' => 'default',
+            'untranslated_prefix' => '[T]',
+            'untranslated_suffix' => '[/T]',
+        ], $options);
 
         $this->dispatcher->connect('user.change_culture', [$this, 'listenToChangeCultureEvent']);
 
@@ -70,7 +76,7 @@ class sfI18N
     }
 
     /**
-     * Returns the initialization options
+     * Returns the initialization options.
      *
      * @return array The options used to initialize sfI18n
      */
@@ -119,7 +125,7 @@ class sfI18N
     /**
      * Returns a new message source.
      *
-     * @param  mixed $dir An array of i18n directories to create a XLIFF or gettext message source, null otherwise
+     * @param mixed $dir An array of i18n directories to create a XLIFF or gettext message source, null otherwise
      *
      * @return sfMessageSource A sfMessageSource object
      */
@@ -194,11 +200,11 @@ class sfI18N
     }
 
     /**
-     * Gets the translation for the given string
+     * Gets the translation for the given string.
      *
-     * @param  string $string     The string to translate
-     * @param  array  $args       An array of arguments for the translation
-     * @param  string $catalogue  The catalogue name
+     * @param string $string    The string to translate
+     * @param array  $args      An array of arguments for the translation
+     * @param string $catalogue The catalogue name
      *
      * @return string The translated string
      */
@@ -210,8 +216,8 @@ class sfI18N
     /**
      * Gets a country name.
      *
-     * @param  string $iso      The ISO code
-     * @param  string $culture  The culture for the translation
+     * @param string $iso     The ISO code
+     * @param string $culture The culture for the translation
      *
      * @return string The country name
      */
@@ -226,7 +232,7 @@ class sfI18N
     /**
      * Gets a native culture name.
      *
-     * @param  string $culture The culture
+     * @param string $culture The culture
      *
      * @return string The culture name
      */
@@ -238,15 +244,19 @@ class sfI18N
     /**
      * Returns a timestamp from a date with time formatted with a given culture.
      *
-     * @param  string  $dateTime  The formatted date with time as string
-     * @param  string  $culture The culture
+     * @param string $dateTime The formatted date with time as string
+     * @param string $culture  The culture
      *
-     * @return integer The timestamp
+     * @return int The timestamp
      */
     public function getTimestampForCulture($dateTime, $culture = null)
     {
-        [$day, $month, $year] = $this->getDateForCulture($dateTime, $culture ?? $this->culture);
-        [$hour, $minute] = $this->getTimeForCulture($dateTime, $culture ?? $this->culture);
+        list($day, $month, $year) = $this->getDateForCulture($dateTime, null === $culture ? $this->culture : $culture);
+        list($hour, $minute) = $this->getTimeForCulture($dateTime, null === $culture ? $this->culture : $culture);
+
+        // mktime behavior change with php8
+        $hour = null !== $hour ? $hour : 0;
+        $minute = null !== $minute ? $minute : 0;
 
         return null === $day ? null : mktime($hour, $minute, 0, $month, $day, $year);
     }
@@ -254,10 +264,10 @@ class sfI18N
     /**
      * Returns the day, month and year from a date formatted with a given culture.
      *
-     * @param  string  $date    The formatted date as string
-     * @param  string  $culture The culture
+     * @param string $date    The formatted date as string
+     * @param string $culture The culture
      *
-     * @return array   An array with the day, month and year
+     * @return array An array with the day, month and year
      */
     public function getDateForCulture($date, $culture = null)
     {
@@ -272,7 +282,11 @@ class sfI18N
         $dateRegexp = preg_replace('/[dmy]+/i', '(\d+)', preg_quote($dateFormat));
 
         // We parse date format to see where things are (m, d, y)
-        $a = ['d' => strpos($dateFormat, 'd'), 'm' => strpos($dateFormat, 'M'), 'y' => strpos($dateFormat, 'y')];
+        $a = [
+            'd' => strpos($dateFormat, 'd'),
+            'm' => strpos($dateFormat, 'M'),
+            'y' => strpos($dateFormat, 'y'),
+        ];
         $tmp = array_flip($a);
         ksort($tmp);
         $i = 0;
@@ -283,21 +297,21 @@ class sfI18N
         $datePositions = array_flip($c);
 
         // We find all elements
-        if (preg_match("~$dateRegexp~", $date, $matches)) {
+        if (preg_match("~{$dateRegexp}~", $date, $matches)) {
             // We get matching timestamp
             return [$matches[$datePositions['d']], $matches[$datePositions['m']], $matches[$datePositions['y']]];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
      * Returns the hour, minute from a date formatted with a given culture.
      *
-     * @param  string  $time    The formatted date as string
-     * @param  string  $culture The culture
+     * @param string $time    The formatted date as string
+     * @param string $culture The culture
      *
-     * @return array   An array with the hour and minute
+     * @return array An array with the hour and minute
      */
     public function getTimeForCulture($time, $culture = null)
     {
@@ -314,25 +328,29 @@ class sfI18N
         $timeRegexp = preg_replace(['/[hm]+/i', '/a/'], ['(\d+)', '(\w+)'], preg_quote($timeFormat));
 
         // We parse time format to see where things are (h, m)
-        $timePositions = ['h' => strpos($timeFormat, 'H') !== false ? strpos($timeFormat, 'H') : strpos($timeFormat, 'h'), 'm' => strpos($timeFormat, 'm'), 'a' => strpos($timeFormat, 'a')];
+        $timePositions = [
+            'h' => false !== strpos($timeFormat, 'H') ? strpos($timeFormat, 'H') : strpos($timeFormat, 'h'),
+            'm' => strpos($timeFormat, 'm'),
+            'a' => strpos($timeFormat, 'a'),
+        ];
         asort($timePositions);
         $i = 0;
 
         // normalize positions to 0, 1, ...
         // positions that don't exist in the pattern remain false
         foreach ($timePositions as $key => $value) {
-            if ($value !== false) {
+            if (false !== $value) {
                 $timePositions[$key] = ++$i;
             }
         }
 
         // We find all elements
-        if (preg_match("~$timeRegexp~", $time, $matches)) {
+        if (preg_match("~{$timeRegexp}~", $time, $matches)) {
             // repect am/pm setting if present
-            if ($timePositions['a'] !== false) {
-                if (strcasecmp($matches[$timePositions['a']], $timeFormatInfo->getAMDesignator()) == 0) {
+            if (false !== $timePositions['a']) {
+                if (0 == strcasecmp($matches[$timePositions['a']], $timeFormatInfo->getAMDesignator())) {
                     $hour = $matches[$timePositions['h']];
-                } elseif (strcasecmp($matches[$timePositions['a']], $timeFormatInfo->getPMDesignator()) == 0) {
+                } elseif (0 == strcasecmp($matches[$timePositions['a']], $timeFormatInfo->getPMDesignator())) {
                     $hour = $matches[$timePositions['h']] + 12;
                 } else {
                     // am/pm marker is invalid
@@ -345,17 +363,17 @@ class sfI18N
 
             // We get matching timestamp
             return [$hour, $matches[$timePositions['m']]];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
      * Returns true if messages are stored in a file.
      *
-     * @param  string  $source  The source name
+     * @param string $source The source name
      *
-     * @return Boolean true if messages are stored in a file, false otherwise
+     * @return bool true if messages are stored in a file, false otherwise
      */
     public static function isMessageSourceFileBased($source)
     {
@@ -367,8 +385,7 @@ class sfI18N
     /**
      * Listens to the user.change_culture event.
      *
-     * @param sfEvent $event  An sfEvent instance
-     *
+     * @param sfEvent $event An sfEvent instance
      */
     public function listenToChangeCultureEvent(sfEvent $event)
     {
@@ -380,7 +397,6 @@ class sfI18N
      * Listens to the controller.change_action event.
      *
      * @param sfEvent $event An sfEvent instance
-     *
      */
     public function listenToChangeActionEvent(sfEvent $event)
     {

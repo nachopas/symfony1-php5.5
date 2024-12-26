@@ -2,7 +2,6 @@
 
 /**
  * ArticleTranslation form.
- *
  */
 class ArticleTranslationForm extends BaseArticleTranslationForm
 {

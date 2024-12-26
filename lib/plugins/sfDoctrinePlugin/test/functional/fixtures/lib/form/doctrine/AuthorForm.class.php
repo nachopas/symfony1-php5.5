@@ -2,7 +2,6 @@
 
 /**
  * Author form.
- *
  */
 class AuthorForm extends BaseAuthorForm
 {

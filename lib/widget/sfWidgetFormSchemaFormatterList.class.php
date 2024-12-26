@@ -9,14 +9,12 @@
  */
 
 /**
- *
- *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class sfWidgetFormSchemaFormatterList extends sfWidgetFormSchemaFormatter
 {
-    protected $rowFormat       = "<li>\n  %error%%label%\n  %field%%help%\n%hidden_fields%</li>\n";
-    protected $errorRowFormat  = "<li>\n%errors%</li>\n";
-    protected $helpFormat      = '<br />%help%';
+    protected $rowFormat = "<li>\n  %error%%label%\n  %field%%help%\n%hidden_fields%</li>\n";
+    protected $errorRowFormat = "<li>\n%errors%</li>\n";
+    protected $helpFormat = '<br />%help%';
     protected $decoratorFormat = "<ul>\n  %content%</ul>";
 }

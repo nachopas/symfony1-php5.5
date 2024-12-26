@@ -22,16 +22,16 @@ class sfPostgreSQLSessionStorage extends sfDatabaseSessionStorage
     /**
      * Destroys a session.
      *
-     * @param  string $id  A session ID
+     * @param string $id A session ID
      *
      * @return bool true, if the session was destroyed, otherwise an exception is thrown
      *
-     * @throws <b>sfDatabaseException</b> If the session cannot be destroyed
+     * @throws sfDatabaseException If the session cannot be destroyed
      */
     public function sessionDestroy($id)
     {
         // get table/column
-        $db_table  = $this->options['db_table'];
+        $db_table = $this->options['db_table'];
         $db_id_col = $this->options['db_id_col'];
 
         // cleanup the session id, just in case
@@ -51,16 +51,16 @@ class sfPostgreSQLSessionStorage extends sfDatabaseSessionStorage
     /**
      * Cleans up old sessions.
      *
-     * @param  int $lifetime  The lifetime of a session
+     * @param int $lifetime The lifetime of a session
      *
      * @return bool true, if old sessions have been cleaned, otherwise an exception is thrown
      *
-     * @throws <b>sfDatabaseException</b> If any old sessions cannot be cleaned
+     * @throws sfDatabaseException If any old sessions cannot be cleaned
      */
     public function sessionGC($lifetime)
     {
         // get table/column
-        $db_table    = $this->options['db_table'];
+        $db_table = $this->options['db_table'];
         $db_time_col = $this->options['db_time_col'];
 
         // delete the record associated with this id
@@ -76,18 +76,18 @@ class sfPostgreSQLSessionStorage extends sfDatabaseSessionStorage
     /**
      * Reads a session.
      *
-     * @param  string $id  A session ID
+     * @param string $id A session ID
      *
-     * @return string      The session data if the session was read or created, otherwise an exception is thrown
+     * @return string The session data if the session was read or created, otherwise an exception is thrown
      *
-     * @throws <b>sfDatabaseException</b> If the session cannot be read
+     * @throws sfDatabaseException If the session cannot be read
      */
     public function sessionRead($id)
     {
         // get table/column
-        $db_table    = $this->options['db_table'];
+        $db_table = $this->options['db_table'];
         $db_data_col = $this->options['db_data_col'];
-        $db_id_col   = $this->options['db_id_col'];
+        $db_id_col = $this->options['db_id_col'];
         $db_time_col = $this->options['db_time_col'];
 
         // cleanup the session id, just in case
@@ -98,44 +98,44 @@ class sfPostgreSQLSessionStorage extends sfDatabaseSessionStorage
 
         $result = @pg_query($this->db, $sql);
 
-        if ($result != false && @pg_num_rows($result) == 1) {
+        if (false != $result && 1 == @pg_num_rows($result)) {
             // found the session
             $data = pg_fetch_row($result);
 
             return $data[0];
-        } else {
-            // session does not exist, create it
-            $sql = 'INSERT INTO '.$db_table.' ('.$db_id_col.', '.$db_data_col.', '.$db_time_col.') VALUES (\''.$id.'\', \'\', '.time().')';
-
-            if (@pg_query($this->db, $sql)) {
-                return '';
-            }
-
-            // can't create record
-            throw new sfDatabaseException(sprintf('sfPostgreSQLSessionStorage cannot create new record for id "%s".', $id));
         }
+
+        // session does not exist, create it
+        $sql = 'INSERT INTO '.$db_table.' ('.$db_id_col.', '.$db_data_col.', '.$db_time_col.') VALUES (\''.$id.'\', \'\', '.time().')';
+
+        if (@pg_query($this->db, $sql)) {
+            return '';
+        }
+
+        // can't create record
+        throw new sfDatabaseException(sprintf('sfPostgreSQLSessionStorage cannot create new record for id "%s".', $id));
     }
 
     /**
      * Writes session data.
      *
-     * @param  string $id    A session ID
-     * @param  string $data  A serialized chunk of session data
+     * @param string $id   A session ID
+     * @param string $data A serialized chunk of session data
      *
      * @return bool true, if the session was written, otherwise an exception is thrown
      *
-     * @throws <b>sfDatabaseException</b> If the session data cannot be written
+     * @throws sfDatabaseException If the session data cannot be written
      */
     public function sessionWrite($id, $data)
     {
         // get table/column
-        $db_table    = $this->options['db_table'];
+        $db_table = $this->options['db_table'];
         $db_data_col = $this->options['db_data_col'];
-        $db_id_col   = $this->options['db_id_col'];
+        $db_id_col = $this->options['db_id_col'];
         $db_time_col = $this->options['db_time_col'];
 
         // cleanup the session id and data, just in case
-        $id   = addslashes($id);
+        $id = addslashes($id);
         $data = addslashes($data);
 
         // delete the record associated with this id

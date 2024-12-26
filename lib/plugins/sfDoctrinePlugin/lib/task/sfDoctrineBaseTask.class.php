@@ -60,14 +60,13 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
     /**
      * Returns Doctrine databases from the supplied database manager.
      *
-     * @param sfDatabaseManager $databaseManager
-     * @param array|null        $names An array of names or NULL for all databases
+     * @param array|null $names An array of names or NULL for all databases
      *
      * @return array An associative array of {@link sfDoctrineDatabase} objects and their names
      *
      * @throws InvalidArgumentException If a requested database is not a Doctrine database
      */
-    protected function getDoctrineDatabases(sfDatabaseManager $databaseManager, array $names = null)
+    protected function getDoctrineDatabases(sfDatabaseManager $databaseManager, ?array $names = null)
     {
         $databases = [];
 
@@ -141,7 +140,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
                         $models[$model]['package'] = $plugin->getName().'.lib.model.doctrine';
                     }
 
-                    if (!isset($models[$model]['package_custom_path']) && 0 === strpos($models[$model]['package'], (string) $plugin->getName())) {
+                    if (!isset($models[$model]['package_custom_path']) && 0 === strpos($models[$model]['package'], $plugin->getName())) {
                         $models[$model]['package_custom_path'] = $plugin->getRootDir().'/lib/model/doctrine';
                     }
                 }
@@ -166,7 +165,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
         }
 
         // create one consolidated schema file
-        $file = realpath(sys_get_temp_dir()).'/doctrine_schema_'.random_int(11111, 99999).'.yml';
+        $file = realpath(sys_get_temp_dir()).'/doctrine_schema_'.rand(11111, 99999).'.yml';
         $this->logSection('file+', $file);
         file_put_contents($file, sfYaml::dump($models, 4));
 
@@ -182,7 +181,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
      *
      * @see Doctrine_Import_Schema::getGlobalDefinitionKeys()
      */
-    protected function filterSchemaGlobals(& $models)
+    protected function filterSchemaGlobals(&$models)
     {
         $globals = [];
         $globalKeys = Doctrine_Import_Schema::getGlobalDefinitionKeys();

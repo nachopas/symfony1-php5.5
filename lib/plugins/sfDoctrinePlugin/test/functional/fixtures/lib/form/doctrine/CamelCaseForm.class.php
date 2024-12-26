@@ -2,7 +2,6 @@
 
 /**
  * CamelCase form.
- *
  */
 class CamelCaseForm extends BaseCamelCaseForm
 {

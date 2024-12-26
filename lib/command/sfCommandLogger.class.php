@@ -9,7 +9,6 @@
  */
 
 /**
- *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class sfCommandLogger extends sfConsoleLogger
@@ -18,7 +17,7 @@ class sfCommandLogger extends sfConsoleLogger
      * Initializes this logger.
      *
      * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
-     * @param array             $options    An array of options.
+     * @param array             $options    an array of options
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -38,8 +37,8 @@ class sfCommandLogger extends sfConsoleLogger
 
         $prefix = '';
         if ('application.log' == $event->getName()) {
-            $subject  = $event->getSubject();
-            $subject  = is_object($subject) ? get_class($subject) : (is_string($subject) ? $subject : 'main');
+            $subject = $event->getSubject();
+            $subject = is_object($subject) ? get_class($subject) : (is_string($subject) ? $subject : 'main');
 
             $prefix = '>> '.$subject.' ';
         }

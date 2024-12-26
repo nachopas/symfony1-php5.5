@@ -10,7 +10,6 @@
  */
 
 /**
- *
  * sfUser wraps a client session and provides accessor methods for user
  * attributes. It also makes storing and retrieving multiple page form data
  * rather easy by allowing user attributes to be stored in namespaces, which
@@ -24,20 +23,28 @@ class sfUser implements ArrayAccess
     /**
      * The namespace under which attributes will be stored.
      */
-    const ATTRIBUTE_NAMESPACE = 'symfony/user/sfUser/attributes';
+    public const ATTRIBUTE_NAMESPACE = 'symfony/user/sfUser/attributes';
 
-    const CULTURE_NAMESPACE = 'symfony/user/sfUser/culture';
+    public const CULTURE_NAMESPACE = 'symfony/user/sfUser/culture';
 
-    protected $options         = [];
-    protected $attributeHolder = null;
-    protected $culture         = null;
-    protected $storage         = null;
-    protected $dispatcher      = null;
+    protected $options = [];
+
+    /** @var sfNamespacedParameterHolder */
+    protected $attributeHolder;
+    protected $culture;
+
+    /** @var sfStorage */
+    protected $storage;
+
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $options
      */
     public function __construct(sfEventDispatcher $dispatcher, sfStorage $storage, $options = [])
     {
@@ -59,18 +66,22 @@ class sfUser implements ArrayAccess
      *  * use_flash:       Whether to enable flash usage (false by default)
      *  * logging:         Whether to enable logging (false by default)
      *
-     * @param sfEventDispatcher $dispatcher  An sfEventDispatcher instance.
-     * @param sfStorage         $storage     An sfStorage instance.
-     * @param array             $options     An associative array of options.
-     *
-     * @return Boolean          true, if initialization completes successfully, otherwise false.
+     * @param sfEventDispatcher $dispatcher an sfEventDispatcher instance
+     * @param sfStorage         $storage    an sfStorage instance
+     * @param array             $options    an associative array of options
      */
     public function initialize(sfEventDispatcher $dispatcher, sfStorage $storage, $options = [])
     {
         $this->dispatcher = $dispatcher;
-        $this->storage    = $storage;
+        $this->storage = $storage;
 
-        $this->options = array_merge(['auto_shutdown'   => true, 'culture'         => null, 'default_culture' => 'en', 'use_flash'       => false, 'logging'         => false], $options);
+        $this->options = array_merge([
+            'auto_shutdown' => true,
+            'culture' => null,
+            'default_culture' => 'en',
+            'use_flash' => false,
+            'logging' => false,
+        ], $options);
 
         $this->attributeHolder = new sfNamespacedParameterHolder(self::ATTRIBUTE_NAMESPACE);
 
@@ -102,7 +113,7 @@ class sfUser implements ArrayAccess
     }
 
     /**
-     * Returns the initialization options
+     * Returns the initialization options.
      *
      * @return array The options used to initialize sfUser
      */
@@ -128,9 +139,9 @@ class sfUser implements ArrayAccess
     /**
      * Sets a flash variable that will be passed to the very next action.
      *
-     * @param  string $name     The name of the flash variable
-     * @param  string $value    The value of the flash variable
-     * @param  bool   $persist  true if the flash have to persist for the following request (true by default)
+     * @param string $name    The name of the flash variable
+     * @param string $value   The value of the flash variable
+     * @param bool   $persist true if the flash have to persist for the following request (true by default)
      */
     public function setFlash($name, $value, $persist = true)
     {
@@ -151,8 +162,8 @@ class sfUser implements ArrayAccess
     /**
      * Gets a flash variable.
      *
-     * @param  string $name     The name of the flash variable
-     * @param  string $default  The default value returned when named variable does not exist.
+     * @param string $name    The name of the flash variable
+     * @param string $default the default value returned when named variable does not exist
      *
      * @return mixed The value of the flash variable
      */
@@ -168,7 +179,7 @@ class sfUser implements ArrayAccess
     /**
      * Returns true if a flash variable of the specified name exists.
      *
-     * @param  string $name  The name of the flash variable
+     * @param string $name The name of the flash variable
      *
      * @return bool true if the variable exists, false otherwise
      */
@@ -194,10 +205,11 @@ class sfUser implements ArrayAccess
     /**
      * Returns true if the user attribute exists (implements the ArrayAccess interface).
      *
-     * @param  string $name The name of the user attribute
+     * @param string $name The name of the user attribute
      *
-     * @return Boolean true if the user attribute exists, false otherwise
+     * @return bool true if the user attribute exists, false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->hasAttribute($name);
@@ -206,10 +218,11 @@ class sfUser implements ArrayAccess
     /**
      * Returns the user attribute associated with the name (implements the ArrayAccess interface).
      *
-     * @param  string $name  The offset of the value to get
+     * @param string $name The offset of the value to get
      *
      * @return mixed The user attribute if exists, null otherwise
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->getAttribute($name, false);
@@ -219,8 +232,9 @@ class sfUser implements ArrayAccess
      * Sets the user attribute associated with the offset (implements the ArrayAccess interface).
      *
      * @param string $offset The parameter name
-     * @param string $value The parameter value
+     * @param string $value  The parameter value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->setAttribute($offset, $value);
@@ -231,6 +245,7 @@ class sfUser implements ArrayAccess
      *
      * @param string $offset The parameter name
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->getAttributeHolder()->remove($offset);
@@ -288,8 +303,8 @@ class sfUser implements ArrayAccess
     /**
      * Calls methods defined via sfEventDispatcher.
      *
-     * @param string $method     The method name
-     * @param array  $arguments  The method arguments
+     * @param string $method    The method name
+     * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
      *

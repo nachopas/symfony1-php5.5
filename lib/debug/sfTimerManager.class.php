@@ -23,13 +23,12 @@ class sfTimerManager
      *
      * It returns the timer named $name or create a new one if it does not exist.
      *
-     * @param string $name The name of the timer
-     *
+     * @param string $name  The name of the timer
      * @param bool   $reset
      *
      * @return sfTimer The timer instance
      */
-    public static function getTimer($name, $reset=true)
+    public static function getTimer($name, $reset = true)
     {
         if (!isset(self::$timers[$name])) {
             self::$timers[$name] = new sfTimer($name);

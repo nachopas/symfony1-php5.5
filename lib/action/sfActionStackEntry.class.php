@@ -17,10 +17,10 @@
  */
 class sfActionStackEntry
 {
-    protected $actionInstance = null;
-    protected $actionName     = null;
-    protected $moduleName     = null;
-    protected $presentation   = null;
+    protected $actionInstance;
+    protected $actionName;
+    protected $moduleName;
+    protected $presentation;
 
     /**
      * Class constructor.
@@ -31,9 +31,9 @@ class sfActionStackEntry
      */
     public function __construct($moduleName, $actionName, $actionInstance)
     {
-        $this->actionName     = $actionName;
+        $this->actionName = $actionName;
         $this->actionInstance = $actionInstance;
-        $this->moduleName     = $moduleName;
+        $this->moduleName = $moduleName;
     }
 
     /**
@@ -73,7 +73,7 @@ class sfActionStackEntry
      *
      * @return string Rendered view presentation
      */
-    public function & getPresentation()
+    public function &getPresentation()
     {
         return $this->presentation;
     }
@@ -81,10 +81,10 @@ class sfActionStackEntry
     /**
      * Sets the rendered presentation for this action.
      *
-     * @param string $presentation A rendered presentation.
+     * @param string $presentation a rendered presentation
      */
     public function setPresentation(&$presentation)
     {
-        $this->presentation =& $presentation;
+        $this->presentation = &$presentation;
     }
 }

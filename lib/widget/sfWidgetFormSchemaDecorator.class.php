@@ -15,20 +15,20 @@
  */
 class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
 {
-    protected $widget    = null;
+    protected $widget;
     protected $decorator = '';
 
     /**
      * Constructor.
      *
-     * @param sfWidgetFormSchema $widget     A sfWidgetFormSchema instance
-     * @param string             $decorator  A decorator string
+     * @param sfWidgetFormSchema $widget    A sfWidgetFormSchema instance
+     * @param string             $decorator A decorator string
      *
      * @see sfWidgetFormSchema
      */
     public function __construct(sfWidgetFormSchema $widget, $decorator)
     {
-        $this->widget    = $widget;
+        $this->widget = $widget;
         $this->decorator = $decorator;
 
         parent::__construct();
@@ -37,7 +37,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * Returns the decorated widget.
      *
-     * @param sfWidget The decorated widget
+     * @return sfWidget The decorated widget
      */
     public function getWidget()
     {
@@ -47,12 +47,14 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $values      The value displayed in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param array  $values     The value displayed in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @see sfWidget
+     *
+     * @return string
      */
     public function render($name, $values = [], $attributes = [], $errors = [])
     {
@@ -141,6 +143,8 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
 
     /**
      * @see sfWidgetFormSchema
+     *
+     * @param mixed|null $value
      */
     public function setLabel($name, $value = null)
     {
@@ -155,6 +159,8 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
 
     /**
      * @see sfWidgetFormSchema
+     *
+     * @param mixed|null $name
      */
     public function getLabel($name = null)
     {
@@ -227,6 +233,8 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
 
     /**
      * @see sfWidgetFormSchema
+     *
+     * @param mixed|null $value
      */
     public function renderField($name, $value = null, $attributes = [], $errors = [])
     {
@@ -268,7 +276,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * @see sfWidgetFormSchema
      */
-    public function setParent(sfWidgetFormSchema $parent = null)
+    public function setParent(?sfWidgetFormSchema $parent = null)
     {
         $this->widget->setParent($parent);
 
@@ -303,6 +311,8 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
 
     /**
      * @see sfWidgetFormSchema
+     *
+     * @param mixed|null $pivot
      */
     public function moveField($field, $action, $pivot = null)
     {
@@ -312,6 +322,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * @see sfWidgetFormSchema
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return isset($this->widget[$name]);
@@ -320,6 +331,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * @see sfWidgetFormSchema
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->widget[$name];
@@ -328,6 +340,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * @see sfWidgetFormSchema
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($name, $widget)
     {
         $this->widget[$name] = $widget;
@@ -336,6 +349,7 @@ class sfWidgetFormSchemaDecorator extends sfWidgetFormSchema
     /**
      * @see sfWidgetFormSchema
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         unset($this->widget[$name]);

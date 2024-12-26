@@ -15,7 +15,7 @@
  */
 class sfTesterForm extends sfTester
 {
-    protected $form = null;
+    protected $form;
 
     /**
      * Constructor.
@@ -49,6 +49,7 @@ class sfTesterForm extends sfTester
             foreach ($action->getVarHolder()->getAll() as $name => $value) {
                 if ($value instanceof sfForm && $value->isBound()) {
                     $this->form = $value;
+
                     break;
                 }
             }
@@ -68,9 +69,9 @@ class sfTesterForm extends sfTester
     /**
      * Tests if the submitted form has some error.
      *
-     * @param  Boolean|integer $value Whether to check if the form has error or not, or the number of errors
+     * @param bool|int $value Whether to check if the form has error or not, or the number of errors
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function hasErrors($value = true)
     {
@@ -84,6 +85,14 @@ class sfTesterForm extends sfTester
             $this->tester->is($this->form->hasErrors(), $value, sprintf('the submitted form %s.', ($value) ? 'has some errors' : 'is valid'));
         }
 
+        if ((false === $value || is_int($value) && $value != count($this->form->getErrorSchema()))
+          && $this->form->hasErrors()) {
+            $this->tester->diag(sprintf('%s Errors:', get_class($this->form)));
+            foreach ($this->form->getErrorSchema()->getErrors() as $key => $error) {
+                $this->tester->diag(sprintf('  - %s: %s', $key, $error));
+            }
+        }
+
         return $this->getObjectToReturn();
     }
 
@@ -92,7 +101,7 @@ class sfTesterForm extends sfTester
      *
      * @param mixed $value The error message or the number of errors for the field (optional)
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function hasGlobalError($value = true)
     {
@@ -105,7 +114,7 @@ class sfTesterForm extends sfTester
      * @param string $field The field name to check for an error (null for global errors)
      * @param mixed  $value The error message or the number of errors for the field (optional)
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isError($field, $value = true)
     {
@@ -114,7 +123,10 @@ class sfTesterForm extends sfTester
         }
 
         if (null === $field) {
-            $error = new sfValidatorErrorSchema(new sfValidatorPass(), $this->form->getGlobalErrors());
+            $error = new sfValidatorErrorSchema(new sfValidatorPass());
+            foreach ($this->form->getGlobalErrors() as $globalError) {
+                $error->addError($globalError);
+            }
         } else {
             $error = $this->getFormField($field)->getError();
         }
@@ -129,7 +141,7 @@ class sfTesterForm extends sfTester
             if (!$error) {
                 $this->tester->fail(sprintf('the submitted form has a "%s" error.', $field));
             } else {
-                if ($match[1] == '!') {
+                if ('!' == $match[1]) {
                     $this->tester->unlike($error->getCode(), substr($value, 1), sprintf('the submitted form has a "%s" error that does not match "%s".', $field, $value));
                 } else {
                     $this->tester->like($error->getCode(), $value, sprintf('the submitted form has a "%s" error that matches "%s".', $field, $value));
@@ -155,10 +167,10 @@ class sfTesterForm extends sfTester
             throw new LogicException('no form has been submitted.');
         }
 
-        print $this->tester->error('Form debug');
+        echo $this->tester->error('Form debug');
 
-        print sprintf("Submitted values: %s\n", str_replace("\n", '', var_export($this->form->getTaintedValues(), true)));
-        print sprintf("Errors: %s\n", $this->form->getErrorSchema());
+        echo sprintf("Submitted values: %s\n", str_replace("\n", '', var_export($this->form->getTaintedValues(), true)));
+        echo sprintf("Errors: %s\n", $this->form->getErrorSchema());
 
         exit(1);
     }
@@ -181,6 +193,7 @@ class sfTesterForm extends sfTester
             foreach ($parameters as $key => $value) {
                 if ($value instanceof sfForm && $value->isBound()) {
                     $this->form = $value;
+
                     break;
                 }
             }
@@ -191,9 +204,9 @@ class sfTesterForm extends sfTester
 
     /**
      * @param string $path
+     *
      * @return sfFormField
      */
-
     public function getFormField($path)
     {
         if (false !== $pos = strpos($path, '[')) {

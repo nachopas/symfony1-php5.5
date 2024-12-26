@@ -12,10 +12,12 @@
  * sfWebDebugPanelView adds a panel to the web debug toolbar with information about the view layer.
  *
  * @author      Kris Wallsmith <kris.wallsmith@symfony-project.com>
+ *
+ * @version     SVN: $Id$
  */
 class sfWebDebugPanelView extends sfWebDebugPanel
 {
-    protected $actions  = [];
+    protected $actions = [];
     protected $partials = [];
 
     /**
@@ -33,20 +35,17 @@ class sfWebDebugPanelView extends sfWebDebugPanel
 
     /**
      * Resets the parameter collections.
-     *
-     * @param sfEvent $event
      */
     public function listenForChangeAction(sfEvent $event)
     {
-        $this->actions  = [];
+        $this->actions = [];
         $this->partials = [];
     }
 
     /**
      * Stacks action and partial parameters in the template.filter_parameters event.
      *
-     * @param  sfEvent $event
-     * @param  array   $parameters
+     * @param array $parameters
      *
      * @return array
      */
@@ -66,7 +65,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Returns the path to the last template rendered.
      *
-     * @param  string $class Name of the rendering view class
+     * @param string $class Name of the rendering view class
      *
      * @return string|null
      */
@@ -74,10 +73,10 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     {
         foreach (array_reverse($this->webDebug->getLogger()->getLogs()) as $log) {
             if (
-        ($class == $log['type'] || (class_exists($log['type'], false) && is_subclass_of($log['type'], $class)))
-        &&
-        preg_match('/^Render "(.*)"$/', $log['message'], $match)
-      ) {
+                ($class == $log['type'] || (class_exists($log['type'], false) && is_subclass_of($log['type'], $class)))
+                &&
+                preg_match('/^Render "(.*)"$/', $log['message'], $match)
+            ) {
                 return $match[1];
             }
         }
@@ -124,9 +123,9 @@ class sfWebDebugPanelView extends sfWebDebugPanel
      *
      * The rendered HTML for each parameter is filtered through the "debug.web.view.filter_parameter_html" event.
      *
-     * @param  string $file       The template file path
-     * @param  array  $parameters
-     * @param  string $label
+     * @param string $file       The template file path
+     * @param array  $parameters
+     * @param string $label
      *
      * @return string
      */
@@ -135,7 +134,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
         static $i = 0;
 
         $parameters = $this->filterCoreParameters($parameters);
-        $i++;
+        ++$i;
 
         $html = [];
         $html[] = sprintf('<h2>%s: %s %s</h2>', $label, $this->formatFileLink($file, null, $this->shortenTemplatePath($file)), $this->getToggler('sfWebDebugViewTemplate'.$i));
@@ -159,8 +158,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Formats information about a parameter as HTML.
      *
-     * @param  string $name
-     * @param  mixed  $parameter
+     * @param string $name
      *
      * @return string
      */
@@ -170,14 +168,14 @@ class sfWebDebugPanelView extends sfWebDebugPanel
             $method = 'getParameterDescription';
         }
 
-        return $this->$method($name, $parameter);
+        return $this->{$method}($name, $parameter);
     }
 
     /**
      * Formats object information as HTML.
      *
-     * @param  string $name
-     * @param  object $parameter
+     * @param string $name
+     * @param object $parameter
      *
      * @return string
      */
@@ -185,16 +183,15 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     {
         if ($parameter instanceof sfForm) {
             return $this->formatFormAsHtml($name, $parameter);
-        } else {
-            return $this->getParameterDescription($name, $parameter);
         }
+
+        return $this->getParameterDescription($name, $parameter);
     }
 
     /**
      * Formats form information as HTML.
      *
-     * @param  string $name
-     * @param  sfForm $form
+     * @param string $name
      *
      * @return string
      */
@@ -202,7 +199,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     {
         static $i = 0;
 
-        $i++;
+        ++$i;
 
         if ($form->hasErrors() && sfLogger::NOTICE < $this->getStatus()) {
             $this->setStatus(sfLogger::NOTICE);
@@ -226,8 +223,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Formats form field schema information as HTML.
      *
-     * @param  sfFormFieldSchema $fieldSchema
-     * @param  string            $nameFormat
+     * @param string $nameFormat
      *
      * @return string
      */
@@ -257,8 +253,9 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Formats information about a parameter as HTML.
      *
-     * @param  string $name
-     * @param  mixed  $parameter
+     * @param string     $name
+     * @param mixed|null $nameFormat
+     * @param mixed|null $typeFormat
      *
      * @return string
      */
@@ -278,7 +275,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Shortens an action's template path.
      *
-     * @param  string $path
+     * @param string $path
      *
      * @return string
      */
@@ -298,7 +295,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Removes parameters prefixed with "sf_" from the array.
      *
-     * @param  array $parameters
+     * @param array $parameters
      *
      * @return array
      */
@@ -318,14 +315,14 @@ class sfWebDebugPanelView extends sfWebDebugPanel
     /**
      * Returns a string representation of a value.
      *
-     * @param  string $value
+     * @param string $value
      *
      * @return string
      */
     protected function varExport($value)
     {
         if (is_numeric($value)) {
-            $value = (integer) $value;
+            $value = (int) $value;
         }
 
         return var_export($value, true);

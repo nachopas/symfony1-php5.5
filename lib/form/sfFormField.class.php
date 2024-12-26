@@ -15,13 +15,22 @@
  */
 class sfFormField
 {
-    protected static $toStringException = null;
+    protected static $toStringException;
 
-    protected $widget = null;
-    protected $parent = null;
-    protected $name   = '';
-    protected $value  = null;
-    protected $error  = null;
+    /** @var sfWidgetForm */
+    protected $widget;
+
+    /** @var sfFormField|null */
+    protected $parent;
+
+    /** @var string */
+    protected $name = '';
+
+    /** @var string */
+    protected $value;
+
+    /** @var sfValidatorError|sfValidatorErrorSchema|null */
+    protected $error;
 
     /**
      * Constructor.
@@ -32,13 +41,13 @@ class sfFormField
      * @param string           $value  The field value
      * @param sfValidatorError $error  A sfValidatorError instance
      */
-    public function __construct(sfWidgetForm $widget, sfFormField $parent = null, $name, $value, sfValidatorError $error = null)
+    public function __construct(sfWidgetForm $widget, ?sfFormField $parent = null, $name, $value, ?sfValidatorError $error = null)
     {
         $this->widget = $widget;
         $this->parent = $parent;
-        $this->name   = $name;
-        $this->value  = $value;
-        $this->error  = $error;
+        $this->name = $name;
+        $this->value = $value;
+        $this->error = $error;
     }
 
     /**
@@ -59,11 +68,11 @@ class sfFormField
     }
 
     /**
-     * Returns true if a form thrown an exception in the __toString() method
+     * Returns true if a form thrown an exception in the __toString() method.
      *
      * This is a hack needed because PHP does not allow to throw exceptions in __toString() magic method.
      *
-     * @return boolean
+     * @return bool
      */
     public static function hasToStringException()
     {
@@ -107,9 +116,9 @@ class sfFormField
     {
         if ($this->parent) {
             return $this->parent->getWidget()->renderField($this->name, $this->value, $attributes, $this->error);
-        } else {
-            return $this->widget->render($this->name, $this->value, $attributes, $this->error);
         }
+
+        return $this->widget->render($this->name, $this->value, $attributes, $this->error);
     }
 
     /**
@@ -237,7 +246,7 @@ class sfFormField
     /**
      * Returns true if the widget is hidden.
      *
-     * @return Boolean true if the widget is hidden, false otherwise
+     * @return bool true if the widget is hidden, false otherwise
      */
     public function isHidden()
     {
@@ -267,7 +276,7 @@ class sfFormField
     /**
      * Returns the wrapped widget.
      *
-     * @return sfWidget A sfWidget instance
+     * @return sfWidget|sfWidgetFormSchemaDecorator A sfWidget instance
      */
     public function getWidget()
     {
@@ -297,7 +306,7 @@ class sfFormField
     /**
      * Returns true is the field has an error.
      *
-     * @return Boolean true if the field has some errors, false otherwise
+     * @return bool true if the field has some errors, false otherwise
      */
     public function hasError()
     {
@@ -305,10 +314,10 @@ class sfFormField
             return true;
         }
 
-        if ($this->error instanceof sfValidatorError) {
-            return true;
+        if ($this->error instanceof sfValidatorErrorSchema) {
+            return $this->error->count() > 0;
         }
 
-        return false;
+        return null !== $this->error;
     }
 }

@@ -15,10 +15,10 @@
  */
 class sfFileLogger extends sfLogger
 {
-    protected $type       = 'symfony';
-    protected $format     = '%time% %type% [%priority%] %message%%EOL%';
+    protected $type = 'symfony';
+    protected $format = '%time% %type% [%priority%] %message%%EOL%';
     protected $timeFormat = '%b %d %H:%M:%S';
-    protected $fp         = null;
+    protected $fp;
 
     /**
      * Initializes this logger.
@@ -32,10 +32,11 @@ class sfFileLogger extends sfLogger
      * - dir_mode:    The mode to use when creating a directory (default to 0777)
      * - file_mode:   The mode to use when creating a file (default to 0666)
      *
-     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param  array             $options     An array of options.
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      *
-     * @return Boolean      true, if initialization completes successfully, otherwise false.
+     * @throws sfConfigurationException
+     * @throws sfFileException
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -56,8 +57,9 @@ class sfFileLogger extends sfLogger
         }
 
         $dir = dirname($options['file']);
-        if (!is_dir($dir)) {
-            mkdir($dir, $options['dir_mode'] ?? 0777, true);
+        $dirMode = isset($options['dir_mode']) ? $options['dir_mode'] : 0777;
+        if (!is_dir($dir) && !@mkdir($dir, $dirMode, true) && !is_dir($dir)) {
+            throw new RuntimeException(sprintf('Logger was not able to create a directory "%s"', $dir));
         }
 
         $fileExists = file_exists($options['file']);
@@ -70,26 +72,32 @@ class sfFileLogger extends sfLogger
             chmod($options['file'], $options['file_mode'] ?? 0666);
         }
 
-        return parent::initialize($dispatcher, $options);
+        parent::initialize($dispatcher, $options);
     }
 
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     protected function doLog($message, $priority)
     {
         flock($this->fp, LOCK_EX);
-        fwrite($this->fp, strtr($this->format, ['%type%'     => $this->type, '%message%'  => $message, '%time%'     => strftime($this->timeFormat), '%priority%' => $this->getPriority($priority), '%EOL%'      => PHP_EOL]));
+        fwrite($this->fp, strtr($this->format, [
+            '%type%' => $this->type,
+            '%message%' => $message,
+            '%time%' => self::strftime($this->timeFormat),
+            '%priority%' => $this->getPriority($priority),
+            '%EOL%' => PHP_EOL,
+        ]));
         flock($this->fp, LOCK_UN);
     }
 
     /**
      * Returns the priority string to use in log messages.
      *
-     * @param  string $priority The priority constant
+     * @param string $priority The priority constant
      *
      * @return string The priority to use in log messages
      */
@@ -106,5 +114,61 @@ class sfFileLogger extends sfLogger
         if (is_resource($this->fp)) {
             fclose($this->fp);
         }
+    }
+
+    /**
+     * @return false|string
+     */
+    public static function strftime($format)
+    {
+        if (version_compare(PHP_VERSION, '8.1.0') < 0) {
+            return strftime($format);
+        }
+
+        return date(self::_strftimeFormatToDateFormat($format));
+    }
+
+    /**
+     * Try to Convert a strftime to date format.
+     *
+     * Unable to find a perfect implementation, based on those one (Each contains some errors)
+     * https://github.com/Fabrik/fabrik/blob/master/plugins/fabrik_element/date/date.php
+     * https://gist.github.com/mcaskill/02636e5970be1bb22270
+     * https://stackoverflow.com/questions/22665959/using-php-strftime-using-date-format-string
+     *
+     * Limitation:
+     * - Do not apply translation
+     * - Some few strftime format could be broken (low probability to be used on logs)
+     *
+     * Private: because it should not be used outside of this scope
+     *
+     * A better solution is to use : IntlDateFormatter, but it will require to load a new php extension, which could break some setup.
+     *
+     * @return array|string|string[]
+     */
+    private static function _strftimeFormatToDateFormat($strftimeFormat)
+    {
+        // Missing %V %C %g %G
+        $search = [
+            '%a', '%A', '%d', '%e', '%u',
+            '%w', '%W', '%b', '%h', '%B',
+            '%m', '%y', '%Y', '%D', '%F',
+            '%x', '%n', '%t', '%H', '%k',
+            '%I', '%l', '%M', '%p', '%P',
+            '%r' /* %I:%M:%S %p */, '%R' /* %H:%M */, '%S', '%T' /* %H:%M:%S */, '%X', '%z', '%Z',
+            '%c', '%s', '%j',
+            '%%'];
+
+        $replace = [
+            'D', 'l', 'd', 'j', 'N',
+            'w', 'W', 'M', 'M', 'F',
+            'm', 'y', 'Y', 'm/d/y', 'Y-m-d',
+            'm/d/y', "\n", "\t", 'H', 'G',
+            'h', 'g', 'i', 'A', 'a',
+            'h:i:s A', 'H:i', 's', 'H:i:s', 'H:i:s', 'O', 'T',
+            'D M j H:i:s Y' /* Tue Feb 5 00:45:10 2009 */, 'U', 'z',
+            '%'];
+
+        return str_replace($search, $replace, $strftimeFormat);
     }
 }

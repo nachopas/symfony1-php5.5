@@ -15,9 +15,9 @@
  */
 class sfPartialView extends sfPHPView
 {
-    protected $viewCache   = null;
-    protected $checkCache  = false;
-    protected $cacheKey    = null;
+    protected $viewCache;
+    protected $checkCache = false;
+    protected $cacheKey;
     protected $partialVars = [];
 
     /**
@@ -45,9 +45,6 @@ class sfPartialView extends sfPHPView
     {
     }
 
-    /**
-     * @param array $partialVars
-     */
     public function setPartialVars(array $partialVars)
     {
         $this->partialVars = $partialVars;

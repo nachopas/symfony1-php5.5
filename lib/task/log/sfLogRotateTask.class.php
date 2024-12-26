@@ -16,25 +16,32 @@
 class sfLogRotateTask extends sfBaseTask
 {
     /** the default period to rotate logs in days */
-    const DEF_PERIOD = 7;
+    public const DEF_PERIOD = 7;
 
     /** the default number of log historys to store, one history is created for every period */
-    const DEF_HISTORY = 10;
+    public const DEF_HISTORY = 10;
+
 
     /**
      * @see sfTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('env', sfCommandArgument::REQUIRED, 'The environment name')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('env', sfCommandArgument::REQUIRED, 'The environment name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('history', null, sfCommandOption::PARAMETER_REQUIRED, 'The maximum number of old log files to keep', self::DEF_HISTORY), new sfCommandOption('period', null, sfCommandOption::PARAMETER_REQUIRED, 'The period in days', self::DEF_PERIOD)]);
+        $this->addOptions([
+            new sfCommandOption('history', null, sfCommandOption::PARAMETER_REQUIRED, 'The maximum number of old log files to keep', self::DEF_HISTORY),
+            new sfCommandOption('period', null, sfCommandOption::PARAMETER_REQUIRED, 'The period in days', self::DEF_PERIOD),
+        ]);
 
         $this->namespace = 'log';
         $this->name = 'rotate';
         $this->briefDescription = 'Rotates an application\'s log files';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [log:rotate|INFO] task rotates application log files for a given
 environment:
 
@@ -52,19 +59,21 @@ EOF;
     protected function execute($arguments = [], $options = [])
     {
         $this->rotate($arguments['application'], $arguments['env'], $options['period'], $options['history'], true);
+
+        return 0;
     }
 
     /**
      * Rotates log file.
      *
-     * @param  string $app       Application name
-     * @param  string $env       Enviroment name
-     * @param  string $period    Period
-     * @param  string $history   History
-     * @param  bool   $override  Override
+     * @param string $app      Application name
+     * @param string $env      Enviroment name
+     * @param string $period   Period
+     * @param string $history  History
+     * @param bool   $override Override
      *
      * @author Joe Simms
-     **/
+     */
     public function rotate($app, $env, $period = null, $history = null, $override = false)
     {
         $logfile = $app.'_'.$env;

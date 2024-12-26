@@ -24,7 +24,7 @@ class sfProjectClearControllersTask extends sfBaseTask
         $this->name = 'clear-controllers';
         $this->briefDescription = 'Clears all non production environment controllers';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:clear-controllers|INFO] task clears all non production environment
 controllers:
 
@@ -63,10 +63,12 @@ EOF;
 
             if (preg_match('/ProjectConfiguration::getApplicationConfiguration\(\'(.*?)\', \'(.*?)\'/', $content, $match)) {
                 // Remove file if it has found an application and the environment is not production
-                if ($match[2] != 'prod') {
+                if ('prod' != $match[2]) {
                     $this->getFilesystem()->remove($controller);
                 }
             }
         }
+
+        return 0;
     }
 }

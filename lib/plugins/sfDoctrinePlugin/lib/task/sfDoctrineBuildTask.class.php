@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Generates code based on your schema.
@@ -18,34 +18,52 @@ require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
  */
 class sfDoctrineBuildTask extends sfDoctrineBaseTask
 {
-    const
-    BUILD_MODEL   = 1,
-    BUILD_FORMS   = 2,
-    BUILD_FILTERS = 4,
-    BUILD_SQL     = 8,
-    BUILD_DB      = 16,
+    public const BUILD_MODEL = 1;
+    public const BUILD_FORMS = 2;
+    public const BUILD_FILTERS = 4;
+    public const BUILD_SQL = 8;
+    public const BUILD_DB = 16;
+    // model, forms
+    public const OPTION_MODEL = 1;
+    public const OPTION_FORMS = 3;
+    // model, filters
+    public const OPTION_FILTERS = 5;
+    // model, sql
+    public const OPTION_SQL = 9;
+    // model, sql, db
+    public const OPTION_DB = 25;
+    // model, forms, filters
+    public const OPTION_ALL_CLASSES = 7;
+    // model, forms, filters, sql, db
+    public const OPTION_ALL = 31;
 
-    OPTION_MODEL       = 1,
-    OPTION_FORMS       = 3,  // model, forms
-    OPTION_FILTERS     = 5,  // model, filters
-    OPTION_SQL         = 9,  // model, sql
-    OPTION_DB          = 25, // model, sql, db
-    OPTION_ALL_CLASSES = 7,  // model, forms, filters
-    OPTION_ALL         = 31; // model, forms, filters, sql, db
-
-  /**
-   * @see sfTask
-   */
+    /**
+     * @see sfTask
+     */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Whether to force dropping of the database'), new sfCommandOption('all', null, sfCommandOption::PARAMETER_NONE, 'Build everything and reset the database'), new sfCommandOption('all-classes', null, sfCommandOption::PARAMETER_NONE, 'Build all classes'), new sfCommandOption('model', null, sfCommandOption::PARAMETER_NONE, 'Build model classes'), new sfCommandOption('forms', null, sfCommandOption::PARAMETER_NONE, 'Build form classes'), new sfCommandOption('filters', null, sfCommandOption::PARAMETER_NONE, 'Build filter classes'), new sfCommandOption('sql', null, sfCommandOption::PARAMETER_NONE, 'Build SQL'), new sfCommandOption('db', null, sfCommandOption::PARAMETER_NONE, 'Drop, create, and either insert SQL or migrate the database'), new sfCommandOption('and-migrate', null, sfCommandOption::PARAMETER_NONE, 'Migrate the database'), new sfCommandOption('and-load', null, sfCommandOption::PARAMETER_OPTIONAL | sfCommandOption::IS_ARRAY, 'Load fixture data'), new sfCommandOption('and-append', null, sfCommandOption::PARAMETER_OPTIONAL | sfCommandOption::IS_ARRAY, 'Append fixture data')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Whether to force dropping of the database'),
+            new sfCommandOption('all', null, sfCommandOption::PARAMETER_NONE, 'Build everything and reset the database'),
+            new sfCommandOption('all-classes', null, sfCommandOption::PARAMETER_NONE, 'Build all classes'),
+            new sfCommandOption('model', null, sfCommandOption::PARAMETER_NONE, 'Build model classes'),
+            new sfCommandOption('forms', null, sfCommandOption::PARAMETER_NONE, 'Build form classes'),
+            new sfCommandOption('filters', null, sfCommandOption::PARAMETER_NONE, 'Build filter classes'),
+            new sfCommandOption('sql', null, sfCommandOption::PARAMETER_NONE, 'Build SQL'),
+            new sfCommandOption('db', null, sfCommandOption::PARAMETER_NONE, 'Drop, create, and either insert SQL or migrate the database'),
+            new sfCommandOption('and-migrate', null, sfCommandOption::PARAMETER_NONE, 'Migrate the database'),
+            new sfCommandOption('and-load', null, sfCommandOption::PARAMETER_OPTIONAL | sfCommandOption::IS_ARRAY, 'Load fixture data'),
+            new sfCommandOption('and-append', null, sfCommandOption::PARAMETER_OPTIONAL | sfCommandOption::IS_ARRAY, 'Append fixture data'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'build';
 
         $this->briefDescription = 'Generate code based on your schema';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:build|INFO] task generates code based on your schema:
 
   [./symfony doctrine:build|INFO]
@@ -197,7 +215,9 @@ EOF;
             $task->setConfiguration($this->configuration);
 
             if (count($options['and-load'])) {
-                $ret = $task->run(['dir_or_file' => in_array([], $options['and-load'], true) ? null : $options['and-load']]);
+                $ret = $task->run([
+                    'dir_or_file' => in_array([], $options['and-load'], true) ? null : $options['and-load'],
+                ]);
 
                 if ($ret) {
                     return $ret;
@@ -205,7 +225,11 @@ EOF;
             }
 
             if (count($options['and-append'])) {
-                $ret = $task->run(['dir_or_file' => in_array([], $options['and-append'], true) ? null : $options['and-append']], ['append' => true]);
+                $ret = $task->run([
+                    'dir_or_file' => in_array([], $options['and-append'], true) ? null : $options['and-append'],
+                ], [
+                    'append' => true,
+                ]);
 
                 if ($ret) {
                     return $ret;
@@ -217,9 +241,9 @@ EOF;
     /**
      * Calculates a bit mode based on the supplied options.
      *
-     * @param  array $options
+     * @param array $options
      *
-     * @return integer
+     * @return int
      */
     protected function calculateMode($options = [])
     {
@@ -242,7 +266,7 @@ EOF;
     {
         $options = [];
         foreach ($this->options as $option) {
-            if (defined($constant = self::class.'::OPTION_'.str_replace('-', '_', strtoupper($option->getName())))) {
+            if (defined($constant = __CLASS__.'::OPTION_'.str_replace('-', '_', strtoupper($option->getName())))) {
                 $options[$option->getName()] = constant($constant);
             }
         }

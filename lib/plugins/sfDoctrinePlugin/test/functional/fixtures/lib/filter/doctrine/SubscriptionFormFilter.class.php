@@ -2,7 +2,6 @@
 
 /**
  * Subscription filter form.
- *
  */
 class SubscriptionFormFilter extends BaseSubscriptionFormFilter
 {

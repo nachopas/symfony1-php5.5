@@ -2,7 +2,6 @@
 
 /**
  * FormGeneratorTest form.
- *
  */
 class FormGeneratorTestForm extends BaseFormGeneratorTestForm
 {

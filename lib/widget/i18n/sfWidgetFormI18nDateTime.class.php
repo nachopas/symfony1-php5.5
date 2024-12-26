@@ -22,8 +22,8 @@ class sfWidgetFormI18nDateTime extends sfWidgetFormDateTime
      *
      *  * culture: The culture to use for internationalized strings (required)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormDateTime
      */

@@ -37,8 +37,8 @@ class sfValidatorDate extends sfValidatorBase
      *  * min
      *  * max
      *
-     * @param array $options    An array of options
-     * @param array $messages   An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -79,8 +79,8 @@ class sfValidatorDate extends sfValidatorBase
 
         // convert timestamp to date number format
         if (is_numeric($value)) {
-            $cleanTime = (integer) $value;
-            $clean     = date('YmdHis', $cleanTime);
+            $cleanTime = (int) $value;
+            $clean = date('YmdHis', $cleanTime);
         }
         // convert string to date number format
         else {
@@ -98,12 +98,12 @@ class sfValidatorDate extends sfValidatorBase
             // convert timestamp to date number format
             if (is_numeric($max)) {
                 $maxError = date($this->getOption('date_format_range_error'), $max);
-                $max      = date('YmdHis', $max);
+                $max = date('YmdHis', $max);
             }
             // convert string to date number
             else {
-                $dateMax  = new DateTime($max);
-                $max      = $dateMax->format('YmdHis');
+                $dateMax = new DateTime($max);
+                $max = $dateMax->format('YmdHis');
                 $maxError = $dateMax->format($this->getOption('date_format_range_error'));
             }
 
@@ -117,12 +117,12 @@ class sfValidatorDate extends sfValidatorBase
             // convert timestamp to date number
             if (is_numeric($min)) {
                 $minError = date($this->getOption('date_format_range_error'), $min);
-                $min      = date('YmdHis', $min);
+                $min = date('YmdHis', $min);
             }
             // convert string to date number
             else {
-                $dateMin  = new DateTime($min);
-                $min      = $dateMin->format('YmdHis');
+                $dateMin = new DateTime($min);
+                $min = $dateMin->format('YmdHis');
                 $minError = $dateMin->format($this->getOption('date_format_range_error'));
             }
 
@@ -145,7 +145,7 @@ class sfValidatorDate extends sfValidatorBase
      *
      * The array can contains the following keys: year, month, day, hour, minute, second
      *
-     * @param  array $value  An array of date elements
+     * @param array $value An array of date elements
      *
      * @return int A timestamp
      */
@@ -153,24 +153,24 @@ class sfValidatorDate extends sfValidatorBase
     {
         // all elements must be empty or a number
         foreach (['year', 'month', 'day', 'hour', 'minute', 'second'] as $key) {
-            if (isset($value[$key]) && !preg_match('#^\d+$#', $value[$key]) && !empty($value[$key])) {
+            if (isset($value[$key]) && !ctype_digit((string) $value[$key]) && !empty($value[$key])) {
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
         }
 
         // if one date value is empty, all others must be empty too
         $empties =
-      (!isset($value['year']) || !$value['year'] ? 1 : 0) +
-      (!isset($value['month']) || !$value['month'] ? 1 : 0) +
-      (!isset($value['day']) || !$value['day'] ? 1 : 0)
-    ;
+          (!isset($value['year']) || !$value['year'] ? 1 : 0) +
+          (!isset($value['month']) || !$value['month'] ? 1 : 0) +
+          (!isset($value['day']) || !$value['day'] ? 1 : 0);
         if ($empties > 0 && $empties < 3) {
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
-        } elseif (3 == $empties) {
+        }
+        if (3 == $empties) {
             return $this->getEmptyValue();
         }
 
-        if (!checkdate(intval($value['month']), intval($value['day']), intval($value['year']))) {
+        if (!checkdate((int) $value['month'], (int) $value['day'], (int) $value['year'])) {
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 
@@ -178,28 +178,27 @@ class sfValidatorDate extends sfValidatorBase
             // if second is set, minute and hour must be set
             // if minute is set, hour must be set
             if (
-        $this->isValueSet($value, 'second') && (!$this->isValueSet($value, 'minute') || !$this->isValueSet($value, 'hour'))
-        ||
-        $this->isValueSet($value, 'minute') && !$this->isValueSet($value, 'hour')
-      ) {
+                $this->isValueSet($value, 'second') && (!$this->isValueSet($value, 'minute') || !$this->isValueSet($value, 'hour'))
+                || $this->isValueSet($value, 'minute') && !$this->isValueSet($value, 'hour')
+            ) {
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
 
             $clean = sprintf(
-                "%04d-%02d-%02d %02d:%02d:%02d",
-                intval($value['year']),
-                intval($value['month']),
-                intval($value['day']),
-                isset($value['hour']) ? intval($value['hour']) : 0,
-                isset($value['minute']) ? intval($value['minute']) : 0,
-                isset($value['second']) ? intval($value['second']) : 0
+                '%04d-%02d-%02d %02d:%02d:%02d',
+                (int) $value['year'],
+                (int) $value['month'],
+                (int) $value['day'],
+                isset($value['hour']) ? (int) $value['hour'] : 0,
+                isset($value['minute']) ? (int) $value['minute'] : 0,
+                isset($value['second']) ? (int) $value['second'] : 0
             );
         } else {
             $clean = sprintf(
-                "%04d-%02d-%02d %02d:%02d:%02d",
-                intval($value['year']),
-                intval($value['month']),
-                intval($value['day']),
+                '%04d-%02d-%02d %02d:%02d:%02d',
+                (int) $value['year'],
+                (int) $value['month'],
+                (int) $value['day'],
                 0,
                 0,
                 0

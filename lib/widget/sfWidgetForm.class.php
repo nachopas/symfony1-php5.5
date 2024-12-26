@@ -15,7 +15,7 @@
  */
 abstract class sfWidgetForm extends sfWidget
 {
-    protected $parent   = null;
+    protected $parent;
 
     /**
      * Constructor.
@@ -28,8 +28,8 @@ abstract class sfWidgetForm extends sfWidget
      *  * default:         The default value to use when rendering the widget
      *  * label:           The label to use when the widget is rendered by a widget schema
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidget
      */
@@ -95,7 +95,7 @@ abstract class sfWidgetForm extends sfWidget
     /**
      * Sets the format for HTML id attributes.
      *
-     * @param string $format  The format string (must contain a %s for the id placeholder)
+     * @param string $format The format string (must contain a %s for the id placeholder)
      *
      * @return sfWidget The current widget instance
      */
@@ -119,7 +119,7 @@ abstract class sfWidgetForm extends sfWidget
     /**
      * Returns true if the widget is hidden.
      *
-     * @return Boolean true if the widget is hidden, false otherwise
+     * @return bool true if the widget is hidden, false otherwise
      */
     public function isHidden()
     {
@@ -129,13 +129,13 @@ abstract class sfWidgetForm extends sfWidget
     /**
      * Sets the hidden flag for the widget.
      *
-     * @param bool $boolean  true if the widget must be hidden, false otherwise
+     * @param bool $boolean true if the widget must be hidden, false otherwise
      *
      * @return sfWidget The current widget instance
      */
     public function setHidden($boolean)
     {
-        $this->setOption('is_hidden', (boolean) $boolean);
+        $this->setOption('is_hidden', (bool) $boolean);
 
         return $this;
     }
@@ -156,8 +156,8 @@ abstract class sfWidgetForm extends sfWidget
      * The id attribute is added automatically to the array of attributes if none is specified.
      * If uses for "id_format" option to generate the id.
      *
-     * @param  string $tag        The tag name
-     * @param  array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param string $tag        The tag name
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
      *
      * @return string An HTML tag string
      */
@@ -178,9 +178,9 @@ abstract class sfWidgetForm extends sfWidget
      * The id attribute is added automatically to the array of attributes if none is specified.
      * If uses for "id_format" option to generate the id.
      *
-     * @param  string $tag         The tag name
-     * @param  string $content     The content of the tag
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
+     * @param string $tag        The tag name
+     * @param string $content    The content of the tag
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
      *
      * @return string An HTML tag string
      */
@@ -192,9 +192,9 @@ abstract class sfWidgetForm extends sfWidget
     /**
      * Adds an HTML id attributes to the array of attributes if none is given and a name attribute exists.
      *
-     * @param  array $attributes  An array of attributes
+     * @param array $attributes An array of attributes
      *
-     * @return array An array of attributes with an id.
+     * @return array an array of attributes with an id
      */
     protected function fixFormId($attributes)
     {
@@ -223,10 +223,10 @@ abstract class sfWidgetForm extends sfWidget
      * Ids must begin with a letter ([A-Za-z]) and may be followed by any number of letters, digits
      * ([0-9]), hyphens ("-"), underscores ("_"), colons (":"), and periods (".").
      *
-     * @param  string $name   The field name
-     * @param  string $value  The field value
+     * @param string $name  The field name
+     * @param string $value The field value
      *
-     * @return string The field id or null.
+     * @return string the field id or null
      */
     public function generateId($name, $value = null)
     {
@@ -236,7 +236,7 @@ abstract class sfWidgetForm extends sfWidget
 
         // check to see if we have an array variable for a field name
         if (false !== strpos($name, '[')) {
-            $name = str_replace(['[]', '][', '[', ']'], [(null !== $value && !is_array($value) ? '_'.$value : ''), '_', '_', ''], $name);
+            $name = str_replace(['[]', '][', '[', ']'], [null !== $value && !is_array($value) ? '_'.$value : '', '_', '_', ''], $name);
         }
 
         if (false !== strpos($this->getOption('id_format'), '%s')) {
@@ -244,35 +244,33 @@ abstract class sfWidgetForm extends sfWidget
         }
 
         // remove illegal characters
-        $name = preg_replace(['/^[^A-Za-z]+/', '/[^A-Za-z0-9\:_\.\-]/'], ['', '_'], $name);
-
-        return $name;
+        return preg_replace(['/^[^A-Za-z]+/', '/[^A-Za-z0-9\:_\.\-]/'], ['', '_'], $name);
     }
 
     /**
-     * Generates a two chars range
+     * Generates a two chars range.
      *
-     * @param  int  $start
-     * @param  int  $stop
+     * @param int $start
+     * @param int $stop
+     *
      * @return array
      */
     protected static function generateTwoCharsRange($start, $stop)
     {
         $results = [];
-        for ($i = $start; $i <= $stop; $i++) {
+        for ($i = $start; $i <= $stop; ++$i) {
             $results[$i] = sprintf('%02d', $i);
         }
+
         return $results;
     }
 
     /**
      * Sets the parent widget schema.
      *
-     * @param  sfWidgetFormSchema|null $widgetSchema
-     *
      * @return sfWidgetForm The current widget instance
      */
-    public function setParent(sfWidgetFormSchema $widgetSchema = null)
+    public function setParent(?sfWidgetFormSchema $widgetSchema = null)
     {
         $this->parent = $widgetSchema;
 
@@ -294,10 +292,10 @@ abstract class sfWidgetForm extends sfWidget
     /**
      * Translates the given text.
      *
-     * @param  string $text       The text with optional placeholders
-     * @param  array $parameters  The values to replace the placeholders
+     * @param string $text       The text with optional placeholders
+     * @param array  $parameters The values to replace the placeholders
      *
-     * @return string             The translated text
+     * @return string The translated text
      *
      * @see sfWidgetFormSchemaFormatter::translate()
      */
@@ -305,18 +303,18 @@ abstract class sfWidgetForm extends sfWidget
     {
         if (null === $this->parent) {
             return $text;
-        } else {
-            return $this->parent->getFormFormatter()->translate($text, $parameters);
         }
+
+        return $this->parent->getFormFormatter()->translate($text, $parameters);
     }
 
     /**
      * Translates all values of the given array.
      *
-     * @param  array $texts       The texts with optional placeholders
-     * @param  array $parameters  The values to replace the placeholders
+     * @param array $texts      The texts with optional placeholders
+     * @param array $parameters The values to replace the placeholders
      *
-     * @return array              The translated texts
+     * @return array The translated texts
      *
      * @see sfWidgetFormSchemaFormatter::translate()
      */
@@ -324,14 +322,14 @@ abstract class sfWidgetForm extends sfWidget
     {
         if (null === $this->parent) {
             return $texts;
-        } else {
-            $result = [];
-
-            foreach ($texts as $key => $text) {
-                $result[$key] = $this->parent->getFormFormatter()->translate($text, $parameters);
-            }
-
-            return $result;
         }
+
+        $result = [];
+
+        foreach ($texts as $key => $text) {
+            $result[$key] = $this->parent->getFormFormatter()->translate($text, $parameters);
+        }
+
+        return $result;
     }
 }

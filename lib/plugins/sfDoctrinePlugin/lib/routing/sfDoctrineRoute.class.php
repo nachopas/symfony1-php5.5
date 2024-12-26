@@ -19,7 +19,7 @@
  */
 class sfDoctrineRoute extends sfObjectRoute
 {
-    protected $query = null;
+    protected $query;
 
     public function setListQuery(Doctrine_Query $query)
     {
@@ -69,20 +69,20 @@ class sfDoctrineRoute extends sfObjectRoute
                 $q = $tableModel->createQuery('a');
                 foreach ($values as $variable => $value) {
                     $fieldName = $tableModel->getFieldName($variable);
-                    $q->andWhere('a.'. $fieldName . ' = ?', $parameters[$variable]);
+                    $q->andWhere('a.'.$fieldName.' = ?', $parameters[$variable]);
                 }
             } else {
                 $q = $this->query;
             }
             if (isset($this->options['method_for_query'])) {
                 $method = $this->options['method_for_query'];
-                $results = $tableModel->$method($q);
+                $results = $tableModel->{$method}($q);
             } else {
                 $results = $q->execute();
             }
         } else {
             $method = $this->options['method'];
-            $results = $tableModel->$method($this->filterParameters($parameters));
+            $results = $tableModel->{$method}($this->filterParameters($parameters));
         }
 
         // If query returned a Doctrine_Record instance instead of a
@@ -106,11 +106,11 @@ class sfDoctrineRoute extends sfObjectRoute
         $parameters = [];
         foreach ($this->getRealVariables() as $variable) {
             try {
-                $parameters[$variable] = $object->$variable;
+                $parameters[$variable] = $object->{$variable};
             } catch (Exception $e) {
                 try {
                     $method = 'get'.sfInflector::camelize($variable);
-                    $parameters[$variable] = $object->$method();
+                    $parameters[$variable] = $object->{$method}();
                 } catch (Exception $e) {
                 }
             }

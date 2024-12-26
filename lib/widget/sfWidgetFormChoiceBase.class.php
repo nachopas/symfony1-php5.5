@@ -9,7 +9,7 @@
  */
 
 /**
- * sfWidgetFormChoiceBase is the base class for all choice/select widgets
+ * sfWidgetFormChoiceBase is the base class for all choice/select widgets.
  *
  * @author     Bernhard Schussek <bernhard.schussek@symfony-project.com>
  */
@@ -22,8 +22,8 @@ abstract class sfWidgetFormChoiceBase extends sfWidgetForm
      *
      *  * choices:         An array of possible choices (required)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetForm
      */
@@ -34,9 +34,9 @@ abstract class sfWidgetFormChoiceBase extends sfWidgetForm
     }
 
     /**
-     * Returns the translated choices configured for this widget
+     * Returns the translated choices configured for this widget.
      *
-     * @return array  An array of strings
+     * @return array An array of strings
      */
     public function getChoices()
     {
@@ -63,7 +63,7 @@ abstract class sfWidgetFormChoiceBase extends sfWidgetForm
     }
 
     /**
-     * Clones this object
+     * Clones this object.
      */
     public function __clone()
     {

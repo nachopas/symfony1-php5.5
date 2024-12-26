@@ -15,26 +15,28 @@
  */
 class sfCommandOption
 {
-    const PARAMETER_NONE     = 1;
-    const PARAMETER_REQUIRED = 2;
-    const PARAMETER_OPTIONAL = 4;
+    public const PARAMETER_NONE = 1;
+    public const PARAMETER_REQUIRED = 2;
+    public const PARAMETER_OPTIONAL = 4;
 
-    const IS_ARRAY = 8;
+    public const IS_ARRAY = 8;
 
-    protected $name     = null;
-    protected $shortcut = null;
-    protected $mode     = null;
-    protected $default  = null;
-    protected $help     = '';
+    protected $name;
+    protected $shortcut;
+    protected $mode;
+    protected $default;
+    protected $help = '';
 
     /**
      * Constructor.
      *
-     * @param string  $name     The option name
-     * @param string  $shortcut The shortcut (can be null)
-     * @param integer $mode     The option mode: self::PARAMETER_REQUIRED, self::PARAMETER_NONE or self::PARAMETER_OPTIONAL
-     * @param string  $help     A help text
-     * @param mixed   $default  The default value (must be null for self::PARAMETER_REQUIRED or self::PARAMETER_NONE)
+     * @param string $name     The option name
+     * @param string $shortcut The shortcut (can be null)
+     * @param int    $mode     The option mode: self::PARAMETER_REQUIRED, self::PARAMETER_NONE or self::PARAMETER_OPTIONAL
+     * @param string $help     A help text
+     * @param mixed  $default  The default value (must be null for self::PARAMETER_REQUIRED or self::PARAMETER_NONE)
+     *
+     * @throws sfCommandException
      */
     public function __construct($name, $shortcut = null, $mode = null, $help = '', $default = null)
     {
@@ -58,10 +60,10 @@ class sfCommandOption
             throw new sfCommandException(sprintf('Option mode "%s" is not valid.', $mode));
         }
 
-        $this->name     = $name;
+        $this->name = $name;
         $this->shortcut = $shortcut;
-        $this->mode     = $mode;
-        $this->help     = $help;
+        $this->mode = $mode;
+        $this->help = $help;
 
         $this->setDefault($default);
     }
@@ -89,7 +91,7 @@ class sfCommandOption
     /**
      * Returns true if the option accept a parameter.
      *
-     * @return Boolean true if parameter mode is not self::PARAMETER_NONE, false otherwise
+     * @return bool true if parameter mode is not self::PARAMETER_NONE, false otherwise
      */
     public function acceptParameter()
     {
@@ -99,7 +101,7 @@ class sfCommandOption
     /**
      * Returns true if the option requires a parameter.
      *
-     * @return Boolean true if parameter mode is self::PARAMETER_REQUIRED, false otherwise
+     * @return bool true if parameter mode is self::PARAMETER_REQUIRED, false otherwise
      */
     public function isParameterRequired()
     {
@@ -109,7 +111,7 @@ class sfCommandOption
     /**
      * Returns true if the option takes an optional parameter.
      *
-     * @return Boolean true if parameter mode is self::PARAMETER_OPTIONAL, false otherwise
+     * @return bool true if parameter mode is self::PARAMETER_OPTIONAL, false otherwise
      */
     public function isParameterOptional()
     {
@@ -119,7 +121,7 @@ class sfCommandOption
     /**
      * Returns true if the option can take multiple values.
      *
-     * @return Boolean true if mode is self::IS_ARRAY, false otherwise
+     * @return bool true if mode is self::IS_ARRAY, false otherwise
      */
     public function isArray()
     {
@@ -130,6 +132,8 @@ class sfCommandOption
      * Sets the default value.
      *
      * @param mixed $default The default value
+     *
+     * @throws sfCommandException
      */
     public function setDefault($default = null)
     {

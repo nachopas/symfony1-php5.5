@@ -36,36 +36,39 @@ class sfTesterDoctrine extends sfTester
      * @param array|Doctrine_Query $query A Doctrine_Query object or an array of conditions
      * @param string               $value The value to test
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function check($model, $query, $value = true)
     {
         if (null === $query) {
             $query = Doctrine_Core::getTable($model)
-        ->createQuery('a');
+                ->createQuery('a')
+            ;
         }
 
         if (is_array($query)) {
             $conditions = $query;
             $query = $query = Doctrine_Core::getTable($model)
-        ->createQuery('a');
+                ->createQuery('a')
+            ;
             foreach ($conditions as $column => $condition) {
                 $column = Doctrine_Core::getTable($model)->getFieldName($column);
 
                 if (null === $condition) {
                     $query->andWhere('a.'.$column.' IS NULL');
+
                     continue;
                 }
 
                 $operator = '=';
-                if ('!' == $condition[0]) {
+                if (strlen($condition) && '!' == substr($condition, 0, 1)) {
                     $operator = false !== strpos($condition, '%') ? 'NOT LIKE' : '!=';
                     $condition = substr($condition, 1);
                 } elseif (false !== strpos($condition, '%')) {
                     $operator = 'LIKE';
                 }
 
-                $query->andWhere('a.' . $column . ' ' . $operator . ' ?', $condition);
+                $query->andWhere('a.'.$column.' '.$operator.' ?', $condition);
             }
         }
 
@@ -87,7 +90,7 @@ class sfTesterDoctrine extends sfTester
     /**
      * Outputs some debug information about queries run during the current request.
      *
-     * @param integer|string $limit Either an integer to return the last many queries, a regular expression or a substring to search for
+     * @param int|string $limit Either an integer to return the last many queries, a regular expression or a substring to search for
      */
     public function debug($limit = null)
     {
@@ -111,7 +114,7 @@ class sfTesterDoctrine extends sfTester
         if (is_integer($limit)) {
             $events = array_slice($events, $limit * -1);
         } elseif (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $limit, $match)) {
-            if ($match[1] == '!') {
+            if ('!' == $match[1]) {
                 $pattern = substr($limit, 1);
                 $match = false;
             } else {
@@ -126,12 +129,10 @@ class sfTesterDoctrine extends sfTester
 
         foreach ($events as $event) {
             if (
-        (!isset($pattern) && !isset($substring))
-        ||
-        (isset($pattern) && $match == preg_match($pattern, $event->getQuery()))
-        ||
-        (isset($substring) && false !== stripos($event->getQuery(), $substring))
-      ) {
+                (!isset($pattern) && !isset($substring))
+                || (isset($pattern) && $match == preg_match($pattern, $event->getQuery()))
+                || (isset($substring) && false !== stripos($event->getQuery(), $substring))
+            ) {
                 $conn = $event->getInvoker() instanceof Doctrine_Connection ? $event->getInvoker() : $event->getInvoker()->getConnection();
 
                 echo $event->getQuery()."\n";

@@ -9,7 +9,6 @@
  */
 
 /**
- *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
 class sfInflector
@@ -18,33 +17,28 @@ class sfInflector
      * Returns a camelized string from a lower case and underscored string by replaceing slash with
      * double-colon and upper-casing each letter preceded by an underscore.
      *
-     * @param  string $lower_case_and_underscored_word  String to camelize.
+     * @param string $lower_case_and_underscored_word string to camelize
      *
-     * @return string Camelized string.
+     * @return string camelized string
      */
     public static function camelize($lower_case_and_underscored_word)
     {
-        $tmp = $lower_case_and_underscored_word;
-        $tmp = sfToolkit::pregtrcb(
-            $tmp,
-            ['#/(.?)#' => fn ($matches) => '::'.strtoupper($matches[1]), '/(^|_|-)+(.)/' => fn ($matches) => strtoupper($matches[2])]
-        );
-
-        return $tmp;
+        return strtr(ucwords(strtr((string) $lower_case_and_underscored_word, ['/' => ':: ', '_' => ' ', '-' => ' '])), [' ' => '']);
     }
 
     /**
      * Returns an underscore-syntaxed version or the CamelCased string.
      *
-     * @param  string $camel_cased_word  String to underscore.
+     * @param string $camel_cased_word string to underscore
      *
-     * @return string Underscored string.
+     * @return string underscored string
      */
     public static function underscore($camel_cased_word)
     {
-        $tmp = $camel_cased_word;
+        $tmp = (string) $camel_cased_word;
         $tmp = str_replace('::', '/', $tmp);
-        $tmp = sfToolkit::pregtr($tmp, ['/([A-Z]+)([A-Z][a-z])/' => '\\1_\\2', '/([a-z\d])([A-Z])/'     => '\\1_\\2']);
+        $tmp = sfToolkit::pregtr($tmp, ['/([A-Z]+)([A-Z][a-z])/' => '\\1_\\2',
+            '/([a-z\d])([A-Z])/' => '\\1_\\2']);
 
         return strtolower($tmp);
     }
@@ -52,9 +46,9 @@ class sfInflector
     /**
      * Returns classname::module with classname:: stripped off.
      *
-     * @param  string $class_name_in_module  Classname and module pair.
+     * @param string $class_name_in_module classname and module pair
      *
-     * @return string Module name.
+     * @return string module name
      */
     public static function demodulize($class_name_in_module)
     {
@@ -65,22 +59,22 @@ class sfInflector
      * Returns classname in underscored form, with "_id" tacked on at the end.
      * This is for use in dealing with foreign keys in the database.
      *
-     * @param string $class_name                Class name.
-     * @param bool   $separate_with_underscore  Separate with underscore.
+     * @param string $class_name               class name
+     * @param bool   $separate_with_underscore separate with underscore
      *
      * @return string Foreign key
      */
     public static function foreign_key($class_name, $separate_with_underscore = true)
     {
-        return sfInflector::underscore(sfInflector::demodulize($class_name)).($separate_with_underscore ? "_id" : "id");
+        return sfInflector::underscore(sfInflector::demodulize($class_name)).($separate_with_underscore ? '_id' : 'id');
     }
 
     /**
      * Returns corresponding table name for given classname.
      *
-     * @param  string $class_name  Name of class to get database table name for.
+     * @param string $class_name name of class to get database table name for
      *
-     * @return string Name of the databse table for given class.
+     * @return string name of the databse table for given class
      */
     public static function tableize($class_name)
     {
@@ -90,9 +84,9 @@ class sfInflector
     /**
      * Returns model class name for given database table.
      *
-     * @param  string $table_name  Table name.
+     * @param string $table_name table name
      *
-     * @return string Classified table name.
+     * @return string classified table name
      */
     public static function classify($table_name)
     {
@@ -103,13 +97,13 @@ class sfInflector
      * Returns a human-readable string from a lower case and underscored word by replacing underscores
      * with a space, and by upper-casing the initial characters.
      *
-     * @param  string $lower_case_and_underscored_word String to make more readable.
+     * @param string $lower_case_and_underscored_word string to make more readable
      *
-     * @return string Human-readable string.
+     * @return string human-readable string
      */
     public static function humanize($lower_case_and_underscored_word)
     {
-        if (substr($lower_case_and_underscored_word, -3) === '_id') {
+        if ('_id' === substr($lower_case_and_underscored_word, -3)) {
             $lower_case_and_underscored_word = substr($lower_case_and_underscored_word, 0, -3);
         }
 

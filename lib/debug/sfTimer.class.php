@@ -15,8 +15,8 @@
  */
 class sfTimer
 {
-    protected $startTime = null;
-    protected $totalTime = null;
+    protected $startTime;
+    protected $totalTime;
     protected $name = '';
     protected $calls = 0;
 
@@ -56,7 +56,7 @@ class sfTimer
     /**
      * Gets the number of calls this timer has been called to time code.
      *
-     * @return integer Number of calls
+     * @return int Number of calls
      */
     public function getCalls()
     {

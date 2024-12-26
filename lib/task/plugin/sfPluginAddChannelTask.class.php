@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfPluginBaseTask.class.php');
+require_once __DIR__.'/sfPluginBaseTask.class.php';
 
 /**
  * Installs a plugin.
@@ -22,14 +22,16 @@ class sfPluginAddChannelTask extends sfPluginBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The channel name')]);
+        $this->addArguments([
+            new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The channel name'),
+        ]);
 
         $this->namespace = 'plugin';
         $this->name = 'add-channel';
 
         $this->briefDescription = 'Add a new PEAR channel';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [plugin:add-channel|INFO] task adds a new PEAR channel:
 
   [./symfony plugin:add-channel symfony.plugins.pear.example.com|INFO]
@@ -44,5 +46,7 @@ EOF;
         $this->logSection('plugin', sprintf('add channel "%s"', $arguments['name']));
 
         $this->getPluginManager()->getEnvironment()->registerChannel($arguments['name']);
+
+        return 0;
     }
 }

@@ -20,15 +20,20 @@ class sfTestCoverageTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('test_name', sfCommandArgument::REQUIRED, 'A test file name or a test directory'), new sfCommandArgument('lib_name', sfCommandArgument::REQUIRED, 'A lib file name or a lib directory for wich you want to know the coverage')]);
+        $this->addArguments([
+            new sfCommandArgument('test_name', sfCommandArgument::REQUIRED, 'A test file name or a test directory'),
+            new sfCommandArgument('lib_name', sfCommandArgument::REQUIRED, 'A lib file name or a lib directory for wich you want to know the coverage'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('detailed', null, sfCommandOption::PARAMETER_NONE, 'Output detailed information')]);
+        $this->addOptions([
+            new sfCommandOption('detailed', null, sfCommandOption::PARAMETER_NONE, 'Output detailed information'),
+        ]);
 
         $this->namespace = 'test';
         $this->name = 'coverage';
         $this->briefDescription = 'Outputs test code coverage';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [test:coverage|INFO] task outputs the code coverage
 given a test file or test directory
 and a lib file or lib directory for which you want code
@@ -60,6 +65,8 @@ EOF;
 
         $coveredFiles = $this->getFiles(sfConfig::get('sf_root_dir').'/'.$arguments['lib_name']);
         $coverage->output($coveredFiles);
+
+        return 0;
     }
 
     protected function getTestHarness($harnessOptions = [])
@@ -86,10 +93,11 @@ EOF;
     {
         if (is_dir($directory)) {
             return sfFinder::type('file')->name('*.php')->in($directory);
-        } elseif (file_exists($directory)) {
-            return [$directory];
-        } else {
-            throw new sfCommandException(sprintf('File or directory "%s" does not exist.', $directory));
         }
+        if (file_exists($directory)) {
+            return [$directory];
+        }
+
+        throw new sfCommandException(sprintf('File or directory "%s" does not exist.', $directory));
     }
 }

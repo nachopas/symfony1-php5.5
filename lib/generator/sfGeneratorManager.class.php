@@ -15,8 +15,8 @@
  */
 class sfGeneratorManager
 {
-    protected $configuration = null;
-    protected $basePath      = null;
+    protected $configuration;
+    protected $basePath;
 
     /**
      * Class constructor.
@@ -70,15 +70,20 @@ class sfGeneratorManager
      *
      * @param string $path    The relative path
      * @param string $content The content
+     *
+     * @return int
+     *
+     * @throws sfCacheException
      */
     public function save($path, $content)
     {
         $path = $this->getBasePath().DIRECTORY_SEPARATOR.$path;
 
-        if (!is_dir(dirname($path))) {
+        $cacheDir = dirname($path);
+        if (!is_dir($cacheDir)) {
             $current_umask = umask(0000);
-            if (false === @mkdir(dirname($path), 0777, true)) {
-                throw new sfCacheException(sprintf('Failed to make cache directory "%s".', dirname($path)));
+            if (!@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
+                throw new sfCacheException(sprintf('Failed to make cache directory "%s".', $cacheDir));
             }
             umask($current_umask);
         }
@@ -100,6 +105,7 @@ class sfGeneratorManager
      */
     public function generate($generatorClass, $param)
     {
+        /** @var sfGenerator $generator */
         $generator = new $generatorClass($this);
 
         return $generator->generate($param);

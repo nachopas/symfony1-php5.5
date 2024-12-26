@@ -22,8 +22,8 @@ class sfValidatorI18nChoiceCountry extends sfValidatorChoice
      *
      *  * countries: An array of country codes to use (ISO 3166)
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorChoice
      */

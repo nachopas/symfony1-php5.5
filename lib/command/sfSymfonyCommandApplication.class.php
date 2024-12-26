@@ -16,7 +16,7 @@
 class sfSymfonyCommandApplication extends sfCommandApplication
 {
     protected $taskFiles = [];
-  
+
     /**
      * Configures the current symfony command application.
      */
@@ -25,7 +25,7 @@ class sfSymfonyCommandApplication extends sfCommandApplication
         if (!isset($this->options['symfony_lib_dir'])) {
             throw new sfInitializationException('You must pass a "symfony_lib_dir" option.');
         }
-    
+
         $configurationFile = getcwd().'/config/ProjectConfiguration.class.php';
         if (is_readable($configurationFile)) {
             require_once $configurationFile;
@@ -46,7 +46,7 @@ class sfSymfonyCommandApplication extends sfCommandApplication
      *
      * @param mixed $options The command line options
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function run($options = null)
     {
@@ -112,11 +112,11 @@ class sfSymfonyCommandApplication extends sfCommandApplication
     }
 
     /**
-     * Autoloads a task class
+     * Autoloads a task class.
      *
-     * @param  string  $class  The task class name
+     * @param string $class The task class name
      *
-     * @return Boolean
+     * @return bool
      */
     public function autoloadTask($class)
     {

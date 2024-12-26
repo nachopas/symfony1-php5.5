@@ -23,8 +23,8 @@ class sfValidatorRegex extends sfValidatorString
      *  * pattern:    A regex pattern compatible with PCRE or {@link sfCallable} that returns one (required)
      *  * must_match: Whether the regex must match or not (true by default)
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorString
      */
@@ -46,10 +46,10 @@ class sfValidatorRegex extends sfValidatorString
         $pattern = $this->getPattern();
 
         if (
-      ($this->getOption('must_match') && !preg_match($pattern, $clean))
-      ||
-      (!$this->getOption('must_match') && preg_match($pattern, $clean))
-    ) {
+            ($this->getOption('must_match') && !preg_match($pattern, $clean))
+            ||
+            (!$this->getOption('must_match') && preg_match($pattern, $clean))
+        ) {
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 

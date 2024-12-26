@@ -32,6 +32,7 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
 {
     /**
      * Message data filename extension.
+     *
      * @var string
      */
     protected $dataExt = '.xml';
@@ -39,16 +40,15 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
     /**
      * Loads the messages from a XLIFF file.
      *
-     * @param string $filename  XLIFF file.
-     * @return array|false An array of messages or false if there was a problem loading the file.
+     * @param string $filename XLIFF file
+     *
+     * @return array|false an array of messages or false if there was a problem loading the file
      */
     public function &loadData($filename)
     {
         libxml_use_internal_errors(true);
         if (!$xml = simplexml_load_file($filename)) {
-            $error = false;
-
-            return $error;
+            return false;
         }
         libxml_use_internal_errors(false);
 
@@ -67,9 +67,9 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
     }
 
     /**
-     * Creates and returns a new DOMDocument instance
+     * Creates and returns a new DOMDocument instance.
      *
-     * @param  string  $xml  XML string
+     * @param string $xml XML string
      *
      * @return DOMDocument
      */
@@ -97,7 +97,9 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
      * Gets the variant for a catalogue depending on the current culture.
      *
      * @param string $catalogue catalogue
-     * @return string the variant.
+     *
+     * @return string the variant
+     *
      * @see save()
      * @see update()
      * @see delete()
@@ -124,7 +126,8 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
      * strings to the translation source via the <b>append()</b> method.
      *
      * @param string $catalogue the catalogue to add to
-     * @return boolean true if saved successfuly, false otherwise.
+     *
+     * @return bool true if saved successfuly, false otherwise
      */
     public function save($catalogue = 'messages')
     {
@@ -135,13 +138,13 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
 
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            [$variant, $filename] = str_split($variants);
+            list($variant, $filename) = $variants;
         } else {
-            [$variant, $filename] = $this->createMessageTemplate($catalogue);
+            list($variant, $filename) = $this->createMessageTemplate($catalogue);
         }
 
-        if (is_writable($filename) == false) {
-            throw new sfException(sprintf("Unable to save to file %s, file must be writable.", $filename));
+        if (false == is_writable($filename)) {
+            throw new sfException(sprintf('Unable to save to file %s, file must be writable.', $filename));
         }
 
         // create a new dom, import the existing xml
@@ -149,21 +152,21 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
         @$dom->load($filename);
 
         // find the body element
-        $xpath = new DomXPath($dom);
+        $xpath = new DOMXPath($dom);
         $body = $xpath->query('//body')->item(0);
 
         if (null === $body) {
-            //create and try again
+            // create and try again
             $this->createMessageTemplate($catalogue);
             $dom->load($filename);
-            $xpath = new DomXPath($dom);
+            $xpath = new DOMXPath($dom);
             $body = $xpath->query('//body')->item(0);
         }
 
         // find the biggest "id" used
         $lastNodes = $xpath->query('//trans-unit[not(@id <= preceding-sibling::trans-unit/@id) and not(@id <= following-sibling::trans-unit/@id)]');
         if (null !== $last = $lastNodes->item(0)) {
-            $count = intval($last->getAttribute('id'));
+            $count = (int) $last->getAttribute('id');
         } else {
             $count = 0;
         }
@@ -201,23 +204,24 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
     /**
      * Updates the translation.
      *
-     * @param string $text      the source string.
-     * @param string $target    the new translation string.
+     * @param string $text      the source string
+     * @param string $target    the new translation string
      * @param string $comments  comments
-     * @param string $catalogue the catalogue to save to.
-     * @return boolean true if translation was updated, false otherwise.
+     * @param string $catalogue the catalogue to save to
+     *
+     * @return bool true if translation was updated, false otherwise
      */
     public function update($text, $target, $comments, $catalogue = 'messages')
     {
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            [$variant, $filename] = str_split($variants);
+            list($variant, $filename) = $variants;
         } else {
             return false;
         }
 
-        if (is_writable($filename) == false) {
-            throw new sfException(sprintf("Unable to update file %s, file must be writable.", $filename));
+        if (false == is_writable($filename)) {
+            throw new sfException(sprintf('Unable to update file %s, file must be writable.', $filename));
         }
 
         // create a new dom, import the existing xml
@@ -225,7 +229,7 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
         $dom->load($filename);
 
         // find the body element
-        $xpath = new DomXPath($dom);
+        $xpath = new DOMXPath($dom);
         $units = $xpath->query('//trans-unit');
 
         // for each of the existin units
@@ -234,24 +238,24 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
             $targetted = false;
             $commented = false;
 
-            //in each unit, need to find the source, target and comment nodes
-            //it will assume that the source is before the target.
+            // in each unit, need to find the source, target and comment nodes
+            // it will assume that the source is before the target.
             foreach ($unit->childNodes as $node) {
                 // source node
-                if ($node->nodeName == 'source' && $node->firstChild->wholeText == $text) {
+                if ('source' == $node->nodeName && $node->firstChild->wholeText == $text) {
                     $found = true;
                 }
 
                 // found source, get the target and notes
                 if ($found) {
                     // set the new translated string
-                    if ($node->nodeName == 'target') {
+                    if ('target' == $node->nodeName) {
                         $node->nodeValue = $target;
                         $targetted = true;
                     }
 
                     // set the notes
-                    if (!empty($comments) && $node->nodeName == 'note') {
+                    if (!empty($comments) && 'note' == $node->nodeName) {
                         $node->nodeValue = $comments;
                         $commented = true;
                     }
@@ -295,21 +299,22 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
     /**
      * Deletes a particular message from the specified catalogue.
      *
-     * @param string $message   the source message to delete.
-     * @param string $catalogue the catalogue to delete from.
-     * @return boolean true if deleted, false otherwise.
+     * @param string $message   the source message to delete
+     * @param string $catalogue the catalogue to delete from
+     *
+     * @return bool true if deleted, false otherwise
      */
-    public function delete($message, $catalogue='messages')
+    public function delete($message, $catalogue = 'messages')
     {
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            [$variant, $filename] = str_split($variants);
+            list($variant, $filename) = $variants;
         } else {
             return false;
         }
 
-        if (is_writable($filename) == false) {
-            throw new sfException(sprintf("Unable to modify file %s, file must be writable.", $filename));
+        if (false == is_writable($filename)) {
+            throw new sfException(sprintf('Unable to modify file %s, file must be writable.', $filename));
         }
 
         // create a new dom, import the existing xml
@@ -317,16 +322,16 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
         $dom->load($filename);
 
         // find the body element
-        $xpath = new DomXPath($dom);
+        $xpath = new DOMXPath($dom);
         $units = $xpath->query('//trans-unit');
 
         // for each of the existin units
         foreach ($units as $unit) {
-            //in each unit, need to find the source, target and comment nodes
-            //it will assume that the source is before the target.
+            // in each unit, need to find the source, target and comment nodes
+            // it will assume that the source is before the target.
             foreach ($unit->childNodes as $node) {
                 // source node
-                if ($node->nodeName == 'source' && $node->firstChild->wholeText == $message) {
+                if ('source' == $node->nodeName && $node->firstChild->wholeText == $message) {
                     // we found it, remove and save the xml file.
                     $unit->parentNode->removeChild($unit);
 
@@ -339,9 +344,9 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
                         }
 
                         return true;
-                    } else {
-                        return false;
                     }
+
+                    return false;
                 }
             }
         }
@@ -365,7 +370,7 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
         }
 
         if (!is_dir($dir)) {
-            throw new sfException(sprintf("Unable to create directory %s.", $dir));
+            throw new sfException(sprintf('Unable to create directory %s.', $dir));
         }
 
         $dom = $this->createDOMDocument($this->getTemplate($catalogue));
@@ -383,7 +388,7 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xliff PUBLIC "-//XLIFF//DTD XLIFF//EN" "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd" >
 <xliff version="1.0">
-  <file source-language="EN" target-language="{$this->culture}" datatype="plaintext" original="$catalogue" date="$date" product-name="$catalogue">
+  <file source-language="EN" target-language="{$this->culture}" datatype="plaintext" original="{$catalogue}" date="{$date}" product-name="{$catalogue}">
     <header />
     <body>
     </body>

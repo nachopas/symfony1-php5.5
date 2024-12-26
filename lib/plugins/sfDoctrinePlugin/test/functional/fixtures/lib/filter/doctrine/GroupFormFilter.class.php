@@ -2,7 +2,6 @@
 
 /**
  * Group filter form.
- *
  */
 class GroupFormFilter extends BaseGroupFormFilter
 {

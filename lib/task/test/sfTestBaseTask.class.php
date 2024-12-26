@@ -18,9 +18,9 @@ abstract class sfTestBaseTask extends sfBaseTask
     /**
      * Filters tests through the "task.test.filter_test_files" event.
      *
-     * @param  array $tests     An array of absolute test file paths
-     * @param  array $arguments Current task arguments
-     * @param  array $options   Current task options
+     * @param array $tests     An array of absolute test file paths
+     * @param array $arguments Current task arguments
+     * @param array $options   Current task options
      *
      * @return array The filtered array of test files
      */
@@ -31,5 +31,26 @@ abstract class sfTestBaseTask extends sfBaseTask
         $this->dispatcher->filter($event, $tests);
 
         return $event->getReturnValue();
+    }
+
+    /**
+     * Checks if a plugin exists.
+     *
+     * The plugin directory must exist and have at least one file or folder
+     * inside for that plugin to exist.
+     *
+     * @param string $plugin
+     *
+     * @return bool True if the plugin exist, false otherwise
+     */
+    protected function checkPluginExists($plugin)
+    {
+        try {
+            sfApplicationConfiguration::getActive()->getPluginConfiguration($plugin);
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

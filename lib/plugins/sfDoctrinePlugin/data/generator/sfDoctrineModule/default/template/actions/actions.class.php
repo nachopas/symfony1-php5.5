@@ -3,6 +3,8 @@
 /**
  * <?php echo $this->getModuleName() ?> actions.
  *
+ * @package    ##PROJECT_NAME##
+ * @subpackage <?php echo $this->getModuleName()."\n" ?>
  * @author     ##AUTHOR_NAME##
  */
 class <?php echo $this->getGeneratedModuleName() ?>Actions extends <?php echo $this->getActionsBaseClass() ?>

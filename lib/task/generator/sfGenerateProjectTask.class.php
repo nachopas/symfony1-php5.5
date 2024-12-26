@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfGeneratorBaseTask.class.php');
+require_once __DIR__.'/sfGeneratorBaseTask.class.php';
 
 /**
  * Generates a new project.
@@ -32,16 +32,22 @@ class sfGenerateProjectTask extends sfGeneratorBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The project name'), new sfCommandArgument('author', sfCommandArgument::OPTIONAL, 'The project author', 'Your name here')]);
+        $this->addArguments([
+            new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The project name'),
+            new sfCommandArgument('author', sfCommandArgument::OPTIONAL, 'The project author', 'Your name here'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('orm', null, sfCommandOption::PARAMETER_REQUIRED, 'The ORM to use by default', 'Doctrine'), new sfCommandOption('installer', null, sfCommandOption::PARAMETER_REQUIRED, 'An installer script to execute', null)]);
+        $this->addOptions([
+            new sfCommandOption('orm', null, sfCommandOption::PARAMETER_REQUIRED, 'The ORM to use by default', 'Doctrine'),
+            new sfCommandOption('installer', null, sfCommandOption::PARAMETER_REQUIRED, 'An installer script to execute', null),
+        ]);
 
         $this->namespace = 'generate';
         $this->name = 'project';
 
         $this->briefDescription = 'Generates a new project';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [generate:project|INFO] task creates the basic directory structure
 for a new project in the current directory:
 
@@ -51,9 +57,6 @@ If the current directory already contains a symfony project,
 it throws a [sfCommandException|COMMENT].
 
 By default, the task configures Doctrine as the ORM.
-Propel, use the [--orm|COMMENT] option:
-
-  [./symfony generate:project blog --orm=Propel|INFO]
 
 If you don't want to use an ORM, pass [none|COMMENT] to [--orm|COMMENT] option:
 
@@ -80,7 +83,7 @@ EOF;
             throw new sfCommandException(sprintf('A symfony project already exists in this directory (%s).', getcwd()));
         }
 
-        if (!in_array(strtolower($options['orm']), ['propel', 'doctrine', 'none'])) {
+        if (!in_array(strtolower($options['orm']), ['doctrine', 'none'])) {
             throw new InvalidArgumentException(sprintf('Invalid ORM name "%s".', $options['orm']));
         }
 
@@ -98,18 +101,23 @@ EOF;
         $this->installDir(__DIR__.'/skeleton/project');
 
         // update ProjectConfiguration class (use a relative path when the symfony core is nested within the project)
-        $symfonyCoreAutoload = 0 === strpos(sfConfig::get('sf_symfony_lib_dir'), (string) sfConfig::get('sf_root_dir')) ?
-      sprintf('dirname(__FILE__).\'/..%s/autoload/sfCoreAutoload.class.php\'', str_replace(sfConfig::get('sf_root_dir'), '', sfConfig::get('sf_symfony_lib_dir'))) :
-      var_export(sfConfig::get('sf_symfony_lib_dir').'/autoload/sfCoreAutoload.class.php', true);
+        $symfonyCoreAutoload = 0 === strpos(sfConfig::get('sf_symfony_lib_dir'), sfConfig::get('sf_root_dir')) ?
+          sprintf('__DIR__.\'/..%s/autoload/sfCoreAutoload.class.php\'', str_replace(sfConfig::get('sf_root_dir'), '', sfConfig::get('sf_symfony_lib_dir'))) :
+          var_export(sfConfig::get('sf_symfony_lib_dir').'/autoload/sfCoreAutoload.class.php', true);
 
         $this->replaceTokens([sfConfig::get('sf_config_dir')], ['SYMFONY_CORE_AUTOLOAD' => str_replace('\\', '/', $symfonyCoreAutoload)]);
 
-        $this->tokens = ['ORM'          => $this->options['orm'], 'PROJECT_NAME' => $this->arguments['name'], 'AUTHOR_NAME'  => $this->arguments['author'], 'PROJECT_DIR'  => sfConfig::get('sf_root_dir')];
+        $this->tokens = [
+            'ORM' => $this->options['orm'],
+            'PROJECT_NAME' => $this->arguments['name'],
+            'AUTHOR_NAME' => $this->arguments['author'],
+            'PROJECT_DIR' => sfConfig::get('sf_root_dir'),
+        ];
 
         $this->replaceTokens();
 
         // execute the choosen ORM installer script
-        if (in_array($options['orm'], ['Doctrine', 'Propel'])) {
+        if ('Doctrine' === $options['orm']) {
             include __DIR__.'/../../plugins/sf'.$options['orm'].'Plugin/config/installer.php';
         }
 
@@ -117,6 +125,7 @@ EOF;
         if ($options['installer'] && $this->commandApplication) {
             if ($this->canRunInstaller($options['installer'])) {
                 $this->reloadTasks();
+
                 include $options['installer'];
             }
         }
@@ -128,19 +137,23 @@ EOF;
         $fixPerms->run();
 
         $this->replaceTokens();
+
+        return 0;
     }
 
     protected function canRunInstaller($installer)
     {
         if (preg_match('#^(https?|ftps?)://#', $installer)) {
-            if (ini_get('allow_url_fopen') === false) {
+            if (false === ini_get('allow_url_fopen')) {
                 $this->logSection('generate', sprintf('Cannot run remote installer "%s" because "allow_url_fopen" is off', $installer));
             }
-            if (ini_get('allow_url_include') === false) {
+            if (false === ini_get('allow_url_include')) {
                 $this->logSection('generate', sprintf('Cannot run remote installer "%s" because "allow_url_include" is off', $installer));
             }
+
             return ini_get('allow_url_fopen') && ini_get('allow_url_include');
         }
+
         return true;
     }
 }

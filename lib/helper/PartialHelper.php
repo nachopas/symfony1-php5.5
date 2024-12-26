@@ -44,10 +44,11 @@ function include_component_slot($name, $vars = [])
  *  echo get_component_slot('sidebar', array('myvar' => 12345));
  * </code>
  *
- * @param  string $name  slot name
- * @param  array  $vars  variables to be made accessible to the component
+ * @param string $name slot name
+ * @param array  $vars variables to be made accessible to the component
  *
  * @return string result of the component execution
+ *
  * @see    get_component_slot, include_partial, include_component
  */
 function get_component_slot($name, $vars = [])
@@ -68,6 +69,7 @@ function get_component_slot($name, $vars = [])
  * Returns true if component slot exists.
  *
  * @param  string slot name
+ *
  * @return bool true if component slot exists, false otherwise
  */
 function has_component_slot($name)
@@ -78,7 +80,7 @@ function has_component_slot($name)
     if (!$viewInstance->hasComponentSlot($name)) {
         return false;
     }
-  
+
     // check to see if component slot is empty (null)
     if ($viewInstance->getComponentSlot($name)) {
         return true;
@@ -97,9 +99,9 @@ function has_component_slot($name)
  *  include_component('mymodule', 'mypartial', array('myvar' => 12345));
  * </code>
  *
- * @param  string $moduleName     module name
- * @param  string $componentName  component name
- * @param  array  $vars           variables to be made accessible to the component
+ * @param string $moduleName    module name
+ * @param string $componentName component name
+ * @param array  $vars          variables to be made accessible to the component
  *
  * @see    get_component, include_partial, include_component_slot
  */
@@ -117,11 +119,12 @@ function include_component($moduleName, $componentName, $vars = [])
  *  echo get_component('mymodule', 'mypartial', array('myvar' => 12345));
  * </code>
  *
- * @param  string $moduleName     module name
- * @param  string $componentName  component name
- * @param  array  $vars           variables to be made accessible to the component
+ * @param string $moduleName    module name
+ * @param string $componentName component name
+ * @param array  $vars          variables to be made accessible to the component
  *
  * @return string result of the component execution
+ *
  * @see    include_component
  */
 function get_component($moduleName, $componentName, $vars = [])
@@ -129,7 +132,7 @@ function get_component($moduleName, $componentName, $vars = [])
     $context = sfContext::getInstance();
     $actionName = '_'.$componentName;
 
-    require($context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml'));
+    require $context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml');
 
     $class = sfConfig::get('mod_'.strtolower($moduleName).'_partial_view_class', 'sf').'PartialView';
     $view = new $class($context, $moduleName, $actionName, '');
@@ -163,8 +166,8 @@ function get_component($moduleName, $componentName, $vars = [])
  *  include_partial('mypartial', array('myvar' => 12345));
  * </code>
  *
- * @param  string $templateName  partial name
- * @param  array  $vars          variables to be made accessible to the partial
+ * @param string $templateName partial name
+ * @param array  $vars         variables to be made accessible to the partial
  *
  * @see    get_partial, include_component
  */
@@ -175,17 +178,18 @@ function include_partial($templateName, $vars = [])
 
 /**
  * Evaluates and returns a partial.
- * The syntax is similar to the one of include_partial
+ * The syntax is similar to the one of include_partial.
  *
  * <b>Example:</b>
  * <code>
  *  echo get_partial('mypartial', array('myvar' => 12345));
  * </code>
  *
- * @param  string $templateName  partial name
- * @param  array  $vars          variables to be made accessible to the partial
+ * @param string $templateName partial name
+ * @param array  $vars         variables to be made accessible to the partial
  *
  * @return string result of the partial execution
+ *
  * @see    include_partial
  */
 function get_partial($templateName, $vars = [])
@@ -194,7 +198,7 @@ function get_partial($templateName, $vars = [])
 
     // partial is in another module?
     if (false !== $sep = strpos($templateName, '/')) {
-        $moduleName   = substr($templateName, 0, $sep);
+        $moduleName = substr($templateName, 0, $sep);
         $templateName = substr($templateName, $sep + 1);
     } else {
         $moduleName = $context->getActionStack()->getLastEntry()->getModuleName();
@@ -211,8 +215,8 @@ function get_partial($templateName, $vars = [])
 /**
  * Begins the capturing of the slot.
  *
- * @param  string $name   slot name
- * @param  string $value  The slot content
+ * @param string $name  slot name
+ * @param string $value The slot content
  *
  * @see    end_slot
  */
@@ -269,9 +273,10 @@ function end_slot()
 /**
  * Returns true if the slot exists.
  *
- * @param  string $name  slot name
+ * @param string $name slot name
  *
  * @return bool true, if the slot exists
+ *
  * @see    get_slot, include_slot
  */
 function has_slot($name)
@@ -287,8 +292,8 @@ function has_slot($name)
  *  include_slot('navigation');
  * </code>
  *
- * @param  string $name     slot name
- * @param  string $default  default content to return if slot is unexistent
+ * @param string $name    slot name
+ * @param string $default default content to return if slot is unexistent
  *
  * @see    has_slot, get_slot
  */
@@ -305,10 +310,11 @@ function include_slot($name, $default = '')
  *  echo get_slot('navigation');
  * </code>
  *
- * @param  string $name     slot name
- * @param  string $default  default content to return if slot is unexistent
+ * @param string $name    slot name
+ * @param string $default default content to return if slot is unexistent
  *
  * @return string content of the slot
+ *
  * @see    has_slot, include_slot
  */
 function get_slot($name, $default = '')
@@ -338,7 +344,7 @@ function _call_component($moduleName, $componentName, $vars)
     $componentInstance = $controller->getComponent($moduleName, $componentName);
 
     // load component's module config file
-    require($context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml'));
+    require $context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml');
 
     // pass unescaped vars to the component if escaping_strategy is set to true
     $componentInstance->getVarHolder()->add(true === sfConfig::get('sf_escaping_strategy') ? sfOutputEscaper::unescape($vars) : $vars);
@@ -355,7 +361,7 @@ function _call_component($moduleName, $componentName, $vars)
     }
 
     if (sfConfig::get('sf_logging_enabled')) {
-        $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', [sprintf('Call "%s->%s()'.'"', $moduleName, $componentToRun)]));
+        $context->getEventDispatcher()->notify(new sfEvent(null, 'application.log', [sprintf('Call "%s->%s()"', $moduleName, $componentToRun)]));
     }
 
     // run component
@@ -363,7 +369,7 @@ function _call_component($moduleName, $componentName, $vars)
         $timer = sfTimerManager::getTimer(sprintf('Component "%s/%s"', $moduleName, $componentName));
     }
 
-    $retval = $componentInstance->$componentToRun($context->getRequest());
+    $retval = $componentInstance->{$componentToRun}($context->getRequest());
 
     if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) {
         $timer->addTime();

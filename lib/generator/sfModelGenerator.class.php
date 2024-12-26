@@ -15,12 +15,13 @@
  */
 abstract class sfModelGenerator extends sfGenerator
 {
-    protected $configuration = null;
-    protected $primaryKey    = [];
-    protected $modelClass    = '';
-    protected $params        = [];
-    protected $config        = [];
-    protected $formObject    = null;
+    /** @var sfModelGeneratorConfiguration */
+    protected $configuration;
+    protected $primaryKey = [];
+    protected $modelClass = '';
+    protected $params = [];
+    protected $config = [];
+    protected $formObject;
 
     /**
      * Generates classes and templates in cache.
@@ -28,6 +29,8 @@ abstract class sfModelGenerator extends sfGenerator
      * @param array $params The parameters
      *
      * @return string The data to put in configuration cache
+     *
+     * @throws sfConfigurationException
      */
     public function generate($params = [])
     {
@@ -86,7 +89,7 @@ abstract class sfModelGenerator extends sfGenerator
     /**
      * Gets the primary key name.
      *
-     * @param Boolean $firstOne Whether to return the first PK or not
+     * @param bool $firstOne Whether to return the first PK or not
      *
      * @return array An array of primary keys
      */
@@ -128,8 +131,7 @@ abstract class sfModelGenerator extends sfGenerator
     /**
      * Returns PHP code for primary keys parameters.
      *
-     * @param integer $indent The indentation value
-     * @param string  $callee The function to call
+     * @param int $indent The indentation value
      *
      * @return string The PHP code
      */
@@ -147,6 +149,7 @@ abstract class sfModelGenerator extends sfGenerator
      * Returns PHP code to add to a URL for primary keys.
      *
      * @param string $prefix The prefix value
+     * @param bool   $full
      *
      * @return string PHP code
      */
@@ -180,9 +183,9 @@ abstract class sfModelGenerator extends sfGenerator
      *
      * This method is ORM dependant.
      *
-     * @param string  $column    The column name
-     * @param boolean $developed true if you want developped method names, false otherwise
-     * @param string  $prefix    The prefix value
+     * @param string $column    The column name
+     * @param bool   $developed true if you want developped method names, false otherwise
+     * @param string $prefix    The prefix value
      *
      * @return string PHP code
      */
@@ -193,9 +196,9 @@ abstract class sfModelGenerator extends sfGenerator
     /**
      * Returns HTML code for an action link.
      *
-     * @param string  $actionName The action name
-     * @param array   $params     The parameters
-     * @param boolean $pk_link    Whether to add a primary key link or not
+     * @param string $actionName The action name
+     * @param array  $params     The parameters
+     * @param bool   $pk_link    Whether to add a primary key link or not
      *
      * @return string HTML code
      */
@@ -222,14 +225,14 @@ abstract class sfModelGenerator extends sfGenerator
             $credentials = $this->asPhp($params['credentials']);
 
             return <<<EOF
-[?php if (\$sf_user->hasCredential($credentials)): ?]
-$content
+[?php if (\$sf_user->hasCredential({$credentials})): ?]
+{$content}
 [?php endif; ?]
 
 EOF;
-        } else {
-            return $content;
         }
+
+        return $content;
     }
 
     /**
@@ -244,13 +247,13 @@ EOF;
         $html = $this->getColumnGetter($field->getName(), true);
 
         if ($renderer = $field->getRenderer()) {
-            $html = sprintf("$html ? call_user_func_array(%s, array_merge(array(%s), %s)) : '&nbsp;'", $this->asPhp($renderer), $html, $this->asPhp($field->getRendererArguments()));
+            $html = sprintf("{$html} ? call_user_func_array(%s, array_merge(array(%s), %s)) : '&nbsp;'", $this->asPhp($renderer), $html, $this->asPhp($field->getRendererArguments()));
         } elseif ($field->isComponent()) {
             return sprintf("get_component('%s', '%s', array('type' => 'list', '%s' => \$%s))", $this->getModuleName(), $field->getName(), $this->getSingularName(), $this->getSingularName());
         } elseif ($field->isPartial()) {
             return sprintf("get_partial('%s/%s', array('type' => 'list', '%s' => \$%s))", $this->getModuleName(), $field->getName(), $this->getSingularName(), $this->getSingularName());
         } elseif ('Date' == $field->getType()) {
-            $html = sprintf("false !== strtotime($html) ? format_date(%s, \"%s\") : '&nbsp;'", $html, $field->getConfig('date_format', 'f'));
+            $html = sprintf("is_string({$html}) && false !== strtotime({$html}) ? format_date(%s, \"%s\") : '&nbsp;'", $html, $field->getConfig('date_format', 'f'));
         } elseif ('Boolean' == $field->getType()) {
             $html = sprintf("get_partial('%s/list_field_boolean', array('value' => %s))", $this->getModuleName(), $html);
         }
@@ -292,7 +295,7 @@ EOF;
     }
 
     /**
-     * Gets the form object
+     * Gets the form object.
      *
      * @return sfForm
      */
@@ -316,15 +319,18 @@ EOF;
     {
         if (isset($this->params['non_verbose_templates']) && $this->params['non_verbose_templates']) {
             return '[?php $form->isMultipart() and print \' enctype="multipart/form-data"\' ?]';
-        } else {
-            return $this->getFormObject()->isMultipart() ? ' enctype="multipart/form-data"' : '';
         }
+
+        return $this->getFormObject()->isMultipart() ? ' enctype="multipart/form-data"' : '';
     }
 
     /**
      * Validates the basic structure of the parameters.
      *
      * @param array $params An array of parameters
+     *
+     * @throws sfInitializationException
+     * @throws sfParseException
      */
     protected function validateParameters($params)
     {
@@ -373,6 +379,7 @@ EOF;
 
             require_once $configuration;
             $class = $this->getModuleName().'GeneratorConfiguration';
+
             break;
         }
 
@@ -391,15 +398,17 @@ EOF;
     /**
      * Returns the URL for a given action.
      *
+     * @param string $action
+     *
      * @return string The URL related to a given action
      */
     public function getUrlForAction($action)
     {
         if (isset($this->params['route_prefix'])) {
             return 'list' == $action ? $this->params['route_prefix'] : $this->params['route_prefix'].'_'.$action;
-        } else {
-            return $this->getModuleName().'/'.$action;
         }
+
+        return $this->getModuleName().'/'.$action;
     }
 
     public function asPhp($variable)

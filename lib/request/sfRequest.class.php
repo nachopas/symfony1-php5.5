@@ -19,23 +19,38 @@
  */
 abstract class sfRequest implements ArrayAccess
 {
-    const GET    = 'GET';
-    const POST   = 'POST';
-    const PUT    = 'PUT';
-    const DELETE = 'DELETE';
-    const HEAD   = 'HEAD';
+    public const GET = 'GET';
+    public const POST = 'POST';
+    public const PUT = 'PUT';
+    public const PATCH = 'PATCH';
+    public const DELETE = 'DELETE';
+    public const HEAD = 'HEAD';
+    public const OPTIONS = 'OPTIONS';
 
-    protected $dispatcher      = null;
-    protected $content         = null;
-    protected $method          = null;
-    protected $options         = [];
-    protected $parameterHolder = null;
-    protected $attributeHolder = null;
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var string|null */
+    protected $content;
+
+    /** @var string */
+    protected $method;
+    protected $options = [];
+
+    /** @var sfParameterHolder */
+    protected $parameterHolder;
+
+    /** @var sfParameterHolder */
+    protected $attributeHolder;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $parameters
+     * @param array $attributes
+     * @param array $options
      */
     public function __construct(sfEventDispatcher $dispatcher, $parameters = [], $attributes = [], $options = [])
     {
@@ -49,14 +64,12 @@ abstract class sfRequest implements ArrayAccess
      *
      *  * logging: Whether to enable logging or not (false by default)
      *
-     * @param  sfEventDispatcher $dispatcher  An sfEventDispatcher instance
-     * @param  array             $parameters  An associative array of initialization parameters
-     * @param  array             $attributes  An associative array of initialization attributes
-     * @param  array             $options     An associative array of options
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
+     * @param array             $parameters An associative array of initialization parameters
+     * @param array             $attributes An associative array of initialization attributes
+     * @param array             $options    An associative array of options
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfRequest
+     * @throws sfInitializationException If an error occurs while initializing this sfRequest
      */
     public function initialize(sfEventDispatcher $dispatcher, $parameters = [], $attributes = [], $options = [])
     {
@@ -77,9 +90,21 @@ abstract class sfRequest implements ArrayAccess
     }
 
     /**
+     * Return an option value or null if option does not exists.
+     *
+     * @param string $name the option name
+     *
+     * @return mixed The option value
+     */
+    public function getOption($name)
+    {
+        return $this->options[$name] ?? null;
+    }
+
+    /**
      * Returns the options.
      *
-     * @return array The options.
+     * @return array the options
      */
     public function getOptions()
     {
@@ -89,7 +114,7 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Extracts parameter values from the request.
      *
-     * @param  array $names  An indexed array of parameter names to extract
+     * @param array $names An indexed array of parameter names to extract
      *
      * @return array An associative array of parameters and their values. If
      *               a specified parameter doesn't exist an empty string will
@@ -122,13 +147,13 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Sets the request method.
      *
-     * @param string $method  The request method
+     * @param string $method The request method
      *
-     * @throws <b>sfException</b> - If the specified request method is invalid
+     * @throws sfException - If the specified request method is invalid
      */
     public function setMethod($method)
     {
-        if (!in_array(strtoupper($method), [self::GET, self::POST, self::PUT, self::DELETE, self::HEAD])) {
+        if (!in_array(strtoupper($method), [self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS])) {
             throw new sfException(sprintf('Invalid request method: %s.', $method));
         }
 
@@ -138,10 +163,11 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Returns true if the request parameter exists (implements the ArrayAccess interface).
      *
-     * @param  string $name The name of the request parameter
+     * @param string $name The name of the request parameter
      *
-     * @return Boolean true if the request parameter exists, false otherwise
+     * @return bool true if the request parameter exists, false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->hasParameter($name);
@@ -150,10 +176,11 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Returns the request parameter associated with the name (implements the ArrayAccess interface).
      *
-     * @param  string $name  The offset of the value to get
+     * @param string $name The offset of the value to get
      *
      * @return mixed The request parameter if exists, null otherwise
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->getParameter($name, false);
@@ -163,8 +190,9 @@ abstract class sfRequest implements ArrayAccess
      * Sets the request parameter associated with the offset (implements the ArrayAccess interface).
      *
      * @param string $offset The parameter name
-     * @param string $value The parameter value
+     * @param string $value  The parameter value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->setParameter($offset, $value);
@@ -175,6 +203,7 @@ abstract class sfRequest implements ArrayAccess
      *
      * @param string $offset The parameter name
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->getParameterHolder()->remove($offset);
@@ -203,8 +232,8 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Retrieves an attribute from the current request.
      *
-     * @param  string $name     Attribute name
-     * @param  string $default  Default attribute value
+     * @param string $name    Attribute name
+     * @param string $default Default attribute value
      *
      * @return mixed An attribute value
      */
@@ -216,7 +245,7 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Indicates whether or not an attribute exist for the current request.
      *
-     * @param  string $name  Attribute name
+     * @param string $name Attribute name
      *
      * @return bool true, if the attribute exists otherwise false
      */
@@ -228,9 +257,8 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Sets an attribute for the request.
      *
-     * @param string $name   Attribute name
-     * @param string $value  Value for the attribute
-     *
+     * @param string $name  Attribute name
+     * @param string $value Value for the attribute
      */
     public function setAttribute($name, $value)
     {
@@ -240,9 +268,8 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Retrieves a parameter for the current request.
      *
-     * @param string $name     Parameter name
-     * @param string $default  Parameter default value
-     *
+     * @param string $name    Parameter name
+     * @param string $default Parameter default value
      */
     public function getParameter($name, $default = null)
     {
@@ -252,7 +279,7 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Indicates whether or not a parameter exist for the current request.
      *
-     * @param  string $name  Parameter name
+     * @param string $name Parameter name
      *
      * @return bool true, if the parameter exists otherwise false
      */
@@ -264,9 +291,8 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Sets a parameter for the current request.
      *
-     * @param string $name   Parameter name
-     * @param string $value  Parameter value
-     *
+     * @param string $name  Parameter name
+     * @param string $value Parameter value
      */
     public function setParameter($name, $value)
     {
@@ -276,14 +302,12 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Returns the content of the current request.
      *
-     * @return string|Boolean The content or false if none is available
+     * @return false|string The content or false if none is available
      */
     public function getContent()
     {
-        if (null === $this->content) {
-            if (0 === strlen(trim($this->content = file_get_contents('php://input')))) {
-                $this->content = false;
-            }
+        if (null === $this->content && '' === trim($this->content = file_get_contents('php://input'))) {
+            $this->content = false;
         }
 
         return $this->content;
@@ -292,12 +316,12 @@ abstract class sfRequest implements ArrayAccess
     /**
      * Calls methods defined via sfEventDispatcher.
      *
-     * @param  string $method     The method name
-     * @param  array  $arguments  The method arguments
+     * @param string $method    The method name
+     * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
      *
-     * @throws <b>sfException</b> if call fails
+     * @throws sfException if call fails
      */
     public function __call($method, $arguments)
     {

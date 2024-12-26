@@ -22,18 +22,48 @@ class sfDeprecatedMethodsValidation extends sfValidation
 
     public function getExplanation()
     {
-        return ['', '  The files above use deprecated functions and/or methods', '  that have been removed in symfony 1.4.', '', '  You can find a list of all deprecated methods under the', '  "Methods and Functions" section of the DEPRECATED tutorial:', '', '  http://www.symfony-project.org/tutorial/1_4/en/deprecated', ''];
+        return [
+            '',
+            '  The files above use deprecated functions and/or methods',
+            '  that have been removed in symfony 1.4.',
+            '',
+            '  You can find a list of all deprecated methods under the',
+            '  "Methods and Functions" section of the DEPRECATED tutorial:',
+            '',
+            '  http://www.symfony-project.org/tutorial/1_4/en/deprecated',
+            '',
+        ];
     }
 
     public function validate()
     {
-        $found = array_merge(
-            $this->doValidate(['sfToolkit::getTmpDir', 'sfToolkit::removeArrayValueForPath', 'sfToolkit::hasArrayValueForPath', 'sfToolkit::getArrayValueForPathByRef', 'sfValidatorBase::setInvalidMessage', 'sfValidatorBase::setRequiredMessage', 'debug_message', 'sfContext::retrieveObjects', 'getXDebugStack', 'checkSymfonyVersion', 'sh'], [sfConfig::get('sf_apps_dir'), sfConfig::get('sf_lib_dir'), sfConfig::get('sf_test_dir'), sfConfig::get('sf_plugins_dir')]),
-            $this->doValidate(['contains', 'responseContains', 'isRequestParameter', 'isResponseHeader', 'isUserCulture', 'isRequestFormat', 'checkResponseElement'], sfConfig::get('sf_test_dir')),
-            $this->doValidate(['getDefaultView', 'handleError', 'validate', 'debugMessage', 'getController()->sendEmail'], $this->getProjectActionDirectories())
+        return array_merge(
+            $this->doValidate([
+                'sfToolkit::getTmpDir',
+                'sfToolkit::removeArrayValueForPath',
+                'sfToolkit::hasArrayValueForPath',
+                'sfToolkit::getArrayValueForPathByRef',
+                'sfValidatorBase::setInvalidMessage',
+                'sfValidatorBase::setRequiredMessage',
+                'debug_message',
+                'sfContext::retrieveObjects',
+                'getXDebugStack',
+                'checkSymfonyVersion',
+                'sh',
+            ], [
+                sfConfig::get('sf_apps_dir'),
+                sfConfig::get('sf_lib_dir'),
+                sfConfig::get('sf_test_dir'),
+                sfConfig::get('sf_plugins_dir'),
+            ]),
+            $this->doValidate([
+                'contains', 'responseContains', 'isRequestParameter', 'isResponseHeader',
+                'isUserCulture', 'isRequestFormat', 'checkResponseElement',
+            ], sfConfig::get('sf_test_dir')),
+            $this->doValidate([
+                'getDefaultView', 'handleError', 'validate', 'debugMessage', 'getController()->sendEmail',
+            ], $this->getProjectActionDirectories())
         );
-
-        return $found;
     }
 
     public function doValidate($methods, $dir)

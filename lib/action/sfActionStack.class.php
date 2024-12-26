@@ -18,6 +18,7 @@
  */
 class sfActionStack
 {
+    /** @var sfActionStackEntry[] */
     protected $stack = [];
 
     /**
@@ -44,7 +45,7 @@ class sfActionStack
      *
      * @param int $index An entry index
      *
-     * @return sfActionStackEntry An action stack entry implementation.
+     * @return sfActionStackEntry an action stack entry implementation
      */
     public function getEntry($index)
     {
@@ -60,7 +61,7 @@ class sfActionStack
     /**
      * Removes the entry at a specific index.
      *
-     * @return sfActionStackEntry An action stack entry implementation.
+     * @return sfActionStackEntry an action stack entry implementation
      */
     public function popEntry()
     {
@@ -90,7 +91,7 @@ class sfActionStack
      */
     public function getLastEntry()
     {
-        $count  = count($this->stack);
+        $count = count($this->stack);
         $retval = null;
 
         if (isset($this->stack[0])) {
@@ -103,7 +104,7 @@ class sfActionStack
     /**
      * Retrieves the size of this stack.
      *
-     * @return int The size of this stack.
+     * @return int the size of this stack
      */
     public function getSize()
     {

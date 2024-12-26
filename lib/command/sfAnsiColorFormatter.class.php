@@ -16,12 +16,12 @@
 class sfAnsiColorFormatter extends sfFormatter
 {
     protected $styles = [
-      'ERROR'    => ['bg' => 'red', 'fg' => 'white', 'bold' => true],
-      'INFO'     => ['fg' => 'green', 'bold' => true],
-      'COMMENT'  => ['fg' => 'yellow'],
-      'QUESTION' => ['bg' => 'cyan', 'fg' => 'black', 'bold' => false],
+        'ERROR' => ['bg' => 'red', 'fg' => 'white', 'bold' => true],
+        'INFO' => ['fg' => 'green', 'bold' => true],
+        'COMMENT' => ['fg' => 'yellow'],
+        'QUESTION' => ['bg' => 'cyan', 'fg' => 'black', 'bold' => false],
     ];
-    protected $options    = ['bold' => 1, 'underscore' => 4, 'blink' => 5, 'reverse' => 7, 'conceal' => 8];
+    protected $options = ['bold' => 1, 'underscore' => 4, 'blink' => 5, 'reverse' => 7, 'conceal' => 8];
     protected $foreground = ['black' => 30, 'red' => 31, 'green' => 32, 'yellow' => 33, 'blue' => 34, 'magenta' => 35, 'cyan' => 36, 'white' => 37];
     protected $background = ['black' => 40, 'red' => 41, 'green' => 42, 'yellow' => 43, 'blue' => 44, 'magenta' => 45, 'cyan' => 46, 'white' => 47];
 
@@ -39,8 +39,8 @@ class sfAnsiColorFormatter extends sfFormatter
     /**
      * Formats a text according to the given style or parameters.
      *
-     * @param  string   $text       The test to style
-     * @param  mixed    $parameters An array of options or a style name
+     * @param string $text       The test to style
+     * @param mixed  $parameters An array of options or a style name
      *
      * @return string The styled text
      */
@@ -73,10 +73,12 @@ class sfAnsiColorFormatter extends sfFormatter
     /**
      * Formats a message within a section.
      *
-     * @param string  $section  The section name
-     * @param string  $text     The text message
-     * @param integer $size     The maximum size allowed for a line
-     * @param string  $style    The color scheme to apply to the section string (INFO, ERROR, COMMENT or QUESTION)
+     * @param string $section The section name
+     * @param string $text    The text message
+     * @param int    $size    The maximum size allowed for a line
+     * @param string $style   The color scheme to apply to the section string (INFO, ERROR, COMMENT or QUESTION)
+     *
+     * @return string
      */
     public function formatSection($section, $text, $size = null, $style = 'INFO')
     {
@@ -93,8 +95,8 @@ class sfAnsiColorFormatter extends sfFormatter
     /**
      * Truncates a line.
      *
-     * @param string  $text The text
-     * @param integer $size The maximum size of the returned string
+     * @param string $text The text
+     * @param int    $size The maximum size of the returned string
      *
      * @return string The truncated string
      */

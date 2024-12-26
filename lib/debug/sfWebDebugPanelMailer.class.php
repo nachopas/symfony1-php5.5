@@ -15,7 +15,8 @@
  */
 class sfWebDebugPanelMailer extends sfWebDebugPanel
 {
-    protected $mailer = null;
+    /** @var sfMailer */
+    protected $mailer;
 
     /**
      * Constructor.
@@ -73,7 +74,7 @@ class sfWebDebugPanelMailer extends sfWebDebugPanel
     {
         static $i = 0;
 
-        $i++;
+        ++$i;
 
         $to = null === $message->getTo() ? '' : implode(', ', array_keys($message->getTo()));
 
@@ -88,8 +89,6 @@ class sfWebDebugPanelMailer extends sfWebDebugPanel
 
     /**
      * Listens for the mailer.configure event and captures a reference to the mailer.
-     *
-     * @param sfEvent $event
      */
     public function listenForMailerConfigure(sfEvent $event)
     {

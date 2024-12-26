@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Creates database for current model.
@@ -24,15 +24,23 @@ class sfDoctrineDqlTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('dql_query', sfCommandArgument::REQUIRED, 'The DQL query to execute', null), new sfCommandArgument('parameter', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'Query parameter')]);
+        $this->addArguments([
+            new sfCommandArgument('dql_query', sfCommandArgument::REQUIRED, 'The DQL query to execute', null),
+            new sfCommandArgument('parameter', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'Query parameter'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('show-sql', null, sfCommandOption::PARAMETER_NONE, 'Show the sql that would be executed'), new sfCommandOption('table', null, sfCommandOption::PARAMETER_NONE, 'Return results in table format')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('show-sql', null, sfCommandOption::PARAMETER_NONE, 'Show the sql that would be executed'),
+            new sfCommandOption('table', null, sfCommandOption::PARAMETER_NONE, 'Return results in table format'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'dql';
         $this->briefDescription = 'Execute a DQL query and view the results';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:dql|INFO] task executes a DQL query and displays the formatted
 results:
 
@@ -58,7 +66,8 @@ EOF;
         $dql = $arguments['dql_query'];
 
         $q = Doctrine_Query::create()
-      ->parseDqlQuery($dql);
+            ->parseDqlQuery($dql)
+        ;
 
         $this->logSection('doctrine', 'executing dql query');
         $this->log(sprintf('DQL: %s', $dql));
@@ -73,7 +82,10 @@ EOF;
             if (!$options['table']) {
                 $results = $q->fetchArray($arguments['parameter']);
 
-                $this->log([sprintf('found %s results', number_format($count)), sfYaml::dump($results, 4)]);
+                $this->log([
+                    sprintf('found %s results', number_format($count)),
+                    sfYaml::dump($results, 4),
+                ]);
             } else {
                 $results = $q->execute($arguments['parameter'], Doctrine_Core::HYDRATE_SCALAR);
 
@@ -94,7 +106,7 @@ EOF;
                 $hdr = '|';
                 $div = '+';
 
-                foreach ($headers as $field => & $length) {
+                foreach ($headers as $field => &$length) {
                     if ($length < strlen($field)) {
                         $length = strlen($field);
                     }
@@ -141,6 +153,6 @@ EOF;
      */
     protected function renderValue($value)
     {
-        return $value ?? 'NULL';
+        return null === $value ? 'NULL' : $value;
     }
 }

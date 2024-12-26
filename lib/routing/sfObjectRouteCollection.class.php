@@ -30,7 +30,18 @@ class sfObjectRouteCollection extends sfRouteCollection
             throw new InvalidArgumentException(sprintf('You must pass a "model" option to %s ("%s" route)', get_class($this), $this->options['name']));
         }
 
-        $this->options = array_merge(['actions'              => false, 'module'               => $this->options['name'], 'prefix_path'          => '/'.$this->options['name'], 'column'               => $this->options['column'] ?? 'id', 'with_show'            => true, 'segment_names'        => ['edit' => 'edit', 'new' => 'new'], 'model_methods'        => [], 'requirements'         => [], 'with_wildcard_routes' => false, 'default_params'   => []], $this->options);
+        $this->options = array_merge([
+            'actions' => false,
+            'module' => $this->options['name'],
+            'prefix_path' => '/'.$this->options['name'],
+            'column' => isset($this->options['column']) ? $this->options['column'] : 'id',
+            'with_show' => true,
+            'segment_names' => ['edit' => 'edit', 'new' => 'new'],
+            'model_methods' => [],
+            'requirements' => [],
+            'with_wildcard_routes' => false,
+            'default_params' => [],
+        ], $this->options);
 
         $this->options['requirements'] = array_merge([$this->options['column'] => 'id' == $this->options['column'] ? '\d+' : null], $this->options['requirements']);
         $this->options['model_methods'] = array_merge(['list' => null, 'object' => null], $this->options['model_methods']);
@@ -59,7 +70,7 @@ class sfObjectRouteCollection extends sfRouteCollection
                 throw new InvalidArgumentException(sprintf('Unable to generate a route for the "%s" action.', $action));
             }
 
-            $this->routes[$this->getRoute($action)] = $this->$method();
+            $this->routes[$this->getRoute($action)] = $this->{$method}();
         }
 
         // object actions

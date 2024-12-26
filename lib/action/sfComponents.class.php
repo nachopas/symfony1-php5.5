@@ -16,6 +16,8 @@
 abstract class sfComponents extends sfComponent
 {
     /**
+     * @param sfRequest $request
+     *
      * @throws sfInitializationException
      *
      * @see sfComponent

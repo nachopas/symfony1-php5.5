@@ -25,7 +25,7 @@ abstract class sfActions extends sfAction
      *
      * @param sfRequest $request The current sfRequest object
      *
-     * @return string    A string containing the view name associated with this action
+     * @return string A string containing the view name associated with this action
      *
      * @throws sfInitializationException
      *
@@ -36,7 +36,7 @@ abstract class sfActions extends sfAction
         // dispatch action
         $actionToRun = 'execute'.ucfirst($this->getActionName());
 
-        if ($actionToRun === 'execute') {
+        if ('execute' === $actionToRun) {
             // no action given
             throw new sfInitializationException(sprintf('sfAction initialization failed for module "%s". There was no action given.', $this->getModuleName()));
         }
@@ -51,6 +51,6 @@ abstract class sfActions extends sfAction
         }
 
         // run action
-        return $this->$actionToRun($request);
+        return $this->{$actionToRun}($request);
     }
 }

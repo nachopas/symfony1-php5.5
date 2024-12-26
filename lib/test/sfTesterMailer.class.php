@@ -15,8 +15,8 @@
  */
 class sfTesterMailer extends sfTester
 {
-    protected $logger  = null;
-    protected $message = null;
+    protected $logger;
+    protected $message;
 
     /**
      * Prepares the tester.
@@ -44,7 +44,7 @@ class sfTesterMailer extends sfTester
      *
      * @param int $nb number of messages
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function hasSent($nb = null)
     {
@@ -72,17 +72,17 @@ class sfTesterMailer extends sfTester
     /**
      * Changes the context to use the email corresponding to the given criteria.
      *
-     * @param string|array $to       the email or array(email => alias)
+     * @param array|string $to       the email or array(email => alias)
      * @param int          $position address position
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function withMessage($to, $position = 1)
     {
         $messageEmail = $to;
         if (is_array($to)) {
-            $alias        = current($to);
-            $to           = key($to);
+            $alias = current($to);
+            $to = key($to);
             $messageEmail = sprintf('%s <%s>', $alias, $to);
         }
 
@@ -90,7 +90,7 @@ class sfTesterMailer extends sfTester
         foreach ($this->logger->getMessages() as $message) {
             $email = $message->getTo();
             if ($to == key($email)) {
-                $matches++;
+                ++$matches;
 
                 if ($matches == $position) {
                     $this->message = $message;
@@ -116,7 +116,7 @@ class sfTesterMailer extends sfTester
      *
      * @param string $value regular expression or value
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function checkBody($value)
     {
@@ -130,7 +130,7 @@ class sfTesterMailer extends sfTester
         $mustMatch = true;
         if (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match)) {
             $regex = $value;
-            if ($match[1] == '!') {
+            if ('!' == $match[1]) {
                 $mustMatch = false;
                 $regex = substr($value, 1);
             }
@@ -170,7 +170,7 @@ class sfTesterMailer extends sfTester
      * @param string $key   entry to test
      * @param string $value regular expression or value
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function checkHeader($key, $value)
     {
@@ -188,7 +188,7 @@ class sfTesterMailer extends sfTester
         $mustMatch = true;
         if (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match)) {
             $regex = $value;
-            if ($match[1] == '!') {
+            if ('!' == $match[1]) {
                 $mustMatch = false;
                 $regex = substr($value, 1);
             }
@@ -200,18 +200,21 @@ class sfTesterMailer extends sfTester
                     if (preg_match($regex, $header)) {
                         $ok = true;
                         $this->tester->pass(sprintf('email header "%s" matches "%s" (%s)', $key, $value, $current));
+
                         break;
                     }
                 } else {
                     if (preg_match($regex, $header)) {
                         $ok = true;
                         $this->tester->fail(sprintf('email header "%s" does not match "%s" (%s)', $key, $value, $current));
+
                         break;
                     }
                 }
             } elseif ($header == $value) {
                 $ok = true;
                 $this->tester->pass(sprintf('email header "%s" is "%s" (%s)', $key, $value, $current));
+
                 break;
             }
         }

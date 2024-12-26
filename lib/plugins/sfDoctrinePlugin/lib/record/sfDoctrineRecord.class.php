@@ -11,7 +11,7 @@
 
 /**
  * Base sfDoctrineRecord extends the base Doctrine_Record in Doctrine to provide some
- * symfony specific functionality to Doctrine_Records
+ * symfony specific functionality to Doctrine_Records.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
@@ -31,9 +31,9 @@ abstract class sfDoctrineRecord extends Doctrine_Record
             // only add filter to each table once
             if (!$this->getTable()->getOption('has_symfony_i18n_filter')) {
                 $this->getTable()
-          ->unshiftFilter(new sfDoctrineRecordI18nFilter())
-          ->setOption('has_symfony_i18n_filter', true)
-        ;
+                    ->unshiftFilter(new sfDoctrineRecordI18nFilter())
+                    ->setOption('has_symfony_i18n_filter', true)
+                ;
             }
         }
     }
@@ -49,7 +49,7 @@ abstract class sfDoctrineRecord extends Doctrine_Record
     }
 
     /**
-     * Sets the default culture
+     * Sets the default culture.
      *
      * @param string $culture
      */
@@ -59,7 +59,7 @@ abstract class sfDoctrineRecord extends Doctrine_Record
     }
 
     /**
-     * Return the default culture
+     * Return the default culture.
      *
      * @return string the default culture
      */
@@ -83,17 +83,18 @@ abstract class sfDoctrineRecord extends Doctrine_Record
     public function getPrimaryKey()
     {
         $identifier = (array) $this->identifier();
+
         return end($identifier);
     }
 
     /**
      * Function require by symfony >= 1.2 admin generators.
      *
-     * @return boolean
+     * @return bool
      */
     public function isNew()
     {
-        return ! $this->exists();
+        return !$this->exists();
     }
 
     /**
@@ -103,7 +104,12 @@ abstract class sfDoctrineRecord extends Doctrine_Record
      */
     public function __toString()
     {
-        $guesses = ['name', 'title', 'description', 'subject', 'keywords', 'id'];
+        $guesses = ['name',
+            'title',
+            'description',
+            'subject',
+            'keywords',
+            'id'];
 
         // we try to guess a column which would give a good description of the object
         foreach ($guesses as $descriptionColumn) {
@@ -119,14 +125,15 @@ abstract class sfDoctrineRecord extends Doctrine_Record
     /**
      * Provides getter and setter methods.
      *
-     * @param  string $method    The method name
-     * @param  array  $arguments The method arguments
+     * @param string $method    The method name
+     * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
      */
     public function __call($method, $arguments)
     {
         $failed = false;
+
         try {
             if (in_array($verb = substr($method, 0, 3), ['set', 'get'])) {
                 $name = substr($method, 3);
@@ -162,9 +169,8 @@ abstract class sfDoctrineRecord extends Doctrine_Record
                     [$this, $verb],
                     array_merge([$entityName], $arguments)
                 );
-            } else {
-                $failed = true;
             }
+            $failed = true;
         } catch (Exception $e) {
             $failed = true;
         }
@@ -176,42 +182,56 @@ abstract class sfDoctrineRecord extends Doctrine_Record
 
             if (isset($e) && $e) {
                 throw $e;
-            } elseif (isset($e2) && $e2) {
+            }
+            if (isset($e2) && $e2) {
                 throw $e2;
             }
         }
     }
 
     /**
-     * Get the Doctrine date value as a PHP DateTime object
+     * Get the Doctrine date value as a PHP DateTime object, null if the value is not set.
      *
-     * @param string $dateFieldName   The field name to get the DateTime object for
-     * @return DateTime $dateTime     The instance of PHPs DateTime
+     * @param string $dateFieldName The field name to get the DateTime object for
+     *
+     * @return DateTime|null $dateTime     The instance of PHPs DateTime
+     *
+     * @throws sfException if the field is not one of date, datetime, or timestamp types
      */
     public function getDateTimeObject($dateFieldName)
     {
         $type = $this->getTable()->getTypeOf($dateFieldName);
-        if ($type == 'date' || $type == 'timestamp' || $type == 'datetime') {
-            return new DateTime($this->get($dateFieldName));
+        if ('date' == $type || 'timestamp' == $type || 'datetime' == $type) {
+            $datetime = $this->get($dateFieldName);
+            if ($datetime) {
+                return new DateTime($datetime);
+            }
         } else {
             throw new sfException('Cannot call getDateTimeObject() on a field that is not of type date or timestamp.');
         }
     }
 
     /**
-     * Set the Doctrine date value by passing a valid PHP DateTime object instance
+     * Set the Doctrine date value by passing a valid PHP DateTime object instance.
      *
-     * @param string $dateFieldName       The field name to set the date for
-     * @param DateTime $dateTimeObject    The DateTime instance to use to set the value
-     * @return void
+     * @param string   $dateFieldName  The field name to set the date for
+     * @param DateTime $dateTimeObject The DateTime instance to use to set the value
+     *
+     * @return sfDoctrineRecord
+     *
+     * @throws sfException if the field is not one of date, datetime, or timestamp types
      */
-    public function setDateTimeObject($dateFieldName, DateTime $dateTimeObject)
+    public function setDateTimeObject($dateFieldName, ?DateTime $dateTimeObject = null)
     {
         $type = $this->getTable()->getTypeOf($dateFieldName);
-        if ($type == 'date' || $type == 'timestamp' || $type == 'datetime') {
+        if ('date' == $type || 'timestamp' == $type || 'datetime' == $type) {
+            if (null === $dateTimeObject) {
+                return $this->set($dateFieldName, null);
+            }
+
             return $this->set($dateFieldName, $dateTimeObject->format('Y-m-d H:i:s'));
-        } else {
-            throw new sfException('Cannot call setDateTimeObject() on a field that is not of type date or timestamp.');
         }
+
+        throw new sfException('Cannot call setDateTimeObject() on a field that is not of type date or timestamp.');
     }
 }

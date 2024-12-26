@@ -17,8 +17,6 @@ abstract class sfOutputEscaper
 {
     /**
      * The value that is to be escaped.
-     *
-     * @var mixed
      */
     protected $value;
 
@@ -38,12 +36,12 @@ abstract class sfOutputEscaper
      * Since sfOutputEscaper is an abstract class, instances cannot be created
      * directly but the constructor will be inherited by sub-classes.
      *
-     * @param string $escapingMethod  Escaping method
-     * @param string $value           Escaping value
+     * @param string $escapingMethod Escaping method
+     * @param string $value          Escaping value
      */
     public function __construct($escapingMethod, $value)
     {
-        $this->value          = $value;
+        $this->value = $value;
         $this->escapingMethod = $escapingMethod;
     }
 
@@ -69,8 +67,8 @@ abstract class sfOutputEscaper
      * of standard escaping methods listed in the escaping helper
      * (EscapingHelper.php).
      *
-     * @param  string $escapingMethod  The escaping method (a PHP callable) to apply to the value
-     * @param  mixed  $value           The value to escape
+     * @param string $escapingMethod The escaping method (a PHP callable) to apply to the value
+     * @param mixed  $value          The value to escape
      *
      * @return mixed Escaping value
      *
@@ -99,19 +97,22 @@ abstract class sfOutputEscaper
                 $copy->escapingMethod = $escapingMethod;
 
                 return $copy;
-            } elseif (self::isClassMarkedAsSafe(get_class($value))) {
+            }
+            if (self::isClassMarkedAsSafe(get_class($value))) {
                 // the class or one of its children is marked as safe
                 // return the unescaped object
                 return $value;
-            } elseif ($value instanceof sfOutputEscaperSafe) {
+            }
+            if ($value instanceof sfOutputEscaperSafe) {
                 // do not escape objects marked as safe
                 // return the original object
                 return $value->getValue();
-            } elseif ($value instanceof Traversable) {
-                return new sfOutputEscaperIteratorDecorator($escapingMethod, $value);
-            } else {
-                return new sfOutputEscaperObjectDecorator($escapingMethod, $value);
             }
+            if ($value instanceof Traversable) {
+                return new sfOutputEscaperIteratorDecorator($escapingMethod, $value);
+            }
+
+            return new sfOutputEscaperObjectDecorator($escapingMethod, $value);
         }
 
         // it must be a resource; cannot escape that.
@@ -121,7 +122,7 @@ abstract class sfOutputEscaper
     /**
      * Unescapes a value that has been escaped previously with the escape() method.
      *
-     * @param  mixed $value The value to unescape
+     * @param mixed $value The value to unescape
      *
      * @return mixed Unescaped value
      *
@@ -135,13 +136,15 @@ abstract class sfOutputEscaper
 
         if (is_scalar($value)) {
             return html_entity_decode($value, ENT_QUOTES, sfConfig::get('sf_charset'));
-        } elseif (is_array($value)) {
+        }
+        if (is_array($value)) {
             foreach ($value as $name => $v) {
                 $value[$name] = self::unescape($v);
             }
 
             return $value;
-        } elseif (is_object($value)) {
+        }
+        if (is_object($value)) {
             return $value instanceof sfOutputEscaper ? $value->getRawValue() : $value;
         }
 
@@ -151,7 +154,7 @@ abstract class sfOutputEscaper
     /**
      * Returns true if the class if marked as safe.
      *
-     * @param  string  $class  A class name
+     * @param string $class A class name
      *
      * @return bool true if the class if safe, false otherwise
      */
@@ -173,7 +176,7 @@ abstract class sfOutputEscaper
     /**
      * Marks an array of classes (and all its children) as being safe for output.
      *
-     * @param array $classes  An array of class names
+     * @param array $classes An array of class names
      */
     public static function markClassesAsSafe(array $classes)
     {
@@ -183,7 +186,7 @@ abstract class sfOutputEscaper
     /**
      * Marks a class (and all its children) as being safe for output.
      *
-     * @param string $class  A class name
+     * @param string $class A class name
      */
     public static function markClassAsSafe($class)
     {
@@ -206,12 +209,12 @@ abstract class sfOutputEscaper
     /**
      * Gets a value from the escaper.
      *
-     * @param  string $var  Value to get
+     * @param string $var Value to get
      *
      * @return mixed Value
      */
     public function __get($var)
     {
-        return static::escape($this->escapingMethod, $this->value->$var);
+        return static::escape($this->escapingMethod, $this->value->{$var});
     }
 }

@@ -17,9 +17,9 @@
  */
 class sfViewParameterHolder extends sfParameterHolder
 {
-    protected $dispatcher     = null;
-    protected $escaping       = null;
-    protected $escapingMethod = null;
+    protected $dispatcher;
+    protected $escaping;
+    protected $escapingMethod;
 
     /**
      * Constructor.
@@ -30,20 +30,44 @@ class sfViewParameterHolder extends sfParameterHolder
     }
 
     /**
+     * Serializes the current instance for PHP 7.4+.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return [$this->getAll(), $this->escapingMethod, $this->escaping];
+    }
+
+    /**
+     * Unserializes a sfParameterHolder instance for PHP 7.4+.
+     *
+     * @param array $data
+     */
+    public function __unserialize($data)
+    {
+        list($this->parameters, $escapingMethod, $escaping) = $data;
+        $this->initialize(sfContext::hasInstance() ? sfContext::getInstance()->getEventDispatcher() : new sfEventDispatcher());
+
+        $this->setEscapingMethod($escapingMethod);
+        $this->setEscaping($escaping);
+    }
+
+    /**
      * Initializes this view parameter holder.
      *
-     * @param  sfEventDispatcher $dispatcher  An sfEventDispatcher instance.
-     * @param  array             $parameters  An associative array of initialization parameters.
-     * @param  array             $options     An associative array of options.
+     * @param sfEventDispatcher $dispatcher an sfEventDispatcher instance
+     * @param array             $parameters an associative array of initialization parameters
+     * @param array             $options    An associative array of options.
      *
      * <b>Options:</b>
      *
      * # <b>escaping_strategy</b> - [off]              - The escaping strategy (on or off)
      * # <b>escaping_method</b>   - [ESC_SPECIALCHARS] - The escaping method (ESC_RAW, ESC_ENTITIES, ESC_JS, ESC_JS_NO_ENTITIES, or ESC_SPECIALCHARS)
      *
-     * @return bool true, if initialization completes successfully, otherwise false.
+     * @return bool true, if initialization completes successfully, otherwise false
      *
-     * @throws sfInitializationException If an error occurs while initializing this view parameter holder.
+     * @throws sfInitializationException if an error occurs while initializing this view parameter holder
      */
     public function initialize(sfEventDispatcher $dispatcher, $parameters = [], $options = [])
     {
@@ -53,6 +77,8 @@ class sfViewParameterHolder extends sfParameterHolder
 
         $this->setEscaping($options['escaping_strategy'] ?? false);
         $this->setEscapingMethod($options['escaping_method'] ?? 'ESC_SPECIALCHARS');
+
+        return true;
     }
 
     /**
@@ -108,7 +134,7 @@ class sfViewParameterHolder extends sfParameterHolder
     /**
      * Sets the escape character strategy.
      *
-     * @param string $escaping  Escape code
+     * @param string $escaping Escape code
      */
     public function setEscaping($escaping)
     {
@@ -143,7 +169,7 @@ class sfViewParameterHolder extends sfParameterHolder
     /**
      * Sets the escaping method for the current view.
      *
-     * @param string $method  Method for escaping
+     * @param string $method Method for escaping
      */
     public function setEscapingMethod($method)
     {
@@ -153,11 +179,11 @@ class sfViewParameterHolder extends sfParameterHolder
     /**
      * Serializes the current instance.
      *
-     * @return array Objects instance
+     * @return string Objects instance
      */
     public function serialize()
     {
-        return serialize([$this->getAll(), $this->escapingMethod, $this->escaping]);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -167,11 +193,6 @@ class sfViewParameterHolder extends sfParameterHolder
      */
     public function unserialize($serialized)
     {
-        [$this->parameters, $escapingMethod, $escaping] = unserialize($serialized);
-
-        $this->initialize(sfContext::hasInstance() ? sfContext::getInstance()->getEventDispatcher() : new sfEventDispatcher());
-
-        $this->setEscapingMethod($escapingMethod);
-        $this->setEscaping($escaping);
+        $this->__unserialize(unserialize($serialized));
     }
 }

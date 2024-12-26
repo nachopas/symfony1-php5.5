@@ -25,8 +25,8 @@ class sfValidatorDateRange extends sfValidatorBase
      *  * from_field:  The name of the "from" date field (optional, default: from)
      *  * to_field:    The name of the "to" date field (optional, default: to)
      *
-     * @param array $options    An array of options
-     * @param array $messages   An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -49,7 +49,7 @@ class sfValidatorDateRange extends sfValidatorBase
         $toField   = $this->getOption('to_field');
 
         $value[$fromField] = $this->getOption('from_date')->clean($value[$fromField] ?? null);
-        $value[$toField]   = $this->getOption('to_date')->clean($value[$toField] ?? null);
+        $value[$toField] = $this->getOption('to_date')->clean($value[$toField] ?? null);
 
         if ($value[$fromField] && $value[$toField]) {
             $v = new sfValidatorSchemaCompare($fromField, sfValidatorSchemaCompare::LESS_THAN_EQUAL, $toField, ['throw_global_error' => true], ['invalid' => $this->getMessage('invalid')]);

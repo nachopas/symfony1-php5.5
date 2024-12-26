@@ -2,7 +2,6 @@
 
 /**
  * User form.
- *
  */
 class UserForm extends BaseUserForm
 {

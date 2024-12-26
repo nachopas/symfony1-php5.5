@@ -15,10 +15,10 @@
  */
 class sfCommandArgumentSet
 {
-    protected $arguments          = [];
-    protected $requiredCount      = 0;
+    protected $arguments = [];
+    protected $requiredCount = 0;
     protected $hasAnArrayArgument = false;
-    protected $hasOptional        = false;
+    protected $hasOptional = false;
 
     /**
      * Constructor.
@@ -37,9 +37,9 @@ class sfCommandArgumentSet
      */
     public function setArguments($arguments = [])
     {
-        $this->arguments     = [];
+        $this->arguments = [];
         $this->requiredCount = 0;
-        $this->hasOptional   = false;
+        $this->hasOptional = false;
         $this->addArguments($arguments);
     }
 
@@ -61,6 +61,8 @@ class sfCommandArgumentSet
      * Add a sfCommandArgument objects.
      *
      * @param sfCommandArgument $argument A sfCommandArgument object
+     *
+     * @throws sfCommandException
      */
     public function addArgument(sfCommandArgument $argument)
     {
@@ -95,6 +97,8 @@ class sfCommandArgumentSet
      * @param string $name The argument name
      *
      * @return sfCommandArgument A sfCommandArgument object
+     *
+     * @throws sfCommandException
      */
     public function getArgument($name)
     {
@@ -110,7 +114,7 @@ class sfCommandArgumentSet
      *
      * @param string $name The argument name
      *
-     * @return Boolean true if the argument object exists, false otherwise
+     * @return bool true if the argument object exists, false otherwise
      */
     public function hasArgument($name)
     {
@@ -120,7 +124,7 @@ class sfCommandArgumentSet
     /**
      * Gets the array of sfCommandArgument objects.
      *
-     * @return array An array of sfCommandArgument objects
+     * @return sfCommandArgument[] An array of sfCommandArgument objects
      */
     public function getArguments()
     {
@@ -130,7 +134,7 @@ class sfCommandArgumentSet
     /**
      * Returns the number of arguments.
      *
-     * @return integer The number of arguments
+     * @return int The number of arguments
      */
     public function getArgumentCount()
     {
@@ -140,7 +144,7 @@ class sfCommandArgumentSet
     /**
      * Returns the number of required arguments.
      *
-     * @return integer The number of required arguments
+     * @return int The number of required arguments
      */
     public function getArgumentRequiredCount()
     {

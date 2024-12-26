@@ -14,13 +14,25 @@
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     David Heinemeier Hansson
+ *
+ * @param mixed|null $truncate_pattern
+ * @param mixed|null $length_max
  */
 
 /**
  * Truncates +text+ to the length of +length+ and replaces the last three characters with the +truncate_string+
  * if the +text+ is longer than +length+.
+ *
+ * @param string $text               The original text
+ * @param int    $length             The length for truncate
+ * @param string $truncate_string    The string to add after truncated text
+ * @param string $truncate_lastspace Remove or not last space after truncate
+ * @param string $truncate_pattern   Pattern
+ * @param int    $length_max         Used only with truncate_patter
+ *
+ * @return string
  */
-function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_lastspace = false)
+function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_lastspace = false, $truncate_pattern = null, $length_max = null)
 {
     if ('' == $text) {
         return '';
@@ -35,6 +47,23 @@ function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_
     $substr = $mbstring ? 'mb_substr' : 'substr';
 
     if ($strlen($text) > $length) {
+        if ($truncate_pattern) {
+            $length_min = null !== $length_max && (0 == $length_max || $length_max > $length) ? $length : null;
+
+            preg_match($truncate_pattern, $text, $matches, PREG_OFFSET_CAPTURE, $length_min);
+
+            if ($matches) {
+                if ($length_min) {
+                    $truncate_string = $matches[0][0].$truncate_string;
+                    $length = $matches[0][1] + $strlen($truncate_string);
+                } else {
+                    $match = end($matches);
+                    $truncate_string = $match[0].$truncate_string;
+                    $length = $match[1] + $strlen($truncate_string);
+                }
+            }
+        }
+
         $truncate_text = $substr($text, 0, $length - $strlen($truncate_string));
         if ($truncate_lastspace) {
             $truncate_text = preg_replace('/\s+?(\S+)?$/', '', $truncate_text);
@@ -55,9 +84,9 @@ function truncate_text($text, $length = 30, $truncate_string = '...', $truncate_
  * passing +highlighter+ as single-quoted string with \1 where the phrase is supposed to be inserted.
  * N.B.: The +phrase+ is sanitized to include only letters, digits, and spaces before use.
  *
- * @param string $text subject input to preg_replace.
- * @param string $phrase string or array of words to highlight
- * @param string $highlighter regex replacement input to preg_replace.
+ * @param string $text        subject input to preg_replace
+ * @param mixed  $phrase      string, array or sfOutputEscaperArrayDecorator instance of words to highlight
+ * @param string $highlighter regex replacement input to preg_replace
  *
  * @return string
  */
@@ -90,11 +119,11 @@ function highlight_text($text, $phrase, $highlighter = '<strong class="highlight
  *   excerpt("hello my world", "my", 3) => "...lo my wo..."
  * If +excerpt_space+ is true the text will only be truncated on whitespace, never inbetween words.
  * This might return a smaller radius than specified.
- *   excerpt("hello my world", "my", 3, "...", true) => "... my ..."
+ *   excerpt("hello my world", "my", 3, "...", true) => "... my ...".
  */
 function excerpt_text($text, $phrase, $radius = 100, $excerpt_string = '...', $excerpt_space = false)
 {
-    if ($text == '' || $phrase == '') {
+    if ('' == $text || '' == $phrase) {
         return '';
     }
 
@@ -110,7 +139,7 @@ function excerpt_text($text, $phrase, $radius = 100, $excerpt_string = '...', $e
 
     $found_pos = $strpos($strtolower($text), $strtolower($phrase));
     $return_string = '';
-    if ($found_pos !== false) {
+    if (false !== $found_pos) {
         $start_pos = max($found_pos - $radius, 0);
         $end_pos = min($found_pos + $strlen($phrase) + $radius, $strlen($text));
         $excerpt = $substr($text, $start_pos, $end_pos - $start_pos);
@@ -133,6 +162,7 @@ function excerpt_text($text, $phrase, $radius = 100, $excerpt_string = '...', $e
     if ($mbstring) {
         @mb_internal_encoding($old_encoding);
     }
+
     return $return_string;
 }
 
@@ -148,20 +178,18 @@ function wrap_text($text, $line_width = 80)
  * Returns +text+ transformed into html using very simple formatting rules
  * Surrounds paragraphs with <tt>&lt;p&gt;</tt> tags, and converts line breaks into <tt>&lt;br /&gt;</tt>
  * Two consecutive newlines(<tt>\n\n</tt>) are considered as a paragraph, one newline (<tt>\n</tt>) is
- * considered a linebreak, three or more consecutive newlines are turned into two newlines
+ * considered a linebreak, three or more consecutive newlines are turned into two newlines.
  */
 function simple_format_text($text, $options = [])
 {
     $css = (isset($options['class'])) ? ' class="'.$options['class'].'"' : '';
 
-    $text = sfToolkit::pregtr($text, [
-      "/(\r\n|\r)/"        => "\n",
-      // lets make them newlines crossplatform
-      "/\n{2,}/"           => "</p><p$css>",
-  ]);    // turn two and more newlines into paragraph
+    $text = sfToolkit::pregtr($text, ["/(\r\n|\r)/" => "\n",               // lets make them newlines crossplatform
+        "/\n{2,}/" => "</p><p{$css}>"]);    // turn two and more newlines into paragraph
 
     // turn single newline into <br/>
     $text = str_replace("\n", "\n<br />", $text);
+
     return '<p'.$css.'>'.$text.'</p>'; // wrap the first and last line in paragraphs before we're done
 }
 
@@ -176,11 +204,13 @@ function simple_format_text($text, $options = [])
  */
 function auto_link_text($text, $link = 'all', $href_options = [], $truncate = false, $truncate_len = 35, $pad = '...')
 {
-    if ($link == 'all') {
+    if ('all' == $link) {
         return _auto_link_urls(_auto_link_email_addresses($text), $href_options, $truncate, $truncate_len, $pad);
-    } elseif ($link == 'email_addresses') {
+    }
+    if ('email_addresses' == $link) {
         return _auto_link_email_addresses($text);
-    } elseif ($link == 'urls') {
+    }
+    if ('urls' == $link) {
         return _auto_link_urls($text, $href_options, $truncate, $truncate_len, $pad);
     }
 }
@@ -224,12 +254,12 @@ function _auto_link_urls($text, $href_options = [], $truncate = false, $truncate
     $href_options = _tag_options($href_options);
 
     $callback_function = function ($matches) use ($href_options, $truncate, $truncate_len, $pad) {
-        if (preg_match("/<a\s/i", $matches[1])) {
+        if (preg_match('/<a\\s/i', $matches[1])) {
             return $matches[0];
         }
 
-        $text = $matches[2] . $matches[3];
-        $href = ($matches[2] == "www." ? "http://www." : $matches[2]) . $matches[3];
+        $text = $matches[2].$matches[3];
+        $href = ('www.' == $matches[2] ? 'http://www.' : $matches[2]).$matches[3];
 
         if ($truncate && strlen($text) > $truncate_len) {
             $text = substr($text, 0, $truncate_len).$pad;
@@ -251,9 +281,8 @@ function _auto_link_urls($text, $href_options = [], $truncate = false, $truncate
 function _auto_link_email_addresses($text)
 {
     // Taken from http://snippets.dzone.com/posts/show/6156
-    return preg_replace("#(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $text);
-
+    return preg_replace("#(^|[\n ])([a-z0-9&\\-_\\.]+?)@([\\w\\-]+\\.([\\w\\-\\.]+\\.)*[\\w]+)#i", '\\1<a href="mailto:\\2@\\3">\\2@\\3</a>', $text);
     // Removed since it destroys already linked emails
-  // Example:   <a href="mailto:me@example.com">bar</a> gets <a href="mailto:me@example.com">bar</a> gets <a href="mailto:<a href="mailto:me@example.com">bar</a>
-  //return preg_replace('/([\w\.!#\$%\-+.]+@[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)+)/', '<a href="mailto:\\1">\\1</a>', $text);
+    // Example:   <a href="mailto:me@example.com">bar</a> gets <a href="mailto:me@example.com">bar</a> gets <a href="mailto:<a href="mailto:me@example.com">bar</a>
+    // return preg_replace('/([\w\.!#\$%\-+.]+@[A-Za-z0-9\-]+(\.[A-Za-z0-9\-]+)+)/', '<a href="mailto:\\1">\\1</a>', $text);
 }

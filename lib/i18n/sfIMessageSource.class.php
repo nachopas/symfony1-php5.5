@@ -13,8 +13,10 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
+ * @version    $Id$
  */
- 
+
 /**
  * sfIMessageSource interface.
  *
@@ -24,6 +26,8 @@
  * catalogue.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
+ * @version v1.0, last update on Fri Dec 24 17:40:19 EST 2004
  */
 interface sfIMessageSource
 {
@@ -39,7 +43,8 @@ interface sfIMessageSource
      *  # [7] continue with the foreach loop, e.g. goto [2].
      *
      * @param string $catalogue a catalogue to load
-     * @return boolean true if loaded, false otherwise.
+     *
+     * @return bool true if loaded, false otherwise
      */
     public function load($catalogue = 'messages');
 
@@ -53,9 +58,9 @@ interface sfIMessageSource
      *       array('source string' => 'target string', ...)
      *             ...),
      *        ...);
-     * </code>
+     * </code>.
      *
-     * @return array 2 level array translation table.
+     * @return array 2 level array translation table
      */
     public function read();
 
@@ -65,7 +70,8 @@ interface sfIMessageSource
      * strings to the translation source via the <b>append()</b> method.
      *
      * @param string $catalogue the catalogue to add to
-     * @return boolean true if saved successfuly, false otherwise.
+     *
+     * @return bool true if saved successfuly, false otherwise
      */
     public function save($catalogue = 'messages');
 
@@ -74,27 +80,28 @@ interface sfIMessageSource
      * to save the messages to source.
      *
      * @param string $message message to add
-     * @return void
      */
     public function append($message);
 
     /**
      * Deletes a particular message from the specified catalogue.
      *
-     * @param string $message   the source message to delete.
-     * @param string $catalogue the catalogue to delete from.
-     * @return boolean true if deleted, false otherwise.
+     * @param string $message   the source message to delete
+     * @param string $catalogue the catalogue to delete from
+     *
+     * @return bool true if deleted, false otherwise
      */
     public function delete($message, $catalogue = 'messages');
 
     /**
      * Updates the translation.
      *
-     * @param string $text      the source string.
-     * @param string $target    the new translation string.
+     * @param string $text      the source string
+     * @param string $target    the new translation string
      * @param string $comments  comments
-     * @param string $catalogue the catalogue of the translation.
-     * @return boolean true if translation was updated, false otherwise.
+     * @param string $catalogue the catalogue of the translation
+     *
+     * @return bool true if translation was updated, false otherwise
      */
     public function update($text, $target, $comments, $catalogue = 'messages');
 
@@ -108,14 +115,14 @@ interface sfIMessageSource
     /**
      * Set the culture for this particular message source.
      *
-     * @param string $culture the Culture name.
+     * @param string $culture the Culture name
      */
     public function setCulture($culture);
 
     /**
      * Get the culture identifier for the source.
      *
-     * @return string culture identifier.
+     * @return string culture identifier
      */
     public function getCulture();
 

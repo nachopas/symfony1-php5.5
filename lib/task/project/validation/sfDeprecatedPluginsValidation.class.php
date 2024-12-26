@@ -22,7 +22,14 @@ class sfDeprecatedPluginsValidation extends sfValidation
 
     public function getExplanation()
     {
-        return ['', '  The files above use deprecated plugins', '  that have been removed in symfony 1.4.', '', 'You can probably remove those references safely.', ''];
+        return [
+            '',
+            '  The files above use deprecated plugins',
+            '  that have been removed in symfony 1.4.',
+            '',
+            'You can probably remove those references safely.',
+            '',
+        ];
     }
 
     public function validate()

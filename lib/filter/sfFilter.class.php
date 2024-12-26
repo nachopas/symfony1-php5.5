@@ -17,15 +17,22 @@
  */
 abstract class sfFilter
 {
-    protected $parameterHolder = null;
-    protected $context         = null;
+    /** @var bool[] */
+    public static $filterCalled = [];
 
-    public static $filterCalled    = [];
+    /** @var sfParameterHolder */
+    protected $parameterHolder;
+
+    /** @var sfContext */
+    protected $context;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param sfContext $context
+     * @param array     $parameters
      */
     public function __construct($context, $parameters = [])
     {
@@ -38,7 +45,7 @@ abstract class sfFilter
      * @param sfContext $context    The current application context
      * @param array     $parameters An associative array of initialization parameters
      *
-     * @return boolean true
+     * @return bool|void true
      */
     public function initialize($context, $parameters = [])
     {
@@ -53,18 +60,18 @@ abstract class sfFilter
     /**
      * Returns true if this is the first call to the sfFilter instance.
      *
-     * @return boolean true if this is the first call to the sfFilter instance, false otherwise
+     * @return bool true if this is the first call to the sfFilter instance, false otherwise
      */
     protected function isFirstCall()
     {
         $class = get_class($this);
         if (isset(self::$filterCalled[$class])) {
             return false;
-        } else {
-            self::$filterCalled[$class] = true;
-
-            return true;
         }
+
+        self::$filterCalled[$class] = true;
+
+        return true;
     }
 
     /**
@@ -115,7 +122,7 @@ abstract class sfFilter
      *
      * @param string $name The key name
      *
-     * @return boolean true if the given key exists, false otherwise
+     * @return bool true if the given key exists, false otherwise
      *
      * @see sfParameterHolder
      */

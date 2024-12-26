@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../vendor/lime/lime.php');
+require_once __DIR__.'/../vendor/lime/lime.php';
 
 /*
  * This file is part of the symfony package.
@@ -17,12 +17,12 @@ require_once(__DIR__.'/../vendor/lime/lime.php');
  */
 abstract class sfTestFunctionalBase
 {
-    protected $testers       = [];
-    protected $blockTester   = null;
-    protected $currentTester = null;
-    protected $browser       = null;
+    protected $testers = [];
+    protected $blockTester;
+    protected $currentTester;
+    protected $browser;
 
-    protected static $test = null;
+    protected static $test;
 
     /**
      * Initializes the browser tester instance.
@@ -30,7 +30,7 @@ abstract class sfTestFunctionalBase
      * @param sfBrowserBase $browser A sfBrowserBase instance
      * @param lime_test     $lime    A lime instance
      */
-    public function __construct(sfBrowserBase $browser, lime_test $lime = null, $testers = [])
+    public function __construct(sfBrowserBase $browser, ?lime_test $lime = null, $testers = [])
     {
         $this->browser = $browser;
 
@@ -38,7 +38,12 @@ abstract class sfTestFunctionalBase
             self::$test = $lime ?? new lime_test();
         }
 
-        $this->setTesters(array_merge(['request'  => 'sfTesterRequest', 'response' => 'sfTesterResponse', 'user'     => 'sfTesterUser', 'mailer'   => 'sfTesterMailer'], $testers));
+        $this->setTesters(array_merge([
+            'request' => 'sfTesterRequest',
+            'response' => 'sfTesterResponse',
+            'user' => 'sfTesterUser',
+            'mailer' => 'sfTesterMailer',
+        ], $testers));
 
         // register our shutdown function
         register_shutdown_function([$this, 'shutdown']);
@@ -51,8 +56,7 @@ abstract class sfTestFunctionalBase
     /**
      * Returns the tester associated with the given name.
      *
-     * @param string   $name The tester name
-     *
+     * @param string $name The tester name
      * @param sfTester A sfTester instance
      */
     public function with($name)
@@ -134,8 +138,6 @@ abstract class sfTestFunctionalBase
 
     /**
      * Shutdown function.
-     *
-     * @return void
      */
     public function shutdown()
     {
@@ -157,7 +159,7 @@ abstract class sfTestFunctionalBase
      *
      * @param string $uri         The URI to fetch
      * @param array  $parameters  The Request parameters
-     * @param bool   $changeStack  Change the browser history stack?
+     * @param bool   $changeStack Change the browser history stack?
      *
      * @return sfTestFunctionalBase
      */
@@ -169,10 +171,10 @@ abstract class sfTestFunctionalBase
     /**
      * Retrieves and checks an action.
      *
-     * @param  string $module  Module name
-     * @param  string $action  Action name
-     * @param  string $url     Url
-     * @param  string $code    The expected return status code
+     * @param string $module Module name
+     * @param string $action Action name
+     * @param string $url    Url
+     * @param string $code   The expected return status code
      *
      * @return sfTestFunctionalBase The current sfTestFunctionalBase instance
      */
@@ -180,12 +182,11 @@ abstract class sfTestFunctionalBase
     {
         return $this->
       get($url ?? sprintf('/%s/%s', $module, $action))->
-      with('request')->begin()->
-        isParameter('module', $module)->
-        isParameter('action', $action)->
-      end()->
-      with('response')->isStatusCode($code)
-    ;
+          with('request')->begin()->
+            isParameter('module', $module)->
+            isParameter('action', $action)->
+          end()->
+          with('response')->isStatusCode($code);
     }
 
     /**
@@ -193,7 +194,7 @@ abstract class sfTestFunctionalBase
      *
      * @param string $uri         The URI to fetch
      * @param array  $parameters  The Request parameters
-     * @param bool   $changeStack  Change the browser history stack?
+     * @param bool   $changeStack Change the browser history stack?
      *
      * @return sfTestFunctionalBase
      */
@@ -205,10 +206,10 @@ abstract class sfTestFunctionalBase
     /**
      * Calls a request.
      *
-     * @param  string $uri          URI to be invoked
-     * @param  string $method       HTTP method used
-     * @param  array  $parameters   Additional parameters
-     * @param  bool   $changeStack  If set to false ActionStack is not changed
+     * @param string $uri         URI to be invoked
+     * @param string $method      HTTP method used
+     * @param array  $parameters  Additional parameters
+     * @param bool   $changeStack If set to false ActionStack is not changed
      *
      * @return sfTestFunctionalBase The current sfTestFunctionalBase instance
      */
@@ -232,7 +233,7 @@ abstract class sfTestFunctionalBase
     /**
      * Simulates deselecting a checkbox or radiobutton.
      *
-     * @param string  $name       The checkbox or radiobutton id, name or text
+     * @param string $name The checkbox or radiobutton id, name or text
      *
      * @return sfTestFunctionalBase
      */
@@ -246,7 +247,7 @@ abstract class sfTestFunctionalBase
     /**
      * Simulates selecting a checkbox or radiobutton.
      *
-     * @param string  $name       The checkbox or radiobutton id, name or text
+     * @param string $name The checkbox or radiobutton id, name or text
      *
      * @return sfTestFunctionalBase
      */
@@ -260,21 +261,21 @@ abstract class sfTestFunctionalBase
     /**
      * Simulates a click on a link or button.
      *
-     * @param string  $name       The link or button text
-     * @param array   $arguments  The arguments to pass to the link
-     * @param array   $options    An array of options
+     * @param string $name      The link or button text
+     * @param array  $arguments The arguments to pass to the link
+     * @param array  $options   An array of options
      *
      * @return sfTestFunctionalBase
      */
     public function click($name, $arguments = [], $options = [])
     {
         if ($name instanceof DOMElement) {
-            [$uri, $method, $parameters] = $this->doClickElement($name, $arguments, $options);
+            list($uri, $method, $parameters) = $this->doClickElement($name, $arguments, $options);
         } else {
             try {
-                [$uri, $method, $parameters] = $this->doClick($name, $arguments, $options);
+                list($uri, $method, $parameters) = $this->doClick($name, $arguments, $options);
             } catch (InvalidArgumentException $e) {
-                [$uri, $method, $parameters] = $this->doClickCssSelector($name, $arguments, $options);
+                list($uri, $method, $parameters) = $this->doClickCssSelector($name, $arguments, $options);
             }
         }
 
@@ -326,8 +327,8 @@ abstract class sfTestFunctionalBase
     /**
      * Checks that the current response contains a given text.
      *
-     * @param  string $uri   Uniform resource identifier
-     * @param  string $text  Text in the response
+     * @param string $uri  Uniform resource identifier
+     * @param string $text Text in the response
      *
      * @return sfTestFunctionalBase The current sfTestFunctionalBase instance
      */
@@ -335,7 +336,7 @@ abstract class sfTestFunctionalBase
     {
         $this->get($uri)->with('response')->isStatusCode();
 
-        if ($text !== null) {
+        if (null !== $text) {
             $this->with('response')->contains($text);
         }
 
@@ -345,8 +346,8 @@ abstract class sfTestFunctionalBase
     /**
      * Tests if an exception is thrown by the latest request.
      *
-     * @param  string $class    Class name
-     * @param  string $message  Message name
+     * @param string $class   Class name
+     * @param string $message Message name
      *
      * @return sfTestFunctionalBase The current sfTestFunctionalBase instance
      */
@@ -362,7 +363,7 @@ abstract class sfTestFunctionalBase
             }
 
             if (null !== $message && preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $message, $match)) {
-                if ($match[1] == '!') {
+                if ('!' == $match[1]) {
                     $this->test()->unlike($e->getMessage(), substr($message, 1), sprintf('response exception message does not match regex "%s"', $message));
                 } else {
                     $this->test()->like($e->getMessage(), $message, sprintf('response exception message matches regex "%s"', $message));
@@ -380,7 +381,7 @@ abstract class sfTestFunctionalBase
     /**
      * Triggers a test failure if an uncaught exception is present.
      *
-     * @return  bool
+     * @return bool
      */
     public function checkCurrentExceptionIsEmpty()
     {
@@ -402,10 +403,10 @@ abstract class sfTestFunctionalBase
     /**
      * Error handler for the current test browser instance.
      *
-     * @param mixed  $errno    Error number
-     * @param string $errstr   Error message
-     * @param string $errfile  Error file
-     * @param mixed  $errline  Error line
+     * @param mixed  $errno   Error number
+     * @param string $errstr  Error message
+     * @param string $errfile Error file
+     * @param mixed  $errline Error line
      */
     public static function handlePhpError($errno, $errstr, $errfile, $errline)
     {
@@ -414,24 +415,32 @@ abstract class sfTestFunctionalBase
         }
 
         $msg = sprintf('PHP sent a "%%s" error at %s line %s (%s)', $errfile, $errline, $errstr);
+
         switch ($errno) {
-      case E_WARNING:
-        $msg = sprintf($msg, 'warning');
-        throw new RuntimeException($msg);
-        break;
-      case E_NOTICE:
-        $msg = sprintf($msg, 'notice');
-        throw new RuntimeException($msg);
-        break;
-      case E_STRICT:
-        $msg = sprintf($msg, 'strict');
-        throw new RuntimeException($msg);
-        break;
-      case E_RECOVERABLE_ERROR:
-        $msg = sprintf($msg, 'catchable');
-        throw new RuntimeException($msg);
-        break;
-    }
+            case E_WARNING:
+                $msg = sprintf($msg, 'warning');
+
+                throw new RuntimeException($msg);
+                break;
+
+            case E_NOTICE:
+                $msg = sprintf($msg, 'notice');
+
+                throw new RuntimeException($msg);
+                break;
+
+            case E_STRICT:
+                $msg = sprintf($msg, 'strict');
+
+                throw new RuntimeException($msg);
+                break;
+
+            case E_RECOVERABLE_ERROR:
+                $msg = sprintf($msg, 'catchable');
+
+                throw new RuntimeException($msg);
+                break;
+        }
 
         return false;
     }
@@ -439,18 +448,23 @@ abstract class sfTestFunctionalBase
     /**
      * Exception handler for the current test browser instance.
      *
-     * @param Exception $exception The exception
+     * @param Exception|Throwable $exception The exception
      */
-    public function handleException(\Throwable $exception)
+    public function handleException($exception)
     {
         $this->test()->error(sprintf('%s: %s', get_class($exception), $exception->getMessage()));
 
         $traceData = $exception->getTrace();
-        array_unshift($traceData, ['function' => '', 'file'     => $exception->getFile() != null ? $exception->getFile() : 'n/a', 'line'     => $exception->getLine() != null ? $exception->getLine() : 'n/a', 'args'     => []]);
+        array_unshift($traceData, [
+            'function' => '',
+            'file' => null != $exception->getFile() ? $exception->getFile() : 'n/a',
+            'line' => null != $exception->getLine() ? $exception->getLine() : 'n/a',
+            'args' => [],
+        ]);
 
         $traces = [];
         $lineFormat = '  at %s%s%s() in %s line %s';
-        for ($i = 0, $count = count($traceData); $i < $count; $i++) {
+        for ($i = 0, $count = count($traceData); $i < $count; ++$i) {
             $line = $traceData[$i]['line'] ?? 'n/a';
             $file = $traceData[$i]['file'] ?? 'n/a';
             $args = $traceData[$i]['args'] ?? [];

@@ -37,7 +37,7 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
     abstract public function getFields();
 
     /**
-     * Get the name of the table method used to retrieve the query object for the filter
+     * Get the name of the table method used to retrieve the query object for the filter.
      *
      * @return string
      */
@@ -47,7 +47,7 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
     }
 
     /**
-     * Set the name of the table method used to retrieve the query object for the filter
+     * Set the name of the table method used to retrieve the query object for the filter.
      *
      * The specified method will be passed the query object before any changes
      * are made based on incoming parameters.
@@ -72,7 +72,9 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
     /**
      * Returns a Doctrine Query based on the current values form the form.
      *
-     * @return Query A Doctrine Query object
+     * @return Doctrine_Query A Doctrine Query object
+     *
+     * @throws sfValidatorErrorSchema
      */
     public function getQuery()
     {
@@ -93,7 +95,7 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
      * The method must return the processed value or false to remove the value
      * from the array of cleaned up values.
      *
-     * @param  array An array of cleaned up values to process
+     * @param array $values An array of cleaned up values to process
      *
      * @return array An array of cleaned up values processed by the user defined methods
      */
@@ -103,7 +105,7 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
         $originalValues = $values;
         foreach ($originalValues as $field => $value) {
             if (method_exists($this, $method = sprintf('convert%sValue', self::camelize($field)))) {
-                if (false === $ret = $this->$method($value)) {
+                if (false === $ret = $this->{$method}($value)) {
                     unset($values[$field]);
                 } else {
                     $values[$field] = $ret;
@@ -117,9 +119,9 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
     /**
      * Builds a Doctrine Query based on the passed values.
      *
-     * @param  array    An array of parameters to build the Query object
+     * @param array $values An array of parameters to build the Query object
      *
-     * @return Query A Doctrine Query object
+     * @return Doctrine_Query A Doctrine Query object
      */
     public function buildQuery(array $values)
     {
@@ -132,16 +134,16 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
      * Overload this method instead of {@link buildQuery()} to avoid running
      * {@link processValues()} multiple times.
      *
-     * @param  array $values
-     *
      * @return Doctrine_Query
+     *
+     * @throws LogicException
      */
     protected function doBuildQuery(array $values)
     {
         $query = isset($this->options['query']) ? clone $this->options['query'] : $this->getTable()->createQuery('r');
 
         if ($method = $this->getTableMethod()) {
-            $tmp = $this->getTable()->$method($query);
+            $tmp = $this->getTable()->{$method}($query);
 
             // for backward compatibility
             if ($tmp instanceof Doctrine_Query) {
@@ -167,13 +169,13 @@ abstract class sfFormFilterDoctrine extends sfFormFilter
             }
 
             if (method_exists($this, $method)) {
-                $this->$method($query, $field, $values[$field]);
+                $this->{$method}($query, $field, $values[$field]);
             } elseif (null !== $type) {
                 if (!method_exists($this, $method = sprintf('add%sQuery', $type))) {
                     throw new LogicException(sprintf('Unable to filter for the "%s" type.', $type));
                 }
 
-                $this->$method($query, $field, $values[$field]);
+                $this->{$method}($query, $field, $values[$field]);
             }
         }
 

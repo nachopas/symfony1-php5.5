@@ -25,23 +25,31 @@
  */
 abstract class sfLogger
 {
-    const EMERG   = 0; // System is unusable
-  const ALERT   = 1; // Immediate action required
-  const CRIT    = 2; // Critical conditions
-  const ERR     = 3; // Error conditions
-  const WARNING = 4; // Warning conditions
-  const NOTICE  = 5; // Normal but significant
-  const INFO    = 6; // Informational
-  const DEBUG   = 7; // Debug-level messages
+    public const EMERG = 0; // System is unusable
+    public const ALERT = 1; // Immediate action required
+    public const CRIT = 2; // Critical conditions
+    public const ERR = 3; // Error conditions
+    public const WARNING = 4; // Warning conditions
+    public const NOTICE = 5; // Normal but significant
+    public const INFO = 6; // Informational
+    public const DEBUG = 7; // Debug-level messages
 
-  protected $dispatcher = null;
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var array */
     protected $options = [];
+
+    /** @var int */
     protected $level = self::INFO;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      */
     public function __construct(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -59,35 +67,37 @@ abstract class sfLogger
      *
      * - level: The log level.
      *
-     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param  array             $options     An array of options.
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      *
-     * @return Boolean      true, if initialization completes successfully, otherwise false.
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfLogger.
+     * @throws sfInitializationException If an error occurs while initializing this sfLogger
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
         $this->dispatcher = $dispatcher;
         $this->options = $options;
-    
+
         if (isset($this->options['level'])) {
             $this->setLogLevel($this->options['level']);
         }
 
         $dispatcher->connect('application.log', [$this, 'listenToLogEvent']);
     }
-  
+
     /**
      * Returns the options for the logger instance.
+     *
+     * @return array
      */
     public function getOptions()
     {
         return $this->options;
     }
-  
+
     /**
      * Returns the options for the logger instance.
+     *
+     * @param string $name
      */
     public function setOption($name, $value)
     {
@@ -97,7 +107,7 @@ abstract class sfLogger
     /**
      * Retrieves the log level for the current logger instance.
      *
-     * @return string Log level
+     * @return int Log level
      */
     public function getLogLevel()
     {
@@ -107,7 +117,7 @@ abstract class sfLogger
     /**
      * Sets a log level for the current logger instance.
      *
-     * @param string $level Log level
+     * @param int $level Log level
      */
     public function setLogLevel($level)
     {
@@ -121,8 +131,10 @@ abstract class sfLogger
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
+     *
+     * @return bool|void
      */
     public function log($message, $priority = self::INFO)
     {
@@ -130,14 +142,14 @@ abstract class sfLogger
             return false;
         }
 
-        return $this->doLog($message, $priority);
+        $this->doLog($message, $priority);
     }
 
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     abstract protected function doLog($message, $priority);
 
@@ -230,8 +242,8 @@ abstract class sfLogger
     {
         $priority = $event['priority'] ?? self::INFO;
 
-        $subject  = $event->getSubject();
-        $subject  = is_object($subject) ? get_class($subject) : (is_string($subject) ? $subject : 'main');
+        $subject = $event->getSubject();
+        $subject = is_object($subject) ? get_class($subject) : (is_string($subject) ? $subject : 'main');
         foreach ($event->getParameters() as $key => $message) {
             if ('priority' === $key) {
                 continue;
@@ -251,17 +263,26 @@ abstract class sfLogger
     }
 
     /**
-     * Returns the priority name given a priority class constant
+     * Returns the priority name given a priority class constant.
      *
-     * @param  integer $priority A priority class constant
+     * @param int $priority A priority class constant
      *
-     * @return string  The priority name
+     * @return string The priority name
      *
      * @throws sfException if the priority level does not exist
      */
     public static function getPriorityName($priority)
     {
-        static $levels  = [self::EMERG   => 'emerg', self::ALERT   => 'alert', self::CRIT    => 'crit', self::ERR     => 'err', self::WARNING => 'warning', self::NOTICE  => 'notice', self::INFO    => 'info', self::DEBUG   => 'debug'];
+        static $levels = [
+            self::EMERG => 'emerg',
+            self::ALERT => 'alert',
+            self::CRIT => 'crit',
+            self::ERR => 'err',
+            self::WARNING => 'warning',
+            self::NOTICE => 'notice',
+            self::INFO => 'info',
+            self::DEBUG => 'debug',
+        ];
 
         if (!isset($levels[$priority])) {
             throw new sfException(sprintf('The priority level "%s" does not exist.', $priority));

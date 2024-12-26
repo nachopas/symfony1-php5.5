@@ -20,8 +20,8 @@ class sfValidatorI18nChoiceTimezone extends sfValidatorChoice
      *
      * Available options:
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorChoice
      */

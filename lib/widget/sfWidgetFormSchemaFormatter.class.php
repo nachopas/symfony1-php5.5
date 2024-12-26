@@ -15,22 +15,20 @@
  */
 abstract class sfWidgetFormSchemaFormatter
 {
-    protected static $translationCallable       = null;
+    protected static $translationCallable;
 
-    protected $rowFormat                 = '';
-    protected $helpFormat                = '%help%';
-    protected $errorRowFormat            = '%errors%';
-    protected $errorListFormatInARow     = "  <ul class=\"error_list\">\n%errors%  </ul>\n";
-    protected $errorRowFormatInARow      = "    <li>%error%</li>\n";
+    protected $rowFormat = '';
+    protected $helpFormat = '%help%';
+    protected $errorRowFormat = '%errors%';
+    protected $errorListFormatInARow = "  <ul class=\"error_list\">\n%errors%  </ul>\n";
+    protected $errorRowFormatInARow = "    <li>%error%</li>\n";
     protected $namedErrorRowFormatInARow = "    <li>%name%: %error%</li>\n";
-    protected $decoratorFormat           = '';
-    protected $widgetSchema              = null;
-    protected $translationCatalogue      = null;
+    protected $decoratorFormat = '';
+    protected $widgetSchema;
+    protected $translationCatalogue;
 
     /**
-     * Constructor
-     *
-     * @param sfWidgetFormSchema $widgetSchema
+     * Constructor.
      */
     public function __construct(sfWidgetFormSchema $widgetSchema)
     {
@@ -39,14 +37,21 @@ abstract class sfWidgetFormSchemaFormatter
 
     public function formatRow($label, $field, $errors = [], $help = '', $hiddenFields = null)
     {
-        return strtr($this->getRowFormat(), ['%label%'         => $label, '%field%'         => $field, '%error%'         => $this->formatErrorsForRow($errors), '%help%'          => $this->formatHelp($help), '%hidden_fields%' => $hiddenFields ?? '%hidden_fields%']);
+        return strtr($this->getRowFormat(), [
+            '%label%' => $label,
+            '%field%' => $field,
+            '%error%' => $this->formatErrorsForRow($errors),
+            '%help%' => $this->formatHelp($help),
+            '%hidden_fields%' => null === $hiddenFields ? '%hidden_fields%' : $hiddenFields,
+        ]);
     }
 
     /**
-     * Translates a string using an i18n callable, if it has been provided
+     * Translates a string using an i18n callable, if it has been provided.
      *
-     * @param  mixed  $subject     The subject to translate
-     * @param  array  $parameters  Additional parameters to pass back to the callable
+     * @param mixed $subject    The subject to translate
+     * @param array $parameters Additional parameters to pass back to the callable
+     *
      * @return string
      */
     public function translate($subject, $parameters = [])
@@ -76,9 +81,7 @@ abstract class sfWidgetFormSchemaFormatter
     }
 
     /**
-     * Returns the current i18n callable
-     *
-     * @return mixed
+     * Returns the current i18n callable.
      */
     public static function getTranslationCallable()
     {
@@ -86,9 +89,7 @@ abstract class sfWidgetFormSchemaFormatter
     }
 
     /**
-     * Sets a callable which aims to translate form labels, errors and help messages
-     *
-     * @param  mixed  $callable
+     * Sets a callable which aims to translate form labels, errors and help messages.
      *
      * @throws InvalidArgumentException if an invalid php callable or sfCallable has been provided
      */
@@ -135,8 +136,8 @@ abstract class sfWidgetFormSchemaFormatter
     /**
      * Generates a label for the given field name.
      *
-     * @param  string $name        The field name
-     * @param  array  $attributes  Optional html attributes for the label tag
+     * @param string $name       The field name
+     * @param array  $attributes Optional html attributes for the label tag
      *
      * @return string The label tag
      */
@@ -158,7 +159,7 @@ abstract class sfWidgetFormSchemaFormatter
     /**
      * Generates the label name for the given field name.
      *
-     * @param  string $name  The field name
+     * @param string $name The field name
      *
      * @return string The label name
      */
@@ -174,7 +175,7 @@ abstract class sfWidgetFormSchemaFormatter
     }
 
     /**
-     * Get i18n catalogue name
+     * Get i18n catalogue name.
      *
      * @return string
      */
@@ -184,9 +185,9 @@ abstract class sfWidgetFormSchemaFormatter
     }
 
     /**
-     * Set an i18n catalogue name
+     * Set an i18n catalogue name.
      *
-     * @param  string  $catalogue
+     * @param string $catalogue
      *
      * @throws InvalidArgumentException when the catalogue is not a string
      */
@@ -213,7 +214,7 @@ abstract class sfWidgetFormSchemaFormatter
                     $err = $this->translate($error);
                 }
 
-                if (!is_integer($name)) {
+                if (!is_int($name)) {
                     $newErrors[] = strtr($this->getNamedErrorRowFormatInARow(), ['%error%' => $err, '%name%' => ($prefix ? $prefix.' > ' : '').$name]);
                 } else {
                     $newErrors[] = strtr($this->getErrorRowFormatInARow(), ['%error%' => $err]);

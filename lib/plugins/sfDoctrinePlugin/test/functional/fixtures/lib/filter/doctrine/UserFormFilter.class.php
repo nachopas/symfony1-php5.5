@@ -2,7 +2,6 @@
 
 /**
  * User filter form.
- *
  */
 class UserFormFilter extends BaseUserFormFilter
 {

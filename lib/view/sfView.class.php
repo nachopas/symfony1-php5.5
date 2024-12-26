@@ -22,62 +22,62 @@ abstract class sfView
     /**
      * Show an alert view.
      */
-    const ALERT = 'Alert';
+    public const ALERT = 'Alert';
 
     /**
      * Show an error view.
      */
-    const ERROR = 'Error';
+    public const ERROR = 'Error';
 
     /**
      * Show a form input view.
      */
-    const INPUT = 'Input';
+    public const INPUT = 'Input';
 
     /**
      * Skip view execution.
      */
-    const NONE = 'None';
+    public const NONE = 'None';
 
     /**
      * Show a success view.
      */
-    const SUCCESS = 'Success';
+    public const SUCCESS = 'Success';
 
     /**
      * Do not render the presentation.
      */
-    const RENDER_NONE = 1;
+    public const RENDER_NONE = 1;
 
     /**
      * Render the presentation to the client.
      */
-    const RENDER_CLIENT = 2;
+    public const RENDER_CLIENT = 2;
 
     /**
      * Render the presentation to a variable.
      */
-    const RENDER_VAR = 4;
+    public const RENDER_VAR = 4;
 
     /**
-     * Skip view rendering but output http headers
+     * Skip view rendering but output http headers.
      */
-    const HEADER_ONLY = 8;
+    public const HEADER_ONLY = 8;
 
-    protected $context            = null;
-    protected $dispatcher         = null;
-    protected $decorator          = false;
-    protected $decoratorDirectory = null;
-    protected $decoratorTemplate  = null;
-    protected $directory          = null;
-    protected $componentSlots     = [];
-    protected $template           = null;
-    protected $attributeHolder    = null;
-    protected $parameterHolder    = null;
-    protected $moduleName         = '';
-    protected $actionName         = '';
-    protected $viewName           = '';
-    protected $extension          = '.php';
+    protected $context;
+    protected $dispatcher;
+    protected $decorator = false;
+    protected $decoratorDirectory;
+    protected $decoratorTemplate;
+    protected $directory;
+    protected $componentSlots = [];
+    protected $template;
+    protected $attributeHolder;
+    protected $parameterHolder;
+    protected $moduleName = '';
+    protected $actionName = '';
+    protected $viewName = '';
+    protected $extension = '.php';
 
     /**
      * Class constructor.
@@ -92,20 +92,20 @@ abstract class sfView
     /**
      * Initializes this view.
      *
-     * @param  sfContext $context     The current application context
-     * @param  string    $moduleName  The module name for this view
-     * @param  string    $actionName  The action name for this view
-     * @param  string    $viewName    The view name
+     * @param sfContext $context    The current application context
+     * @param string    $moduleName The module name for this view
+     * @param string    $actionName The action name for this view
+     * @param string    $viewName   The view name
      *
-     * @return bool  true, if initialization completes successfully, otherwise false
+     * @return bool true, if initialization completes successfully, otherwise false
      */
     public function initialize($context, $moduleName, $actionName, $viewName)
     {
         $this->moduleName = $moduleName;
         $this->actionName = $actionName;
-        $this->viewName   = $viewName;
+        $this->viewName = $viewName;
 
-        $this->context    = $context;
+        $this->context = $context;
         $this->dispatcher = $context->getEventDispatcher();
 
         sfOutputEscaper::markClassesAsSafe(['sfForm', 'sfFormField', 'sfFormFieldSchema', 'sfModelGeneratorHelper']);
@@ -141,9 +141,10 @@ abstract class sfView
 
     protected function initializeAttributeHolder($attributes = [])
     {
-        $attributeHolder = new sfViewParameterHolder($this->dispatcher, $attributes, ['escaping_method'   => sfConfig::get('sf_escaping_method'), 'escaping_strategy' => sfConfig::get('sf_escaping_strategy')]);
-
-        return $attributeHolder;
+        return new sfViewParameterHolder($this->dispatcher, $attributes, [
+            'escaping_method' => sfConfig::get('sf_escaping_method'),
+            'escaping_strategy' => sfConfig::get('sf_escaping_strategy'),
+        ]);
     }
 
     /**
@@ -218,8 +219,8 @@ abstract class sfView
     /**
      * Retrieves an attribute for the current view.
      *
-     * @param  string $name     Name of the attribute
-     * @param  string $default  Value of the attribute
+     * @param string $name    Name of the attribute
+     * @param string $default Value of the attribute
      *
      * @return mixed Attribute
      */
@@ -231,7 +232,7 @@ abstract class sfView
     /**
      * Returns true if the view have attributes.
      *
-     * @param  string $name  Name of the attribute
+     * @param string $name Name of the attribute
      *
      * @return mixed Attribute of the view
      */
@@ -243,8 +244,8 @@ abstract class sfView
     /**
      * Sets an attribute of the view.
      *
-     * @param string $name   Attribute name
-     * @param string $value  Value for the attribute
+     * @param string $name  Attribute name
+     * @param string $value Value for the attribute
      */
     public function setAttribute($name, $value)
     {
@@ -264,8 +265,8 @@ abstract class sfView
     /**
      * Retrieves a parameter from the current view.
      *
-     * @param  string $name     Parameter name
-     * @param  string $default  Default parameter value
+     * @param string $name    Parameter name
+     * @param string $default Default parameter value
      *
      * @return mixed A parameter value
      */
@@ -277,7 +278,7 @@ abstract class sfView
     /**
      * Indicates whether or not a parameter exist for the current view.
      *
-     * @param  string $name  Name of the parameter
+     * @param string $name Name of the parameter
      *
      * @return bool true, if the parameter exists otherwise false
      */
@@ -289,8 +290,8 @@ abstract class sfView
     /**
      * Sets a parameter for the view.
      *
-     * @param string $name   Name of the parameter
-     * @param string $value  The parameter value
+     * @param string $name  Name of the parameter
+     * @param string $value The parameter value
      */
     public function setParameter($name, $value)
     {
@@ -310,11 +311,11 @@ abstract class sfView
     /**
      * Sets the decorating mode for the current view.
      *
-     * @param bool $boolean  Set the decorating mode for the view
+     * @param bool $boolean Set the decorating mode for the view
      */
     public function setDecorator($boolean)
     {
-        $this->decorator = (boolean) $boolean;
+        $this->decorator = (bool) $boolean;
 
         if (false === $boolean) {
             $this->decoratorTemplate = false;
@@ -359,7 +360,7 @@ abstract class sfView
     /**
      * Sets the decorator template directory for this view.
      *
-     * @param string $directory  An absolute filesystem path to a template directory
+     * @param string $directory An absolute filesystem path to a template directory
      */
     public function setDecoratorDirectory($directory)
     {
@@ -372,7 +373,7 @@ abstract class sfView
      * If the template path is relative, it will be based on the currently
      * executing module's template sub-directory.
      *
-     * @param string $template  An absolute or relative filesystem path to a template
+     * @param string $template An absolute or relative filesystem path to a template
      */
     public function setDecoratorTemplate($template)
     {
@@ -380,7 +381,8 @@ abstract class sfView
             $this->setDecorator(false);
 
             return;
-        } elseif (null === $template) {
+        }
+        if (null === $template) {
             return;
         }
 
@@ -390,7 +392,7 @@ abstract class sfView
 
         if (sfToolkit::isPathAbsolute($template)) {
             $this->decoratorDirectory = dirname($template);
-            $this->decoratorTemplate  = basename($template);
+            $this->decoratorTemplate = basename($template);
         } else {
             $this->decoratorDirectory = $this->context->getConfiguration()->getDecoratorDir($template);
             $this->decoratorTemplate = $template;
@@ -403,7 +405,7 @@ abstract class sfView
     /**
      * Sets the template directory for this view.
      *
-     * @param string $directory  An absolute filesystem path to a template directory
+     * @param string $directory An absolute filesystem path to a template directory
      */
     public function setDirectory($directory)
     {
@@ -413,21 +415,21 @@ abstract class sfView
     /**
      * Sets the module and action to be executed in place of a particular template attribute.
      *
-     * @param string $attributeName  A template attribute name
-     * @param string $moduleName     A module name
-     * @param string $componentName  A component name
+     * @param string $attributeName A template attribute name
+     * @param string $moduleName    A module name
+     * @param string $componentName A component name
      */
     public function setComponentSlot($attributeName, $moduleName, $componentName)
     {
-        $this->componentSlots[$attributeName]                   = [];
-        $this->componentSlots[$attributeName]['module_name']    = $moduleName;
+        $this->componentSlots[$attributeName] = [];
+        $this->componentSlots[$attributeName]['module_name'] = $moduleName;
         $this->componentSlots[$attributeName]['component_name'] = $componentName;
     }
 
     /**
      * Indicates whether or not a component slot exists.
      *
-     * @param  string $name  The component slot name
+     * @param string $name The component slot name
      *
      * @return bool true, if the component slot exists, otherwise false
      */
@@ -437,9 +439,9 @@ abstract class sfView
     }
 
     /**
-     * Gets a component slot
+     * Gets a component slot.
      *
-     * @param  string $name  The component slot name
+     * @param string $name The component slot name
      *
      * @return array The component slot
      */
@@ -458,13 +460,13 @@ abstract class sfView
      * If the template path is relative, it will be based on the currently
      * executing module's template sub-directory.
      *
-     * @param string $template  An absolute or relative filesystem path to a template
+     * @param string $template An absolute or relative filesystem path to a template
      */
     public function setTemplate($template)
     {
         if (sfToolkit::isPathAbsolute($template)) {
             $this->directory = dirname($template);
-            $this->template  = basename($template);
+            $this->template = basename($template);
         } else {
             $this->directory = $this->context->getConfiguration()->getTemplateDir($this->moduleName, $template);
             $this->template = $template;
@@ -474,7 +476,7 @@ abstract class sfView
     /**
      * Retrieves the current view extension.
      *
-     * @return string The extension for current view.
+     * @return string the extension for current view
      */
     public function getExtension()
     {
@@ -484,7 +486,7 @@ abstract class sfView
     /**
      * Sets an extension for the current view.
      *
-     * @param string $extension  The extension name.
+     * @param string $extension the extension name
      */
     public function setExtension($extension)
     {
@@ -524,8 +526,8 @@ abstract class sfView
     /**
      * Calls methods defined via sfEventDispatcher.
      *
-     * @param  string $method     The method name
-     * @param  array  $arguments  The method arguments
+     * @param string $method    The method name
+     * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
      *

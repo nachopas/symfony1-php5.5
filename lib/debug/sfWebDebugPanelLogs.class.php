@@ -100,14 +100,16 @@ class sfWebDebugPanelLogs extends sfWebDebugPanel
         // replace constants value with constant name
         $logLine = str_replace(array_keys($constants), array_values($constants), $logLine);
 
-        $logLine = sfToolkit::pregtr($logLine, ['/&quot;(.+?)&quot;/s' => '"<span class="sfWebDebugLogInfo">\\1</span>"', '/^(.+?)\(\)\:/S'      => '<span class="sfWebDebugLogInfo">\\1()</span>:', '/line (\d+)$/'        => 'line <span class="sfWebDebugLogInfo">\\1</span>']);
+        $logLine = sfToolkit::pregtr($logLine, ['/&quot;(.+?)&quot;/s' => '"<span class="sfWebDebugLogInfo">\\1</span>"',
+            '/^(.+?)\(\)\:/S' => '<span class="sfWebDebugLogInfo">\\1()</span>:',
+            '/line (\d+)$/' => 'line <span class="sfWebDebugLogInfo">\\1</span>']);
 
         // special formatting for SQL lines
         $logLine = $this->formatSql($logLine);
 
         // remove username/password from DSN
-        if (strpos($logLine, 'DSN') !== false) {
-            $logLine = preg_replace("/=&gt;\s+'?[^'\s,]+'?/", "=&gt; '****'", $logLine);
+        if (false !== strpos($logLine, 'DSN')) {
+            $logLine = preg_replace("/=&gt;\\s+'?[^'\\s,]+'?/", "=&gt; '****'", $logLine);
         }
 
         return $logLine;

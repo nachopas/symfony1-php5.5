@@ -20,13 +20,17 @@ class sfListTask extends sfCommandApplicationTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('namespace', sfCommandArgument::OPTIONAL, 'The namespace name')]);
+        $this->addArguments([
+            new sfCommandArgument('namespace', sfCommandArgument::OPTIONAL, 'The namespace name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('xml', null, sfCommandOption::PARAMETER_NONE, 'To output help as XML')]);
+        $this->addOptions([
+            new sfCommandOption('xml', null, sfCommandOption::PARAMETER_NONE, 'To output help as XML'),
+        ]);
 
         $this->briefDescription = 'Lists tasks';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [list|INFO] task lists all tasks:
 
   [./symfony list|INFO]
@@ -69,6 +73,8 @@ EOF;
         } else {
             $this->outputAsText($arguments['namespace'], $tasks);
         }
+
+        return 0;
     }
 
     protected function outputAsText($namespace, $tasks)
@@ -84,7 +90,7 @@ EOF;
 
         $messages = [];
         if ($namespace) {
-            $messages[] = $this->formatter->format(sprintf("Available tasks for the \"%s\" namespace:", $namespace), 'COMMENT');
+            $messages[] = $this->formatter->format(sprintf('Available tasks for the "%s" namespace:', $namespace), 'COMMENT');
         } else {
             $messages[] = $this->formatter->format('Available tasks:', 'COMMENT');
         }
@@ -100,7 +106,7 @@ EOF;
 
             $aliases = $task->getAliases() ? $this->formatter->format(' ('.implode(', ', $task->getAliases()).')', 'COMMENT') : '';
 
-            $messages[] = sprintf("  %-${width}s %s%s", $this->formatter->format(':'.$task->getName(), 'INFO'), $task->getBriefDescription(), $aliases);
+            $messages[] = sprintf("  %-{$width}s %s%s", $this->formatter->format(':'.$task->getName(), 'INFO'), $task->getBriefDescription(), $aliases);
         }
 
         $this->log($messages);
@@ -146,6 +152,6 @@ EOF;
             $tasksXML->appendChild($node);
         }
 
-        echo $dom->saveXml();
+        echo $dom->saveXML();
     }
 }

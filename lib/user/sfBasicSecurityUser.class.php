@@ -17,20 +17,19 @@
  */
 class sfBasicSecurityUser extends sfUser implements sfSecurityUser
 {
-    const LAST_REQUEST_NAMESPACE = 'symfony/user/sfUser/lastRequest';
-    const AUTH_NAMESPACE = 'symfony/user/sfUser/authenticated';
-    const CREDENTIAL_NAMESPACE = 'symfony/user/sfUser/credentials';
+    public const LAST_REQUEST_NAMESPACE = 'symfony/user/sfUser/lastRequest';
+    public const AUTH_NAMESPACE = 'symfony/user/sfUser/authenticated';
+    public const CREDENTIAL_NAMESPACE = 'symfony/user/sfUser/credentials';
 
-    protected $lastRequest = null;
+    protected $lastRequest;
 
-    protected $credentials = null;
-    protected $authenticated = null;
+    protected $credentials;
+    protected $authenticated;
 
     protected $timedout = false;
 
     /**
      * Clears all credentials.
-     *
      */
     public function clearCredentials()
     {
@@ -50,7 +49,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     /**
      * Removes a credential.
      *
-     * @param  mixed $credential credential
+     * @param mixed $credential credential
      */
     public function removeCredential($credential)
     {
@@ -73,8 +72,6 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
 
     /**
      * Adds a credential.
-     *
-     * @param mixed $credential
      */
     public function addCredential($credential)
     {
@@ -88,7 +85,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
      */
     public function addCredentials()
     {
-        if (func_num_args() == 0) {
+        if (0 == func_num_args()) {
             return;
         }
 
@@ -115,8 +112,8 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     /**
      * Returns true if user has credential.
      *
-     * @param  mixed $credentials
-     * @param  bool  $useAnd       specify the mode, either AND or OR
+     * @param bool $useAnd specify the mode, either AND or OR
+     *
      * @return bool
      *
      * @author Olivier Verdier <Olivier.Verdier@free.fr>
@@ -143,7 +140,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
             }
 
             if ($test) { // either passed one in OR mode or failed one in AND mode
-        break; // the matter is settled
+                break; // the matter is settled
             }
         }
 
@@ -157,7 +154,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     /**
      * Returns true if user is authenticated.
      *
-     * @return boolean
+     * @return bool
      */
     public function isAuthenticated()
     {
@@ -167,16 +164,16 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     /**
      * Sets authentication for user.
      *
-     * @param  bool $authenticated
+     * @param bool $authenticated
      */
     public function setAuthenticated($authenticated)
     {
         if ($this->options['logging']) {
-            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('User is %sauthenticated', $authenticated === true ? '' : 'not ')]));
+            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('User is %sauthenticated', true === $authenticated ? '' : 'not ')]));
         }
 
         if ((bool) $authenticated !== $this->authenticated) {
-            if ($authenticated === true) {
+            if (true === $authenticated) {
                 $this->authenticated = true;
             } else {
                 $this->authenticated = false;
@@ -202,7 +199,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     /**
      * Returns the timestamp of the last user request.
      *
-     * @return  int
+     * @return int
      */
     public function getLastRequestTime()
     {
@@ -210,14 +207,14 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     }
 
     /**
-     * Available options:
+     * Available options:.
      *
      *  * timeout: Timeout to automatically log out the user in seconds (1800 by default)
      *             Set to false to disable
      *
-     * @param sfEventDispatcher $dispatcher  An sfEventDispatcher instance.
-     * @param sfStorage         $storage     An sfStorage instance.
-     * @param array             $options     An associative array of options.
+     * @param sfEventDispatcher $dispatcher an sfEventDispatcher instance
+     * @param sfStorage         $storage    an sfStorage instance
+     * @param array             $options    an associative array of options
      *
      * @see sfUser
      */
@@ -237,12 +234,12 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
 
         // read data from storage
         $this->authenticated = $storage->read(self::AUTH_NAMESPACE);
-        $this->credentials   = $storage->read(self::CREDENTIAL_NAMESPACE);
-        $this->lastRequest   = $storage->read(self::LAST_REQUEST_NAMESPACE);
+        $this->credentials = $storage->read(self::CREDENTIAL_NAMESPACE);
+        $this->lastRequest = $storage->read(self::LAST_REQUEST_NAMESPACE);
 
         if (null === $this->authenticated) {
             $this->authenticated = false;
-            $this->credentials   = [];
+            $this->credentials = [];
         } else {
             // Automatic logout logged in user if no request within timeout parameter seconds
             $timeout = $this->options['timeout'];

@@ -27,7 +27,7 @@ class sfFilterChain
      */
     public function loadConfiguration($actionInstance)
     {
-        require(sfContext::getInstance()->getConfigCache()->checkConfig('modules/'.$actionInstance->getModuleName().'/config/filters.yml'));
+        require sfContext::getInstance()->getConfigCache()->checkConfig('modules/'.$actionInstance->getModuleName().'/config/filters.yml');
     }
 
     /**
@@ -53,7 +53,7 @@ class sfFilterChain
      *
      * @param string $class The class name of the filter
      *
-     * @return boolean true if the filter exists, false otherwise
+     * @return bool true if the filter exists, false otherwise
      */
     public function hasFilter($class)
     {
@@ -69,7 +69,7 @@ class sfFilterChain
     /**
      * Registers a filter with this chain.
      *
-     * @param sfFilter $filter A sfFilter implementation instance.
+     * @param sfFilter $filter a sfFilter implementation instance
      */
     public function register($filter)
     {

@@ -43,11 +43,11 @@ function cache($name, $lifeTime = 86400)
         sfConfig::set('symfony.cache.current_name', $name);
 
         return false;
-    } else {
-        echo $data;
-
-        return true;
     }
+
+    echo $data;
+
+    return true;
 }
 
 function cache_save()

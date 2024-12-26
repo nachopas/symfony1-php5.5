@@ -21,9 +21,12 @@ class sfTestFunctional extends sfTestFunctionalBase
      * @param sfBrowserBase $browser A sfBrowserBase instance
      * @param lime_test     $lime    A lime instance
      */
-    public function __construct(sfBrowserBase $browser, lime_test $lime = null, $testers = [])
+    public function __construct(sfBrowserBase $browser, ?lime_test $lime = null, $testers = [])
     {
-        $testers = array_merge(['view_cache' => 'sfTesterViewCache', 'form'       => 'sfTesterForm'], $testers);
+        $testers = array_merge([
+            'view_cache' => 'sfTesterViewCache',
+            'form' => 'sfTesterForm',
+        ], $testers);
 
         parent::__construct($browser, $lime, $testers);
     }
@@ -31,9 +34,9 @@ class sfTestFunctional extends sfTestFunctionalBase
     /**
      * Checks that the request is forwarded to a given module/action.
      *
-     * @param  string $moduleName  The module name
-     * @param  string $actionName  The action name
-     * @param  mixed  $position    The position in the action stack (default to the last entry)
+     * @param string $moduleName The module name
+     * @param string $actionName The action name
+     * @param mixed  $position   The position in the action stack (default to the last entry)
      *
      * @return sfTestFunctional The current sfTestFunctional instance
      */
@@ -42,15 +45,19 @@ class sfTestFunctional extends sfTestFunctionalBase
         $actionStack = $this->browser->getContext()->getActionStack();
 
         switch ($position) {
-      case 'first':
-        $entry = $actionStack->getFirstEntry();
-        break;
-      case 'last':
-        $entry = $actionStack->getLastEntry();
-        break;
-      default:
-        $entry = $actionStack->getEntry($position);
-    }
+            case 'first':
+                $entry = $actionStack->getFirstEntry();
+
+                break;
+
+            case 'last':
+                $entry = $actionStack->getLastEntry();
+
+                break;
+
+            default:
+                $entry = $actionStack->getEntry($position);
+        }
 
         $this->test()->is($entry->getModuleName(), $moduleName, sprintf('request is forwarded to the "%s" module (%s)', $moduleName, $position));
         $this->test()->is($entry->getActionName(), $actionName, sprintf('request is forwarded to the "%s" action (%s)', $actionName, $position));

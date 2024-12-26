@@ -45,7 +45,7 @@ class sfPHPView extends sfView
     /**
      * Renders the presentation.
      *
-     * @param  string $_sfFile  Filename
+     * @param string $_sfFile Filename
      *
      * @return string File content
      */
@@ -66,13 +66,11 @@ class sfPHPView extends sfView
         ob_implicit_flush(0);
 
         try {
-            if ($_sfFile == '/') {
-                return '';
-            }
-            require($_sfFile);
+            require $_sfFile;
         } catch (Exception $e) {
             // need to end output buffering before throwing the exception #7596
             ob_end_clean();
+
             throw $e;
         }
 
@@ -83,8 +81,6 @@ class sfPHPView extends sfView
      * Retrieves the template engine associated with this view.
      *
      * Note: This will return null because PHP itself has no engine reference.
-     *
-     * @return null
      */
     public function getEngine()
     {
@@ -93,8 +89,6 @@ class sfPHPView extends sfView
 
     /**
      * Configures template.
-     *
-     * @return void
      */
     public function configure()
     {
@@ -102,7 +96,7 @@ class sfPHPView extends sfView
         $this->context->set('view_instance', $this);
 
         // require our configuration
-        require($this->context->getConfigCache()->checkConfig('modules/'.$this->moduleName.'/config/view.yml'));
+        require $this->context->getConfigCache()->checkConfig('modules/'.$this->moduleName.'/config/view.yml');
 
         // set template directory
         if (!$this->directory) {
@@ -113,7 +107,7 @@ class sfPHPView extends sfView
     /**
      * Loop through all template slots and fill them in with the results of presentation data.
      *
-     * @param  string $content  A chunk of decorator content
+     * @param string $content A chunk of decorator content
      *
      * @return string A decorated template
      */
@@ -155,7 +149,7 @@ class sfPHPView extends sfView
             $uri = $viewCache->getCurrentCacheKey();
 
             if (null !== $uri) {
-                [$content, $decoratorTemplate] = $viewCache->getActionCache($uri);
+                list($content, $decoratorTemplate) = $viewCache->getActionCache($uri);
                 if (null !== $content) {
                     $this->setDecoratorTemplate($decoratorTemplate);
                 }

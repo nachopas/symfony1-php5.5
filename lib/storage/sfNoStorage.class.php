@@ -25,11 +25,11 @@ class sfNoStorage extends sfStorage
      *
      * The preferred format for a key is directory style so naming conflicts can be avoided.
      *
-     * @param  string $key  A unique key identifying your data
+     * @param string $key A unique key identifying your data
      *
      * @return mixed Data associated with the key
      *
-     * @throws <b>sfStorageException</b> If an error occurs while reading data from this storage
+     * @throws sfStorageException If an error occurs while reading data from this storage
      */
     public function read($key)
     {
@@ -41,11 +41,11 @@ class sfNoStorage extends sfStorage
      *
      * The preferred format for a key is directory style so naming conflicts can be avoided.
      *
-     * @param  string $key  A unique key identifying your data
+     * @param string $key A unique key identifying your data
      *
      * @return mixed Data associated with the key
      *
-     * @throws <b>sfStorageException</b> If an error occurs while removing data from this storage
+     * @throws sfStorageException If an error occurs while removing data from this storage
      */
     public function remove($key)
     {
@@ -57,10 +57,10 @@ class sfNoStorage extends sfStorage
      *
      * The preferred format for a key is directory style so naming conflicts can be avoided.
      *
-     * @param  string $key   A unique key identifying your data
-     * @param  mixed  $data  Data associated with your key
+     * @param string $key  A unique key identifying your data
+     * @param mixed  $data Data associated with your key
      *
-     * @throws <b>sfStorageException</b> If an error occurs while writing to this storage
+     * @throws sfStorageException If an error occurs while writing to this storage
      */
     public function write($key, $data)
     {
@@ -69,10 +69,9 @@ class sfNoStorage extends sfStorage
     /**
      * Regenerates id that represents this storage.
      *
-     * @param  boolean $destroy Destroy session when regenerating?
+     * @param bool $destroy Destroy session when regenerating?
      *
-     * @return boolean True if session regenerated, false if error
-     *
+     * @return bool True if session regenerated, false if error
      */
     public function regenerate($destroy = false)
     {
@@ -82,7 +81,7 @@ class sfNoStorage extends sfStorage
     /**
      * Executes the shutdown procedure.
      *
-     * @throws <b>sfStorageException</b> If an error occurs while shutting down this storage
+     * @throws sfStorageException If an error occurs while shutting down this storage
      */
     public function shutdown()
     {

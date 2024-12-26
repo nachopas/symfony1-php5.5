@@ -15,8 +15,11 @@
  */
 abstract class sfBaseTask extends sfCommandApplicationTask
 {
-    protected $configuration = null;
-    protected $pluginManager = null;
+    protected $configuration;
+    protected $pluginManager;
+    protected $statusStartTime;
+    protected $filesystem;
+    protected $tokens = [];
 
     /**
      * @see sfTask
@@ -52,7 +55,7 @@ abstract class sfBaseTask extends sfCommandApplicationTask
             $this->configuration = $this->createConfiguration($application, $env);
         }
 
-        if (null !== $this->commandApplication && !$this->commandApplication->withTrace()) {
+        if (!$this->withTrace()) {
             sfConfig::set('sf_logging_enabled', false);
         }
 
@@ -65,10 +68,8 @@ abstract class sfBaseTask extends sfCommandApplicationTask
 
     /**
      * Sets the current task's configuration.
-     *
-     * @param sfProjectConfiguration $configuration
      */
-    public function setConfiguration(sfProjectConfiguration $configuration = null)
+    public function setConfiguration(?sfProjectConfiguration $configuration = null)
     {
         $this->configuration = $configuration;
     }
@@ -81,7 +82,7 @@ abstract class sfBaseTask extends sfCommandApplicationTask
     public function getFilesystem()
     {
         if (!isset($this->filesystem)) {
-            if (null === $this->commandApplication || $this->commandApplication->isVerbose()) {
+            if ($this->isVerbose()) {
                 $this->filesystem = new sfFilesystem($this->dispatcher, $this->formatter);
             } else {
                 $this->filesystem = new sfFilesystem();
@@ -95,48 +96,102 @@ abstract class sfBaseTask extends sfCommandApplicationTask
      * Checks if the current directory is a symfony project directory.
      *
      * @return true if the current directory is a symfony project directory, false otherwise
+     *
+     * @throws sfException
      */
     public function checkProjectExists()
     {
         if (!file_exists('symfony')) {
             throw new sfException('You must be in a symfony project directory.');
         }
+
+        return true;
     }
 
     /**
      * Checks if an application exists.
      *
-     * @param  string $app  The application name
+     * @param string $app The application name
      *
      * @return bool true if the application exists, false otherwise
+     *
+     * @throws sfException
      */
     public function checkAppExists($app)
     {
         if (!is_dir(sfConfig::get('sf_apps_dir').'/'.$app)) {
             throw new sfException(sprintf('Application "%s" does not exist', $app));
         }
+
+        return true;
     }
 
     /**
      * Checks if a module exists.
      *
-     * @param  string $app     The application name
-     * @param  string $module  The module name
+     * @param string $app    The application name
+     * @param string $module The module name
      *
      * @return bool true if the module exists, false otherwise
+     *
+     * @throws sfException
      */
     public function checkModuleExists($app, $module)
     {
         if (!is_dir(sfConfig::get('sf_apps_dir').'/'.$app.'/modules/'.$module)) {
             throw new sfException(sprintf('Module "%s/%s" does not exist.', $app, $module));
         }
+
+        return true;
+    }
+
+    /**
+     * Checks if trace mode is enabled.
+     *
+     * @return bool
+     */
+    protected function withTrace()
+    {
+        if (null !== $this->commandApplication && !$this->commandApplication->withTrace()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if verbose mode is enabled.
+     *
+     * @return bool
+     */
+    protected function isVerbose()
+    {
+        if (null !== $this->commandApplication && !$this->commandApplication->isVerbose()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if debug mode is enabled.
+     *
+     * @return bool
+     */
+    protected function isDebug()
+    {
+        if (null !== $this->commandApplication && !$this->commandApplication->isDebug()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Creates a configuration object.
      *
-     * @param string  $application The application name
-     * @param string  $env         The environment name
+     * @param string $application The application name
+     * @param string $env         The environment name
      *
      * @return sfProjectConfiguration A sfProjectConfiguration instance
      */
@@ -147,7 +202,7 @@ abstract class sfBaseTask extends sfCommandApplicationTask
 
             require_once sfConfig::get('sf_config_dir').'/ProjectConfiguration.class.php';
 
-            $configuration = ProjectConfiguration::getApplicationConfiguration($application, $env, true, null, $this->dispatcher);
+            $configuration = ProjectConfiguration::getApplicationConfiguration($application, $env, $this->isDebug(), null, $this->dispatcher);
         } else {
             if (file_exists(sfConfig::get('sf_config_dir').'/ProjectConfiguration.class.php')) {
                 require_once sfConfig::get('sf_config_dir').'/ProjectConfiguration.class.php';
@@ -198,7 +253,7 @@ abstract class sfBaseTask extends sfCommandApplicationTask
      * Initializes autoloaders.
      *
      * @param sfProjectConfiguration $configuration The current project or application configuration
-     * @param boolean                $reload        If true, all autoloaders will be reloaded
+     * @param bool                   $reload        If true, all autoloaders will be reloaded
      */
     protected function initializeAutoload(sfProjectConfiguration $configuration, $reload = false)
     {
@@ -222,7 +277,10 @@ abstract class sfBaseTask extends sfCommandApplicationTask
 
             // project
             $autoload = sfSimpleAutoload::getInstance(sfConfig::get('sf_cache_dir').'/project_autoload.cache');
-            $autoload->loadConfiguration(sfFinder::type('file')->name('autoload.yml')->in([sfConfig::get('sf_symfony_lib_dir').'/config/config', sfConfig::get('sf_config_dir')]));
+            $autoload->loadConfiguration(sfFinder::type('file')->name('autoload.yml')->in([
+                sfConfig::get('sf_symfony_lib_dir').'/config/config',
+                sfConfig::get('sf_config_dir'),
+            ]));
             $autoload->register();
 
             if ($reload) {
@@ -287,7 +345,7 @@ abstract class sfBaseTask extends sfCommandApplicationTask
         $disabledPluginsRegex = sprintf('#^(%s)#', implode('|', array_diff($this->configuration->getAllPluginPaths(), $this->configuration->getPluginPaths())));
         $tasks = [];
         foreach (get_declared_classes() as $class) {
-            $r = new Reflectionclass($class);
+            $r = new ReflectionClass($class);
             if ($r->isSubclassOf('sfTask') && !$r->isAbstract() && !preg_match($disabledPluginsRegex, $r->getFileName())) {
                 $tasks[] = new $class($this->dispatcher, $this->formatter);
             }
@@ -324,7 +382,12 @@ abstract class sfBaseTask extends sfCommandApplicationTask
     protected function getPluginManager()
     {
         if (null === $this->pluginManager) {
-            $environment = new sfPearEnvironment($this->dispatcher, ['plugin_dir' => sfConfig::get('sf_plugins_dir'), 'cache_dir'  => sfConfig::get('sf_cache_dir').'/.pear', 'web_dir'    => sfConfig::get('sf_web_dir'), 'config_dir' => sfConfig::get('sf_config_dir')]);
+            $environment = new sfPearEnvironment($this->dispatcher, [
+                'plugin_dir' => sfConfig::get('sf_plugins_dir'),
+                'cache_dir' => sfConfig::get('sf_cache_dir').'/.pear',
+                'web_dir' => sfConfig::get('sf_web_dir'),
+                'config_dir' => sfConfig::get('sf_config_dir'),
+            ]);
 
             $this->pluginManager = new sfSymfonyPluginManager($this->dispatcher, $environment);
         }
@@ -344,5 +407,101 @@ abstract class sfBaseTask extends sfCommandApplicationTask
         }
 
         return $task;
+    }
+
+    /**
+     * Show status of task.
+     *
+     * @param int $done
+     * @param int $total
+     * @param int $size
+     */
+    protected function showStatus($done, $total, $size = 30)
+    {
+        // if we go over our bound, just ignore it
+        if ($done > $total) {
+            $this->statusStartTime = null;
+
+            return;
+        }
+
+        if (null === $this->statusStartTime) {
+            $this->statusStartTime = time();
+        }
+
+        $now = time();
+        $perc = (float) ($done / $total);
+        $bar = floor($perc * $size);
+
+        $statusBar = "\r[";
+        $statusBar .= str_repeat('=', $bar);
+        if ($bar < $size) {
+            $statusBar .= '>';
+            $statusBar .= str_repeat(' ', $size - $bar);
+        } else {
+            $statusBar .= '=';
+        }
+
+        $disp = number_format($perc * 100, 0);
+
+        $statusBar .= "] {$disp}% ({$done}/{$total})";
+
+        $rate = $done ? ($now - $this->statusStartTime) / $done : 0;
+        $left = $total - $done;
+        $eta = round($rate * $left, 2);
+
+        $elapsed = $now - $this->statusStartTime;
+
+        $eta = $this->convertTime($eta);
+        $elapsed = $this->convertTime($elapsed);
+
+        $memory = memory_get_usage(true);
+        if ($memory > 1024 * 1024 * 1024 * 10) {
+            $memory = sprintf('%.2fGB', $memory / 1024 / 1024 / 1024);
+        } elseif ($memory > 1024 * 1024 * 10) {
+            $memory = sprintf('%.2fMB', $memory / 1024 / 1024);
+        } elseif ($memory > 1024 * 10) {
+            $memory = sprintf('%.2fkB', $memory / 1024);
+        } else {
+            $memory = sprintf('%.2fB', $memory);
+        }
+
+        $statusBar .= ' [ remaining: '.$eta.' | elapsed: '.$elapsed.' ] (memory: '.$memory.')     ';
+
+        echo $statusBar;
+
+        // when done, send a newline
+        if ($done == $total) {
+            $this->statusStartTime = null;
+            echo "\n";
+        }
+    }
+
+    /**
+     * Convert time into humain format.
+     *
+     * @param int $time
+     *
+     * @return string
+     */
+    private function convertTime($time)
+    {
+        $string = '';
+
+        if ($time > 3600) {
+            $h = (int) abs($time / 3600);
+            $time -= ($h * 3600);
+            $string .= $h.' h ';
+        }
+
+        if ($time > 60) {
+            $m = (int) abs($time / 60);
+            $time -= ($m * 60);
+            $string .= $m.' min ';
+        }
+
+        $string .= (int) $time.' sec';
+
+        return $string;
     }
 }

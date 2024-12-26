@@ -9,7 +9,7 @@
  */
 
 /**
- * Creates a task skeleton
+ * Creates a task skeleton.
  *
  * @author     Francois Zaninotto <francois.zaninotto@symfony-project.com>
  */
@@ -20,15 +20,21 @@ class sfGenerateTaskTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('task_name', sfCommandArgument::REQUIRED, 'The task name (can contain namespace)')]);
+        $this->addArguments([
+            new sfCommandArgument('task_name', sfCommandArgument::REQUIRED, 'The task name (can contain namespace)'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('dir', null, sfCommandOption::PARAMETER_REQUIRED, 'The directory to create the task in', 'lib/task'), new sfCommandOption('use-database', null, sfCommandOption::PARAMETER_REQUIRED, 'Whether the task needs model initialization to access database', sfConfig::get('sf_orm')), new sfCommandOption('brief-description', null, sfCommandOption::PARAMETER_REQUIRED, 'A brief task description (appears in task list)')]);
+        $this->addOptions([
+            new sfCommandOption('dir', null, sfCommandOption::PARAMETER_REQUIRED, 'The directory to create the task in', 'lib/task'),
+            new sfCommandOption('use-database', null, sfCommandOption::PARAMETER_REQUIRED, 'Whether the task needs model initialization to access database', sfConfig::get('sf_orm')),
+            new sfCommandOption('brief-description', null, sfCommandOption::PARAMETER_REQUIRED, 'A brief task description (appears in task list)'),
+        ]);
 
         $this->namespace = 'generate';
         $this->name = 'task';
         $this->briefDescription = 'Creates a skeleton class for a new task';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [generate:task|INFO] creates a new sfTask class based on the name passed as
 argument:
 
@@ -77,10 +83,10 @@ EOF;
 
         $briefDescription = $options['brief-description'];
         $detailedDescription = <<<HED
-The [$taskName|INFO] task does things.
+The [{$taskName}|INFO] task does things.
 Call it with:
 
-  [php symfony $taskName|INFO]
+  [php symfony {$taskName}|INFO]
 HED;
 
         $useDatabase = sfToolkit::literalize($options['use-database']);
@@ -90,7 +96,7 @@ HED;
             $content = <<<HED
 <?php
 
-class $taskClassName extends sfBaseTask
+class {$taskClassName} extends sfBaseTask
 {
   protected function configure()
   {
@@ -102,15 +108,15 @@ class $taskClassName extends sfBaseTask
     \$this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', '$defaultConnection'),
+      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', '{$defaultConnection}'),
       // add your own options here
     ));
 
-    \$this->namespace        = '$namespace';
-    \$this->name             = '$name';
-    \$this->briefDescription = '$briefDescription';
+    \$this->namespace        = '{$namespace}';
+    \$this->name             = '{$name}';
+    \$this->briefDescription = '{$briefDescription}';
     \$this->detailedDescription = <<<EOF
-$detailedDescription
+{$detailedDescription}
 EOF;
   }
 
@@ -129,7 +135,7 @@ HED;
             $content = <<<HED
 <?php
 
-class $taskClassName extends sfBaseTask
+class {$taskClassName} extends sfBaseTask
 {
   protected function configure()
   {
@@ -143,11 +149,11 @@ class $taskClassName extends sfBaseTask
     //   new sfCommandOption('my_option', null, sfCommandOption::PARAMETER_REQUIRED, 'My option'),
     // ));
 
-    \$this->namespace        = '$namespace';
-    \$this->name             = '$name';
-    \$this->briefDescription = '$briefDescription';
+    \$this->namespace        = '{$namespace}';
+    \$this->name             = '{$name}';
+    \$this->briefDescription = '{$briefDescription}';
     \$this->detailedDescription = <<<EOF
-$detailedDescription
+{$detailedDescription}
 EOF;
   }
 
@@ -172,5 +178,7 @@ HED;
 
         $this->logSection('task', sprintf('Creating "%s" task file', $taskFile));
         file_put_contents($taskFile, $content);
+
+        return 0;
     }
 }

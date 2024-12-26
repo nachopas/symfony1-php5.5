@@ -15,7 +15,7 @@
  */
 class sfVarLogger extends sfLogger
 {
-    protected $logs          = [];
+    protected $logs = [];
     protected $xdebugLogging = false;
 
     /**
@@ -25,10 +25,8 @@ class sfVarLogger extends sfLogger
      *
      * - xdebug_logging: Whether to add xdebug trace to the logs (false by default).
      *
-     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param  array             $options     An array of options.
-     *
-     * @return Boolean           true, if initialization completes successfully, otherwise false.
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -101,7 +99,7 @@ class sfVarLogger extends sfLogger
     /**
      * Returns the highest priority in the logs.
      *
-     * @return integer The highest priority
+     * @return int The highest priority
      */
     public function getHighestPriority()
     {
@@ -118,19 +116,26 @@ class sfVarLogger extends sfLogger
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     protected function doLog($message, $priority)
     {
         // get log type in {}
         $type = 'sfOther';
         if (preg_match('/^\s*{([^}]+)}\s*(.+?)$/s', $message, $matches)) {
-            $type    = $matches[1];
+            $type = $matches[1];
             $message = $matches[2];
         }
 
-        $this->logs[] = ['priority'        => $priority, 'priority_name'   => $this->getPriorityName($priority), 'time'            => time(), 'message'         => $message, 'type'            => $type, 'debug_backtrace' => $this->getDebugBacktrace()];
+        $this->logs[] = [
+            'priority' => $priority,
+            'priority_name' => $this->getPriorityName($priority),
+            'time' => time(),
+            'message' => $message,
+            'type' => $type,
+            'debug_backtrace' => $this->getDebugBacktrace(),
+        ];
     }
 
     /**
@@ -154,11 +159,12 @@ class sfVarLogger extends sfLogger
             $class = $trace['class'] ?? substr($file = basename($trace['file']), 0, strpos($file, '.'));
 
             if (
-        !class_exists($class)
-        ||
-        (!in_array($class, ['sfLogger', 'sfEventDispatcher']) && !is_subclass_of($class, 'sfLogger') && !is_subclass_of($class, 'sfEventDispatcher'))
-      ) {
+                !class_exists($class)
+                ||
+                (!in_array($class, ['sfLogger', 'sfEventDispatcher']) && !is_subclass_of($class, 'sfLogger') && !is_subclass_of($class, 'sfEventDispatcher'))
+            ) {
                 $traces = array_slice($traces, $i);
+
                 break;
             }
         }

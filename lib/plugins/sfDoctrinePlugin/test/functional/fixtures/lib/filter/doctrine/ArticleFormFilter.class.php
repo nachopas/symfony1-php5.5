@@ -2,7 +2,6 @@
 
 /**
  * Article filter form.
- *
  */
 class ArticleFormFilter extends BaseArticleFormFilter
 {

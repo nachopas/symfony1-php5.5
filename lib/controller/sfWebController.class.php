@@ -20,8 +20,8 @@ abstract class sfWebController extends sfController
     /**
      * Generates an URL from an array of parameters.
      *
-     * @param mixed   $parameters An associative array of URL parameters or an internal URI as a string.
-     * @param boolean $absolute   Whether to generate an absolute URL
+     * @param array|string $parameters an associative array of URL parameters or an internal URI as a string
+     * @param bool         $absolute   Whether to generate an absolute URL
      *
      * @return string A URL to a symfony resource
      */
@@ -41,7 +41,7 @@ abstract class sfWebController extends sfController
                 return $parameters;
             }
 
-            if ($parameters == '#') {
+            if ('#' == $parameters) {
                 return $parameters;
             }
 
@@ -51,7 +51,7 @@ abstract class sfWebController extends sfController
                 $parameters = substr($parameters, 0, $pos);
             }
 
-            [$route, $parameters] = $this->convertUrlStringToParameters($parameters);
+            list($route, $parameters) = $this->convertUrlStringToParameters($parameters);
         } elseif (is_array($parameters)) {
             if (isset($parameters['sf_route'])) {
                 $route = $parameters['sf_route'];
@@ -102,15 +102,15 @@ abstract class sfWebController extends sfController
         // module/action?key1=value1&key2=value2...
 
         // first slash optional
-        if ($url[0] == '/') {
+        if ('/' == $url[0]) {
             $url = substr($url, 1);
         }
 
         // routeName?
-        if ($url && $url[0] == '@') {
+        if ($url && '@' == $url[0]) {
             $route = substr($url, 1);
         } elseif (false !== strpos($url, '/')) {
-            [$params['module'], $params['action']] = explode('/', $url);
+            list($params['module'], $params['action']) = explode('/', $url);
         } elseif (!$queryString) {
             $route = $givenUrl;
         } else {
@@ -143,10 +143,10 @@ abstract class sfWebController extends sfController
     /**
      * Redirects the request to another URL.
      *
-     * @param string $url        An associative array of URL parameters or an internal URI as a string
-     * @param int    $delay      A delay in seconds before redirecting. This is only needed on
-     *                           browsers that do not support HTTP headers
-     * @param int    $statusCode The status code
+     * @param array|string $url        An associative array of URL parameters or an internal URI as a string
+     * @param int          $delay      A delay in seconds before redirecting. This is only needed on
+     *                                 browsers that do not support HTTP headers
+     * @param int          $statusCode The status code
      *
      * @throws InvalidArgumentException If the url argument is null or an empty string
      */
@@ -172,7 +172,7 @@ abstract class sfWebController extends sfController
 
         // The Location header should only be used for status codes 201 and 3..
         // For other code, only the refresh meta tag is used
-        if ($statusCode == 201 || ($statusCode >= 300 && $statusCode < 400)) {
+        if (201 == $statusCode || ($statusCode >= 300 && $statusCode < 400)) {
             $response->setHttpHeader('Location', $url);
         }
 

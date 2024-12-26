@@ -15,16 +15,16 @@
  */
 class sfFilesystem
 {
-    protected $dispatcher = null;
-    protected $formatter  = null;
+    protected $dispatcher;
+    protected $formatter;
 
     /**
      * Constructor.
      *
-     * @param sfEventDispatcher $dispatcher  An sfEventDispatcher instance
-     * @param sfFormatter       $formatter   An sfFormatter instance
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
+     * @param sfFormatter       $formatter  An sfFormatter instance
      */
-    public function __construct(sfEventDispatcher $dispatcher = null, sfFormatter $formatter = null)
+    public function __construct(?sfEventDispatcher $dispatcher = null, ?sfFormatter $formatter = null)
     {
         $this->dispatcher = $dispatcher;
         $this->formatter = $formatter;
@@ -39,9 +39,11 @@ class sfFilesystem
      *
      * To override existing files, pass the "override" option.
      *
-     * @param string $originFile  The original filename
-     * @param string $targetFile  The target filename
-     * @param array  $options     An array of options
+     * @param string $originFile The original filename
+     * @param string $targetFile The target filename
+     * @param array  $options    An array of options
+     *
+     * @return bool
      */
     public function copy($originFile, $targetFile, $options = [])
     {
@@ -58,7 +60,7 @@ class sfFilesystem
         if (file_exists($targetFile)) {
             $statTarget = stat($targetFile);
             $stat_origin = stat($originFile);
-            $mostRecent = ($stat_origin['mtime'] > $statTarget['mtime']) ? true : false;
+            $mostRecent = ($stat_origin['mtime'] > $statTarget['mtime']);
         }
 
         if ($options['override'] || !file_exists($targetFile) || $mostRecent) {
@@ -73,8 +75,8 @@ class sfFilesystem
     /**
      * Creates a directory recursively.
      *
-     * @param  string $path  The directory path
-     * @param  int    $mode  The directory mode
+     * @param string $path The directory path
+     * @param int    $mode The directory mode
      *
      * @return bool true if the directory has been created, false otherwise
      */
@@ -92,7 +94,7 @@ class sfFilesystem
     /**
      * Creates empty files.
      *
-     * @param mixed $files  The filename, or an array of filenames
+     * @param mixed $files The filename, or an array of filenames
      */
     public function touch($files)
     {
@@ -110,7 +112,7 @@ class sfFilesystem
     /**
      * Removes files or directories.
      *
-     * @param mixed $files  A filename or an array of files to remove
+     * @param mixed $files A filename or an array of files to remove
      */
     public function remove($files)
     {
@@ -135,9 +137,9 @@ class sfFilesystem
     /**
      * Change mode for an array of files or directories.
      *
-     * @param array   $files  An array of files or directories
-     * @param integer $mode   The new mode
-     * @param integer $umask  The mode mask (octal)
+     * @param array $files An array of files or directories
+     * @param int   $mode  The new mode
+     * @param int   $umask The mode mask (octal)
      */
     public function chmod($files, $mode, $umask = 0000)
     {
@@ -159,8 +161,12 @@ class sfFilesystem
     /**
      * Renames a file.
      *
-     * @param string $origin  The origin filename
-     * @param string $target  The new filename
+     * @param string $origin The origin filename
+     * @param string $target The new filename
+     *
+     * @return bool
+     *
+     * @throws sfException
      */
     public function rename($origin, $target)
     {
@@ -177,15 +183,16 @@ class sfFilesystem
     /**
      * Creates a symbolic link or copy a directory.
      *
-     * @param string $originDir      The origin directory path
-     * @param string $targetDir      The symbolic link name
-     * @param bool   $copyOnWindows  Whether to copy files if on windows
+     * @param string $originDir     The origin directory path
+     * @param string $targetDir     The symbolic link name
+     * @param bool   $copyOnWindows Whether to copy files if on windows
      */
     public function symlink($originDir, $targetDir, $copyOnWindows = false)
     {
         if ('\\' == DIRECTORY_SEPARATOR && $copyOnWindows) {
             $finder = sfFinder::type('any');
             $this->mirror($originDir, $targetDir, $finder);
+
             return;
         }
 
@@ -207,9 +214,9 @@ class sfFilesystem
     /**
      * Creates a symbolic link using a relative path if possible.
      *
-     * @param string $originDir      The origin directory path
-     * @param string $targetDir      The symbolic link name
-     * @param bool   $copyOnWindows  Whether to copy files if on windows
+     * @param string $originDir     The origin directory path
+     * @param string $targetDir     The symbolic link name
+     * @param bool   $copyOnWindows Whether to copy files if on windows
      */
     public function relativeSymlink($originDir, $targetDir, $copyOnWindows = false)
     {
@@ -223,10 +230,12 @@ class sfFilesystem
     /**
      * Mirrors a directory to another.
      *
-     * @param string   $originDir  The origin directory
-     * @param string   $targetDir  The target directory
-     * @param sfFinder $finder     An sfFinder instance
-     * @param array    $options    An array of options (see copy())
+     * @param string   $originDir The origin directory
+     * @param string   $targetDir The target directory
+     * @param sfFinder $finder    An sfFinder instance
+     * @param array    $options   An array of options (see copy())
+     *
+     * @throws sfException
      */
     public function mirror($originDir, $targetDir, $finder, $options = [])
     {
@@ -257,10 +266,9 @@ class sfFilesystem
         $this->logSection('exec ', $cmd);
 
         $descriptorspec = [
-        1 => ['pipe', 'w'],
-        // stdout
-        2 => ['pipe', 'w'],
-    ];
+            1 => ['pipe', 'w'], // stdout
+            2 => ['pipe', 'w'], // stderr
+        ];
 
         $process = proc_open($cmd, $descriptorspec, $pipes);
         if (!is_resource($process)) {
@@ -309,10 +317,10 @@ class sfFilesystem
     /**
      * Replaces tokens in an array of files.
      *
-     * @param array  $files       An array of filenames
-     * @param string $beginToken  The begin token delimiter
-     * @param string $endToken    The end token delimiter
-     * @param array  $tokens      An array of token/value pairs
+     * @param array  $files      An array of filenames
+     * @param string $beginToken The begin token delimiter
+     * @param string $endToken   The end token delimiter
+     * @param array  $tokens     An array of token/value pairs
      */
     public function replaceTokens($files, $beginToken, $endToken, $tokens)
     {
@@ -335,9 +343,9 @@ class sfFilesystem
     /**
      * Logs a message in a section.
      *
-     * @param string $section  The section name
-     * @param string $message  The message
-     * @param int    $size     The maximum size of a line
+     * @param string $section The section name
+     * @param string $message The message
+     * @param int    $size    The maximum size of a line
      */
     protected function logSection($section, $message, $size = null)
     {
@@ -369,7 +377,7 @@ class sfFilesystem
         $minPathLength = min(strlen($from), strlen($to));
 
         // count how many chars the strings have in common
-        for ($i = 0; $i < $minPathLength; $i++) {
+        for ($i = 0; $i < $minPathLength; ++$i) {
             if ($from[$i] != $to[$i]) {
                 break;
             }
@@ -399,7 +407,7 @@ class sfFilesystem
     }
 
     /**
-     * @param string A filesystem path
+     * @param string $path A filesystem path
      *
      * @return string
      */
@@ -422,7 +430,7 @@ class sfFilesystem
             }
         }
 
-        $result  = DIRECTORY_SEPARATOR == $path[0] ? DIRECTORY_SEPARATOR : '';
+        $result = DIRECTORY_SEPARATOR == $path[0] ? DIRECTORY_SEPARATOR : '';
         $result .= implode(DIRECTORY_SEPARATOR, $out);
         $result .= DIRECTORY_SEPARATOR == $path[strlen($path) - 1] ? DIRECTORY_SEPARATOR : '';
 

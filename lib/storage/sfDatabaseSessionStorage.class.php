@@ -17,11 +17,14 @@
  */
 abstract class sfDatabaseSessionStorage extends sfSessionStorage
 {
-    protected $db = null;
-    protected $con = null;
+    /** @var sfDatabase */
+    protected $db;
+
+    /** @var PDO */
+    protected $con;
 
     /**
-     * Available options:
+     * Available options:.
      *
      *   * db_table:    The database table in which session data will be stored
      *   * database:    The sfDatabase object to use
@@ -29,13 +32,21 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
      *   * db_data_col: The database column in which the session data will be stored (sess_data by default)
      *   * db_time_col: The database column in which the session timestamp will be stored (sess_time by default)
      *
-     * @param  array $options  An associative array of options
+     * @param array $options An associative array of options
+     *
+     * @return bool|void
+     *
+     * @throws sfInitializationException
      *
      * @see sfSessionStorage
      */
     public function initialize($options = [])
     {
-        $options = array_merge(['db_id_col'   => 'sess_id', 'db_data_col' => 'sess_data', 'db_time_col' => 'sess_time'], $options);
+        $options = array_merge([
+            'db_id_col' => 'sess_id',
+            'db_data_col' => 'sess_data',
+            'db_time_col' => 'sess_time',
+        ], $options);
 
         // disable auto_start
         $options['auto_start'] = false;
@@ -68,7 +79,7 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
     /**
      * Closes a session.
      *
-     * @return boolean true, if the session was closed, otherwise false
+     * @return bool true, if the session was closed, otherwise false
      */
     public function sessionClose()
     {
@@ -79,23 +90,24 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
     /**
      * Opens a session.
      *
-     * @param  string $path  (ignored)
-     * @param  string $name  (ignored)
+     * @param string $path (ignored)
+     * @param string $name (ignored)
      *
-     * @return boolean true, if the session was opened, otherwise an exception is thrown
+     * @return bool true, if the session was opened, otherwise an exception is thrown
      *
-     * @throws <b>DatabaseException</b> If a connection with the database does not exist or cannot be created
+     * @throws DatabaseException If a connection with the database does not exist or cannot be created
      */
     public function sessionOpen($path = null, $name = null)
     {
         // what database are we using?
+        /** @var sfDatabase $database */
         $database = $this->options['database'];
 
         // get the database and connection
         $databaseClass = get_class($database);
-        if ($databaseClass == 'sfPropelDatabase') {
+        if ('sfPropelDatabase' == $databaseClass) {
             $this->db = Propel::getConnection($database->getParameter('name'));
-        } elseif ($databaseClass == 'sfDoctrineDatabase') {
+        } elseif ('sfDoctrineDatabase' == $databaseClass) {
             $this->db = $database->getConnection();
         } else {
             $this->db = $database->getResource();
@@ -113,55 +125,54 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
     /**
      * Destroys a session.
      *
-     * @param  string $id  A session ID
+     * @param string $id A session ID
      *
      * @return bool true, if the session was destroyed, otherwise an exception is thrown
      *
-     * @throws <b>DatabaseException</b> If the session cannot be destroyed
+     * @throws DatabaseException If the session cannot be destroyed
      */
     abstract public function sessionDestroy($id);
 
     /**
      * Cleans up old sessions.
      *
-     * @param  int $lifetime  The lifetime of a session
+     * @param int $lifetime The lifetime of a session
      *
      * @return bool true, if old sessions have been cleaned, otherwise an exception is thrown
      *
-     * @throws <b>DatabaseException</b> If any old sessions cannot be cleaned
+     * @throws DatabaseException If any old sessions cannot be cleaned
      */
     abstract public function sessionGC($lifetime);
 
     /**
      * Reads a session.
      *
-     * @param  string $id  A session ID
+     * @param string $id A session ID
      *
      * @return bool true, if the session was read, otherwise an exception is thrown
      *
-     * @throws <b>DatabaseException</b> If the session cannot be read
+     * @throws DatabaseException If the session cannot be read
      */
     abstract public function sessionRead($id);
 
     /**
      * Writes session data.
      *
-     * @param  string $id    A session ID
-     * @param  string $data  A serialized chunk of session data
+     * @param string $id   A session ID
+     * @param string $data A serialized chunk of session data
      *
      * @return bool true, if the session was written, otherwise an exception is thrown
      *
-     * @throws <b>DatabaseException</b> If the session data cannot be written
+     * @throws DatabaseException If the session data cannot be written
      */
     abstract public function sessionWrite($id, $data);
 
     /**
      * Regenerates id that represents this storage.
      *
-     * @param  boolean $destroy Destroy session when regenerating?
+     * @param bool $destroy Destroy session when regenerating?
      *
-     * @return boolean True if session regenerated, false if error
-     *
+     * @return bool|void True if session regenerated, false if error
      */
     public function regenerate($destroy = false)
     {

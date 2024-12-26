@@ -15,7 +15,6 @@
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
  */
 
-
 /**
  * sfChoiceFormat class.
  *
@@ -52,7 +51,7 @@
 class sfChoiceFormat
 {
     /**
-     * The pattern to validate a set notation
+     * The pattern to validate a set notation.
      */
     protected $validate = '/[\(\[\{]|[-Inf\d:\s]+|,|[\+Inf\d\s:\?\-=!><%\|&\(\)]+|[\)\]\}]/ms';
 
@@ -75,11 +74,14 @@ class sfChoiceFormat
     }
 
     /**
-     * Determines if the given number belongs to a given set
+     * Determines if the given number belongs to a given set.
      *
-     * @param  float  $number the number to test.
-     * @param  string $set    the set, in set notation.
-     * @return boolean true if number is in the set, false otherwise.
+     * @param float  $number the number to test
+     * @param string $set    the set, in set notation
+     *
+     * @return bool true if number is in the set, false otherwise
+     *
+     * @throws sfException
      */
     public function isValid($number, $set)
     {
@@ -101,50 +103,48 @@ class sfChoiceFormat
 
         foreach ($matches as $match) {
             $string = $match[0];
-            if ($i != 0 && $i != $n - 1 && $string !== ',') {
-                if ($string == '-Inf') {
+            if (0 != $i && $i != $n - 1 && ',' !== $string) {
+                if ('-Inf' == $string) {
                     $elements[] = -1 * $this->inf;
-                } elseif ($string == '+Inf' || $string == 'Inf') {
+                } elseif ('+Inf' == $string || 'Inf' == $string) {
                     $elements[] = $this->inf;
                 } else {
-                    $elements[] = floatval($string);
+                    $elements[] = (float) $string;
                 }
             }
-            $i++;
+            ++$i;
         }
         $total = count($elements);
-        $number = floatval($number);
+        $number = (float) $number;
 
-        if ($leftBracket == '{' && $rightBracket == '}') {
+        if ('{' == $leftBracket && '}' == $rightBracket) {
             return in_array($number, $elements);
         }
 
         $left = false;
-        if ($leftBracket == '[') {
+        if ('[' == $leftBracket) {
             $left = $number >= $elements[0];
-        } elseif ($leftBracket == '(') {
+        } elseif ('(' == $leftBracket) {
             $left = $number > $elements[0];
         }
 
         $right = false;
-        if ($rightBracket == ']') {
+        if (']' == $rightBracket) {
             $right = $number <= $elements[$total - 1];
-        } elseif ($rightBracket == ')') {
+        } elseif (')' == $rightBracket) {
             $right = $number < $elements[$total - 1];
         }
 
-        if ($left && $right) {
-            return true;
-        }
-
-        return false;
+        return $left && $right;
     }
 
     protected function isValidSetNotation($number, $set)
     {
         $str = '$result = '.str_replace('n', '$number', $set).';';
+
         try {
             eval($str);
+
             return $result;
         } catch (Exception $e) {
             return false;
@@ -154,7 +154,8 @@ class sfChoiceFormat
     /**
      * Parses a choice string and get a list of sets and a list of strings corresponding to the sets.
      *
-     * @param  string $string the string containing the choices
+     * @param string $string the string containing the choices
+     *
      * @return array array($sets, $strings)
      */
     public function parse($string)
@@ -167,9 +168,9 @@ class sfChoiceFormat
 
         $offset = $matches[0];
         $strings = [];
-        for ($i = 0; $i < $n; $i++) {
+        for ($i = 0; $i < $n; ++$i) {
             $len = strlen($offset[$i][0]);
-            $begin = $i == 0 ? $len : $offset[$i][1] + $len;
+            $begin = 0 == $i ? $len : $offset[$i][1] + $len;
             $end = $i == $n - 1 ? strlen($string) : $offset[$i + 1][1];
             $strings[] = substr($string, $begin, $end - $begin);
         }
@@ -180,15 +181,16 @@ class sfChoiceFormat
     /**
      * For the choice string, and a number, find and return the string that satisfied the set within the choices.
      *
-     * @param  string $string   the choices string.
-     * @param  float  $number   the number to test.
-     * @return string the choosen string.
+     * @param string $string the choices string
+     * @param float  $number the number to test
+     *
+     * @return string the chosen string
      */
     public function format($string, $number)
     {
-        [$sets, $strings] = $this->parse($string);
+        list($sets, $strings) = $this->parse($string);
         $total = count($sets);
-        for ($i = 0; $i < $total; $i++) {
+        for ($i = 0; $i < $total; ++$i) {
             if ($this->isValid($number, $sets[$i])) {
                 return $strings[$i];
             }

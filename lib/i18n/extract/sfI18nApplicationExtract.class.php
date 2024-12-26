@@ -67,7 +67,7 @@ class sfI18nApplicationExtract extends sfI18nExtract
     {
         $messages = [];
         foreach ($this->extractObjects as $extractObject) {
-            $messages = array_merge($messages, $extractObject->$method());
+            $messages = array_merge($messages, $extractObject->{$method}());
         }
 
         return array_unique($messages);

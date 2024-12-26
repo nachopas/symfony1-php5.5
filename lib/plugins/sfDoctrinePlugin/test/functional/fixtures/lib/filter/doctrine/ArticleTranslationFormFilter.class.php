@@ -2,7 +2,6 @@
 
 /**
  * ArticleTranslation filter form.
- *
  */
 class ArticleTranslationFormFilter extends BaseArticleTranslationFormFilter
 {

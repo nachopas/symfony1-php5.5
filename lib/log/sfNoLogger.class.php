@@ -18,10 +18,8 @@ class sfNoLogger extends sfLogger
     /**
      * Initializes this logger.
      *
-     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param  array             $options     An array of options.
-     *
-     * @return Boolean      true, if initialization completes successfully, otherwise false.
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -30,8 +28,8 @@ class sfNoLogger extends sfLogger
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     protected function doLog($message, $priority)
     {

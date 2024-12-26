@@ -15,17 +15,22 @@
  */
 abstract class sfRouting
 {
-    protected $dispatcher        = null;
-    protected $cache             = null;
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var sfCache|null */
+    protected $cache;
     protected $defaultParameters = [];
-    protected $options           = [];
+    protected $options = [];
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $options
      */
-    public function __construct(sfEventDispatcher $dispatcher, sfCache $cache = null, $options = [])
+    public function __construct(sfEventDispatcher $dispatcher, ?sfCache $cache = null, $options = [])
     {
         $this->initialize($dispatcher, $cache, $options);
 
@@ -55,15 +60,15 @@ abstract class sfRouting
      *  * debug:          Whether to cache or not (false by default)
      *  * context:        An array of context variables to help URL matching and generation
      *
-     * @param sfEventDispatcher $dispatcher  An sfEventDispatcher instance
-     * @param sfCache           $cache       An sfCache instance
-     * @param array             $options     An associative array of initialization options.
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
+     * @param sfCache           $cache      An sfCache instance
+     * @param array             $options    an associative array of initialization options
      */
-    public function initialize(sfEventDispatcher $dispatcher, sfCache $cache = null, $options = [])
+    public function initialize(sfEventDispatcher $dispatcher, ?sfCache $cache = null, $options = [])
     {
         $this->dispatcher = $dispatcher;
 
-        $options['debug'] = isset($options['debug']) ? (boolean) $options['debug'] : false;
+        $options['debug'] = isset($options['debug']) ? (bool) $options['debug'] : false;
 
         // disable caching when in debug mode
         $this->cache = $options['debug'] ? null : $cache;
@@ -110,8 +115,8 @@ abstract class sfRouting
     /**
      * Gets the internal URI for the current request.
      *
-     * @param  bool $with_route_name  Whether to give an internal URI with the route name (@route)
-     *                                or with the module/action pair
+     * @param bool $with_route_name Whether to give an internal URI with the route name (@route)
+     *                              or with the module/action pair
      *
      * @return string The current internal URI
      */
@@ -125,9 +130,18 @@ abstract class sfRouting
     abstract public function getRoutes();
 
     /**
+     * Gets route from given name.
+     *
+     * @param string $name The route name
+     *
+     * @return sfRoute
+     */
+    abstract public function getRoute($name);
+
+    /**
      * Sets the compiled route array.
      *
-     * @param  array $routes  The route array
+     * @param array $routes The route array
      *
      * @return array The route array
      */
@@ -148,9 +162,9 @@ abstract class sfRouting
     /**
      * Generates a valid URLs for parameters.
      *
-     * @param  string  $name      The route name
-     * @param  array   $params    The parameter values
-     * @param  Boolean $absolute  Whether to generate an absolute URL
+     * @param string $name     The route name
+     * @param array  $params   The parameter values
+     * @param bool   $absolute Whether to generate an absolute URL
      *
      * @return string The generated URL
      */
@@ -161,16 +175,16 @@ abstract class sfRouting
      *
      * Returns false if no route match the URL.
      *
-     * @param  string $url  URL to be parsed
+     * @param string $url URL to be parsed
      *
-     * @return array|false  An array of parameters or false if the route does not match
+     * @return array|false An array of parameters or false if the route does not match
      */
     abstract public function parse($url);
 
     /**
      * Gets the default parameters for URL generation.
      *
-     * @return array  An array of default parameters
+     * @return array An array of default parameters
      */
     public function getDefaultParameters()
     {
@@ -180,7 +194,7 @@ abstract class sfRouting
     /**
      * Gets a default parameter.
      *
-     * @param  string $key    The key
+     * @param string $key The key
      *
      * @return string The value
      */
@@ -192,8 +206,8 @@ abstract class sfRouting
     /**
      * Sets a default parameter.
      *
-     * @param string $key    The key
-     * @param string $value  The value
+     * @param string $key   The key
+     * @param string $value The value
      */
     public function setDefaultParameter($key, $value)
     {
@@ -203,7 +217,7 @@ abstract class sfRouting
     /**
      * Sets the default parameters for URL generation.
      *
-     * @param array $parameters  An array of default parameters
+     * @param array $parameters An array of default parameters
      */
     public function setDefaultParameters($parameters)
     {
@@ -214,7 +228,6 @@ abstract class sfRouting
      * Listens to the user.change_culture event.
      *
      * @param sfEvent $event An sfEvent instance
-     *
      */
     public function listenToChangeCultureEvent(sfEvent $event)
     {
@@ -225,9 +238,10 @@ abstract class sfRouting
     /**
      * Listens to the request.filter_parameters event.
      *
-     * @param  sfEvent $event       An sfEvent instance
+     * @param sfEvent $event      An sfEvent instance
+     * @param array   $parameters
      *
-     * @return array   $parameters  An array of parameters for the event
+     * @return array $parameters  An array of parameters for the event
      */
     public function filterParametersEvent(sfEvent $event, $parameters)
     {
@@ -261,8 +275,6 @@ abstract class sfRouting
 
     /**
      * Execute the shutdown procedure.
-     *
-     * @return void
      */
     public function shutdown()
     {

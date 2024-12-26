@@ -13,11 +13,17 @@ error_reporting(error_reporting() & ~E_STRICT);
 date_default_timezone_set('UTC');
 
 require_once 'PEAR.php';
+
 require_once 'PEAR/Config.php';
+
 require_once 'PEAR/Registry.php';
+
 require_once 'PEAR/Command.php';
+
 require_once 'PEAR/PackageFile/v2/rw.php';
+
 require_once 'PEAR/Dependency2.php';
+
 require_once 'PEAR/Installer.php';
 
 /**
@@ -27,18 +33,18 @@ require_once 'PEAR/Installer.php';
  */
 class sfPearEnvironment
 {
-    protected $dispatcher = null;
-    protected $config     = null;
-    protected $registry   = null;
-    protected $rest       = null;
-    protected $frontend   = null;
-    protected $options    = [];
+    protected $dispatcher;
+    protected $config;
+    protected $registry;
+    protected $rest;
+    protected $frontend;
+    protected $options = [];
 
     /**
      * Constructs a new sfPluginManager.
      *
-     * @param sfEventDispatcher $dispatcher   An event dispatcher instance
-     * @param array             $options      An array of options
+     * @param sfEventDispatcher $dispatcher An event dispatcher instance
+     * @param array             $options    An array of options
      */
     public function __construct(sfEventDispatcher $dispatcher, $options)
     {
@@ -57,8 +63,8 @@ class sfPearEnvironment
      * * downloader_base_class: The base class for downloads (default to sfPearDownloader)
      *                          (mainly used for testing)
      *
-     * @param sfEventDispatcher $dispatcher   An event dispatcher instance
-     * @param array             $options      An array of options
+     * @param sfEventDispatcher $dispatcher An event dispatcher instance
+     * @param array             $options    An array of options
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
@@ -73,8 +79,8 @@ class sfPearEnvironment
             throw new sfConfigurationException('You must provide a "cache_dir" option.');
         }
 
-        if (!is_dir($options['cache_dir'])) {
-            mkdir($options['cache_dir'], 0777, true);
+        if (!is_dir($options['cache_dir']) && !@mkdir($options['cache_dir'], 0777, true) && !is_dir($options['cache_dir'])) {
+            throw new RuntimeException(sprintf('Pear was not able to create a directory "%s"', $options['cache_dir']));
         }
 
         if (!isset($options['rest_base_class'])) {
@@ -100,9 +106,9 @@ class sfPearEnvironment
     /**
      * Returns a configuration value.
      *
-     * @param  string $name The configuration name
+     * @param string $name The configuration name
      *
-     * @return mixed  The configuration value
+     * @return mixed The configuration value
      */
     public function getOption($name)
     {
@@ -112,9 +118,9 @@ class sfPearEnvironment
     /**
      * Returns whether configuration name exists.
      *
-     * @param  string $name The configuration name
+     * @param string $name The configuration name
      *
-     * @return boolean True if configuration name exists
+     * @return bool True if configuration name exists
      */
     public function hasOption($name)
     {
@@ -175,8 +181,8 @@ class sfPearEnvironment
     /**
      * Registers a PEAR channel.
      *
-     * @param string  $channel    The channel name
-     * @param Boolean $isDefault  true if this is the default PEAR channel, false otherwise
+     * @param string $channel   The channel name
+     * @param bool   $isDefault true if this is the default PEAR channel, false otherwise
      */
     public function registerChannel($channel, $isDefault = false)
     {
@@ -223,8 +229,8 @@ class sfPearEnvironment
     /**
      * Registers the PEAR Configuration instance.
      *
-     * @param string $pluginDir   The plugin path
-     * @param string $cacheDir    The cache path
+     * @param string $pluginDir The plugin path
+     * @param string $cacheDir  The cache path
      */
     public function initializeConfiguration($pluginDir, $cacheDir)
     {

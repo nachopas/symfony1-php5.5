@@ -20,18 +20,35 @@
 class sfDoctrineFormGenerator extends sfGenerator
 {
     /**
-     * Array of all the loaded models
+     * @var Doctrine_Table
+     */
+    public $table;
+
+    /**
+     * @var string
+     */
+    public $modelName;
+
+    /**
+     * Array of all the loaded models.
      *
      * @var array
      */
     public $models = [];
 
     /**
-     * Array of all plugin models
+     * Array of all plugin models.
      *
      * @var array
      */
     public $pluginModels = [];
+
+    /**
+     * Array of all configuration params.
+     *
+     * @var array
+     */
+    public $params = [];
 
     /**
      * Initializes the current sfGenerator instance.
@@ -84,12 +101,12 @@ class sfDoctrineFormGenerator extends sfGenerator
             $this->table = Doctrine_Core::getTable($model);
             $this->modelName = $model;
 
-            $baseDir = sfConfig::get('sf_lib_dir') . '/form/doctrine';
+            $baseDir = sfConfig::get('sf_lib_dir').'/form/doctrine';
 
             $isPluginModel = $this->isPluginModel($model);
             if ($isPluginModel) {
                 $pluginName = $this->getPluginNameForModel($model);
-                $baseDir .= '/' . $pluginName;
+                $baseDir .= '/'.$pluginName;
             }
 
             if (!is_dir($baseDir.'/base')) {
@@ -119,16 +136,17 @@ class sfDoctrineFormGenerator extends sfGenerator
 
     /**
      * Get all the models which are a part of a plugin and the name of the plugin.
-     * The array format is modelName => pluginName
+     * The array format is modelName => pluginName.
      *
      * @todo This method is ugly and is a very weird way of finding the models which
      *       belong to plugins. If we could come up with a better way that'd be great
+     *
      * @return array $pluginModels
      */
     public function getPluginModels()
     {
         if (!$this->pluginModels) {
-            $plugins     = $this->generatorManager->getConfiguration()->getPlugins();
+            $plugins = $this->generatorManager->getConfiguration()->getPlugins();
             $pluginPaths = $this->generatorManager->getConfiguration()->getAllPluginPaths();
 
             foreach ($pluginPaths as $pluginName => $path) {
@@ -144,7 +162,7 @@ class sfDoctrineFormGenerator extends sfGenerator
                     if (class_exists($e[0]) && class_exists($modelName)) {
                         $parent = new ReflectionClass('Doctrine_Record');
                         $reflection = new ReflectionClass($modelName);
-                        if ($reflection->isSubClassOf($parent)) {
+                        if ($reflection->isSubclassOf($parent)) {
                             $this->pluginModels[$modelName] = $pluginName;
 
                             if ($reflection->isInstantiable()) {
@@ -163,29 +181,31 @@ class sfDoctrineFormGenerator extends sfGenerator
     }
 
     /**
-     * Check to see if a model is part of a plugin
+     * Check to see if a model is part of a plugin.
      *
      * @param string $modelName
-     * @return boolean $bool
+     *
+     * @return bool $bool
      */
     public function isPluginModel($modelName)
     {
-        return isset($this->pluginModels[$modelName]) ? true:false;
+        return isset($this->pluginModels[$modelName]) ? true : false;
     }
 
     /**
-     * Get the name of the plugin a model belongs to
+     * Get the name of the plugin a model belongs to.
      *
      * @param string $modelName
+     *
      * @return string $pluginName
      */
     public function getPluginNameForModel($modelName)
     {
         if ($this->isPluginModel($modelName)) {
             return $this->pluginModels[$modelName];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -198,12 +218,12 @@ class sfDoctrineFormGenerator extends sfGenerator
         $relations = [];
         foreach ($this->table->getRelations() as $relation) {
             if (
-        Doctrine_Relation::MANY == $relation->getType()
-        &&
-        isset($relation['refTable'])
-        &&
-        (null === $this->getParentModel() || !Doctrine_Core::getTable($this->getParentModel())->hasRelation($relation->getAlias()))
-      ) {
+                Doctrine_Relation::MANY == $relation->getType()
+                &&
+                isset($relation['refTable'])
+                &&
+                (null === $this->getParentModel() || !Doctrine_Core::getTable($this->getParentModel())->hasRelation($relation->getAlias()))
+            ) {
                 $relations[] = $relation;
             }
         }
@@ -217,16 +237,16 @@ class sfDoctrineFormGenerator extends sfGenerator
      * This method does not returns foreign keys that are also primary keys.
      *
      * @return array An array composed of:
-     *                 * The foreign table PHP name
-     *                 * The foreign key PHP name
-     *                 * A Boolean to indicate whether the column is required or not
-     *                 * A Boolean to indicate whether the column is a many to many relationship or not
+     *               * The foreign table PHP name
+     *               * The foreign key PHP name
+     *               * A Boolean to indicate whether the column is required or not
+     *               * A Boolean to indicate whether the column is a many to many relationship or not
      */
     public function getForeignKeyNames()
     {
         $names = [];
         foreach ($this->table->getRelations() as $relation) {
-            if ($relation->getType() === Doctrine_Relation::ONE) {
+            if (Doctrine_Relation::ONE === $relation->getType()) {
                 $foreignDef = $relation->getTable()->getDefinitionOf($relation->getForeignFieldName());
                 $names[] = [$relation['table']->getOption('name'), $relation->getForeignFieldName(), $this->isColumnNotNull($relation->getForeignFieldName(), $foreignDef), false];
             }
@@ -256,37 +276,52 @@ class sfDoctrineFormGenerator extends sfGenerator
     /**
      * Returns a sfWidgetForm class name for a given column.
      *
-     * @param  sfDoctrineColumn $column
-     * @return string    The name of a subclass of sfWidgetForm
+     * @param sfDoctrineColumn $column
+     *
+     * @return string The name of a subclass of sfWidgetForm
      */
     public function getWidgetClassForColumn($column)
     {
         switch ($column->getDoctrineType()) {
-      case 'string':
-        $widgetSubclass = null === $column->getLength() || $column->getLength() > 255 ? 'Textarea' : 'InputText';
-        break;
-      case 'boolean':
-        $widgetSubclass = 'InputCheckbox';
-        break;
-      case 'blob':
-      case 'clob':
-        $widgetSubclass = 'Textarea';
-        break;
-      case 'date':
-        $widgetSubclass = 'Date';
-        break;
-      case 'time':
-        $widgetSubclass = 'Time';
-        break;
-      case 'timestamp':
-        $widgetSubclass = 'DateTime';
-        break;
-      case 'enum':
-        $widgetSubclass = 'Choice';
-        break;
-      default:
-        $widgetSubclass = 'InputText';
-    }
+            case 'string':
+                $widgetSubclass = null === $column->getLength() || $column->getLength() > 255 ? 'Textarea' : 'InputText';
+
+                break;
+
+            case 'boolean':
+                $widgetSubclass = 'InputCheckbox';
+
+                break;
+
+            case 'blob':
+            case 'clob':
+                $widgetSubclass = 'Textarea';
+
+                break;
+
+            case 'date':
+                $widgetSubclass = 'Date';
+
+                break;
+
+            case 'time':
+                $widgetSubclass = 'Time';
+
+                break;
+
+            case 'timestamp':
+                $widgetSubclass = 'DateTime';
+
+                break;
+
+            case 'enum':
+                $widgetSubclass = 'Choice';
+
+                break;
+
+            default:
+                $widgetSubclass = 'InputText';
+        }
 
         if ($column->isPrimaryKey()) {
             $widgetSubclass = 'InputHidden';
@@ -321,49 +356,68 @@ class sfDoctrineFormGenerator extends sfGenerator
      * Returns a sfValidator class name for a given column.
      *
      * @param sfDoctrineColumn $column
-     * @return string    The name of a subclass of sfValidator
+     *
+     * @return string The name of a subclass of sfValidator
      */
     public function getValidatorClassForColumn($column)
     {
         switch ($column->getDoctrineType()) {
-      case 'boolean':
-        $validatorSubclass = 'Boolean';
-        break;
-      case 'string':
-            if ($column->getDefinitionKey('email')) {
-                $validatorSubclass = 'Email';
-            } elseif ($column->getDefinitionKey('regexp')) {
-                $validatorSubclass = 'Regex';
-            } else {
+            case 'boolean':
+                $validatorSubclass = 'Boolean';
+
+                break;
+
+            case 'string':
+                if ($column->getDefinitionKey('email')) {
+                    $validatorSubclass = 'Email';
+                } elseif ($column->getDefinitionKey('regexp')) {
+                    $validatorSubclass = 'Regex';
+                } else {
+                    $validatorSubclass = 'String';
+                }
+
+                break;
+
+            case 'clob':
+            case 'blob':
                 $validatorSubclass = 'String';
-            }
-        break;
-      case 'clob':
-      case 'blob':
-        $validatorSubclass = 'String';
-        break;
-      case 'float':
-      case 'decimal':
-        $validatorSubclass = 'Number';
-        break;
-      case 'integer':
-        $validatorSubclass = 'Integer';
-        break;
-      case 'date':
-        $validatorSubclass = 'Date';
-        break;
-      case 'time':
-        $validatorSubclass = 'Time';
-        break;
-      case 'timestamp':
-        $validatorSubclass = 'DateTime';
-        break;
-      case 'enum':
-        $validatorSubclass = 'Choice';
-        break;
-      default:
-        $validatorSubclass = 'Pass';
-    }
+
+                break;
+
+            case 'float':
+            case 'decimal':
+                $validatorSubclass = 'Number';
+
+                break;
+
+            case 'integer':
+                $validatorSubclass = 'Integer';
+
+                break;
+
+            case 'date':
+                $validatorSubclass = 'Date';
+
+                break;
+
+            case 'time':
+                $validatorSubclass = 'Time';
+
+                break;
+
+            case 'timestamp':
+                $validatorSubclass = 'DateTime';
+
+                break;
+
+            case 'enum':
+                $validatorSubclass = 'Choice';
+
+                break;
+
+            default:
+                $validatorSubclass = 'Pass';
+        }
 
         if ($column->isForeignKey()) {
             $validatorSubclass = 'DoctrineChoice';
@@ -378,7 +432,8 @@ class sfDoctrineFormGenerator extends sfGenerator
      * Returns a PHP string representing options to pass to a validator for a given column.
      *
      * @param sfDoctrineColumn $column
-     * @return string    The options to pass to the validator as a PHP string
+     *
+     * @return string The options to pass to the validator as a PHP string
      */
     public function getValidatorOptionsForColumn($column)
     {
@@ -390,21 +445,24 @@ class sfDoctrineFormGenerator extends sfGenerator
             $options[] = sprintf('\'choices\' => array($this->getObject()->get(\'%s\')), \'empty_value\' => $this->getObject()->get(\'%1$s\')', $column->getFieldName());
         } else {
             switch ($column->getDoctrineType()) {
-        case 'string':
-          if ($column['length']) {
-              $options[] = sprintf('\'max_length\' => %s', $column['length']);
-          }
-          if (isset($column['minlength'])) {
-              $options[] = sprintf('\'min_length\' => %s', $column['minlength']);
-          }
-          if (isset($column['regexp'])) {
-              $options[] = sprintf('\'pattern\' => \'%s\'', $column['regexp']);
-          }
-          break;
-        case 'enum':
-          $options[] = '\'choices\' => '.$this->arrayExport($column['values']);
-          break;
-      }
+                case 'string':
+                    if ($column['length']) {
+                        $options[] = sprintf('\'max_length\' => %s', $column['length']);
+                    }
+                    if (isset($column['minlength'])) {
+                        $options[] = sprintf('\'min_length\' => %s', $column['minlength']);
+                    }
+                    if (isset($column['regexp'])) {
+                        $options[] = sprintf('\'pattern\' => \'%s\'', $column['regexp']);
+                    }
+
+                    break;
+
+                case 'enum':
+                    $options[] = '\'choices\' => '.$this->arrayExport($column['values']);
+
+                    break;
+            }
         }
 
         // If notnull = false, is a primary or the column has a default value then
@@ -419,7 +477,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     /**
      * Returns the maximum length for a column name.
      *
-     * @return integer The length of the longer column name
+     * @return int The length of the longer column name
      */
     public function getColumnNameMaxLength()
     {
@@ -464,7 +522,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     /**
      * Returns true if the current table is internationalized.
      *
-     * @return Boolean true if the current table is internationalized, false otherwise
+     * @return bool true if the current table is internationalized, false otherwise
      */
     public function isI18n()
     {
@@ -518,7 +576,7 @@ class sfDoctrineFormGenerator extends sfGenerator
         foreach ($indexes as $name => $index) {
             $index['fields'] = (array) $index['fields'];
 
-            if (isset($index['type']) && $index['type'] == 'unique') {
+            if (isset($index['type']) && 'unique' == $index['type']) {
                 $tmp = $index['fields'];
                 if (is_array(array_shift($tmp))) {
                     $uniqueColumns[] = array_keys($index['fields']);
@@ -538,7 +596,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     {
         Doctrine_Core::loadModels($this->generatorManager->getConfiguration()->getModelDirs());
         $models = Doctrine_Core::getLoadedModels();
-        $models =  Doctrine_Core::initializeModels($models);
+        $models = Doctrine_Core::initializeModels($models);
         $models = Doctrine_Core::filterInvalidModels($models);
         $this->models = $this->filterModels($models);
 
@@ -546,7 +604,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     }
 
     /**
-     * Filter out models that have disabled generation of form classes
+     * Filter out models that have disabled generation of form classes.
      *
      * @return array $models Array of models to generate forms for
      */
@@ -569,9 +627,10 @@ class sfDoctrineFormGenerator extends sfGenerator
     }
 
     /**
-     * Array export. Export array to formatted php code
+     * Array export. Export array to formatted php code.
      *
      * @param array $values
+     *
      * @return string $php
      */
     protected function arrayExport($values)
@@ -580,8 +639,8 @@ class sfDoctrineFormGenerator extends sfGenerator
         $php = str_replace("\n", '', $php);
         $php = str_replace('array (  ', 'array(', $php);
         $php = str_replace(',)', ')', $php);
-        $php = str_replace('  ', ' ', $php);
-        return $php;
+
+        return str_replace('  ', ' ', $php);
     }
 
     /**
@@ -591,7 +650,10 @@ class sfDoctrineFormGenerator extends sfGenerator
      */
     public function getParentModel()
     {
-        $baseClasses = ['Doctrine_Record', 'sfDoctrineRecord'];
+        $baseClasses = [
+            'Doctrine_Record',
+            'sfDoctrineRecord',
+        ];
 
         $builderOptions = sfConfig::get('doctrine_model_builder_options', []);
         if (isset($builderOptions['baseClassName'])) {
@@ -613,7 +675,7 @@ class sfDoctrineFormGenerator extends sfGenerator
     }
 
     /**
-     * Get the name of the form class to extend based on the inheritance of the model
+     * Get the name of the form class to extend based on the inheritance of the model.
      *
      * @return string
      */

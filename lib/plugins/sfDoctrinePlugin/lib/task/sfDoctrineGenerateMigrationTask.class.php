@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Inserts SQL for current model.
@@ -24,15 +24,21 @@ class sfDoctrineGenerateMigrationTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The name of the migration')]);
+        $this->addArguments([
+            new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The name of the migration'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'), new sfCommandOption('editor-cmd', null, sfCommandOption::PARAMETER_REQUIRED, 'Open script with this command upon creation')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('editor-cmd', null, sfCommandOption::PARAMETER_REQUIRED, 'Open script with this command upon creation'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'generate-migration';
         $this->briefDescription = 'Generate migration class';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:generate-migration|INFO] task generates migration template
 
   [./symfony doctrine:generate-migration AddUserEmailColumn|INFO]
@@ -65,7 +71,11 @@ EOF;
             $file = array_pop($files);
 
             $contents = file_get_contents($file);
-            $contents = strtr(sfToolkit::stripComments($contents), ["{\n\n" => "{\n", "\n}"   => "\n}\n", '    '  => '  ']);
+            $contents = strtr(sfToolkit::stripComments($contents), [
+                "{\n\n" => "{\n",
+                "\n}" => "\n}\n",
+                '    ' => '  ',
+            ]);
             file_put_contents($file, $contents);
 
             if (isset($options['editor-cmd'])) {

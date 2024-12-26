@@ -11,7 +11,7 @@
 require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
 
 /**
- * Delete all generated model classes for models which no longer exist in your YAML schema
+ * Delete all generated model classes for models which no longer exist in your YAML schema.
  *
  * @author     Jonathan H. Wage <jonwage@gmail.com>
  */
@@ -19,14 +19,16 @@ class sfDoctrineCleanModelFilesTask extends sfDoctrineBaseTask
 {
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Do not ask for confirmation')]);
+        $this->addOptions([
+            new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Do not ask for confirmation'),
+        ]);
 
         $this->aliases = ['doctrine:clean'];
         $this->namespace = 'doctrine';
         $this->name = 'clean-model-files';
         $this->briefDescription = 'Delete all generated model classes for models which no longer exist in your YAML schema';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:clean-model-files|INFO] task deletes model classes that are not
 represented in project or plugin schema.yml files:
 
@@ -102,6 +104,7 @@ EOF;
     protected function getFileModels($modelsPath)
     {
         Doctrine_Core::loadModels($modelsPath);
+
         return Doctrine_Core::getLoadedModels();
     }
 }

@@ -10,7 +10,7 @@
  */
 
 /**
- * Represents a Doctrine column
+ * Represents a Doctrine column.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
@@ -18,39 +18,67 @@
 class sfDoctrineColumn implements ArrayAccess
 {
     /**
-     * Array mapping Doctrine column types to the native symfony type
+     * Array mapping Doctrine column types to the native symfony type.
      */
-    public static $doctrineToSymfony = ['boolean'   => 'BOOLEAN', 'string'    => 'LONGVARCHAR', 'integer'   => 'INTEGER', 'date'      => 'DATE', 'timestamp' => 'TIMESTAMP', 'time'      => 'TIME', 'enum'      => 'LONGVARCHAR', 'float'     => 'FLOAT', 'double'    => 'DOUBLE', 'clob'      => 'CLOB', 'blob'      => 'BLOB', 'object'    => 'LONGVARCHAR', 'array'     => 'LONGVARCHAR', 'decimal'   => 'DECIMAL'];
+    public static $doctrineToSymfony = [
+        'boolean' => 'BOOLEAN',
+        'string' => 'LONGVARCHAR',
+        'integer' => 'INTEGER',
+        'date' => 'DATE',
+        'timestamp' => 'TIMESTAMP',
+        'time' => 'TIME',
+        'enum' => 'LONGVARCHAR',
+        'float' => 'FLOAT',
+        'double' => 'DOUBLE',
+        'clob' => 'CLOB',
+        'blob' => 'BLOB',
+        'object' => 'LONGVARCHAR',
+        'array' => 'LONGVARCHAR',
+        'decimal' => 'DECIMAL',
+    ];
 
     /**
      * Store the name of the related class for this column if it is
-     * a foreign key
+     * a foreign key.
      *
      * @var string
      */
-    protected $foreignClassName = null;
+    protected $foreignClassName;
 
     /**
-     * Doctrine_Table instance this column belongs to
-     *
-     * @var Doctrine_Table $table
-     */
-    protected $table = null;
-
-    /**
-     * Field name of the column
+     * Store the name of the related column for this column if it is
+     * a foreign key.
      *
      * @var string
      */
-    protected $name = null;
+    protected $foreignFieldName;
 
     /**
-     * Definition of the column
+     * Doctrine_Table instance this column belongs to.
      *
-     * @var array $definition
+     * @var Doctrine_Table
+     */
+    protected $table;
+
+    /**
+     * Field name of the column.
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * Definition of the column.
+     *
+     * @var array
      */
     protected $definition = [];
 
+    /**
+     * Constructor.
+     *
+     * @param string $name
+     */
     public function __construct($name, Doctrine_Table $table)
     {
         $this->name = $name;
@@ -59,7 +87,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get the name of the column
+     * Get the name of the column.
      *
      * @return string $name
      */
@@ -69,7 +97,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get the alias/field name
+     * Get the alias/field name.
      *
      * @return string $fieldName
      */
@@ -79,7 +107,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get php name. Exists for backwards compatibility with propel orm
+     * Get php name. Exists for backwards compatibility with propel orm.
      *
      * @return string $fieldName
      */
@@ -89,9 +117,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get the Doctrine type of the column
-     *
-     * @return void
+     * Get the Doctrine type of the column.
      */
     public function getDoctrineType()
     {
@@ -99,9 +125,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get symfony type of the column
-     *
-     * @return void
+     * Get symfony type of the column.
      */
     public function getType()
     {
@@ -116,9 +140,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get size/length of the column
-     *
-     * @return void
+     * Get size/length of the column.
      */
     public function getSize()
     {
@@ -131,29 +153,31 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Check if the column definition has a certain key
+     * Check if the column definition has a certain key.
      *
      * @param string $key
+     *
      * @return bool
      */
     public function hasDefinitionKey($key)
     {
-        return isset($this->definition[$key]) ? true:false;
+        return isset($this->definition[$key]) ? true : false;
     }
 
     /**
-     * Get the value of a column definition key
+     * Get the value of a column definition key.
      *
      * @param string $key
+     *
      * @return array $definition
      */
     public function getDefinitionKey($key)
     {
         if ($this->hasDefinitionKey($key)) {
             return $this->definition[$key];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -177,9 +201,9 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Returns true of the column is not null and false if it is null
+     * Returns true of the column is not null and false if it is null.
      *
-     * @return boolean
+     * @return bool
      */
     public function isNotNull()
     {
@@ -187,9 +211,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Returns true if the column is a primary key and false if it is not
-     *
-     * @return void
+     * Returns true if the column is a primary key and false if it is not.
      */
     public function isPrimaryKey()
     {
@@ -197,9 +219,9 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Returns true if this column is a foreign key and false if it is not
+     * Returns true if this column is a foreign key and false if it is not.
      *
-     * @return boolean $isForeignKey
+     * @return bool $isForeignKey
      */
     public function isForeignKey()
     {
@@ -216,9 +238,14 @@ class sfDoctrineColumn implements ArrayAccess
             $local = array_map('strtolower', $local);
             if (in_array(strtolower($this->name), $local)) {
                 $this->foreignClassName = $relation['class'];
+                if (Doctrine_Relation::ONE === $relation->getType()) {
+                    $this->foreignFieldName = $relation['foreign'];
+                }
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -231,13 +258,27 @@ class sfDoctrineColumn implements ArrayAccess
     {
         if ($this->isForeignKey()) {
             return $this->foreignClassName;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * If foreign key get the related Doctrine_Table object
+     * Get the name of the related field for this column foreign key.
+     *
+     * @return string
+     */
+    public function getForeignFieldName()
+    {
+        if ($this->isForeignKey()) {
+            return $this->foreignFieldName;
+        }
+
+        return false;
+    }
+
+    /**
+     * If foreign key get the related Doctrine_Table object.
      *
      * @return Doctrine_Table $table
      */
@@ -245,16 +286,13 @@ class sfDoctrineColumn implements ArrayAccess
     {
         if ($this->isForeignKey()) {
             return Doctrine_Core::getTable($this->foreignClassName);
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
-     * Set the Doctrine_Table object this column belongs to
-     *
-     * @param Doctrine_Table $table
-     * @return void
+     * Set the Doctrine_Table object this column belongs to.
      */
     public function setTable(Doctrine_Table $table)
     {
@@ -262,7 +300,7 @@ class sfDoctrineColumn implements ArrayAccess
     }
 
     /**
-     * Get the Doctrine_Table object this column belongs to
+     * Get the Doctrine_Table object this column belongs to.
      *
      * @return Doctrine_Table $table
      */
@@ -271,21 +309,25 @@ class sfDoctrineColumn implements ArrayAccess
         return $this->table;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->definition[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->definition[$offset] = $value;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->definition[$offset];
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->definition[$offset]);

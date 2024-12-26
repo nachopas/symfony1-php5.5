@@ -16,48 +16,42 @@
 class defaultActions extends sfActions
 {
     /**
-     * Congratulations page for creating an application
-     *
+     * Congratulations page for creating an application.
      */
     public function executeIndex()
     {
     }
 
     /**
-     * Congratulations page for creating a module
-     *
+     * Congratulations page for creating a module.
      */
     public function executeModule()
     {
     }
 
     /**
-     * Error page for page not found (404) error
-     *
+     * Error page for page not found (404) error.
      */
     public function executeError404()
     {
     }
 
     /**
-     * Warning page for restricted area - requires login
-     *
+     * Warning page for restricted area - requires login.
      */
     public function executeSecure()
     {
     }
 
     /**
-     * Warning page for restricted area - requires credentials
-     *
+     * Warning page for restricted area - requires credentials.
      */
     public function executeLogin()
     {
     }
 
     /**
-     * Module disabled in settings.yml
-     *
+     * Module disabled in settings.yml.
      */
     public function executeDisabled()
     {

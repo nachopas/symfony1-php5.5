@@ -22,8 +22,8 @@ class sfWidgetFormI18nTime extends sfWidgetFormTime
      *
      *  * culture: The culture to use for internationalized strings (required)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormTime
      */
@@ -50,7 +50,10 @@ class sfWidgetFormI18nTime extends sfWidgetFormTime
             return $this->getOption('format');
         }
 
-        $trans = [substr($timeFormat, $hourPos, strripos($timeFormat, 'h') - $hourPos + 1)   => '%hour%', substr($timeFormat, $minutePos, strripos($timeFormat, 'm') - $minutePos + 1) => '%minute%'];
+        $trans = [
+            substr($timeFormat, $hourPos, strripos($timeFormat, 'h') - $hourPos + 1) => '%hour%',
+            substr($timeFormat, $minutePos, strripos($timeFormat, 'm') - $minutePos + 1) => '%minute%',
+        ];
 
         if ($withSeconds) {
             if (false === $secondPos = stripos($timeFormat, 's')) {

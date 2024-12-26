@@ -38,7 +38,7 @@ class sfTesterRequest extends sfTester
      * @param string $key
      * @param string $value
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isParameter($key, $value)
     {
@@ -50,9 +50,9 @@ class sfTesterRequest extends sfTester
     /**
      * Tests for the request is in the given format.
      *
-     * @param  string $format  The request format
+     * @param string $format The request format
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isFormat($format)
     {
@@ -62,11 +62,11 @@ class sfTesterRequest extends sfTester
     }
 
     /**
-     * Tests if the current HTTP method matches the given one
+     * Tests if the current HTTP method matches the given one.
      *
-     * @param  string  $method  The HTTP method name
+     * @param string $method The HTTP method name
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isMethod($method)
     {
@@ -78,10 +78,10 @@ class sfTesterRequest extends sfTester
     /**
      * Checks if a cookie exists.
      *
-     * @param string  $name   The cookie name
-     * @param Boolean $exists Whether the cookie must exist or not
+     * @param string $name   The cookie name
+     * @param bool   $exists Whether the cookie must exist or not
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function hasCookie($name, $exists = true)
     {
@@ -107,10 +107,10 @@ class sfTesterRequest extends sfTester
     /**
      * Checks the value of a cookie.
      *
-     * @param string $name   The cookie name
-     * @param mixed  $value  The expected value
+     * @param string $name  The cookie name
+     * @param mixed  $value The expected value
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isCookie($name, $value)
     {
@@ -121,7 +121,7 @@ class sfTesterRequest extends sfTester
         }
 
         if (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match)) {
-            if ($match[1] == '!') {
+            if ('!' == $match[1]) {
                 $this->tester->unlike($_COOKIE[$name], substr($value, 1), sprintf('cookie "%s" content does not match regex "%s"', $name, $value));
             } else {
                 $this->tester->like($_COOKIE[$name], $value, sprintf('cookie "%s" content matches regex "%s"', $name, $value));

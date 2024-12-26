@@ -15,7 +15,7 @@
  */
 class sfCommandOptionSet
 {
-    protected $options   = [];
+    protected $options = [];
     protected $shortcuts = [];
 
     /**
@@ -56,12 +56,15 @@ class sfCommandOptionSet
      * Add a sfCommandOption objects.
      *
      * @param sfCommandOption $option A sfCommandOption object
+     *
+     * @throws sfCommandException
      */
     public function addOption(sfCommandOption $option)
     {
         if (isset($this->options[$option->getName()])) {
             throw new sfCommandException(sprintf('An option named "%s" already exist.', $option->getName()));
-        } elseif (isset($this->shortcuts[$option->getShortcut()])) {
+        }
+        if (isset($this->shortcuts[$option->getShortcut()])) {
             throw new sfCommandException(sprintf('An option with shortcut "%s" already exist.', $option->getShortcut()));
         }
 
@@ -77,6 +80,8 @@ class sfCommandOptionSet
      * @param string $name The option name
      *
      * @return sfCommandOption A sfCommandOption object
+     *
+     * @throws sfCommandException
      */
     public function getOption($name)
     {
@@ -92,7 +97,7 @@ class sfCommandOptionSet
      *
      * @param string $name The option name
      *
-     * @return Boolean true if the option object exists, false otherwise
+     * @return bool true if the option object exists, false otherwise
      */
     public function hasOption($name)
     {
@@ -102,7 +107,7 @@ class sfCommandOptionSet
     /**
      * Gets the array of sfCommandOption objects.
      *
-     * @return array An array of sfCommandOption objects
+     * @return sfCommandOption[] An array of sfCommandOption objects
      */
     public function getOptions()
     {
@@ -114,7 +119,7 @@ class sfCommandOptionSet
      *
      * @param string $name The option shortcut
      *
-     * @return Boolean true if the option object exists, false otherwise
+     * @return bool true if the option object exists, false otherwise
      */
     public function hasShortcut($name)
     {
@@ -123,6 +128,8 @@ class sfCommandOptionSet
 
     /**
      * Gets an option by shortcut.
+     *
+     * @param string $shortcut
      *
      * @return sfCommandOption A sfCommandOption object
      */
@@ -152,6 +159,8 @@ class sfCommandOptionSet
      * @param string $shortcut The shortcut
      *
      * @return string The option name
+     *
+     * @throws sfCommandException
      */
     protected function shortcutToName($shortcut)
     {

@@ -18,14 +18,21 @@
  */
 abstract class sfDatabase
 {
-    protected $parameterHolder = null;
-    protected $connection      = null;
-    protected $resource        = null;
+    /** @var sfParameterHolder */
+    protected $parameterHolder;
+
+    /** @var PDO|resource */
+    protected $connection;
+
+    /** @var PDO|resource (It's interchangeable with. Can be dropped at all.) */
+    protected $resource;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $parameters An associative array of initialization parameters
      */
     public function __construct($parameters = [])
     {
@@ -37,9 +44,7 @@ abstract class sfDatabase
      *
      * @param array $parameters An associative array of initialization parameters
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfDatabase object
+     * @throws sfInitializationException If an error occurs while initializing this sfDatabase object
      */
     public function initialize($parameters = [])
     {
@@ -50,7 +55,7 @@ abstract class sfDatabase
     /**
      * Connects to the database.
      *
-     * @throws <b>sfDatabaseException</b> If a connection could not be created
+     * @throws sfDatabaseException If a connection could not be created
      */
     abstract public function connect();
 
@@ -62,7 +67,7 @@ abstract class sfDatabase
      *
      * @return mixed A database connection
      *
-     * @throws <b>sfDatabaseException</b> If a connection could not be retrieved
+     * @throws sfDatabaseException If a connection could not be retrieved
      */
     public function getConnection()
     {
@@ -78,7 +83,7 @@ abstract class sfDatabase
      *
      * @return mixed A database resource
      *
-     * @throws <b>sfDatabaseException</b> If a resource could not be retrieved
+     * @throws sfDatabaseException If a resource could not be retrieved
      */
     public function getResource()
     {
@@ -127,7 +132,7 @@ abstract class sfDatabase
      *
      * @param string $name The key name
      *
-     * @return boolean true if the given key exists, false otherwise
+     * @return bool true if the given key exists, false otherwise
      *
      * @see sfParameterHolder
      */
@@ -156,9 +161,7 @@ abstract class sfDatabase
     /**
      * Executes the shutdown procedure.
      *
-     * @return void
-     *
-     * @throws <b>sfDatabaseException</b> If an error occurs while shutting down this database
+     * @throws sfDatabaseException If an error occurs while shutting down this database
      */
     abstract public function shutdown();
 }

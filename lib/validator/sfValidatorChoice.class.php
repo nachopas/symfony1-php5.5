@@ -25,8 +25,8 @@ class sfValidatorChoice extends sfValidatorBase
      *  * min:      The minimum number of values that need to be selected (this option is only active if multiple is true)
      *  * max:      The maximum number of values that need to be selected (this option is only active if multiple is true)
      *
-     * @param array $options    An array of options
-     * @param array $messages   An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -59,6 +59,11 @@ class sfValidatorChoice extends sfValidatorBase
         return $value;
     }
 
+    /**
+     * Get choices.
+     *
+     * @return array
+     */
     public function getChoices()
     {
         $choices = $this->getOption('choices');
@@ -72,7 +77,7 @@ class sfValidatorChoice extends sfValidatorBase
     /**
      * Cleans a value when multiple is true.
      *
-     * @param  mixed $value The submitted value
+     * @param mixed $value The submitted value
      *
      * @return array The cleaned value
      */
@@ -102,12 +107,12 @@ class sfValidatorChoice extends sfValidatorBase
     }
 
     /**
-     * Checks if a value is part of given choices (see bug #4212)
+     * Checks if a value is part of given choices (see bug #4212).
      *
-     * @param  mixed $value   The value to check
-     * @param  array $choices The array of available choices
+     * @param mixed $value   The value to check
+     * @param array $choices The array of available choices
      *
-     * @return Boolean
+     * @return bool
      */
     protected static function inChoices($value, array $choices = [])
     {
@@ -115,6 +120,35 @@ class sfValidatorChoice extends sfValidatorBase
             if ((string) $choice == (string) $value) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns true if the value is empty.
+     *
+     * @param mixed $value The input value
+     *
+     * @return bool true if the value is empty, false otherwise
+     */
+    protected function isEmpty($value)
+    {
+        if (parent::isEmpty($value)) {
+            return true;
+        }
+
+        if (is_array($value)) {
+            $isEmpty = true;
+            foreach ($value as $v) {
+                if (!parent::isEmpty($v)) {
+                    $isEmpty = false;
+
+                    break;
+                }
+            }
+
+            return $isEmpty;
         }
 
         return false;

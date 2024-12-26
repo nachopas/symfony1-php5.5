@@ -19,9 +19,10 @@
 /**
  * Constructs an html tag.
  *
- * @param  string $name     tag name
- * @param  array  $options  tag options
- * @param  bool   $open     true to leave tag open
+ * @param string $name    tag name
+ * @param array  $options tag options
+ * @param bool   $open    true to leave tag open
+ *
  * @return string
  */
 function tag($name, $options = [], $open = false)
@@ -30,7 +31,7 @@ function tag($name, $options = [], $open = false)
         return '';
     }
 
-    return '<'.$name._tag_options($options).(($open) ? '>' : ' />');
+    return '<'.$name._tag_options($options).($open ? '>' : ' />');
 }
 
 function content_tag($name, $content = '', $options = [])
@@ -44,14 +45,14 @@ function content_tag($name, $content = '', $options = [])
 
 function cdata_section($content)
 {
-    return "<![CDATA[$content]]>";
+    return "<![CDATA[{$content}]]>";
 }
 
 /**
  * Wraps the content in conditional comments.
  *
- * @param  string $condition
- * @param  string $content
+ * @param string $condition
+ * @param string $content
  *
  * @return string
  *
@@ -59,7 +60,7 @@ function cdata_section($content)
  */
 function comment_as_conditional($condition, $content)
 {
-    return "<!--[if $condition]>$content<![endif]-->";
+    return "<!--[if {$condition}]>{$content}<![endif]-->";
 }
 
 /**
@@ -67,16 +68,16 @@ function comment_as_conditional($condition, $content)
  */
 function escape_javascript($javascript = '')
 {
-    $javascript = preg_replace('/\r\n|\n|\r/', "\\n", $javascript);
-    $javascript = preg_replace('/(["\'])/', '\\\\\1', $javascript);
+    $javascript = preg_replace('/\r\n|\n|\r/', '\\n', $javascript);
 
-    return $javascript;
+    return preg_replace('/(["\'])/', '\\\\\1', $javascript);
 }
 
 /**
  * Escapes an HTML string.
  *
- * @param  string $html HTML string to escape
+ * @param string $html HTML string to escape
+ *
  * @return string escaped string
  */
 function escape_once($html)
@@ -87,7 +88,8 @@ function escape_once($html)
 /**
  * Fixes double escaped strings.
  *
- * @param  string $escaped HTML string to fix
+ * @param string $escaped HTML string to fix
+ *
  * @return string fixed escaped string
  */
 function fix_double_escape($escaped)
@@ -141,25 +143,26 @@ function _get_option(&$options, $name, $default = null)
  *  echo get_id_from_name('status[]', '1');
  * </code>
  *
- * @param  string $name   field name
- * @param  string $value  field value
+ * @param string $name  field name
+ * @param string $value field value
  *
- * @return string <select> tag populated with all the languages in the world.
+ * @return string <select> tag populated with all the languages in the world
  */
 function get_id_from_name($name, $value = null)
 {
     // check to see if we have an array variable for a field name
     if (false !== strpos($name, '[')) {
-        $name = str_replace(['[]', '][', '[', ']'], [(($value != null) ? '_'.$value : ''), '_', '_', ''], $name);
+        $name = str_replace(['[]', '][', '[', ']'], [(null != $value) ? '_'.$value : '', '_', '_', ''], $name);
     }
 
     return $name;
 }
 
 /**
- * Converts specific <i>$options</i> to their correct HTML format
+ * Converts specific <i>$options</i> to their correct HTML format.
  *
- * @param  array $options
+ * @param array $options
+ *
  * @return array returns properly formatted options
  */
 function _convert_options($options)

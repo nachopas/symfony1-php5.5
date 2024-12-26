@@ -105,7 +105,7 @@ class sfDomCssSelector implements Countable, Iterator
                     // Token is an ID selector
                     $tagName = substr($token, 0, $pos);
                     $id = substr($token, $pos + 1);
-                    $xpath = new DomXPath($root_node);
+                    $xpath = new DOMXPath($root_node);
                     $element = $xpath->query(sprintf("//*[@id = '%s']", $id))->item(0);
                     if (!$element || ($tagName && strtolower($element->nodeName) != $tagName)) {
                         // tag with that ID not found
@@ -166,31 +166,43 @@ class sfDomCssSelector implements Countable, Iterator
                         foreach ($matches as $match) {
                             $attrName = $match[1];
                             $attrOperator = $match[2];
-                            $attrValue = $match[4] === '' ? ($match[5] ?? '') : $match[4];
+                            $attrValue = '' === $match[4] ? (isset($match[5]) ? $match[5] : '') : $match[4];
 
                             switch ($attrOperator) {
-                case '=': // Equality
-                  $ok = $found->getAttribute($attrName) == $attrValue;
-                  break;
-                case '~': // Match one of space seperated words
-                  $ok = preg_match('/\b'.preg_quote($attrValue, '/').'\b/', $found->getAttribute($attrName));
-                  break;
-                case '|': // Match start with value followed by optional hyphen
-                  $ok = preg_match('/^'.preg_quote($attrValue, '/').'-?/', $found->getAttribute($attrName));
-                  break;
-                case '^': // Match starts with value
-                  $ok = 0 === strpos($found->getAttribute($attrName), $attrValue);
-                  break;
-                case '$': // Match ends with value
-                  $ok = $attrValue == substr($found->getAttribute($attrName), -strlen($attrValue));
-                  break;
-                case '*': // Match ends with value
-                  $ok = false !== strpos($found->getAttribute($attrName), $attrValue);
-                  break;
-                default:
-                  // Just test for existence of attribute
-                  $ok = $found->hasAttribute($attrName);
-              }
+                                case '=': // Equality
+                                    $ok = $found->getAttribute($attrName) == $attrValue;
+
+                                    break;
+
+                                case '~': // Match one of space seperated words
+                                    $ok = preg_match('/\b'.preg_quote($attrValue, '/').'\b/', $found->getAttribute($attrName));
+
+                                    break;
+
+                                case '|': // Match start with value followed by optional hyphen
+                                    $ok = preg_match('/^'.preg_quote($attrValue, '/').'-?/', $found->getAttribute($attrName));
+
+                                    break;
+
+                                case '^': // Match starts with value
+                                    $ok = 0 === strpos($found->getAttribute($attrName), $attrValue);
+
+                                    break;
+
+                                case '$': // Match ends with value
+                                    $ok = $attrValue == substr($found->getAttribute($attrName), -strlen($attrValue));
+
+                                    break;
+
+                                case '*': // Match ends with value
+                                    $ok = false !== strpos($found->getAttribute($attrName), $attrValue);
+
+                                    break;
+
+                                default:
+                                    // Just test for existence of attribute
+                                    $ok = $found->hasAttribute($attrName);
+                            }
 
                             if (false == $ok) {
                                 break;
@@ -227,34 +239,40 @@ class sfDomCssSelector implements Countable, Iterator
         $founds = [];
         foreach ($nodes as $node) {
             switch ($combinator) {
-        case ' ':
-          // Descendant selector
-          foreach ($node->getElementsByTagName($tagName) as $element) {
-              $founds[] = $element;
-          }
-          break;
-        case '>':
-          // Child selector
-          foreach ($node->childNodes as $element) {
-              if ($tagName == $element->nodeName) {
-                  $founds[] = $element;
-              }
-          }
-          break;
-        case '+':
-          // Adjacent selector
-          $element = $node->nextSibling;
-          if ($element && '#text' == $element->nodeName) {
-              $element = $element->nextSibling;
-          }
+                case ' ':
+                    // Descendant selector
+                    foreach ($node->getElementsByTagName($tagName) as $element) {
+                        $founds[] = $element;
+                    }
 
-          if ($element && $tagName == $element->nodeName) {
-              $founds[] = $element;
-          }
-          break;
-        default:
-          throw new Exception(sprintf('Unrecognized combinator "%s".', $combinator));
-      }
+                    break;
+
+                case '>':
+                    // Child selector
+                    foreach ($node->childNodes as $element) {
+                        if ($tagName == $element->nodeName) {
+                            $founds[] = $element;
+                        }
+                    }
+
+                    break;
+
+                case '+':
+                    // Adjacent selector
+                    $element = $node->nextSibling;
+                    if ($element && '#text' == $element->nodeName) {
+                        $element = $element->nextSibling;
+                    }
+
+                    if ($element && $tagName == $element->nodeName) {
+                        $founds[] = $element;
+                    }
+
+                    break;
+
+                default:
+                    throw new Exception(sprintf('Unrecognized combinator "%s".', $combinator));
+            }
         }
 
         return $founds;
@@ -266,7 +284,7 @@ class sfDomCssSelector implements Countable, Iterator
         $tokens = [];
         $quoted = false;
         $token = '';
-        for ($i = 0, $max = strlen($selector); $i < $max; $i++) {
+        for ($i = 0, $max = strlen($selector); $i < $max; ++$i) {
             if (',' == $selector[$i] && !$quoted) {
                 $tokens[] = trim($token);
                 $token = '';
@@ -291,7 +309,7 @@ class sfDomCssSelector implements Countable, Iterator
         $combinators = [' ', '>', '+'];
         $quoted = false;
         $token = ['combinator' => ' ', 'name' => ''];
-        for ($i = 0, $max = strlen($selector); $i < $max; $i++) {
+        for ($i = 0, $max = strlen($selector); $i < $max; ++$i) {
             if (in_array($selector[$i], $combinators) && !$quoted) {
                 // remove all whitespaces around the combinator
                 $combinator = $selector[$i];
@@ -315,7 +333,7 @@ class sfDomCssSelector implements Countable, Iterator
         }
 
         foreach ($tokens as &$token) {
-            [$token['name'], $token['selector']] = $this->tokenize_selector_name($token['name']);
+            list($token['name'], $token['selector']) = $this->tokenize_selector_name($token['name']);
         }
 
         return $tokens;
@@ -328,7 +346,7 @@ class sfDomCssSelector implements Countable, Iterator
         $name = '';
         $selector = '';
         $in_selector = false;
-        for ($i = 0, $max = strlen($token_name); $i < $max; $i++) {
+        for ($i = 0, $max = strlen($token_name); $i < $max; ++$i) {
             if ('"' == $token_name[$i]) {
                 $quoted = $quoted ? false : true;
             }
@@ -356,6 +374,7 @@ class sfDomCssSelector implements Countable, Iterator
         foreach ($this->split_custom_selector($selector) as $selector) {
             $nodes = $this->matchCustomSelector($nodes, $selector);
         }
+
         return $nodes;
     }
 
@@ -367,67 +386,89 @@ class sfDomCssSelector implements Countable, Iterator
 
         $selector = $this->tokenize_custom_selector($selector);
         $matchingNodes = [];
-        for ($i = 0, $max = count($nodes); $i < $max; $i++) {
+        for ($i = 0, $max = count($nodes); $i < $max; ++$i) {
             switch ($selector['selector']) {
-        case 'contains':
-          if (false !== strpos($nodes[$i]->textContent, (string) $selector['parameter'])) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'nth-child':
-          if ($nodes[$i] === $this->nth($nodes[$i]->parentNode->firstChild, (integer) $selector['parameter'])) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'first-child':
-          if ($nodes[$i] === $this->nth($nodes[$i]->parentNode->firstChild)) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'last-child':
-          if ($nodes[$i] === $this->nth($nodes[$i]->parentNode->lastChild, 1, 'previousSibling')) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'lt':
-          if ($i < (integer) $selector['parameter']) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'gt':
-          if ($i > (integer) $selector['parameter']) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'odd':
-          if ($i % 2) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'even':
-          if (0 == $i % 2) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'nth':
-        case 'eq':
-          if ($i == (integer) $selector['parameter']) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'first':
-          if ($i == 0) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        case 'last':
-          if ($i == $max - 1) {
-              $matchingNodes[] = $nodes[$i];
-          }
-          break;
-        default:
-          throw new Exception(sprintf('Unrecognized selector "%s".', $selector['selector']));
-      }
+                case 'contains':
+                    if (false !== strpos($nodes[$i]->textContent, $selector['parameter'])) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'nth-child':
+                    if ($nodes[$i] === $this->nth($nodes[$i]->parentNode->firstChild, (int) $selector['parameter'])) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'first-child':
+                    if ($nodes[$i] === $this->nth($nodes[$i]->parentNode->firstChild)) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'last-child':
+                    if ($nodes[$i] === $this->nth($nodes[$i]->parentNode->lastChild, 1, 'previousSibling')) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'lt':
+                    if ($i < (int) $selector['parameter']) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'gt':
+                    if ($i > (int) $selector['parameter']) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'odd':
+                    if ($i % 2) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'even':
+                    if (0 == $i % 2) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'nth':
+                case 'eq':
+                    if ($i == (int) $selector['parameter']) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'first':
+                    if (0 == $i) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                case 'last':
+                    if ($i == $max - 1) {
+                        $matchingNodes[] = $nodes[$i];
+                    }
+
+                    break;
+
+                default:
+                    throw new Exception(sprintf('Unrecognized selector "%s".', $selector['selector']));
+            }
         }
 
         return $matchingNodes;
@@ -450,6 +491,7 @@ class sfDomCssSelector implements Countable, Iterator
     /x', $selectors, $matches, PREG_PATTERN_ORDER)) {
             throw new Exception(sprintf('Unable to split custom selector "%s".', $selectors));
         }
+
         return $matches[0];
     }
 
@@ -469,13 +511,14 @@ class sfDomCssSelector implements Countable, Iterator
     /x', substr($selector, 1), $matches)) {
             throw new Exception(sprintf('Unable to parse custom selector "%s".', $selector));
         }
+
         return ['selector' => $matches[1], 'parameter' => isset($matches[3]) ? ($matches[3] ?: $matches[4]) : ''];
     }
 
     protected function nth($cur, $result = 1, $dir = 'nextSibling')
     {
         $num = 0;
-        for (; $cur; $cur = $cur->$dir) {
+        for (; $cur; $cur = $cur->{$dir}) {
             if (1 == $cur->nodeType) {
                 ++$num;
             }
@@ -489,6 +532,7 @@ class sfDomCssSelector implements Countable, Iterator
     /**
      * Reset the array to the beginning (as required for the Iterator interface).
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->nodes);
@@ -501,6 +545,7 @@ class sfDomCssSelector implements Countable, Iterator
      *
      * @return string The key
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->nodes);
@@ -511,6 +556,7 @@ class sfDomCssSelector implements Countable, Iterator
      *
      * @return mixed The escaped value
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->nodes);
@@ -519,11 +565,12 @@ class sfDomCssSelector implements Countable, Iterator
     /**
      * Moves to the next element (as required by the Iterator interface).
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->nodes);
 
-        $this->count --;
+        --$this->count;
     }
 
     /**
@@ -535,6 +582,7 @@ class sfDomCssSelector implements Countable, Iterator
      *
      * @return bool The validity of the current element; true if it is valid
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->count > 0;
@@ -543,8 +591,9 @@ class sfDomCssSelector implements Countable, Iterator
     /**
      * Returns the number of matching nodes (implements Countable).
      *
-     * @param integer The number of matching nodes
+     * @param int The number of matching nodes
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->nodes);

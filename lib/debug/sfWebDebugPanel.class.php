@@ -15,8 +15,8 @@
  */
 abstract class sfWebDebugPanel
 {
-    protected $webDebug = null;
-    protected $status   = sfLogger::INFO;
+    protected $webDebug;
+    protected $status = sfLogger::INFO;
 
     /**
      * Constructor.
@@ -61,7 +61,7 @@ abstract class sfWebDebugPanel
     /**
      * Returns the current status.
      *
-     * @return integer A {@link sfLogger} priority constant
+     * @return int A {@link sfLogger} priority constant
      */
     public function getStatus()
     {
@@ -71,7 +71,7 @@ abstract class sfWebDebugPanel
     /**
      * Sets the current panel's status.
      *
-     * @param integer $status A {@link sfLogger} priority constant
+     * @param int $status A {@link sfLogger} priority constant
      */
     public function setStatus($status)
     {
@@ -81,8 +81,8 @@ abstract class sfWebDebugPanel
     /**
      * Returns a toggler element.
      *
-     * @param  string $element The value of an element's DOM id attribute
-     * @param  string $title   A title attribute
+     * @param string $element The value of an element's DOM id attribute
+     * @param string $title   A title attribute
      *
      * @return string
      */
@@ -94,7 +94,7 @@ abstract class sfWebDebugPanel
     /**
      * Returns a toggleable presentation of a debug stack.
      *
-     * @param  array $debugStack
+     * @param array $debugStack
      *
      * @return string
      */
@@ -109,13 +109,13 @@ abstract class sfWebDebugPanel
         $element = get_class($this).'Debug'.$i++;
         $keys = array_reverse(array_keys($debugStack));
 
-        $html  = $this->getToggler($element, 'Toggle debug stack');
+        $html = $this->getToggler($element, 'Toggle debug stack');
         $html .= '<div class="sfWebDebugDebugInfo" id="'.$element.'" style="display:none">';
         foreach ($debugStack as $j => $trace) {
             $file = $trace['file'] ?? null;
             $line = $trace['line'] ?? null;
 
-            $isProjectFile = $file && 0 === strpos($file, (string) sfConfig::get('sf_root_dir')) && !preg_match('/(cache|plugins|vendor)/', $file);
+            $isProjectFile = $file && 0 === strpos($file, sfConfig::get('sf_root_dir')) && !preg_match('/(cache|plugins|vendor)/', $file);
 
             $html .= sprintf('<span%s>#%s &raquo; ', $isProjectFile ? ' class="sfWebDebugHighlight"' : '', $keys[$j] + 1);
 
@@ -139,9 +139,9 @@ abstract class sfWebDebugPanel
     /**
      * Formats a file link.
      *
-     * @param  string  $file A file path or class name
-     * @param  integer $line
-     * @param  string  $text Text to use for the link
+     * @param string $file A file path or class name
+     * @param int    $line
+     * @param string $text Text to use for the link
      *
      * @return string
      */
@@ -166,21 +166,22 @@ abstract class sfWebDebugPanel
                 '<a href="%s" class="sfWebDebugFileLink" title="%s">%s</a>',
                 htmlspecialchars(strtr($linkFormat, ['%f' => $file, '%l' => $line]), ENT_QUOTES, sfConfig::get('sf_charset')),
                 htmlspecialchars($shortFile, ENT_QUOTES, sfConfig::get('sf_charset')),
-                $text ?? $shortFile
+                null === $text ? $shortFile : $text
             );
-        } elseif (null === $text) {
+        }
+        if (null === $text) {
             // return the shortened file path
             return $shortFile;
-        } else {
-            // return the provided text with the shortened file path as a tooltip
-            return sprintf('<span title="%s">%s</span>', $shortFile, $text);
         }
+
+        // return the provided text with the shortened file path as a tooltip
+        return sprintf('<span title="%s">%s</span>', $shortFile, $text);
     }
 
     /**
      * Format a SQL string with some colors on SQL keywords to make it more readable.
      *
-     * @param  string $sql    SQL string to format
+     * @param string $sql SQL string to format
      *
      * @return string $newSql The new formatted SQL string
      */

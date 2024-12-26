@@ -12,6 +12,7 @@
  * Output escaping decorator class for arrays.
  *
  * @see        sfOutputEscaper
+ *
  * @author     Mike Squire <mike@somosis.co.uk>
  */
 class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator implements Iterator, ArrayAccess, Countable
@@ -38,6 +39,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
     /**
      * Reset the array to the beginning (as required for the Iterator interface).
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->value);
@@ -50,6 +52,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
      *
      * @return string The key
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->value);
@@ -63,6 +66,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
      *
      * @return mixed The escaped value
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return sfOutputEscaper::escape($this->escapingMethod, current($this->value));
@@ -71,22 +75,23 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
     /**
      * Moves to the next element (as required by the Iterator interface).
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->value);
 
-        $this->count--;
+        --$this->count;
     }
 
     /**
      * Returns true if the current element is valid (as required by the Iterator interface).
      *
      * The current element will not be valid if {@link next()} has fallen off the
-     * end of the array or if there are no elements in the array and {@link
-     * rewind()} was called.
+     * end of the array or if there are no elements in the array and {@link * rewind()} was called.
      *
      * @return bool The validity of the current element; true if it is valid
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->count > 0;
@@ -95,10 +100,11 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
     /**
      * Returns true if the supplied offset isset in the array (as required by the ArrayAccess interface).
      *
-     * @param  string $offset  The offset of the value to check existance of
+     * @param string $offset The offset of the value to check existance of
      *
      * @return bool true if the offset isset; false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->value[$offset]);
@@ -107,13 +113,14 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
     /**
      * Returns the element associated with the offset supplied (as required by the ArrayAccess interface).
      *
-     * @param  string $offset  The offset of the value to get
+     * @param string $offset The offset of the value to get
      *
      * @return mixed The escaped value
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        return sfOutputEscaper::escape($this->escapingMethod, $this->value[$offset]);
+        return sfOutputEscaper::escape($this->escapingMethod, $this->value[$offset] ?? null);
     }
 
     /**
@@ -123,11 +130,12 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
      * This (and the other sfOutputEscaper classes) are designed to be read only
      * so this is an illegal operation.
      *
-     * @param  string $offset  (ignored)
-     * @param  string $value   (ignored)
+     * @param string $offset (ignored)
+     * @param string $value  (ignored)
      *
      * @throws sfException
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new sfException('Cannot set values.');
@@ -140,10 +148,11 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
      * This (and the other sfOutputEscaper classes) are designed to be read only
      * so this is an illegal operation.
      *
-     * @param  string $offset  (ignored)
+     * @param string $offset (ignored)
      *
      * @throws sfException
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new sfException('Cannot unset values.');
@@ -154,6 +163,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
      *
      * @return int The size of the array
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->value);
@@ -162,7 +172,7 @@ class sfOutputEscaperArrayDecorator extends sfOutputEscaperGetterDecorator imple
     /**
      * Returns the (unescaped) value from the array associated with the key supplied.
      *
-     * @param  string $key  The key into the array to use
+     * @param string $key The key into the array to use
      *
      * @return mixed The value
      */

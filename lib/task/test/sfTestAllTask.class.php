@@ -20,13 +20,17 @@ class sfTestAllTask extends sfTestBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('only-failed', 'f', sfCommandOption::PARAMETER_NONE, 'Only run tests that failed last time'), new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file')]);
+        $this->addOptions([
+            new sfCommandOption('only-failed', 'f', sfCommandOption::PARAMETER_NONE, 'Only run tests that failed last time'),
+            new sfCommandOption('full-output', 'o', sfCommandOption::PARAMETER_NONE, 'Display full path for the test'),
+            new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file'),
+        ]);
 
         $this->namespace = 'test';
         $this->name = 'all';
         $this->briefDescription = 'Launches all tests';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [test:all|INFO] task launches all unit and functional tests:
 
   [./symfony test:all|INFO]
@@ -56,6 +60,11 @@ The task can output a JUnit compatible XML log file with the [--xml|COMMENT]
 options:
 
   [./symfony test:all --xml=log.xml|INFO]
+
+If you want to display full path for each test in output, add the option
+[--full-output|COMMENT] or [-o|COMMENT] :
+
+  [./symfony test:all --full-output|INFO]
 EOF;
     }
 
@@ -66,7 +75,11 @@ EOF;
     {
         require_once __DIR__.'/sfLimeHarness.class.php';
 
-        $h = new sfLimeHarness(['force_colors' => isset($options['color']) && $options['color'], 'verbose'      => isset($options['trace']) && $options['trace']]);
+        $h = new sfLimeHarness([
+            'force_colors' => isset($options['color']) && $options['color'],
+            'verbose' => isset($options['trace']) && $options['trace'],
+        ]);
+        $h->full_output = $options['full-output'] ? true : false;
         $h->addPlugins(array_map([$this->configuration, 'getPluginConfiguration'], $this->configuration->getPlugins()));
         $h->base_dir = sfConfig::get('sf_test_dir');
 

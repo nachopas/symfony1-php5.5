@@ -14,6 +14,9 @@
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
+ *
+ * @method sfWebController getController()
+ * @method sfWebResponse   getResponse()
  */
 abstract class sfAction extends sfComponent
 {
@@ -22,11 +25,9 @@ abstract class sfAction extends sfComponent
     /**
      * Initializes this action.
      *
-     * @param sfContext $context    The current application context.
-     * @param string    $moduleName The module name.
-     * @param string    $actionName The action name.
-     *
-     * @return bool true, if initialization completes successfully, otherwise false
+     * @param sfContext $context    the current application context
+     * @param string    $moduleName the module name
+     * @param string    $actionName the action name
      */
     public function initialize($context, $moduleName, $actionName)
     {
@@ -34,7 +35,7 @@ abstract class sfAction extends sfComponent
 
         // include security configuration
         if ($file = $context->getConfigCache()->checkConfig('modules/'.$this->getModuleName().'/config/security.yml', true)) {
-            require($file);
+            require $file;
         }
     }
 
@@ -62,7 +63,6 @@ abstract class sfAction extends sfComponent
      * @param string $message Message of the generated exception
      *
      * @throws sfError404Exception
-     *
      */
     public function forward404($message = null)
     {
@@ -72,8 +72,8 @@ abstract class sfAction extends sfComponent
     /**
      * Forwards current action to the default 404 error action unless the specified condition is true.
      *
-     * @param bool    $condition  A condition that evaluates to true or false
-     * @param string  $message    Message of the generated exception
+     * @param bool   $condition A condition that evaluates to true or false
+     * @param string $message   Message of the generated exception
      *
      * @throws sfError404Exception
      */
@@ -87,8 +87,8 @@ abstract class sfAction extends sfComponent
     /**
      * Forwards current action to the default 404 error action if the specified condition is true.
      *
-     * @param bool    $condition  A condition that evaluates to true or false
-     * @param string  $message    Message of the generated exception
+     * @param bool   $condition A condition that evaluates to true or false
+     * @param string $message   Message of the generated exception
      *
      * @throws sfError404Exception
      */
@@ -114,8 +114,8 @@ abstract class sfAction extends sfComponent
      *
      * This method stops the action. So, no code is executed after a call to this method.
      *
-     * @param  string  $module  A module name
-     * @param  string  $action  An action name
+     * @param string $module A module name
+     * @param string $action An action name
      *
      * @throws sfStopException
      */
@@ -135,9 +135,9 @@ abstract class sfAction extends sfComponent
      *
      * This method stops the action. So, no code is executed after a call to this method.
      *
-     * @param  bool   $condition  A condition that evaluates to true or false
-     * @param  string $module     A module name
-     * @param  string $action     An action name
+     * @param bool   $condition A condition that evaluates to true or false
+     * @param string $module    A module name
+     * @param string $action    An action name
      *
      * @throws sfStopException
      */
@@ -153,9 +153,9 @@ abstract class sfAction extends sfComponent
      *
      * This method stops the action. So, no code is executed after a call to this method.
      *
-     * @param  bool   $condition  A condition that evaluates to true or false
-     * @param  string $module     A module name
-     * @param  string $action     An action name
+     * @param bool   $condition A condition that evaluates to true or false
+     * @param string $module    A module name
+     * @param string $action    An action name
      *
      * @throws sfStopException
      */
@@ -175,8 +175,8 @@ abstract class sfAction extends sfComponent
      *
      * This method stops the action. So, no code is executed after a call to this method.
      *
-     * @param  string $url         Url
-     * @param  string $statusCode  Status code (default to 302)
+     * @param string $url        Url
+     * @param int    $statusCode Status code (default to 302)
      *
      * @throws sfStopException
      */
@@ -198,9 +198,9 @@ abstract class sfAction extends sfComponent
      *
      * This method stops the action. So, no code is executed after a call to this method.
      *
-     * @param  bool   $condition  A condition that evaluates to true or false
-     * @param  string $url        Url
-     * @param  string $statusCode Status code (default to 302)
+     * @param bool   $condition  A condition that evaluates to true or false
+     * @param string $url        Url
+     * @param int    $statusCode Status code (default to 302)
      *
      * @throws sfStopException
      *
@@ -220,9 +220,9 @@ abstract class sfAction extends sfComponent
      *
      * This method stops the action. So, no code is executed after a call to this method.
      *
-     * @param  bool   $condition  A condition that evaluates to true or false
-     * @param  string $url        Url
-     * @param  string $statusCode Status code (default to 302)
+     * @param bool   $condition  A condition that evaluates to true or false
+     * @param string $url        Url
+     * @param int    $statusCode Status code (default to 302)
      *
      * @throws sfStopException
      *
@@ -246,7 +246,7 @@ abstract class sfAction extends sfComponent
      *
      * @param string $text Text to append to the response
      *
-     * @return sfView::NONE
+     * @return string sfView::NONE
      */
     public function renderText($text)
     {
@@ -264,8 +264,8 @@ abstract class sfAction extends sfComponent
      * If the vars parameter is set then only those values are
      * available in the partial.
      *
-     * @param  string $templateName partial name
-     * @param  array  $vars         vars
+     * @param string $templateName partial name
+     * @param array  $vars         vars
      *
      * @return string The partial content
      */
@@ -285,10 +285,10 @@ abstract class sfAction extends sfComponent
      *
      * <code>return $this->renderPartial('foo/bar')</code>
      *
-     * @param  string $templateName partial name
-     * @param  array  $vars         vars
+     * @param string $templateName partial name
+     * @param array  $vars         vars
      *
-     * @return sfView::NONE
+     * @return string sfView::NONE
      *
      * @see    getPartial
      */
@@ -306,11 +306,11 @@ abstract class sfAction extends sfComponent
      * If the vars parameter is set then only those values are
      * available in the component.
      *
-     * @param  string  $moduleName    module name
-     * @param  string  $componentName  component name
-     * @param  array   $vars          vars
+     * @param string $moduleName    module name
+     * @param string $componentName component name
+     * @param array  $vars          vars
      *
-     * @return string  The component rendered content
+     * @return string The component rendered content
      */
     public function getComponent($moduleName, $componentName, $vars = null)
     {
@@ -328,11 +328,11 @@ abstract class sfAction extends sfComponent
      *
      * <code>return $this->renderComponent('foo', 'bar')</code>
      *
-     * @param  string  $moduleName    module name
-     * @param  string  $componentName  component name
-     * @param  array   $vars          vars
+     * @param string $moduleName    module name
+     * @param string $componentName component name
+     * @param array  $vars          vars
      *
-     * @return sfView::NONE
+     * @return string sfView::NONE
      *
      * @see    getComponent
      */
@@ -366,8 +366,6 @@ abstract class sfAction extends sfComponent
      *
      * @param string $name    The name of the value to pull from security.yml
      * @param mixed  $default The default value to return if none is found in security.yml
-     *
-     * @return mixed
      */
     public function getSecurityValue($name, $default = null)
     {
@@ -379,7 +377,7 @@ abstract class sfAction extends sfComponent
     /**
      * Indicates that this action requires security.
      *
-     * @return bool true, if this action requires security, otherwise false.
+     * @return bool true, if this action requires security, otherwise false
      */
     public function isSecure()
     {
@@ -401,17 +399,18 @@ abstract class sfAction extends sfComponent
      *
      * See 'Naming Conventions' in the 'Symfony View' documentation.
      *
-     * @param string $name    Template name
-     * @param string $module  The module (current if null)
+     * @param string $name   Template name
+     * @param string $module The module (current if null)
      */
     public function setTemplate($name, $module = null)
     {
         if (sfConfig::get('sf_logging_enabled')) {
-            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Change template to "%s/%s"', $module ?? 'CURRENT', $name)]));
+            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Change template to "%s/%s"', null === $module ? 'CURRENT' : $module, $name)]));
         }
 
         if (null !== $module) {
-            $name = sfConfig::get('sf_app_dir').'/modules/'.$module.'/templates/'.$name;
+            $dir = $this->context->getConfiguration()->getTemplateDir($module, $name.sfView::SUCCESS.'.php');
+            $name = $dir.'/'.$name;
         }
 
         sfConfig::set('symfony.view.'.$this->getModuleName().'_'.$this->getActionName().'_template', $name);
@@ -474,7 +473,7 @@ abstract class sfAction extends sfComponent
     }
 
     /**
-     * Returns the current route for this request
+     * Returns the current route for this request.
      *
      * @return sfRoute The route for the request
      */
@@ -486,7 +485,7 @@ abstract class sfAction extends sfComponent
     /**
      * Returns a formatted message for a 404 error.
      *
-     * @param  string $message An error message (null by default)
+     * @param string $message An error message (null by default)
      *
      * @return string The error message or a default one if null
      */

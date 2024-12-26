@@ -2,7 +2,6 @@
 
 /**
  * AuthorInheritance form.
- *
  */
 class AuthorInheritanceForm extends BaseAuthorInheritanceForm
 {

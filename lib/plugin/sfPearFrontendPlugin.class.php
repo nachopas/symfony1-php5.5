@@ -9,6 +9,7 @@
  */
 
 require_once 'PEAR/Frontend.php';
+
 require_once 'PEAR/Frontend/CLI.php';
 
 /**
@@ -18,7 +19,7 @@ require_once 'PEAR/Frontend/CLI.php';
  */
 class sfPearFrontendPlugin extends PEAR_Frontend_CLI
 {
-    protected $dispatcher = null;
+    protected $dispatcher;
 
     /**
      * Sets the sfEventDispatcher object for this frontend.

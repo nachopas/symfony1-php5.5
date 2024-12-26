@@ -20,13 +20,16 @@ class sfProjectDisableTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('env', sfCommandArgument::REQUIRED, 'The environment name'), new sfCommandArgument('app', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The application name')]);
+        $this->addArguments([
+            new sfCommandArgument('env', sfCommandArgument::REQUIRED, 'The environment name'),
+            new sfCommandArgument('app', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The application name'),
+        ]);
 
         $this->namespace = 'project';
         $this->name = 'disable';
         $this->briefDescription = 'Disables an application in a given environment';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:disable|INFO] task disables an environment:
 
   [./symfony project:disable prod|INFO]
@@ -62,5 +65,7 @@ EOF;
                 $this->logSection('enable', sprintf('%s [%s] has been DISABLED', $app, $env));
             }
         }
+
+        return 0;
     }
 }

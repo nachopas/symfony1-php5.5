@@ -21,14 +21,14 @@ class sfDoctrineDatabase extends sfDatabase
      * Instance of the Doctrine_Connection for this instance of sfDoctrineDatabase.
      * Connection can be accessed by the getDoctrineConnection() accessor method.
      *
-     * @var Doctrine_Connection $_doctrineConnection
+     * @var Doctrine_Connection
      */
-    protected $_doctrineConnection = null;
+    protected $_doctrineConnection;
 
     /**
      * @var sfDoctrineConnectionProfiler
-     **/
-    protected $profiler = null;
+     */
+    protected $profiler;
 
     /**
      * Initialize a sfDoctrineDatabase connection with the given parameters.
@@ -41,8 +41,7 @@ class sfDoctrineDatabase extends sfDatabase
      * $p = new sfDoctrineDatabase($parameters);
      * </code>
      *
-     * @param array $parameters  Array of parameters used to initialize the database connection
-     * @return void
+     * @param array $parameters Array of parameters used to initialize the database connection
      */
     public function initialize($parameters = [])
     {
@@ -88,19 +87,10 @@ class sfDoctrineDatabase extends sfDatabase
 
         // Load Query Profiler
         if ($this->getParameter('profiler', sfConfig::get('sf_debug'))) {
-            $this->profiler = new sfDoctrineConnectionProfiler($dispatcher, ['logging' => $this->getParameter('logging', sfConfig::get('sf_logging_enabled'))]);
+            $this->profiler = new sfDoctrineConnectionProfiler($dispatcher, [
+                'logging' => $this->getParameter('logging', sfConfig::get('sf_logging_enabled')),
+            ]);
             $this->_doctrineConnection->addListener($this->profiler, 'symfony_profiler');
-        }
-
-        // Invoke the configuration methods for the connection if they exist (deprecated in favor of the "doctrine.configure_connection" event)
-        $method = sprintf('configureDoctrineConnection%s', ucwords($this->_doctrineConnection->getName()));
-
-        if (method_exists($configuration, 'configureDoctrineConnection') && ! method_exists($configuration, $method)) {
-            $configuration->configureDoctrineConnection($this->_doctrineConnection);
-        }
-
-        if (method_exists($configuration, $method)) {
-            $configuration->$method($this->_doctrineConnection);
         }
 
         $dispatcher->notify(new sfEvent($manager, 'doctrine.configure_connection', ['connection' => $this->_doctrineConnection, 'database' => $this]));
@@ -128,8 +118,6 @@ class sfDoctrineDatabase extends sfDatabase
 
     /**
      * Initializes the connection and sets it to object.
-     *
-     * @return void
      */
     public function connect()
     {
@@ -138,15 +126,13 @@ class sfDoctrineDatabase extends sfDatabase
 
     /**
      * Execute the shutdown procedure.
-     *
-     * @return void
      */
     public function shutdown()
     {
-        if ($this->connection !== null) {
+        if (null !== $this->connection) {
             $this->connection = null;
         }
-        if ($this->_doctrineConnection !== null) {
+        if (null !== $this->_doctrineConnection) {
             $this->_doctrineConnection->getManager()->closeConnection($this->_doctrineConnection);
         }
     }

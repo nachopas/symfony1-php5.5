@@ -15,11 +15,13 @@
  */
 abstract class sfGenerator
 {
-    protected $generatorClass      = '';
-    protected $generatorManager    = null;
+    protected $generatorClass = '';
+
+    /** @var sfGeneratorManager */
+    protected $generatorManager;
     protected $generatedModuleName = '';
-    protected $theme               = 'default';
-    protected $moduleName          = '';
+    protected $theme = 'default';
+    protected $moduleName = '';
 
     /**
      * Class constructor.
@@ -76,7 +78,8 @@ abstract class sfGenerator
 
         // eval template file
         ob_start();
-        require($templateFile);
+
+        require $templateFile;
         $content = ob_get_clean();
 
         // replace [?php and ?]
@@ -119,7 +122,7 @@ abstract class sfGenerator
     /**
      * Gets the sfGeneratorManager instance.
      *
-     * @return string The sfGeneratorManager instance
+     * @return sfGeneratorManager The sfGeneratorManager instance
      */
     protected function getGeneratorManager()
     {

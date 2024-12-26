@@ -10,6 +10,7 @@
 
 $app = 'frontend';
 $fixtures = 'fixtures/fixtures.yml';
+
 require_once(__DIR__.'/../bootstrap/functional.php');
 
 $t = new lime_test(22);
@@ -50,7 +51,7 @@ $t->is($article->getauthor_id(), $article->author_id);
 // Camel case columns
 $camelCase = new CamelCase();
 $camelCase->testCamelCase = 'camel';
-$camelCase->setTestCamelCase();
+$camelCase->setTestCamelCase('camel');
 
 $t->is($camelCase->getTestCamelCase(), 'camel');
 $t->is($camelCase->gettestCamelCase(), 'camel');
@@ -68,15 +69,18 @@ $t->is($article->getCamelCase()->getTable()->getOption('name'), 'CamelCase');
 
 // Test getDateTimeObject()
 $dateTime = $article->getDateTimeObject('created_at');
-$t->is($dateTime instanceof DateTime, true);
-$t->is($dateTime->format('m/d/Y'), date('m/d/Y'));
+$t->is($dateTime, null);
 
 try {
     $article->getDateTimeObject('author_id');
     $t->fail();
-} catch (Exception $e) {
+} catch (sfException $e) {
     $t->pass();
 }
 
 $article->setDateTimeObject('created_at', new DateTime('1985-09-01'));
 $t->is($article->getDateTimeObject('created_at')->format('m/d/Y'), '09/01/1985');
+
+$article->setDateTimeObject('created_at', null);
+$dateTime = $article->getDateTimeObject('created_at');
+$t->is($dateTime, null);

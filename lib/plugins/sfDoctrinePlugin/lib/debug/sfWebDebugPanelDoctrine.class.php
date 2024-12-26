@@ -18,7 +18,7 @@
 class sfWebDebugPanelDoctrine extends sfWebDebugPanel
 {
     /**
-     * Get the title/icon for the panel
+     * Get the title/icon for the panel.
      *
      * @return string $html
      */
@@ -30,7 +30,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
     }
 
     /**
-     * Get the verbal title of the panel
+     * Get the verbal title of the panel.
      *
      * @return string $title
      */
@@ -40,7 +40,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
     }
 
     /**
-     * Get the html content of the panel
+     * Get the html content of the panel.
      *
      * @return string $html
      */
@@ -106,7 +106,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
 
             // interpolate parameters
             foreach ($params as $param) {
-                $param = htmlspecialchars($param, ENT_QUOTES, sfConfig::get('sf_charset'));
+                $param = htmlspecialchars((string) $param, ENT_QUOTES, sfConfig::get('sf_charset'));
                 $query = join(var_export(is_scalar($param) ? $param : (string) $param, true), explode('?', $query, 2));
             }
 
@@ -123,10 +123,11 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
                     break;
                 }
 
-                if (false !== strpos($log['message'], (string) $event->getQuery())) {
+                if (false !== strpos($log['message'], $event->getQuery())) {
                     // assume queries are being requested in order
                     unset($logs[$i]);
                     $backtrace = '&nbsp;'.$this->getToggleableDebugStack($log['debug_backtrace']);
+
                     break;
                 }
             }

@@ -22,13 +22,16 @@ class sfAppRoutesTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('name', sfCommandArgument::OPTIONAL, 'A route name')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('name', sfCommandArgument::OPTIONAL, 'A route name'),
+        ]);
 
         $this->namespace = 'app';
         $this->name = 'routes';
         $this->briefDescription = 'Displays current routes for an application';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [app:routes|INFO] displays the current routes for a given application:
 
   [./symfony app:routes frontend|INFO]
@@ -44,6 +47,8 @@ EOF;
 
         // display
         $arguments['name'] ? $this->outputRoute($arguments['application'], $arguments['name']) : $this->outputRoutes($arguments['application']);
+
+        return 0;
     }
 
     protected function outputRoutes($application)
@@ -64,10 +69,10 @@ EOF;
                 $maxMethod = strlen($method);
             }
         }
-        $format  = '%-'.$maxName.'s %-'.$maxMethod.'s %s';
+        $format = '%-'.$maxName.'s %-'.$maxMethod.'s %s';
 
         // displays the generated routes
-        $format1  = '%-'.($maxName + 9).'s %-'.($maxMethod + 9).'s %s';
+        $format1 = '%-'.($maxName + 9).'s %-'.($maxMethod + 9).'s %s';
         $this->log(sprintf($format1, $this->formatter->format('Name', 'COMMENT'), $this->formatter->format('Method', 'COMMENT'), $this->formatter->format('Pattern', 'COMMENT')));
         foreach ($this->routes as $name => $route) {
             $requirements = $route->getRequirements();
@@ -137,8 +142,8 @@ EOF;
     {
         if (is_object($value)) {
             return sprintf('object(%s)', get_class($value));
-        } else {
-            return preg_replace("/\n\s*/s", '', var_export($value, true));
         }
+
+        return preg_replace("/\n\\s*/s", '', var_export($value, true));
     }
 }

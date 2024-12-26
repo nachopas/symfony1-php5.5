@@ -16,17 +16,17 @@
 abstract class sfWidget
 {
     protected $requiredOptions = [];
-    protected $attributes      = [];
-    protected $options         = [];
+    protected $attributes = [];
+    protected $options = [];
 
-    protected static $xhtml   = true;
+    protected static $xhtml = true;
     protected static $charset = 'UTF-8';
 
     /**
      * Constructor.
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @throws InvalidArgumentException when a option is not supported
      * @throws RuntimeException         when a required option is not given
@@ -62,8 +62,8 @@ abstract class sfWidget
      * they will take precedence over the options and HTML attributes you configure
      * in this method.
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of HTML attributes
      *
      * @see __construct()
      */
@@ -76,10 +76,10 @@ abstract class sfWidget
      *
      * All subclasses must implement this method.
      *
-     * @param  string $name       The name of the HTML widget
-     * @param  mixed  $value      The value of the widget
-     * @param  array  $attributes An array of HTML attributes
-     * @param  array  $errors     An array of errors
+     * @param string $name       The name of the HTML widget
+     * @param mixed  $value      The value of the widget
+     * @param array  $attributes An array of HTML attributes
+     * @param array  $errors     An array of errors
      *
      * @return string A HTML representation of the widget
      */
@@ -88,7 +88,7 @@ abstract class sfWidget
     /**
      * Adds a required option.
      *
-     * @param string $name  The option name
+     * @param string $name The option name
      *
      * @return sfWidget The current widget instance
      */
@@ -112,8 +112,8 @@ abstract class sfWidget
     /**
      * Adds a new option value with a default value.
      *
-     * @param string $name   The option name
-     * @param mixed  $value  The default value
+     * @param string $name  The option name
+     * @param mixed  $value The default value
      *
      * @return sfWidget The current widget instance
      */
@@ -127,8 +127,8 @@ abstract class sfWidget
     /**
      * Changes an option value.
      *
-     * @param string $name   The option name
-     * @param mixed  $value  The value
+     * @param string $name  The option name
+     * @param mixed  $value The value
      *
      * @return sfWidget The current widget instance
      *
@@ -148,10 +148,10 @@ abstract class sfWidget
     /**
      * Gets an option value.
      *
-     * @param  string $name The option name
-     * @param  string $default A default value if option does not exists
+     * @param string $name    The option name
+     * @param string $default A default value if option does not exists
      *
-     * @return mixed  The option value
+     * @return mixed The option value
      */
     public function getOption($name, $default = null)
     {
@@ -161,7 +161,7 @@ abstract class sfWidget
     /**
      * Returns true if the option exists.
      *
-     * @param  string $name  The option name
+     * @param string $name The option name
      *
      * @return bool true if the option exists, false otherwise
      */
@@ -173,7 +173,7 @@ abstract class sfWidget
     /**
      * Gets all options.
      *
-     * @return array  An array of named options
+     * @return array An array of named options
      */
     public function getOptions()
     {
@@ -183,7 +183,7 @@ abstract class sfWidget
     /**
      * Sets the options.
      *
-     * @param array $options  An array of options
+     * @param array $options An array of options
      *
      * @return sfWidget The current widget instance
      */
@@ -207,8 +207,8 @@ abstract class sfWidget
     /**
      * Sets a default HTML attribute.
      *
-     * @param string $name   The attribute name
-     * @param string $value  The attribute value
+     * @param string $name  The attribute name
+     * @param string $value The attribute value
      *
      * @return sfWidget The current widget instance
      */
@@ -222,7 +222,7 @@ abstract class sfWidget
     /**
      * Returns the HTML attribute value for a given attribute name.
      *
-     * @param  string $name  The attribute name.
+     * @param string $name the attribute name
      *
      * @return string The attribute value, or null if the attribute does not exist
      */
@@ -234,7 +234,7 @@ abstract class sfWidget
     /**
      * Sets the HTML attributes.
      *
-     * @param array $attributes  An array of HTML attributes
+     * @param array $attributes An array of HTML attributes
      *
      * @return sfWidget The current widget instance
      */
@@ -272,7 +272,7 @@ abstract class sfWidget
     /**
      * Sets the charset to use when rendering widgets.
      *
-     * @param string $charset  The charset
+     * @param string $charset The charset
      */
     public static function setCharset($charset)
     {
@@ -292,11 +292,11 @@ abstract class sfWidget
     /**
      * Sets the XHTML generation flag.
      *
-     * @param bool $boolean  true if widgets must be generated as XHTML, false otherwise
+     * @param bool $boolean true if widgets must be generated as XHTML, false otherwise
      */
     public static function setXhtml($boolean)
     {
-        self::$xhtml = (boolean) $boolean;
+        self::$xhtml = (bool) $boolean;
     }
 
     /**
@@ -312,9 +312,8 @@ abstract class sfWidget
     /**
      * Renders a HTML tag.
      *
-     * @param string $tag         The tag name
-     * @param array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     *
+     * @param string $tag        The tag name
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
      * @param string An HTML tag string
      */
     public function renderTag($tag, $attributes = [])
@@ -323,16 +322,15 @@ abstract class sfWidget
             return '';
         }
 
-        return sprintf('<%s%s%s', $tag, $this->attributesToHtml($attributes), self::$xhtml ? ' />' : (strtolower($tag) == 'input' ? '>' : sprintf('></%s>', $tag)));
+        return sprintf('<%s%s%s', $tag, $this->attributesToHtml($attributes), self::$xhtml ? ' />' : ('input' == strtolower($tag) ? '>' : sprintf('></%s>', $tag)));
     }
 
     /**
      * Renders a HTML content tag.
      *
-     * @param string $tag         The tag name
-     * @param string $content     The content of the tag
-     * @param array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     *
+     * @param string $tag        The tag name
+     * @param string $content    The content of the tag
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
      * @param string An HTML tag string
      */
     public function renderContentTag($tag, $content = null, $attributes = [])
@@ -347,7 +345,8 @@ abstract class sfWidget
     /**
      * Escapes a string.
      *
-     * @param  string $value  string to escape
+     * @param string $value string to escape
+     *
      * @return string escaped string
      */
     public static function escapeOnce($value)
@@ -358,7 +357,8 @@ abstract class sfWidget
     /**
      * Fixes double escaped strings.
      *
-     * @param  string $escaped  string to fix
+     * @param string $escaped string to fix
+     *
      * @return string single escaped string
      */
     public static function fixDoubleEscape($escaped)
@@ -369,9 +369,9 @@ abstract class sfWidget
     /**
      * Converts an array of attributes to its HTML representation.
      *
-     * @param  array  $attributes An array of attributes
+     * @param array $attributes An array of attributes
      *
-     * @return string The HTML representation of the HTML attribute array.
+     * @return string the HTML representation of the HTML attribute array
      */
     public function attributesToHtml($attributes)
     {
@@ -388,13 +388,13 @@ abstract class sfWidget
      *
      * It removes empty attributes, except for the value one.
      *
-     * @param  string $k  The attribute key
-     * @param  string $v  The attribute value
+     * @param string $k The attribute key
+     * @param string $v The attribute value
      *
-     * @return string The HTML representation of the HTML key attribute pair.
+     * @return string the HTML representation of the HTML key attribute pair
      */
     protected function attributesToHtmlCallback($k, $v)
     {
-        return false === $v || null === $v || ('' === $v && 'value' != $k) ? '' : sprintf(' %s="%s"', $k, static::escapeOnce($v));
+        return false === $v || null === $v || ('' === $v && 'value' != $k) ? '' : sprintf(' %s="%s"', $k, $this->escapeOnce($v));
     }
 }

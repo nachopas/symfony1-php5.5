@@ -23,8 +23,8 @@ class sfWidgetFormI18nDate extends sfWidgetFormDate
      *  * culture:      The culture to use for internationalized strings (required)
      *  * month_format: The month format (name - default, short_name, number)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormDate
      */
@@ -48,15 +48,18 @@ class sfWidgetFormI18nDate extends sfWidgetFormDate
     protected function getMonthFormat($culture, $monthFormat)
     {
         switch ($monthFormat) {
-      case 'name':
-        return array_combine(range(1, 12), sfDateTimeFormatInfo::getInstance($culture)->getMonthNames());
-      case 'short_name':
-        return array_combine(range(1, 12), sfDateTimeFormatInfo::getInstance($culture)->getAbbreviatedMonthNames());
-      case 'number':
-        return $this->getOption('months');
-      default:
-        throw new InvalidArgumentException(sprintf('The month format "%s" is invalid.', $monthFormat));
-    }
+            case 'name':
+                return array_combine(range(1, 12), sfDateTimeFormatInfo::getInstance($culture)->getMonthNames());
+
+            case 'short_name':
+                return array_combine(range(1, 12), sfDateTimeFormatInfo::getInstance($culture)->getAbbreviatedMonthNames());
+
+            case 'number':
+                return $this->getOption('months');
+
+            default:
+                throw new InvalidArgumentException(sprintf('The month format "%s" is invalid.', $monthFormat));
+        }
     }
 
     protected function getDateFormat($culture)
@@ -67,6 +70,10 @@ class sfWidgetFormI18nDate extends sfWidgetFormDate
             return $this->getOption('format');
         }
 
-        return strtr($dateFormat, [substr($dateFormat, $dayPos, strripos($dateFormat, 'd') - $dayPos + 1)   => '%day%', substr($dateFormat, $monthPos, strripos($dateFormat, 'm') - $monthPos + 1) => '%month%', substr($dateFormat, $yearPos, strripos($dateFormat, 'y') - $yearPos + 1)  => '%year%']);
+        return strtr($dateFormat, [
+            substr($dateFormat, $dayPos, strripos($dateFormat, 'd') - $dayPos + 1) => '%day%',
+            substr($dateFormat, $monthPos, strripos($dateFormat, 'm') - $monthPos + 1) => '%month%',
+            substr($dateFormat, $yearPos, strripos($dateFormat, 'y') - $yearPos + 1) => '%year%',
+        ]);
     }
 }

@@ -23,8 +23,8 @@ class sfWidgetFormSelect extends sfWidgetFormChoiceBase
      *  * choices:  An array of possible choices (required)
      *  * multiple: true if the select tag must allow multiple selections
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormChoiceBase
      */
@@ -38,10 +38,10 @@ class sfWidgetFormSelect extends sfWidgetFormChoiceBase
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The value selected in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The value selected in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -63,12 +63,12 @@ class sfWidgetFormSelect extends sfWidgetFormChoiceBase
     }
 
     /**
-     * Returns an array of option tags for the given choices
+     * Returns an array of option tags for the given choices.
      *
-     * @param  string $value    The selected value
-     * @param  array  $choices  An array of choices
+     * @param string $value   The selected value
+     * @param array  $choices An array of choices
      *
-     * @return array  An array of option tags
+     * @return array An array of option tags
      */
     protected function getOptionsForSelect($value, $choices)
     {
@@ -81,7 +81,7 @@ class sfWidgetFormSelect extends sfWidgetFormChoiceBase
 
         $value_set = [];
         foreach ($value as $v) {
-            $value_set[strval($v)] = true;
+            $value_set[(string) $v] = true;
         }
 
         $options = [];
@@ -90,7 +90,7 @@ class sfWidgetFormSelect extends sfWidgetFormChoiceBase
                 $options[] = $this->renderContentTag('optgroup', implode("\n", $this->getOptionsForSelect($value, $option)), ['label' => self::escapeOnce($key)]);
             } else {
                 $attributes = ['value' => self::escapeOnce($key)];
-                if (isset($value_set[strval($key)])) {
+                if (isset($value_set[(string) $key])) {
                     $attributes['selected'] = 'selected';
                 }
 

@@ -18,8 +18,8 @@ interface sfLoggerInterface
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     public function log($message, $priority = null);
 }

@@ -23,6 +23,8 @@ abstract class sfStorage
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $options
      */
     public function __construct($options = [])
     {
@@ -40,15 +42,15 @@ abstract class sfStorage
      *
      *  * auto_shutdown: Whether to automatically save the changes to the session (true by default)
      *
-     * @param  array $options  An associative array of options
+     * @param array $options An associative array of options
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfStorage
+     * @throws sfInitializationException If an error occurs while initializing this sfStorage
      */
     public function initialize($options = [])
     {
-        $this->options = array_merge(['auto_shutdown' => true], $options);
+        $this->options = array_merge([
+            'auto_shutdown' => true,
+        ], $options);
     }
 
     /**
@@ -66,22 +68,22 @@ abstract class sfStorage
      *
      * The preferred format for a key is directory style so naming conflicts can be avoided.
      *
-     * @param  string $key  A unique key identifying your data
+     * @param string $key A unique key identifying your data
      *
      * @return mixed Data associated with the key
      *
-     * @throws <b>sfStorageException</b> If an error occurs while reading data from this storage
+     * @throws sfStorageException If an error occurs while reading data from this storage
      */
     abstract public function read($key);
 
     /**
      * Regenerates id that represents this storage.
      *
-     * @param  boolean $destroy Destroy session when regenerating?
+     * @param bool $destroy Destroy session when regenerating?
      *
-     * @return boolean True if session regenerated, false if error
+     * @return bool True if session regenerated, false if error
      *
-     * @throws <b>sfStorageException</b> If an error occurs while regenerating this storage
+     * @throws sfStorageException If an error occurs while regenerating this storage
      */
     abstract public function regenerate($destroy = false);
 
@@ -90,18 +92,18 @@ abstract class sfStorage
      *
      * The preferred format for a key is directory style so naming conflicts can be avoided.
      *
-     * @param  string $key  A unique key identifying your data
+     * @param string $key A unique key identifying your data
      *
      * @return mixed Data associated with the key
      *
-     * @throws <b>sfStorageException</b> If an error occurs while removing data from this storage
+     * @throws sfStorageException If an error occurs while removing data from this storage
      */
     abstract public function remove($key);
 
     /**
      * Executes the shutdown procedure.
      *
-     * @throws <b>sfStorageException</b> If an error occurs while shutting down this storage
+     * @throws sfStorageException If an error occurs while shutting down this storage
      */
     abstract public function shutdown();
 
@@ -110,10 +112,10 @@ abstract class sfStorage
      *
      * The preferred format for a key is directory style so naming conflicts can be avoided.
      *
-     * @param  string $key   A unique key identifying your data
-     * @param  mixed  $data  Data associated with your key
+     * @param string $key  A unique key identifying your data
+     * @param mixed  $data Data associated with your key
      *
-     * @throws <b>sfStorageException</b> If an error occurs while writing to this storage
+     * @throws sfStorageException If an error occurs while writing to this storage
      */
     abstract public function write($key, $data);
 }

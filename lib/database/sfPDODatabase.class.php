@@ -12,7 +12,7 @@
 /**
  * sfPDODatabase provides connectivity for the PDO database abstraction layer.
  *
- * @author     Daniel Swarbrick (daniel@pressure.net.nz)
+ * @author     Daniel Swarbrick <daniel@pressure.net.nz>
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
  * @author     Dustin Whittle <dustin.whittle@symfony-project.com>
@@ -22,7 +22,7 @@ class sfPDODatabase extends sfDatabase
     /**
      * Connects to the database.
      *
-     * @throws <b>sfDatabaseException</b> If a connection could not be created
+     * @throws sfDatabaseException If a connection could not be created
      */
     public function connect()
     {
@@ -32,12 +32,12 @@ class sfPDODatabase extends sfDatabase
         }
 
         try {
-            $pdo_class  = $this->getParameter('class', 'PDO');
-            $username   = $this->getParameter('username');
-            $password   = $this->getParameter('password');
+            $pdo_class = $this->getParameter('class', 'PDO');
+            $username = $this->getParameter('username');
+            $password = $this->getParameter('password');
             $persistent = $this->getParameter('persistent');
 
-            $options = ($persistent) ? [PDO::ATTR_PERSISTENT => true] : [];
+            $options = $persistent ? [PDO::ATTR_PERSISTENT => true] : [];
 
             $this->connection = new $pdo_class($dsn, $username, $password, $options);
         } catch (PDOException $e) {
@@ -74,22 +74,19 @@ class sfPDODatabase extends sfDatabase
 
     /**
      * Execute the shutdown procedure.
-     *
-     * @return void
      */
     public function shutdown()
     {
-        if ($this->connection !== null) {
+        if (null !== $this->connection) {
             @$this->connection = null;
         }
     }
 
     /**
-     * Magic method for calling PDO directly via sfPDODatabase
+     * Magic method for calling PDO directly via sfPDODatabase.
      *
      * @param string $method
-     * @param array $arguments
-     * @return mixed
+     * @param array  $arguments
      */
     public function __call($method, $arguments)
     {

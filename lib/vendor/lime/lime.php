@@ -11,6 +11,7 @@
 /**
  * Unit test library.
  *
+ * @package    lime
  * @author     Fabien Potencier <fabien.potencier@gmail.com>
  */
 class lime_test
@@ -32,12 +33,21 @@ class lime_test
       $options = ['output' => $options];
     }
 
-    $this->options = array_merge(['force_colors'    => false, 'output'          => null, 'verbose'         => false, 'error_reporting' => false], $options);
+    $this->options = array_merge([
+      'force_colors'    => false,
+      'output'          => null,
+      'verbose'         => false,
+      'error_reporting' => false,
+    ], $options);
 
     $this->output = $this->options['output'] ?: new lime_output($this->options['force_colors']);
 
     $caller = $this->find_caller(debug_backtrace());
-    self::$all_results[] = ['file'  => $caller[0], 'tests' => [], 'stats' => ['plan' => $plan, 'total' => 0, 'failed' => [], 'passed' => [], 'skipped' => [], 'errors' => []]];
+    self::$all_results[] = [
+      'file'  => $caller[0],
+      'tests' => array(),
+      'stats' => array('plan' => $plan, 'total' => 0, 'failed' => array(), 'passed' => array(), 'skipped' => array(), 'errors' => array()),
+    ];
 
     $this->results = &self::$all_results[count(self::$all_results) - 1];
 
@@ -93,7 +103,7 @@ class lime_test
       foreach ($result['tests'] as $test)
       {
         $testsuite->appendChild($testcase = $dom->createElement('testcase'));
-        $testcase->setAttribute('name', $test['message']);
+        $testcase->setAttribute('name', utf8_encode($test['message']));
         $testcase->setAttribute('file', $test['file']);
         $testcase->setAttribute('line', $test['line']);
         $testcase->setAttribute('assertions', 1);
@@ -180,6 +190,27 @@ class lime_test
   }
 
   /**
+   * Compares two values and returns true if they are equal
+   *
+   * @param mixed  $exp1    left value
+   * @param mixed  $exp2    right value
+   * @return bool
+   */
+  private function equals($exp1, $exp2)
+  {
+    if (is_object($exp1) || is_object($exp2)) {
+      return $exp1 === $exp2;
+    } else if (is_float($exp1) && is_float($exp2)) {
+      return abs($exp1 - $exp2) < self::EPSILON;
+    } else if (is_string($exp1) && is_numeric($exp1) || is_string($exp2) && is_numeric($exp2)) {
+      return $exp1 == $exp2;
+    } else if (is_string($exp1) || is_string($exp2)) {
+      return (string) $exp1 === (string) $exp2;
+    }
+    return $exp1 == $exp2;
+  }
+
+  /**
    * Compares two values and passes if they are equal (==)
    *
    * @param mixed  $exp1    left value
@@ -190,18 +221,7 @@ class lime_test
    */
   public function is($exp1, $exp2, $message = '')
   {
-    if (is_object($exp1) || is_object($exp2))
-    {
-      $value = $exp1 === $exp2;
-    }
-    else if (is_float($exp1) && is_float($exp2))
-    {
-      $value = abs($exp1 - $exp2) < self::EPSILON;
-    }
-    else
-    {
-      $value = $exp1 == $exp2;
-    }
+    $value = $this->equals($exp1, $exp2);
 
     if (!$result = $this->ok($value, $message))
     {
@@ -222,7 +242,9 @@ class lime_test
    */
   public function isnt($exp1, $exp2, $message = '')
   {
-    if (!$result = $this->ok($exp1 != $exp2, $message))
+    $value = $this->equals($exp1, $exp2);
+
+    if (!$result = $this->ok(!$value, $message))
     {
       $this->set_last_test_errors([sprintf("      %s", var_export($exp2, true)), '          ne', sprintf("      %s", var_export($exp2, true))]);
     }
@@ -497,7 +519,11 @@ class lime_test
   {
     $this->output->error($message, $file, $line, $traces);
 
-  	$this->results['stats']['errors'][] = ['message' => $message, 'file' => $file, 'line' => $line];
+    $this->results['stats']['errors'][] = [
+      'message' => $message,
+      'file' => $file,
+      'line' => $line,
+    ];
   }
 
   protected function update_stats()
@@ -505,7 +531,7 @@ class lime_test
     ++$this->test_nb;
     ++$this->results['stats']['total'];
 
-    [$this->results['tests'][$this->test_nb]['file'], $this->results['tests'][$this->test_nb]['line']] = $this->find_caller(debug_backtrace());
+    list($this->results['tests'][$this->test_nb]['file'], $this->results['tests'][$this->test_nb]['line']) = $this->find_caller(debug_backtrace());
   }
 
   protected function set_last_test_errors(array $errors)
@@ -515,13 +541,19 @@ class lime_test
     $this->results['tests'][$this->test_nb]['error'] = implode("\n", $errors);
   }
 
+  private function is_test_object($object)
+  {
+    return $object instanceof lime_test || $object instanceof sfTestFunctionalBase || $object instanceof sfTester;
+  }
+
   protected function find_caller($traces)
   {
     // find the first call to a method of an object that is an instance of lime_test
     $t = array_reverse($traces);
     foreach ($t as $trace)
     {
-      if (isset($trace['object']) && $trace['object'] instanceof lime_test)
+      // In internal calls, like error_handle, 'file' will be missing
+      if (isset($trace['object']) && $this->is_test_object($trace['object']) && isset($trace['file']))
       {
         return [$trace['file'], $trace['line']];
       }
@@ -532,7 +564,7 @@ class lime_test
     return [$traces[$last]['file'], $traces[$last]['line']];
   }
 
-  public function handle_error($code, $message, $file, $line, $context)
+  public function handle_error($code, $message, $file, $line, $context = null)
   {
     if (!$this->options['error_reporting'] || ($code & error_reporting()) == 0)
     {
@@ -555,7 +587,11 @@ class lime_test
     $this->error($type.': '.$message, $file, $line, $trace);
   }
 
-  public function handle_exception(\Throwable $exception)
+  /**
+   * @param Throwable|Exception $exception
+   * @return bool
+   */
+  public function handle_exception($exception)
   {
     $this->error(get_class($exception).': '.$exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTrace());
 
@@ -572,7 +608,7 @@ class lime_output
   public function __construct($force_colors = false, $base_dir = null)
   {
     $this->colorizer = new lime_colorizer($force_colors);
-    $this->base_dir = $base_dir ?? getcwd();
+    $this->base_dir = $base_dir === null ? getcwd() : $base_dir;
   }
 
   public function diag()
@@ -669,10 +705,35 @@ class lime_output
   {
     if ($colorize)
     {
-      $message = preg_replace_callback('/(?:^|\.)((?:not ok|dubious|errors) *\d*)\b/', fn($matches) => $this->colorizer->colorize($matches[1], 'ERROR'), $message);
-      $message = preg_replace_callback('/(?:^|\.)(ok *\d*)\b/', fn($matches) => $this->colorizer->colorize($matches[1], 'INFO'), $message);
-      $message = preg_replace_callback('/"(.+?)"/', fn($matches) => $this->colorizer->colorize($matches[1], 'PARAMETER'), $message);
-      $message = preg_replace_callback('/(\->|\:\:)?([a-zA-Z0-9_]+?)\(\)/', fn($matches) => $this->colorizer->colorize($matches[1], 'PARAMETER'), $message);
+      $colorizer = $this->colorizer;
+      $message = preg_replace_callback(
+        '/(?:^|\.)((?:not ok|dubious|errors) *\d*)\b/',
+        function ($match) use ($colorizer) {
+          return $colorizer->colorize($match[1], 'ERROR');
+        },
+        $message
+      );
+      $message = preg_replace_callback(
+        '/(?:^|\.)(ok *\d*)\b/',
+        function ($match) use ($colorizer) {
+          return $colorizer->colorize($match[1], 'INFO');
+        },
+        $message
+      );
+      $message = preg_replace_callback(
+        '/"(.+?)"/',
+        function ($match) use ($colorizer) {
+          return $colorizer->colorize($match[1], 'PARAMETER');
+        },
+        $message
+      );
+      $message = preg_replace_callback(
+        '/(\->|\:\:)?([a-zA-Z0-9_]+?)\(\)/',
+        function ($match) use ($colorizer) {
+          return $colorizer->colorize($match[1].$match[2].'()', 'PARAMETER');
+        },
+        $message
+      );
     }
 
     echo ($colorizer_parameter ? $this->colorizer->colorize($message, $colorizer_parameter) : $message)."\n";
@@ -771,6 +832,7 @@ class lime_harness extends lime_registration
   public $php_cli = null;
   public $stats   = [];
   public $output  = null;
+  public $full_output = false;
 
   public function __construct($options = [])
   {
@@ -780,10 +842,16 @@ class lime_harness extends lime_registration
       $options = ['output' => $options];
     }
 
-    $this->options = array_merge(['php_cli'      => null, 'force_colors' => false, 'output'       => null, 'verbose'      => false], $options);
+    $this->options = array_merge([
+      'php_cli'      => null,
+      'force_colors' => false,
+      'output'       => null,
+      'verbose'      => false,
+      'test_path'    => sys_get_temp_dir(),
+    ], $options);
 
     $this->php_cli = $this->find_php_cli($this->options['php_cli']);
-    $this->output = $this->options['output'] ?: new lime_output($this->options['force_colors']);
+    $this->output = $this->options['output'] ? $this->options['output'] : new lime_output($this->options['force_colors']);
   }
 
   protected function find_php_cli($php_cli = null)
@@ -856,7 +924,12 @@ class lime_harness extends lime_registration
     // sort the files to be able to predict the order
     sort($this->files);
 
-    $this->stats = ['files'        => [], 'failed_files' => [], 'failed_tests' => 0, 'total'        => 0];
+    $this->stats = [
+      'files'        => [],
+      'failed_files' => [],
+      'failed_tests' => 0,
+      'total'        => 0,
+    ];
 
     foreach ($this->files as $file)
     {
@@ -865,8 +938,8 @@ class lime_harness extends lime_registration
 
       $relative_file = $this->get_relative_file($file);
 
-      $test_file = tempnam(sys_get_temp_dir(), 'lime');
-      $result_file = tempnam(sys_get_temp_dir(), 'lime');
+      $test_file = tempnam($this->options['test_path'], 'lime_test').'.php';
+      $result_file = tempnam($this->options['test_path'], 'lime_result');
       file_put_contents($test_file, <<<EOF
 <?php
 function lime_shutdown()
@@ -922,7 +995,14 @@ EOF
         }
       }
 
-      $this->output->echoln(sprintf('%s%s%s', substr($relative_file, -min(67, strlen($relative_file))), str_repeat('.', 70 - min(67, strlen($relative_file))), $stats['status']));
+      if (true === $this->full_output)
+      {
+        $this->output->echoln(sprintf('%s%s%s', $relative_file, '.....', $stats['status']));
+      }
+      else
+      {
+        $this->output->echoln(sprintf('%s%s%s', substr($relative_file, -min(67, strlen($relative_file))), str_repeat('.', 70 - min(67, strlen($relative_file))), $stats['status']));
+      }
 
       if ('dubious' == $stats['status'])
       {
@@ -1022,7 +1102,10 @@ EOF
 
             $this->output->comment(sprintf('  at %s line %s', $this->get_relative_file($testsuite['tests'][$testcase]['file']).$this->extension, $testsuite['tests'][$testcase]['line']));
             $this->output->info('  '.$testsuite['tests'][$testcase]['message']);
-            $this->output->echoln($testsuite['tests'][$testcase]['error'], null, false);
+            if (isset($testsuite['tests'][$testcase]['error']))
+            {
+              $this->output->echoln($testsuite['tests'][$testcase]['error'], null, false);
+            }
           }
         }
       }
@@ -1257,7 +1340,7 @@ EOF;
         continue;
       }
 
-      [$id, $text] = $token;
+      list($id, $text) = $token;
 
       switch ($id)
       {

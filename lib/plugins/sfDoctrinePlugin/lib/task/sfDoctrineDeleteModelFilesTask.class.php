@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Delete all generated files associated with a Doctrine model. Forms, filters, etc.
@@ -19,15 +19,22 @@ class sfDoctrineDeleteModelFilesTask extends sfDoctrineBaseTask
 {
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('name', sfCommandArgument::REQUIRED | sfCommandArgument::IS_ARRAY, 'The name of the model you wish to delete all related files for.')]);
+        $this->addArguments([
+            new sfCommandArgument('name', sfCommandArgument::REQUIRED | sfCommandArgument::IS_ARRAY, 'The name of the model you wish to delete all related files for.'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Do not ask for confirmation'), new sfCommandOption('prefix', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Class prefix to remove'), new sfCommandOption('suffix', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Class suffix to remove'), new sfCommandOption('extension', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Filename extension to remove')]);
+        $this->addOptions([
+            new sfCommandOption('no-confirmation', null, sfCommandOption::PARAMETER_NONE, 'Do not ask for confirmation'),
+            new sfCommandOption('prefix', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Class prefix to remove'),
+            new sfCommandOption('suffix', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Class suffix to remove'),
+            new sfCommandOption('extension', null, sfCommandOption::PARAMETER_REQUIRED | sfCommandOption::IS_ARRAY, 'Filename extension to remove'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'delete-model-files';
         $this->briefDescription = 'Delete all the related auto generated files for a given model name.';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:delete-model-files|INFO] task deletes all files associated with certain
 models:
 
@@ -41,15 +48,19 @@ EOF;
     protected function execute($arguments = [], $options = [])
     {
         $paths = array_merge(
-            [sfConfig::get('sf_lib_dir').'/model/doctrine', sfConfig::get('sf_lib_dir').'/form/doctrine', sfConfig::get('sf_lib_dir').'/filter/doctrine'],
+            [
+                sfConfig::get('sf_lib_dir').'/model/doctrine',
+                sfConfig::get('sf_lib_dir').'/form/doctrine',
+                sfConfig::get('sf_lib_dir').'/filter/doctrine',
+            ],
             $this->configuration->getPluginSubPaths('/lib/model/doctrine'),
             $this->configuration->getPluginSubPaths('/lib/form/doctrine'),
             $this->configuration->getPluginSubPaths('/lib/filter/doctrine')
         );
 
-        $prefixPattern    = $this->valuesToRegex($options['prefix'] ?: ['', 'Base', 'Plugin']);
-        $suffixPattern    = $this->valuesToRegex($options['suffix'] ?: ['', 'Table', 'Form', 'FormFilter']);
-        $extensionPattern = $this->valuesToRegex($options['extension'] ?: ['.php', '.class.php']);
+        $prefixPattern = $this->valuesToRegex($options['prefix'] ? $options['prefix'] : ['', 'Base', 'Plugin']);
+        $suffixPattern = $this->valuesToRegex($options['suffix'] ? $options['suffix'] : ['', 'Table', 'Form', 'FormFilter']);
+        $extensionPattern = $this->valuesToRegex($options['extension'] ? $options['extension'] : ['.php', '.class.php']);
 
         $total = 0;
 
@@ -60,10 +71,13 @@ EOF;
             if ($files) {
                 if (!$options['no-confirmation'] && !$this->askConfirmation(array_merge(
                     ['The following '.$modelName.' files will be deleted:', ''],
-                    array_map(fn ($v) => ' - ' . sfDebug::shortenFilePath($v), $files),
+                    array_map(function ($v) {
+                        return ' - '.sfDebug::shortenFilePath($v);
+                    }, $files),
                     ['', 'Continue? (y/N)']
                 ), 'QUESTION_LARGE', false)) {
                     $this->logSection('doctrine', 'Aborting delete of "'.$modelName.'" files');
+
                     continue;
                 }
 

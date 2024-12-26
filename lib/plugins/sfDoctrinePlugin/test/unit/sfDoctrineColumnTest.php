@@ -8,12 +8,17 @@
  * file that was distributed with this source code.
  */
 
-include(__DIR__.'/../bootstrap/unit.php');
+include __DIR__.'/../bootstrap/unit.php';
 
 $t = new lime_test(23);
 
 $conn = Doctrine_Manager::connection(new Doctrine_Adapter_Mock('mysql'));
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class Test extends sfDoctrineRecord
 {
     public function setTableDefinition()

@@ -28,8 +28,8 @@ class sfWidgetFormSelectCheckbox extends sfWidgetFormChoiceBase
      *                     The formatter callable receives the widget and the array of inputs as arguments
      *  * template:        The template to use when grouping option in groups (%group% %options%)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetFormChoiceBase
      */
@@ -47,10 +47,10 @@ class sfWidgetFormSelectCheckbox extends sfWidgetFormChoiceBase
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The value selected in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The value selected in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -76,22 +76,30 @@ class sfWidgetFormSelectCheckbox extends sfWidgetFormChoiceBase
             }
 
             return implode("\n", $parts);
-        } else {
-            return $this->formatChoices($name, $value, $choices, $attributes);
         }
+
+        return $this->formatChoices($name, $value, $choices, $attributes);
     }
 
     protected function formatChoices($name, $value, $choices, $attributes)
     {
         $inputs = [];
         foreach ($choices as $key => $option) {
-            $baseAttributes = ['name'  => $name, 'type'  => 'checkbox', 'value' => self::escapeOnce($key), 'id'    => $id = $this->generateId($name, self::escapeOnce($key))];
+            $baseAttributes = [
+                'name' => $name,
+                'type' => 'checkbox',
+                'value' => self::escapeOnce($key),
+                'id' => $id = $this->generateId($name, self::escapeOnce($key)),
+            ];
 
-            if ((is_array($value) && in_array(strval($key), $value)) || (is_string($value) && strval($key) == strval($value))) {
+            if ((is_array($value) && in_array((string) $key, $value)) || (is_string($value) && (string) $key == (string) $value)) {
                 $baseAttributes['checked'] = 'checked';
             }
 
-            $inputs[$id] = ['input' => $this->renderTag('input', array_merge($baseAttributes, $attributes)), 'label' => $this->renderContentTag('label', self::escapeOnce($option), ['for' => $id])];
+            $inputs[$id] = [
+                'input' => $this->renderTag('input', array_merge($baseAttributes, $attributes)),
+                'label' => $this->renderContentTag('label', self::escapeOnce($option), ['for' => $id]),
+            ];
         }
 
         return call_user_func($this->getOption('formatter'), $this, $inputs);

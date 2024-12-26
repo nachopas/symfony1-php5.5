@@ -30,8 +30,8 @@ class sfWidgetFormDateTime extends sfWidgetForm
      *  * with_time: Whether to include time (true by default)
      *  * format:    The format string for the date and the time widget (default to %date% %time%)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetForm
      */
@@ -46,10 +46,10 @@ class sfWidgetFormDateTime extends sfWidgetForm
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The date and time displayed in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The date and time displayed in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -63,13 +63,17 @@ class sfWidgetFormDateTime extends sfWidgetForm
             return $date;
         }
 
-        return strtr($this->getOption('format'), ['%date%' => $date, '%time%' => $this->getTimeWidget($attributes)->render($name, $value)]);
+        return strtr($this->getOption('format'), [
+            '%date%' => $date,
+            '%time%' => $this->getTimeWidget($attributes)->render($name, $value),
+        ]);
     }
+
 
     /**
      * Returns the date widget.
      *
-     * @param  array $attributes  An array of attributes
+     * @param array $attributes An array of attributes
      *
      * @return sfWidgetForm A Widget representing the date
      */
@@ -81,7 +85,7 @@ class sfWidgetFormDateTime extends sfWidgetForm
     /**
      * Returns the time widget.
      *
-     * @param  array $attributes  An array of attributes
+     * @param array $attributes An array of attributes
      *
      * @return sfWidgetForm A Widget representing the time
      */
@@ -93,9 +97,9 @@ class sfWidgetFormDateTime extends sfWidgetForm
     /**
      * Returns an array of options for the given type.
      *
-     * @param  string $type  The type (date or time)
+     * @param string $type The type (date or time)
      *
-     * @return array  An array of options
+     * @return array An array of options
      *
      * @throws InvalidArgumentException when option date|time type is not array
      */
@@ -115,10 +119,10 @@ class sfWidgetFormDateTime extends sfWidgetForm
     /**
      * Returns an array of HTML attributes for the given type.
      *
-     * @param  string $type        The type (date or time)
-     * @param  array  $attributes  An array of attributes
+     * @param string $type       The type (date or time)
+     * @param array  $attributes An array of attributes
      *
-     * @return array  An array of HTML attributes
+     * @return array An array of HTML attributes
      */
     protected function getAttributesFor($type, $attributes)
     {

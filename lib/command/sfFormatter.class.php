@@ -15,14 +15,14 @@
  */
 class sfFormatter
 {
-    protected $size = null;
+    protected $size;
 
     public function __construct($maxLineSize = null)
     {
         if (null === $maxLineSize) {
             if (function_exists('shell_exec')) {
                 // this is tricky because "tput cols 2>&1" is not accurate
-                $maxLineSize = ctype_digit(trim(shell_exec('tput cols 2>&1'))) ? (integer) shell_exec('tput cols') : 78;
+                $maxLineSize = ctype_digit(trim(shell_exec('tput cols 2>&1'))) ? (int) shell_exec('tput cols') : 78;
             } else {
                 $maxLineSize = 78;
             }
@@ -44,8 +44,8 @@ class sfFormatter
     /**
      * Formats a text according to the given parameters.
      *
-     * @param  string $text         The test to style
-     * @param  mixed  $parameters   An array of parameters
+     * @param string $text       The test to style
+     * @param mixed  $parameters An array of parameters
      *
      * @return string The formatted text
      */
@@ -57,9 +57,11 @@ class sfFormatter
     /**
      * Formats a message within a section.
      *
-     * @param string  $section  The section name
-     * @param string  $text     The text message
-     * @param integer $size     The maximum size allowed for a line
+     * @param string $section The section name
+     * @param string $text    The text message
+     * @param int    $size    The maximum size allowed for a line
+     *
+     * @return string
      */
     public function formatSection($section, $text, $size = null)
     {
@@ -75,8 +77,8 @@ class sfFormatter
     /**
      * Truncates a line.
      *
-     * @param string  $text The text
-     * @param integer $size The maximum size of the returned string
+     * @param string $text The text
+     * @param int    $size The maximum size of the returned string
      *
      * @return string The truncated string
      */
@@ -98,7 +100,7 @@ class sfFormatter
     /**
      * Sets the maximum line size.
      *
-     * @param integer $size The maximum line size for a message
+     * @param int $size The maximum line size for a message
      */
     public function setMaxLineSize($size)
     {

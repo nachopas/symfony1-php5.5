@@ -25,8 +25,8 @@ class sfWidgetFormDateRange extends sfWidgetForm
      *  * template:    The template to use to render the widget
      *                 Available placeholders: %from_date%, %to_date%
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetForm
      */
@@ -41,10 +41,10 @@ class sfWidgetFormDateRange extends sfWidgetForm
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The date displayed in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The date displayed in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -53,8 +53,12 @@ class sfWidgetFormDateRange extends sfWidgetForm
     public function render($name, $value = null, $attributes = [], $errors = [])
     {
         $value = array_merge(['from' => '', 'to' => ''], is_array($value) ? $value : []);
+        $attributes = array_merge(['from' => [], 'to' => []], is_array($attributes) ? $attributes : []);
 
-        return strtr($this->translate($this->getOption('template')), ['%from_date%'      => $this->getOption('from_date')->render($name.'[from]', $value['from']), '%to_date%'        => $this->getOption('to_date')->render($name.'[to]', $value['to'])]);
+        return strtr($this->translate($this->getOption('template')), [
+            '%from_date%' => $this->getOption('from_date')->render($name.'[from]', $value['from'], $attributes['from'], $errors),
+            '%to_date%' => $this->getOption('to_date')->render($name.'[to]', $value['to'], $attributes['to'], $errors),
+        ]);
     }
 
     /**

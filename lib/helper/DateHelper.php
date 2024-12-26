@@ -12,15 +12,19 @@
  * DateHelper.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
+ *
+ * @param mixed|null $culture
+ * @param mixed|null $charset
  */
-
-function format_daterange($start_date, $end_date, $full_text, $start_text, $end_text, $format = 'd', $culture = null, $charset = null)
+function format_daterange($start_date, $end_date, $format = 'd', $full_text = '', $start_text = '', $end_text = '', $culture = null, $charset = null)
 {
-    if ($start_date != '' && $end_date != '') {
+    if ('' != $start_date && '' != $end_date) {
         return sprintf($full_text, format_date($start_date, $format, $culture, $charset), format_date($end_date, $format, $culture, $charset));
-    } elseif ($start_date != '') {
+    }
+    if ('' != $start_date) {
         return sprintf($start_text, format_date($start_date, $format, $culture, $charset));
-    } elseif ($end_date != '') {
+    }
+    if ('' != $end_date) {
         return sprintf($end_text, format_date($end_date, $format, $culture, $charset));
     }
 }
@@ -65,7 +69,7 @@ function distance_of_time_in_words($from_time, $to_time = null, $include_seconds
 
     if ($distance_in_minutes <= 1) {
         if (!$include_seconds) {
-            $string = $distance_in_minutes == 0 ? 'less than a minute' : '1 minute';
+            $string = 0 == $distance_in_minutes ? 'less than a minute' : '1 minute';
         } else {
             if ($distance_in_seconds <= 5) {
                 $string = 'less than 5 seconds';
@@ -110,9 +114,9 @@ function distance_of_time_in_words($from_time, $to_time = null, $include_seconds
         require_once __DIR__.'/I18NHelper.php';
 
         return __($string, $parameters);
-    } else {
-        return strtr($string, $parameters);
     }
+
+    return strtr($string, $parameters);
 }
 
 // Like distance_of_time_in_words, but where to_time is fixed to time()

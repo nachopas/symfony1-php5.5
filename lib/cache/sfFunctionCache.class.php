@@ -15,7 +15,7 @@
  */
 class sfFunctionCache
 {
-    protected $cache = null;
+    protected $cache;
 
     /**
      * Constructor.
@@ -41,6 +41,9 @@ class sfFunctionCache
      * @param array $arguments An array of arguments to pass to the callable
      *
      * @return mixed The result of the function/method
+     *
+     * @throws Exception
+     * @throws sfException
      */
     public function call($callable, $arguments = [])
     {
@@ -48,7 +51,7 @@ class sfFunctionCache
         $key = $this->computeCacheKey($callable, $arguments);
 
         $serialized = $this->cache->get($key);
-        if ($serialized !== null) {
+        if (null !== $serialized) {
             $data = unserialize($serialized);
         } else {
             $data = [];
@@ -64,6 +67,7 @@ class sfFunctionCache
                 $data['result'] = call_user_func_array($callable, $arguments);
             } catch (Exception $e) {
                 ob_end_clean();
+
                 throw $e;
             }
 

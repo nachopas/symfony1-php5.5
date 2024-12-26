@@ -20,13 +20,16 @@ class sfProjectOptimizeTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('env', sfCommandArgument::OPTIONAL, 'The environment name', 'prod')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('env', sfCommandArgument::OPTIONAL, 'The environment name', 'prod'),
+        ]);
 
         $this->namespace = 'project';
         $this->name = 'optimize';
         $this->briefDescription = 'Optimizes a project for better performance';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:optimize|INFO] optimizes a project for better performance:
 
   [./symfony project:optimize frontend prod|INFO]
@@ -45,20 +48,31 @@ EOF;
         $modules = $this->findModules();
         $target = sfConfig::get('sf_cache_dir').'/'.$arguments['application'].'/'.$arguments['env'].'/config/configuration.php';
 
+        $current_umask = umask();
+        umask(0000);
+
         // remove existing optimization file
         if (file_exists($target)) {
             $this->getFilesystem()->remove($target);
         }
 
         // recreate configuration without the cache
-        $this->setConfiguration($this->createConfiguration($this->configuration->getApplication(), $this->configuration->getEnvironment()));
+        $this->setConfiguration($this->createConfiguration($arguments['application'], $arguments['env']));
 
         // initialize the context
         sfContext::createInstance($this->configuration);
 
         // force cache generation for generated modules
         foreach ($modules as $module) {
-            $this->configuration->getConfigCache()->import('modules/'.$module.'/config/generator.yml', false, true);
+            $this->logSection('module', $module);
+
+            try {
+                $this->configuration->getConfigCache()->checkConfig('modules/'.$module.'/config/generator.yml', true);
+            } catch (Exception $e) {
+                $this->dispatcher->notifyUntil(new sfEvent($e, 'application.throw_exception'));
+
+                $this->logSection($module, $e->getMessage(), null, 'ERROR');
+            }
         }
 
         $templates = $this->findTemplates($modules);
@@ -74,6 +88,10 @@ EOF;
 
         $this->logSection('file+', $target);
         file_put_contents($target, '<?php return '.var_export($data, true).';');
+
+        umask($current_umask);
+
+        return 0;
     }
 
     protected function optimizeGetControllerDirs($modules)

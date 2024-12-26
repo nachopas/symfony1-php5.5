@@ -13,6 +13,7 @@
  * their return values.
  *
  * @see        sfOutputEscaper
+ *
  * @author     Mike Squire <mike@somosis.co.uk>
  */
 class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator implements Countable
@@ -34,8 +35,8 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
      *   $o->b('a')             // Escapes the return value of b('a')
      *   $o->b('a', ESC_RAW);   // Uses the escaping method ESC_RAW with b('a')
      *
-     * @param  string $method  The method on the object to be called
-     * @param  array  $args    An array of arguments to be passed to the method
+     * @param string $method The method on the object to be called
+     * @param array  $args   An array of arguments to be passed to the method
      *
      * @return mixed The escaped value returned by the method
      */
@@ -43,7 +44,7 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
     {
         if (count($args) > 0) {
             $escapingMethod = $args[count($args) - 1];
-            if (is_string($escapingMethod) && substr($escapingMethod, 0, 4) === 'esc_') {
+            if (is_string($escapingMethod) && 'esc_' === substr($escapingMethod, 0, 4)) {
                 array_pop($args);
             } else {
                 $escapingMethod = $this->escapingMethod;
@@ -63,7 +64,7 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
      *
      * If there is not a callable get() method this will throw an exception.
      *
-     * @param  string $key  The parameter to be passed to the get() get method
+     * @param string $key The parameter to be passed to the get() get method
      *
      * @return mixed The unescaped value returned
      *
@@ -91,22 +92,28 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
     /**
      * Asks the wrapped object whether a property is set.
      *
-     * @return boolean
+     * @return bool
      */
     public function __isset($key)
     {
-        return isset($this->value->$key);
+        return isset($this->value->{$key});
     }
 
     /**
      * Returns the size of the object if it implements Countable (is required by the Countable interface).
      *
-     * It returns 1 if other cases (which is the default PHP behavior in such a case).
+     * It returns 1 if other cases (which was the default PHP behavior in such a case before php 7.3).
      *
      * @return int The size of the object
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
-        return count($this->value);
+        // See https://github.com/symfony/polyfill/commit/d330c0094a47d8edceeea1ed553d6e08215a9fc2
+        if (is_array($this->value) || $this->value instanceof Countable || $this->value instanceof ResourceBundle || $this->value instanceof SimpleXMLElement) {
+            return count($this->value);
+        }
+
+        return 1;
     }
 }

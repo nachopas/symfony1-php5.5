@@ -15,7 +15,8 @@
  */
 class sfSQLiteCache extends sfCache
 {
-    protected $dbh      = null;
+    protected $dbh;
+    protected $sqlLiteVersion;
     protected $database = '';
 
     /**
@@ -46,6 +47,10 @@ class sfSQLiteCache extends sfCache
 
     /**
      * @see sfCache
+     *
+     * @inheritdo
+     *
+     * @return SQLite3|SQLiteDatabase
      */
     public function getBackend()
     {
@@ -54,12 +59,18 @@ class sfSQLiteCache extends sfCache
 
     /**
      * @see sfCache
+     *
+     * @param mixed|null $default
      */
     public function get($key, $default = null)
     {
-        $data = $this->dbh->singleQuery(sprintf("SELECT data FROM cache WHERE key = '%s' AND timeout > %d", sqlite_escape_string($key), time()));
+        if ($this->isSqLite3()) {
+            $data = $this->dbh->querySingle(sprintf("SELECT data FROM cache WHERE key = '%s' AND timeout > %d", $this->dbh->escapeString($key), time()));
+        } else {
+            $data = $this->dbh->singleQuery(sprintf("SELECT data FROM cache WHERE key = '%s' AND timeout > %d", sqlite_escape_string($key), time()));
+        }
 
-        return $data ?? $default;
+        return null === $data ? $default : $data;
     }
 
     /**
@@ -67,19 +78,29 @@ class sfSQLiteCache extends sfCache
      */
     public function has($key)
     {
-        return (boolean) $this->dbh->query(sprintf("SELECT key FROM cache WHERE key = '%s' AND timeout > %d", sqlite_escape_string($key), time()))->numRows();
+        if ($this->isSqLite3()) {
+            return (int) $this->dbh->querySingle(sprintf("SELECT count(*) FROM cache WHERE key = '%s' AND timeout > %d", $this->dbh->escapeString($key), time()));
+        }
+
+        return (bool) $this->dbh->query(sprintf("SELECT key FROM cache WHERE key = '%s' AND timeout > %d", sqlite_escape_string($key), time()))->numRows();
     }
 
     /**
      * @see sfCache
+     *
+     * @param mixed|null $lifetime
      */
     public function set($key, $data, $lifetime = null)
     {
-        if ($this->getOption('automatic_cleaning_factor') > 0 && random_int(1, $this->getOption('automatic_cleaning_factor')) == 1) {
+        if ($this->getOption('automatic_cleaning_factor') > 0 && 1 == mt_rand(1, $this->getOption('automatic_cleaning_factor'))) {
             $this->clean(sfCache::OLD);
         }
 
-        return (boolean) $this->dbh->query(sprintf("INSERT OR REPLACE INTO cache (key, data, timeout, last_modified) VALUES ('%s', '%s', %d, %d)", sqlite_escape_string($key), sqlite_escape_string($data), time() + $this->getLifetime($lifetime), time()));
+        if ($this->isSqLite3()) {
+            return $this->dbh->exec(sprintf("INSERT OR REPLACE INTO cache (key, data, timeout, last_modified) VALUES ('%s', '%s', %d, %d)", $this->dbh->escapeString($key), $this->dbh->escapeString($data), time() + $this->getLifetime($lifetime), time()));
+        }
+
+        return (bool) $this->dbh->query(sprintf("INSERT OR REPLACE INTO cache (key, data, timeout, last_modified) VALUES ('%s', '%s', %d, %d)", sqlite_escape_string($key), sqlite_escape_string($data), time() + $this->getLifetime($lifetime), time()));
     }
 
     /**
@@ -87,7 +108,11 @@ class sfSQLiteCache extends sfCache
      */
     public function remove($key)
     {
-        return (boolean) $this->dbh->query(sprintf("DELETE FROM cache WHERE key = '%s'", sqlite_escape_string($key)));
+        if ($this->isSqLite3()) {
+            return $this->dbh->exec(sprintf("DELETE FROM cache WHERE key = '%s'", $this->dbh->escapeString($key)));
+        }
+
+        return (bool) $this->dbh->query(sprintf("DELETE FROM cache WHERE key = '%s'", sqlite_escape_string($key)));
     }
 
     /**
@@ -95,7 +120,11 @@ class sfSQLiteCache extends sfCache
      */
     public function removePattern($pattern)
     {
-        return (boolean) $this->dbh->query(sprintf("DELETE FROM cache WHERE REGEXP('%s', key)", sqlite_escape_string(self::patternToRegexp($pattern))));
+        if ($this->isSqLite3()) {
+            return $this->dbh->exec(sprintf("DELETE FROM cache WHERE REGEXP('%s', key)", $this->dbh->escapeString(self::patternToRegexp($pattern))));
+        }
+
+        return (bool) $this->dbh->query(sprintf("DELETE FROM cache WHERE REGEXP('%s', key)", sqlite_escape_string(self::patternToRegexp($pattern))));
     }
 
     /**
@@ -103,7 +132,17 @@ class sfSQLiteCache extends sfCache
      */
     public function clean($mode = sfCache::ALL)
     {
-        return (boolean) $this->dbh->query("DELETE FROM cache".(sfCache::OLD == $mode ? sprintf(" WHERE timeout < '%s'", time()) : ''))->numRows();
+        if ($this->isSqLite3()) {
+            $res = $this->dbh->exec('DELETE FROM cache'.(sfCache::OLD == $mode ? sprintf(" WHERE timeout < '%s'", time()) : ''));
+
+            if ($res) {
+                return (bool) $this->dbh->changes();
+            }
+
+            return false;
+        }
+
+        return (bool) $this->dbh->query('DELETE FROM cache'.(sfCache::OLD == $mode ? sprintf(" WHERE timeout < '%s'", time()) : ''))->numRows();
     }
 
     /**
@@ -111,9 +150,15 @@ class sfSQLiteCache extends sfCache
      */
     public function getTimeout($key)
     {
+        if ($this->isSqLite3()) {
+            $rs = $this->dbh->querySingle(sprintf("SELECT timeout FROM cache WHERE key = '%s' AND timeout > %d", $this->dbh->escapeString($key), time()));
+
+            return null === $rs ? 0 : $rs;
+        }
+
         $rs = $this->dbh->query(sprintf("SELECT timeout FROM cache WHERE key = '%s' AND timeout > %d", sqlite_escape_string($key), time()));
 
-        return $rs->numRows() ? intval($rs->fetchSingle()) : 0;
+        return $rs->numRows() ? (int) $rs->fetchSingle() : 0;
     }
 
     /**
@@ -121,15 +166,62 @@ class sfSQLiteCache extends sfCache
      */
     public function getLastModified($key)
     {
+        if ($this->isSqLite3()) {
+            $rs = $this->dbh->querySingle(sprintf("SELECT last_modified FROM cache WHERE key = '%s' AND timeout > %d", $this->dbh->escapeString($key), time()));
+
+            return null === $rs ? 0 : $rs;
+        }
+
         $rs = $this->dbh->query(sprintf("SELECT last_modified FROM cache WHERE key = '%s' AND timeout > %d", sqlite_escape_string($key), time()));
 
-        return $rs->numRows() ? intval($rs->fetchSingle()) : 0;
+        return $rs->numRows() ? (int) $rs->fetchSingle() : 0;
+    }
+
+    /**
+     * Callback used when deleting keys from cache.
+     *
+     * @param string $regexp
+     * @param string $key
+     *
+     * @return int
+     */
+    public function removePatternRegexpCallback($regexp, $key)
+    {
+        return preg_match($regexp, $key);
+    }
+
+    /**
+     * @see sfCache
+     */
+    public function getMany($keys)
+    {
+        if ($this->isSqLite3()) {
+            $data = [];
+            if ($results = $this->dbh->query(sprintf("SELECT key, data FROM cache WHERE key IN ('%s') AND timeout > %d", implode('\', \'', array_map([$this->dbh, 'escapeString'], $keys)), time()))) {
+                while ($row = $results->fetchArray()) {
+                    $data[$row['key']] = $row['data'];
+                }
+            }
+
+            return $data;
+        }
+
+        $rows = $this->dbh->arrayQuery(sprintf("SELECT key, data FROM cache WHERE key IN ('%s') AND timeout > %d", implode('\', \'', array_map('sqlite_escape_string', $keys)), time()));
+
+        $data = [];
+        foreach ($rows as $row) {
+            $data[$row['key']] = $row['data'];
+        }
+
+        return $data;
     }
 
     /**
      * Sets the database name.
      *
      * @param string $database The database name where to store the cache
+     *
+     * @throws sfCacheException
      */
     protected function setDatabase($database)
     {
@@ -152,8 +244,15 @@ class sfSQLiteCache extends sfCache
             umask($current_umask);
         }
 
-        if (!$this->dbh = new SQLiteDatabase($this->database, 0644, $errmsg)) {
-            throw new sfCacheException(sprintf('Unable to connect to SQLite database: %s.', $errmsg));
+        if ($this->isSqLite3()) {
+            $this->dbh = new SQLite3($this->database);
+            if ('not an error' !== $errmsg = $this->dbh->lastErrorMsg()) {
+                throw new sfCacheException(sprintf('Unable to connect to SQLite database: %s.', $errmsg));
+            }
+        } else {
+            if (!$this->dbh = new SQLiteDatabase($this->database, 0644, $errmsg)) {
+                throw new sfCacheException(sprintf('Unable to connect to SQLite database: %s.', $errmsg));
+            }
         }
 
         $this->dbh->createFunction('regexp', [$this, 'removePatternRegexpCallback'], 2);
@@ -164,46 +263,52 @@ class sfSQLiteCache extends sfCache
     }
 
     /**
-     * Callback used when deleting keys from cache.
-     */
-    public function removePatternRegexpCallback($regexp, $key)
-    {
-        return preg_match($regexp, $key);
-    }
-
-    /**
-     * @see sfCache
-     */
-    public function getMany($keys)
-    {
-        $rows = $this->dbh->arrayQuery(sprintf("SELECT key, data FROM cache WHERE key IN ('%s') AND timeout > %d", implode('\', \'', array_map('sqlite_escape_string', $keys)), time()));
-
-        $data = [];
-        foreach ($rows as $row) {
-            $data[$row['key']] = $row['data'];
-        }
-
-        return $data;
-    }
-
-    /**
      * Creates the database schema.
      *
      * @throws sfCacheException
      */
     protected function createSchema()
     {
-        $statements = ['CREATE TABLE [cache] (
+        $statements = [
+            'CREATE TABLE [cache] (
         [key] VARCHAR(255),
         [data] LONGVARCHAR,
         [timeout] TIMESTAMP,
         [last_modified] TIMESTAMP
-      )', 'CREATE UNIQUE INDEX [cache_unique] ON [cache] ([key])'];
+      )',
+            'CREATE UNIQUE INDEX [cache_unique] ON [cache] ([key])',
+        ];
 
         foreach ($statements as $statement) {
-            if (!$this->dbh->query($statement)) {
-                throw new sfCacheException(sqlite_error_string($this->dbh->lastError()));
+            if (false === $this->dbh->query($statement)) {
+                $message = $this->isSqLite3() ? $this->dbh->lastErrorMsg() : sqlite_error_string($this->dbh->lastError());
+
+                throw new sfCacheException($message);
             }
         }
+    }
+
+    /**
+     * Checks if sqlite is version 3.
+     *
+     * @return bool
+     */
+    protected function isSqLite3()
+    {
+        return 3 === $this->getSqLiteVersion();
+    }
+
+    /**
+     * Get sqlite version number.
+     *
+     * @return int
+     */
+    protected function getSqLiteVersion()
+    {
+        if (null === $this->sqlLiteVersion) {
+            $this->sqlLiteVersion = 3;
+        }
+
+        return $this->sqlLiteVersion;
     }
 }

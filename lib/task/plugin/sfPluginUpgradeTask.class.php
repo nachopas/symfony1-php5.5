@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfPluginBaseTask.class.php');
+require_once __DIR__.'/sfPluginBaseTask.class.php';
 
 /**
  * Upgrades a plugin.
@@ -22,16 +22,22 @@ class sfPluginUpgradeTask extends sfPluginBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The plugin name')]);
+        $this->addArguments([
+            new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The plugin name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('stability', 's', sfCommandOption::PARAMETER_REQUIRED, 'The preferred stability (stable, beta, alpha)', null), new sfCommandOption('release', 'r', sfCommandOption::PARAMETER_REQUIRED, 'The preferred version', null), new sfCommandOption('channel', 'c', sfCommandOption::PARAMETER_REQUIRED, 'The PEAR channel name', null)]);
+        $this->addOptions([
+            new sfCommandOption('stability', 's', sfCommandOption::PARAMETER_REQUIRED, 'The preferred stability (stable, beta, alpha)', null),
+            new sfCommandOption('release', 'r', sfCommandOption::PARAMETER_REQUIRED, 'The preferred version', null),
+            new sfCommandOption('channel', 'c', sfCommandOption::PARAMETER_REQUIRED, 'The PEAR channel name', null),
+        ]);
 
         $this->namespace = 'plugin';
         $this->name = 'upgrade';
 
         $this->briefDescription = 'Upgrades a plugin';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [plugin:upgrade|INFO] task tries to upgrade a plugin:
 
   [./symfony plugin:upgrade sfGuardPlugin|INFO]
@@ -53,5 +59,7 @@ EOF;
         $this->logSection('plugin', sprintf('upgrading plugin "%s"', $arguments['name']));
 
         $this->getPluginManager()->installPlugin($arguments['name'], $options);
+
+        return 0;
     }
 }

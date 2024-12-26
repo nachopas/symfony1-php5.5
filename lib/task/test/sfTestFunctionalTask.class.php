@@ -20,15 +20,20 @@ class sfTestFunctionalTask extends sfTestBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('controller', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The controller name')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('controller', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The controller name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file')]);
+        $this->addOptions([
+            new sfCommandOption('xml', null, sfCommandOption::PARAMETER_REQUIRED, 'The file name for the JUnit compatible XML log file'),
+        ]);
 
         $this->namespace = 'test';
         $this->name = 'functional';
         $this->briefDescription = 'Launches functional tests';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [test:functional|INFO] task launches functional tests for a
 given application:
 
@@ -74,15 +79,20 @@ EOF;
 
             if ($allFiles = $this->filterTestFiles($files, $arguments, $options)) {
                 foreach ($allFiles as $file) {
-                    include($file);
+                    include $file;
                 }
             } else {
                 $this->logSection('functional', 'no controller found', null, 'ERROR');
+
+                return 1;
             }
         } else {
             require_once __DIR__.'/sfLimeHarness.class.php';
 
-            $h = new sfLimeHarness(['force_colors' => isset($options['color']) && $options['color'], 'verbose'      => isset($options['trace']) && $options['trace']]);
+            $h = new sfLimeHarness([
+                'force_colors' => isset($options['color']) && $options['color'],
+                'verbose' => isset($options['trace']) && $options['trace'],
+            ]);
             $h->addPlugins(array_map([$this->configuration, 'getPluginConfiguration'], $this->configuration->getPlugins()));
             $h->base_dir = sfConfig::get('sf_test_dir').'/functional/'.$app;
 
@@ -98,5 +108,7 @@ EOF;
 
             return $ret;
         }
+
+        return 0;
     }
 }

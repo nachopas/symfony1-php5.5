@@ -23,7 +23,7 @@ abstract class sfData
      * Sets a flag to indicate if the current data in the database
      * should be deleted before new data is loaded.
      *
-     * @param boolean $boolean The flag value
+     * @param bool $boolean The flag value
      */
     public function setDeleteCurrentData($boolean)
     {
@@ -34,7 +34,7 @@ abstract class sfData
      * Gets the current value of the flag that indicates whether
      * current data is to be deleted or not.
      *
-     * @return boolean
+     * @return bool
      */
     public function getDeleteCurrentData()
     {
@@ -42,20 +42,20 @@ abstract class sfData
     }
 
     /**
-     * Loads data for the database from a YAML file
+     * Loads data for the database from a YAML file.
      *
-     * @param string $file The path to the YAML file.
+     * @param string $file the path to the YAML file
      */
     protected function doLoadDataFromFile($file)
     {
         // import new datas
-        $data = sfYaml::load($file);
+        $data = sfYaml::load($file, sfConfig::get('sf_charset', 'UTF-8'));
 
         $this->loadDataFromArray($data);
     }
 
     /**
-     * Manages the insertion of data into the data source
+     * Manages the insertion of data into the data source.
      *
      * @param array $data The data to be inserted into the data source
      */
@@ -63,7 +63,7 @@ abstract class sfData
 
     /**
      * Manages reading all of the fixture data files and
-     * loading them into the data source
+     * loading them into the data source.
      *
      * @param array $files The path names of the YAML data files
      */
@@ -82,12 +82,12 @@ abstract class sfData
      *
      * The returned array of files is sorted by alphabetical order.
      *
-     * @param string|array $element A directory or file name or an array of directories and/or file names
+     * @param array|string $element A directory or file name or an array of directories and/or file names
      *                              If null, then defaults to 'sf_data_dir'/fixtures
      *
      * @return array A list of *.yml files
      *
-     * @throws sfInitializationException If the directory or file does not exist.
+     * @throws sfInitializationException if the directory or file does not exist
      */
     public function getFiles($element = null)
     {

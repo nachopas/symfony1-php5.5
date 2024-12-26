@@ -15,7 +15,7 @@
  */
 class sfDoctrineGenerator extends sfModelGenerator
 {
-    protected $table = null;
+    protected $table;
 
     /**
      * Initializes the current sfGenerator instance.
@@ -45,16 +45,17 @@ class sfDoctrineGenerator extends sfModelGenerator
      *
      * A table is considered to be a m2m table if it has 2 foreign keys that are also primary keys.
      *
-     * @return array An array of tables.
+     * @return array an array of tables
      */
     public function getManyToManyTables()
     {
         $relations = [];
         foreach ($this->table->getRelations() as $relation) {
-            if ($relation->getType() === Doctrine_Relation::MANY && isset($relation['refTable'])) {
+            if (Doctrine_Relation::MANY === $relation->getType() && isset($relation['refTable'])) {
                 $relations[] = $relation;
             }
         }
+
         return $relations;
     }
 
@@ -80,9 +81,9 @@ class sfDoctrineGenerator extends sfModelGenerator
     /**
      * Returns the getter either non-developped: 'getFoo' or developped: '$class->getFoo()'.
      *
-     * @param string  $column     The column name
-     * @param boolean $developed  true if you want developped method names, false otherwise
-     * @param string  $prefix     The prefix value
+     * @param string $column    The column name
+     * @param bool   $developed true if you want developped method names, false otherwise
+     * @param string $prefix    The prefix value
      *
      * @return string PHP code
      */
@@ -99,7 +100,7 @@ class sfDoctrineGenerator extends sfModelGenerator
     /**
      * Returns the type of a column.
      *
-     * @param  object $column A column object
+     * @param object $column A column object
      *
      * @return string The column type
      */
@@ -110,18 +111,22 @@ class sfDoctrineGenerator extends sfModelGenerator
         }
 
         switch ($column->getDoctrineType()) {
-      case 'enum':
-        return 'Enum';
-      case 'boolean':
-        return 'Boolean';
-      case 'date':
-      case 'timestamp':
-        return 'Date';
-      case 'time':
-        return 'Time';
-      default:
-        return 'Text';
-    }
+            case 'enum':
+                return 'Enum';
+
+            case 'boolean':
+                return 'Boolean';
+
+            case 'date':
+            case 'timestamp':
+                return 'Date';
+
+            case 'time':
+                return 'Time';
+
+            default:
+                return 'Text';
+        }
     }
 
     /**
@@ -136,13 +141,25 @@ class sfDoctrineGenerator extends sfModelGenerator
         $names = [];
         foreach ($this->getColumns() as $name => $column) {
             $names[] = $name;
-            $fields[$name] = array_merge(['is_link'      => (Boolean) $column->isPrimaryKey(), 'is_real'      => true, 'is_partial'   => false, 'is_component' => false, 'type'         => $this->getType($column)], $this->config['fields'][$name] ?? []);
+            $fields[$name] = array_merge([
+                'is_link' => (bool) $column->isPrimaryKey(),
+                'is_real' => true,
+                'is_partial' => false,
+                'is_component' => false,
+                'type' => $this->getType($column),
+            ], isset($this->config['fields'][$name]) ? $this->config['fields'][$name] : []);
         }
 
         foreach ($this->getManyToManyTables() as $tables) {
             $name = sfInflector::underscore($tables['alias']).'_list';
             $names[] = $name;
-            $fields[$name] = array_merge(['is_link'      => false, 'is_real'      => false, 'is_partial'   => false, 'is_component' => false, 'type'         => 'Text'], $this->config['fields'][$name] ?? []);
+            $fields[$name] = array_merge([
+                'is_link' => false,
+                'is_real' => false,
+                'is_partial' => false,
+                'is_component' => false,
+                'type' => 'Text',
+            ], isset($this->config['fields'][$name]) ? $this->config['fields'][$name] : []);
         }
 
         if (isset($this->config['fields'])) {
@@ -151,7 +168,13 @@ class sfDoctrineGenerator extends sfModelGenerator
                     continue;
                 }
 
-                $fields[$name] = array_merge(['is_link'      => false, 'is_real'      => false, 'is_partial'   => false, 'is_component' => false, 'type'         => 'Text'], is_array($params) ? $params : []);
+                $fields[$name] = array_merge([
+                    'is_link' => false,
+                    'is_real' => false,
+                    'is_partial' => false,
+                    'is_component' => false,
+                    'type' => 'Text',
+                ], is_array($params) ? $params : []);
             }
         }
 
@@ -163,7 +186,7 @@ class sfDoctrineGenerator extends sfModelGenerator
     /**
      * Returns the configuration for fields in a given context.
      *
-     * @param  string $context The Context
+     * @param string $context The Context
      *
      * @return array An array of configuration for all the fields in a given context
      */
@@ -201,9 +224,9 @@ class sfDoctrineGenerator extends sfModelGenerator
     /**
      * Gets all the fields for the current model.
      *
-     * @param  Boolean $withM2M Whether to include m2m fields or not
+     * @param bool $withM2M Whether to include m2m fields or not
      *
-     * @return array   An array of field names
+     * @return array An array of field names
      */
     public function getAllFieldNames($withM2M = true)
     {
@@ -222,7 +245,7 @@ class sfDoctrineGenerator extends sfModelGenerator
     }
 
     /**
-     * Get array of sfDoctrineAdminColumn objects
+     * Get array of sfDoctrineAdminColumn objects.
      *
      * @return array $columns
      */

@@ -15,8 +15,8 @@
  */
 class sfProjectPermissionsTask extends sfBaseTask
 {
-    protected $current = null;
-    protected $failed  = [];
+    protected $current;
+    protected $failed = [];
 
     /**
      * @see sfTask
@@ -27,7 +27,7 @@ class sfProjectPermissionsTask extends sfBaseTask
         $this->name = 'permissions';
         $this->briefDescription = 'Fixes symfony directory permissions';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:permissions|INFO] task fixes directory permissions:
 
   [./symfony project:permissions|INFO]
@@ -47,7 +47,11 @@ EOF;
         $this->chmod(sfConfig::get('sf_log_dir'), 0777);
         $this->chmod(sfConfig::get('sf_root_dir').'/symfony', 0777);
 
-        $dirs = [sfConfig::get('sf_cache_dir'), sfConfig::get('sf_log_dir'), sfConfig::get('sf_upload_dir')];
+        $dirs = [
+            sfConfig::get('sf_cache_dir'),
+            sfConfig::get('sf_log_dir'),
+            sfConfig::get('sf_upload_dir'),
+        ];
 
         $dirFinder = sfFinder::type('dir');
         $fileFinder = sfFinder::type('file');
@@ -61,17 +65,23 @@ EOF;
         if (count($this->failed)) {
             $this->logBlock(array_merge(
                 ['Permissions on the following file(s) could not be fixed:', ''],
-                array_map(fn ($f) => ' - ' . sfDebug::shortenFilePath($f), $this->failed)
+                array_map(function ($f) {
+                    return ' - '.sfDebug::shortenFilePath($f);
+                }, $this->failed)
             ), 'ERROR_LARGE');
+
+            return 1;
         }
+
+        return 0;
     }
 
     /**
      * Chmod and capture any failures.
      *
-     * @param string  $file
-     * @param integer $mode
-     * @param integer $umask
+     * @param string $file
+     * @param int    $mode
+     * @param int    $umask
      *
      * @see sfFilesystem
      */
@@ -96,8 +106,10 @@ EOF;
      * Captures those chmod commands that fail.
      *
      * @see http://www.php.net/set_error_handler
+     *
+     * @param mixed|null $context
      */
-    public function handleError($no, $string, $file, $line, $context)
+    public function handleError($no, $string, $file, $line, $context = null)
     {
         $this->failed[] = $this->current;
     }

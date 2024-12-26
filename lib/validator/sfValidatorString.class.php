@@ -28,8 +28,8 @@ class sfValidatorString extends sfValidatorBase
      *  * max_length
      *  * min_length
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */

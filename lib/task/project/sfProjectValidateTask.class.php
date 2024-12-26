@@ -24,7 +24,7 @@ class sfValidateTask extends sfBaseTask
         $this->name = 'validate';
         $this->briefDescription = 'Finds deprecated usage in a project';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:validate|INFO] task detects deprecated usage in your project.
 
   [./symfony project:validate|INFO]
@@ -66,6 +66,8 @@ EOF;
 
             $this->log($v->getExplanation());
         }
+
+        return 0;
     }
 
     protected function formatFile($file)
@@ -87,7 +89,7 @@ EOF;
                 require_once $baseDir.$class.'.class.php';
             }
         }
-  
+
         return $classes;
     }
 }

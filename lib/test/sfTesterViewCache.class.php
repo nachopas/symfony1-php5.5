@@ -15,9 +15,9 @@
  */
 class sfTesterViewCache extends sfTester
 {
-    protected $viewCacheManager = null;
-    protected $response         = null;
-    protected $routing          = null;
+    protected $viewCacheManager;
+    protected $response;
+    protected $routing;
 
     /**
      * Prepares the tester.
@@ -39,10 +39,10 @@ class sfTesterViewCache extends sfTester
     /**
      * Tests if the given uri is cached.
      *
-     * @param  boolean $boolean      Flag for checking the cache
-     * @param  boolean $with_layout  If have or not layout
+     * @param bool $boolean     Flag for checking the cache
+     * @param bool $with_layout If have or not layout
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isCached($boolean, $with_layout = false)
     {
@@ -52,11 +52,11 @@ class sfTesterViewCache extends sfTester
     /**
      * Tests if the given uri is cached.
      *
-     * @param  string  $uri          Uniform resource identifier
-     * @param  boolean $boolean      Flag for checking the cache
-     * @param  boolean $with_layout  If have or not layout
+     * @param string $uri         Uniform resource identifier
+     * @param bool   $boolean     Flag for checking the cache
+     * @param bool   $with_layout If have or not layout
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isUriCached($uri, $boolean, $with_layout = false)
     {
@@ -101,7 +101,7 @@ class sfTesterViewCache extends sfTester
                 } else {
                     $ret = unserialize($cacheManager->get($uri));
                     $content = $ret['content'];
-                    $this->tester->ok(false !== strpos($this->response->getContent(), (string) $content), 'content in cache is ok');
+                    $this->tester->ok(false !== strpos($this->response->getContent(), $content), 'content in cache is ok');
                 }
             }
         }

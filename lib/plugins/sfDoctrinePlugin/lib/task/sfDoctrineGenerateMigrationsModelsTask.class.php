@@ -24,13 +24,16 @@ class sfDoctrineGenerateMigrationsModelsTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'generate-migrations-models';
         $this->briefDescription = 'Generate migration classes from an existing set of models';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:generate-migrations-models|INFO] task generates migration classes
 from an existing set of models:
 

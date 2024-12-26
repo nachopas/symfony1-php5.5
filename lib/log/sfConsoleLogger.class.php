@@ -17,6 +17,9 @@ class sfConsoleLogger extends sfStreamLogger
 {
     /**
      * @see sfStreamLogger
+     *
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {

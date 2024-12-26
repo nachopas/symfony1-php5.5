@@ -15,27 +15,27 @@
  */
 abstract class sfPager implements Iterator, Countable
 {
-    protected $page            = 1;
-    protected $maxPerPage      = 0;
-    protected $lastPage        = 1;
-    protected $nbResults       = 0;
-    protected $class           = '';
-    protected $tableName       = '';
-    protected $objects         = null;
-    protected $cursor          = 1;
-    protected $parameters      = [];
-    protected $currentMaxLink  = 1;
-    protected $parameterHolder = null;
-    protected $maxRecordLimit  = false;
+    protected $page = 1;
+    protected $maxPerPage = 0;
+    protected $lastPage = 1;
+    protected $nbResults = 0;
+    protected $class = '';
+    protected $tableName = '';
+    protected $objects;
+    protected $cursor = 1;
+    protected $parameters = [];
+    protected $currentMaxLink = 1;
+    protected $parameterHolder;
+    protected $maxRecordLimit = false;
     // used by iterator interface
-    protected $results         = null;
-    protected $resultsCounter  = 0;
+    protected $results;
+    protected $resultsCounter = 0;
 
     /**
      * Constructor.
      *
-     * @param string  $class      The model class
-     * @param integer $maxPerPage Number of records to display per page
+     * @param string $class      The model class
+     * @param int    $maxPerPage Number of records to display per page
      */
     public function __construct($class, $maxPerPage = 10)
     {
@@ -63,14 +63,14 @@ abstract class sfPager implements Iterator, Countable
      *
      * Used internally by {@link getCurrent()}.
      *
-     * @return mixed
+     * @param int $offset
      */
     abstract protected function retrieveObject($offset);
 
     /**
      * Returns the current pager's max link.
      *
-     * @return integer
+     * @return int
      */
     public function getCurrentMaxLink()
     {
@@ -80,7 +80,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the current pager's max record limit.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxRecordLimit()
     {
@@ -90,7 +90,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets the current pager's max record limit.
      *
-     * @param integer $limit
+     * @param int $limit
      */
     public function setMaxRecordLimit($limit)
     {
@@ -100,14 +100,14 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns an array of page numbers to use in pagination links.
      *
-     * @param  integer $nb_links The maximum number of page numbers to return
+     * @param int $nb_links The maximum number of page numbers to return
      *
      * @return array
      */
     public function getLinks($nb_links = 5)
     {
         $links = [];
-        $tmp   = $this->page - floor($nb_links / 2);
+        $tmp = $this->page - floor($nb_links / 2);
         $check = $this->lastPage - $nb_links + 1;
         $limit = $check > 0 ? $check : 1;
         $begin = $tmp > 0 ? ($tmp > $limit ? $limit : $tmp) : 1;
@@ -125,7 +125,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns true if the current query requires pagination.
      *
-     * @return boolean
+     * @return bool
      */
     public function haveToPaginate()
     {
@@ -135,7 +135,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the current cursor.
      *
-     * @return integer
+     * @return int
      */
     public function getCursor()
     {
@@ -145,7 +145,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets the current cursor.
      *
-     * @param integer $pos
+     * @param int $pos
      */
     public function setCursor($pos)
     {
@@ -161,9 +161,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns an object by cursor position.
      *
-     * @param  integer $pos
-     *
-     * @return mixed
+     * @param int $pos
      */
     public function getObjectByCursor($pos)
     {
@@ -174,8 +172,6 @@ abstract class sfPager implements Iterator, Countable
 
     /**
      * Returns the current object.
-     *
-     * @return mixed
      */
     public function getCurrent()
     {
@@ -191,9 +187,9 @@ abstract class sfPager implements Iterator, Countable
     {
         if ($this->cursor + 1 > $this->nbResults) {
             return null;
-        } else {
-            return $this->retrieveObject($this->cursor + 1);
         }
+
+        return $this->retrieveObject($this->cursor + 1);
     }
 
     /**
@@ -205,41 +201,41 @@ abstract class sfPager implements Iterator, Countable
     {
         if ($this->cursor - 1 < 1) {
             return null;
-        } else {
-            return $this->retrieveObject($this->cursor - 1);
         }
+
+        return $this->retrieveObject($this->cursor - 1);
     }
 
     /**
      * Returns the first index on the current page.
      *
-     * @return integer
+     * @return int
      */
     public function getFirstIndice()
     {
-        if ($this->page == 0) {
+        if (0 == $this->page) {
             return 1;
-        } else {
-            return ($this->page - 1) * $this->maxPerPage + 1;
         }
+
+        return ($this->page - 1) * $this->maxPerPage + 1;
     }
 
     /**
      * Returns the last index on the current page.
      *
-     * @return integer
+     * @return int
      */
     public function getLastIndice()
     {
-        if ($this->page == 0) {
+        if (0 == $this->page) {
             return $this->nbResults;
-        } else {
-            if ($this->page * $this->maxPerPage >= $this->nbResults) {
-                return $this->nbResults;
-            } else {
-                return $this->page * $this->maxPerPage;
-            }
         }
+
+        if ($this->page * $this->maxPerPage >= $this->nbResults) {
+            return $this->nbResults;
+        }
+
+        return $this->page * $this->maxPerPage;
     }
 
     /**
@@ -265,7 +261,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the number of results.
      *
-     * @return integer
+     * @return int
      */
     public function getNbResults()
     {
@@ -275,7 +271,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets the number of results.
      *
-     * @param integer $nb
+     * @param int $nb
      */
     protected function setNbResults($nb)
     {
@@ -285,7 +281,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the first page number.
      *
-     * @return integer
+     * @return int
      */
     public function getFirstPage()
     {
@@ -295,7 +291,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the last page number.
      *
-     * @return integer
+     * @return int
      */
     public function getLastPage()
     {
@@ -305,7 +301,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets the last page number.
      *
-     * @param integer $page
+     * @param int $page
      */
     protected function setLastPage($page)
     {
@@ -319,7 +315,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the current page.
      *
-     * @return integer
+     * @return int
      */
     public function getPage()
     {
@@ -329,7 +325,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the next page.
      *
-     * @return integer
+     * @return int
      */
     public function getNextPage()
     {
@@ -339,7 +335,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the previous page.
      *
-     * @return integer
+     * @return int
      */
     public function getPreviousPage()
     {
@@ -349,11 +345,11 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets the current page.
      *
-     * @param integer $page
+     * @param int $page
      */
     public function setPage($page)
     {
-        $this->page = intval($page);
+        $this->page = (int) $page;
 
         if ($this->page <= 0) {
             // set first page, which depends on a maximum set
@@ -364,7 +360,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns the maximum number of results per page.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxPerPage()
     {
@@ -374,21 +370,21 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets the maximum number of results per page.
      *
-     * @param integer $max
+     * @param int $max
      */
     public function setMaxPerPage($max)
     {
         if ($max > 0) {
             $this->maxPerPage = $max;
-            if ($this->page == 0) {
+            if (0 == $this->page) {
                 $this->page = 1;
             }
-        } elseif ($max == 0) {
+        } elseif (0 == $max) {
             $this->maxPerPage = 0;
             $this->page = 0;
         } else {
             $this->maxPerPage = 1;
-            if ($this->page == 0) {
+            if (0 == $this->page) {
                 $this->page = 1;
             }
         }
@@ -397,7 +393,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns true if on the first page.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFirstPage()
     {
@@ -407,7 +403,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns true if on the last page.
      *
-     * @return boolean
+     * @return bool
      */
     public function isLastPage()
     {
@@ -427,10 +423,8 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns a parameter.
      *
-     * @param  string $name
-     * @param  mixed  $default
-     *
-     * @return mixed
+     * @param string     $name
+     * @param mixed|null $default
      */
     public function getParameter($name, $default = null)
     {
@@ -440,9 +434,9 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Checks whether a parameter has been set.
      *
-     * @param  string $name
+     * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function hasParameter($name)
     {
@@ -452,8 +446,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Sets a parameter.
      *
-     * @param  string $name
-     * @param  mixed  $value
+     * @param string $name
      */
     public function setParameter($name, $value)
     {
@@ -463,7 +456,7 @@ abstract class sfPager implements Iterator, Countable
     /**
      * Returns true if the properties used for iteration have been initialized.
      *
-     * @return boolean
+     * @return bool
      */
     protected function isIteratorInitialized()
     {
@@ -493,6 +486,7 @@ abstract class sfPager implements Iterator, Countable
      *
      * @see Iterator
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         if (!$this->isIteratorInitialized()) {
@@ -507,6 +501,7 @@ abstract class sfPager implements Iterator, Countable
      *
      * @see Iterator
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         if (!$this->isIteratorInitialized()) {
@@ -521,6 +516,7 @@ abstract class sfPager implements Iterator, Countable
      *
      * @see Iterator
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if (!$this->isIteratorInitialized()) {
@@ -537,6 +533,7 @@ abstract class sfPager implements Iterator, Countable
      *
      * @see Iterator
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         if (!$this->isIteratorInitialized()) {
@@ -553,6 +550,7 @@ abstract class sfPager implements Iterator, Countable
      *
      * @see Iterator
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         if (!$this->isIteratorInitialized()) {
@@ -567,6 +565,7 @@ abstract class sfPager implements Iterator, Countable
      *
      * @see Countable
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->getNbResults();

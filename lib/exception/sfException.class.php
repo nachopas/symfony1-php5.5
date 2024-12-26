@@ -10,27 +10,28 @@
  */
 
 /**
- * sfException is the base class for all symfony related exceptions and
+ * sfException is the base class for all symfony related throwables and
  * provides an additional method for printing up a detailed view of an
- * exception.
+ * throwable.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
  */
 class sfException extends Exception
 {
-    protected $wrappedException = null;
+    /** @var Exception|Throwable|null */
+    protected $wrappedException;
 
-    protected static $lastException = null;
+    protected static $lastException;
 
     /**
-     * Wraps an Exception.
+     * Wraps an Throwable.
      *
-     * @param Exception $e An Exception instance
+     * @param Exception|Throwable $e An Throwable instance
      *
-     * @return sfException An sfException instance that wraps the given Exception object
+     * @return sfException An sfException instance that wraps the given Throwable object
      */
-    public static function createFromException(Exception $e)
+    public static function createFromException($e)
     {
         $exception = new sfException(sprintf('Wrapped %s: %s', get_class($e), $e->getMessage()));
         $exception->setWrappedException($e);
@@ -42,9 +43,9 @@ class sfException extends Exception
     /**
      * Sets the wrapped exception.
      *
-     * @param Exception $e An Exception instance
+     * @param Exception|Throwable $e A Throwable instance
      */
-    public function setWrappedException(Exception $e)
+    public function setWrappedException($e)
     {
         $this->wrappedException = $e;
 
@@ -52,9 +53,9 @@ class sfException extends Exception
     }
 
     /**
-     * Gets the last wrapped exception.
+     * Gets the last wrapped throwable.
      *
-     * @return Exception An Exception instance
+     * @return Exception|Throwable An Throwable instance
      */
     public static function getLastException()
     {
@@ -62,7 +63,7 @@ class sfException extends Exception
     }
 
     /**
-     * Clears the $lastException property (added for #6342)
+     * Clears the $lastException property (added for #6342).
      */
     public static function clearLastException()
     {
@@ -98,9 +99,16 @@ class sfException extends Exception
             header('HTTP/1.0 500 Internal Server Error');
         }
 
-        try {
-            static::outputStackTrace($exception);
-        } catch (Exception $e) {
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            try {
+                $this->outputStackTrace($exception);
+            } catch (Throwable $e) {
+            }
+        } else {
+            try {
+                $this->outputStackTrace($exception);
+            } catch (Exception $e) {
+            }
         }
 
         if (!sfConfig::get('sf_test')) {
@@ -110,19 +118,24 @@ class sfException extends Exception
 
     /**
      * Gets the stack trace for this exception.
+     *
+     * @param Exception|Throwable $exception
      */
-    protected static function outputStackTrace(Exception $exception)
+    protected static function outputStackTrace($exception)
     {
         $format = 'html';
-        $code   = '500';
-        $text   = 'Internal Server Error';
+        $code = '500';
+        $text = 'Internal Server Error';
 
         $response = null;
         if (class_exists('sfContext', false) && sfContext::hasInstance() && is_object($request = sfContext::getInstance()->getRequest()) && is_object($response = sfContext::getInstance()->getResponse())) {
+            /** @var sfWebRequest $request */
+            /** @var sfWebResponse $response */
             $dispatcher = sfContext::getInstance()->getEventDispatcher();
 
             if (sfConfig::get('sf_logging_enabled')) {
-                $dispatcher->notify(new sfEvent($exception, 'application.log', [$exception->getMessage(), 'priority' => sfLogger::ERR]));
+                $priority = $exception instanceof sfError404Exception ? sfLogger::ERR : sfLogger::CRIT;
+                $dispatcher->notify(new sfEvent($exception, 'application.log', [$exception->getMessage(), 'priority' => $priority]));
             }
 
             $event = $dispatcher->notifyUntil(new sfEvent($exception, 'application.throw_exception'));
@@ -165,6 +178,7 @@ class sfException extends Exception
         if (!sfConfig::get('sf_debug')) {
             if ($template = self::getTemplatePathForError($format, false)) {
                 include $template;
+
                 return;
             }
         }
@@ -176,8 +190,8 @@ class sfException extends Exception
         }
 
         $message = $exception->getMessage() ?? 'n/a';
-        $name    = get_class($exception);
-        $traces  = self::getTraces($exception, $format);
+        $name = get_class($exception);
+        $traces = self::getTraces($exception, $format);
 
         // dump main objects values
         $sf_settings = '';
@@ -185,10 +199,10 @@ class sfException extends Exception
         if (class_exists('sfContext', false) && sfContext::hasInstance()) {
             $context = sfContext::getInstance();
             $settingsTable = self::formatArrayAsHtml(sfDebug::settingsAsArray());
-            $requestTable  = self::formatArrayAsHtml(sfDebug::requestAsArray($context->getRequest()));
+            $requestTable = self::formatArrayAsHtml(sfDebug::requestAsArray($context->getRequest()));
             $responseTable = self::formatArrayAsHtml(sfDebug::responseAsArray($context->getResponse()));
-            $userTable     = self::formatArrayAsHtml(sfDebug::userAsArray($context->getUser()));
-            $globalsTable  = self::formatArrayAsHtml(sfDebug::globalsAsArray());
+            $userTable = self::formatArrayAsHtml(sfDebug::userAsArray($context->getUser()));
+            $globalsTable = self::formatArrayAsHtml(sfDebug::globalsAsArray());
         }
 
         if (isset($response) && $response) {
@@ -198,6 +212,7 @@ class sfException extends Exception
         if ($template = self::getTemplatePathForError($format, true)) {
             if (isset($dispatcher)) {
                 ob_start();
+
                 include $template;
                 $content = ob_get_clean();
 
@@ -215,15 +230,19 @@ class sfException extends Exception
     /**
      * Returns the path for the template error message.
      *
-     * @param  string  $format The request format
-     * @param  Boolean $debug  Whether to return a template for the debug mode or not
+     * @param string $format The request format
+     * @param bool   $debug  Whether to return a template for the debug mode or not
      *
-     * @return string|Boolean  false if the template cannot be found for the given format,
-     *                         the absolute path to the template otherwise
+     * @return bool|string false if the template cannot be found for the given format,
+     *                     the absolute path to the template otherwise
      */
     public static function getTemplatePathForError($format, $debug)
     {
-        $templatePaths = [sfConfig::get('sf_app_config_dir').'/error', sfConfig::get('sf_config_dir').'/error', __DIR__.'/data'];
+        $templatePaths = [
+            sfConfig::get('sf_app_config_dir').'/error',
+            sfConfig::get('sf_config_dir').'/error',
+            __DIR__.'/data',
+        ];
 
         $template = sprintf('%s.%s.php', $debug ? 'exception' : 'error', $format);
         foreach ($templatePaths as $path) {
@@ -238,24 +257,29 @@ class sfException extends Exception
     /**
      * Returns an array of exception traces.
      *
-     * @param Exception $exception  An Exception implementation instance
-     * @param string    $format     The trace format (txt or html)
+     * @param Exception|Throwable $exception An Throwable implementation instance
+     * @param string              $format    The trace format (txt or html)
      *
      * @return array An array of traces
      */
     protected static function getTraces($exception, $format = 'txt')
     {
         $traceData = $exception->getTrace();
-        array_unshift($traceData, ['function' => '', 'file'     => $exception->getFile() != null ? $exception->getFile() : null, 'line'     => $exception->getLine() != null ? $exception->getLine() : null, 'args'     => []]);
+        array_unshift($traceData, [
+            'function' => '',
+            'file' => null != $exception->getFile() ? $exception->getFile() : null,
+            'line' => null != $exception->getLine() ? $exception->getLine() : null,
+            'args' => [],
+        ]);
 
         $traces = [];
-        if ($format == 'html') {
+        if ('html' == $format) {
             $lineFormat = 'at <strong>%s%s%s</strong>(%s)<br />in <em>%s</em> line %s <a href="#" onclick="toggle(\'%s\'); return false;">...</a><br /><ul class="code" id="%s" style="display: %s">%s</ul>';
         } else {
             $lineFormat = 'at %s%s%s(%s) in %s line %s';
         }
 
-        for ($i = 0, $count = count($traceData); $i < $count; $i++) {
+        for ($i = 0, $count = count($traceData); $i < $count; ++$i) {
             $line = $traceData[$i]['line'] ?? null;
             $file = $traceData[$i]['file'] ?? null;
             $args = $traceData[$i]['args'] ?? [];
@@ -269,7 +293,7 @@ class sfException extends Exception
                 $line ?? 'n/a',
                 'trace_'.$i,
                 'trace_'.$i,
-                $i == 0 ? 'block' : 'none',
+                0 == $i ? 'block' : 'none',
                 self::fileExcerpt($file, $line)
             );
         }
@@ -292,18 +316,23 @@ class sfException extends Exception
     /**
      * Returns an excerpt of a code file around the given line number.
      *
-     * @param string $file  A file path
-     * @param int    $line  The selected line number
+     * @param string $file A file path
+     * @param int    $line The selected line number
      *
      * @return string An HTML string
      */
     protected static function fileExcerpt($file, $line)
     {
+        // $file can be null for RuntimeException
+        if (null === $file) {
+            return '';
+        }
+
         if (is_readable($file)) {
             $content = preg_split('#<br />#', preg_replace('/^<code>(.*)<\/code>$/s', '$1', highlight_file($file, true)));
 
             $lines = [];
-            for ($i = max($line - 3, 1), $max = min($line + 3, count($content)); $i <= $max; $i++) {
+            for ($i = max($line - 3, 1), $max = min($line + 3, count($content)); $i <= $max; ++$i) {
                 $lines[] = '<li'.($i == $line ? ' class="selected"' : '').'>'.$content[$i - 1].'</li>';
             }
 
@@ -314,9 +343,9 @@ class sfException extends Exception
     /**
      * Formats an array as a string.
      *
-     * @param array   $args     The argument array
-     * @param boolean $single
-     * @param string  $format   The format string (html or txt)
+     * @param array  $args   The argument array
+     * @param bool   $single
+     * @param string $format The format string (html or txt)
      *
      * @return string
      */
@@ -328,13 +357,13 @@ class sfException extends Exception
 
         foreach ($args as $key => $value) {
             if (is_object($value)) {
-                $formattedValue = ($format == 'html' ? '<em>object</em>' : 'object').sprintf("('%s')", get_class($value));
+                $formattedValue = ('html' == $format ? '<em>object</em>' : 'object').sprintf("('%s')", get_class($value));
             } elseif (is_array($value)) {
-                $formattedValue = ($format == 'html' ? '<em>array</em>' : 'array').sprintf("(%s)", self::formatArgs($value));
+                $formattedValue = ('html' == $format ? '<em>array</em>' : 'array').sprintf('(%s)', self::formatArgs($value));
             } elseif (is_string($value)) {
-                $formattedValue = ($format == 'html' ? sprintf("'%s'", self::escape($value)) : "'$value'");
+                $formattedValue = ('html' == $format ? sprintf("'%s'", self::escape($value)) : "'{$value}'");
             } elseif (null === $value) {
-                $formattedValue = ($format == 'html' ? '<em>null</em>' : 'null');
+                $formattedValue = ('html' == $format ? '<em>null</em>' : 'null');
             } else {
                 $formattedValue = $value;
             }
@@ -348,10 +377,10 @@ class sfException extends Exception
     /**
      * Formats a file path.
      *
-     * @param  string  $file   An absolute file path
-     * @param  integer $line   The line number
-     * @param  string  $format The output format (txt or html)
-     * @param  string  $text   Use this text for the link rather than the file path
+     * @param string $file   An absolute file path
+     * @param int    $line   The line number
+     * @param string $format The output format (txt or html)
+     * @param string $text   Use this text for the link rather than the file path
      *
      * @return string
      */
@@ -370,9 +399,9 @@ class sfException extends Exception
     }
 
     /**
-     * Escapes a string value with html entities
+     * Escapes a string value with html entities.
      *
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */

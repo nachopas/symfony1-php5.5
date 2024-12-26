@@ -27,9 +27,9 @@ class sfWebDebugPanelCache extends sfWebDebugPanel
 
         if (false === strpos($queryString, '_sf_ignore_cache')) {
             return sprintf('?%s_sf_ignore_cache=1', $queryString ? $queryString.'&' : '');
-        } else {
-            return '?'.$queryString;
         }
+
+        return '?'.$queryString;
     }
 
     public function getPanelTitle()

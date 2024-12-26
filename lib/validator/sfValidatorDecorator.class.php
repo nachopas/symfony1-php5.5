@@ -19,7 +19,7 @@
  */
 abstract class sfValidatorDecorator extends sfValidatorBase
 {
-    protected $validator = null;
+    protected $validator;
 
     /**
      * @see sfValidatorBase
@@ -80,6 +80,8 @@ abstract class sfValidatorDecorator extends sfValidatorBase
     public function setMessage($name, $value)
     {
         $this->validator->setMessage($name, $value);
+
+        return $this;
     }
 
     /**
@@ -112,6 +114,8 @@ abstract class sfValidatorDecorator extends sfValidatorBase
     public function setOption($name, $value)
     {
         $this->validator->setOption($name, $value);
+
+        return $this;
     }
 
     /**
@@ -136,6 +140,8 @@ abstract class sfValidatorDecorator extends sfValidatorBase
     public function setOptions($values)
     {
         $this->validator->setOptions($values);
+
+        return $this;
     }
 
     /**

@@ -15,10 +15,11 @@
  */
 class sfLoggerWrapper extends sfLogger
 {
-    protected $logger = null;
+    /** @var sfLoggerInterface */
+    protected $logger;
 
     /**
-     * Creates a new logger wrapper
+     * Creates a new logger wrapper.
      *
      * @param sfLoggerInterface $logger The wrapped logger
      */
@@ -30,8 +31,8 @@ class sfLoggerWrapper extends sfLogger
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param int    $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     protected function doLog($message, $priority)
     {

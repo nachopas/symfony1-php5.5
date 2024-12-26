@@ -2,7 +2,6 @@
 
 /**
  * Article form.
- *
  */
 class ArticleForm extends BaseArticleForm
 {

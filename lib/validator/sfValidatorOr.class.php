@@ -26,9 +26,9 @@ class sfValidatorOr extends sfValidatorBase
      *  * a sfValidatorBase instance
      *  * an array of sfValidatorBase instances
      *
-     * @param mixed $validators  Initial validators
-     * @param array $options     An array of options
-     * @param array $messages    An array of error messages
+     * @param mixed $validators Initial validators
+     * @param array $options    An array of options
+     * @param array $messages   An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -58,7 +58,7 @@ class sfValidatorOr extends sfValidatorBase
     /**
      * Adds a validator.
      *
-     * @param sfValidatorBase $validator  An sfValidatorBase instance
+     * @param sfValidatorBase $validator An sfValidatorBase instance
      */
     public function addValidator(sfValidatorBase $validator)
     {
@@ -80,12 +80,12 @@ class sfValidatorOr extends sfValidatorBase
      */
     protected function doClean($value)
     {
-        $errors = [];
+        $errors = new sfValidatorErrorSchema($this);
         foreach ($this->validators as $validator) {
             try {
                 return $validator->clean($value);
             } catch (sfValidatorError $e) {
-                $errors[] = $e;
+                $errors->addError($e);
             }
         }
 
@@ -93,7 +93,7 @@ class sfValidatorOr extends sfValidatorBase
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 
-        throw new sfValidatorErrorSchema($this, $errors);
+        throw $errors;
     }
 
     /**
@@ -102,7 +102,7 @@ class sfValidatorOr extends sfValidatorBase
     public function asString($indent = 0)
     {
         $validators = '';
-        for ($i = 0, $max = count($this->validators); $i < $max; $i++) {
+        for ($i = 0, $max = count($this->validators); $i < $max; ++$i) {
             $validators .= "\n".$this->validators[$i]->asString($indent + 2)."\n";
 
             if ($i < $max - 1) {
@@ -123,6 +123,6 @@ class sfValidatorOr extends sfValidatorBase
             }
         }
 
-        return sprintf("%s(%s%s)", str_repeat(' ', $indent), $validators, str_repeat(' ', $indent));
+        return sprintf('%s(%s%s)', str_repeat(' ', $indent), $validators, str_repeat(' ', $indent));
     }
 }

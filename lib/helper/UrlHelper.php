@@ -39,7 +39,7 @@ function link_to1($name, $internal_uri, $options = [])
         unset($html_options['absolute_url']);
     }
     if (isset($html_options['absolute'])) {
-        $absolute = (boolean) $html_options['absolute'];
+        $absolute = (bool) $html_options['absolute'];
         unset($html_options['absolute']);
     }
 
@@ -63,7 +63,7 @@ function link_to1($name, $internal_uri, $options = [])
         }
     }
 
-    if (!strlen($name)) {
+    if ('' === $name) {
         $name = $html_options['href'];
     }
 
@@ -102,8 +102,6 @@ function url_for1($internal_uri, $absolute = false)
  *    => http://myapp.example.com/path/to/my/action
  * </code>
  *
- * @param  string $internal_uri  'module/action' or '@rule' of the action
- * @param  bool   $absolute      return absolute path?
  * @return string routed URL
  */
 function url_for()
@@ -112,9 +110,9 @@ function url_for()
     $arguments = func_get_args();
     if (is_array($arguments[0]) || '@' == substr($arguments[0], 0, 1) || false !== strpos($arguments[0], '/')) {
         return call_user_func_array('url_for1', $arguments);
-    } else {
-        return call_user_func_array('url_for2', $arguments);
     }
+
+    return call_user_func_array('url_for2', $arguments);
 }
 
 /**
@@ -150,10 +148,8 @@ function url_for()
  *    => <a href="http://myapp.example.com/path/to/my/action" id="myid" onclick="return confirm('Are you sure?');">Delete this page</a>
  * </code>
  *
- * @param  string $name          name of the link, i.e. string to appear between the <a> tags
- * @param  string $internal_uri  'module/action' or '@rule' of the action
- * @param  array  $options       additional HTML compliant <a> tag parameters
  * @return string XHTML compliant <a href> tag
+ *
  * @see    url_for
  */
 function link_to()
@@ -162,12 +158,13 @@ function link_to()
     $arguments = func_get_args();
     if (empty($arguments[1]) || is_array($arguments[1]) || '@' == substr($arguments[1], 0, 1) || false !== strpos($arguments[1], '/')) {
         return call_user_func_array('link_to1', $arguments);
-    } else {
-        if (!array_key_exists(2, $arguments)) {
-            $arguments[2] = [];
-        }
-        return call_user_func_array('link_to2', $arguments);
     }
+
+    if (!array_key_exists(2, $arguments)) {
+        $arguments[2] = [];
+    }
+
+    return call_user_func_array('link_to2', $arguments);
 }
 
 function url_for_form(sfFormObject $form, $routePrefix)
@@ -192,7 +189,7 @@ function form_tag_for(sfForm $form, $routePrefix, $attributes = [])
  * If the condition passed as first argument is true,
  * creates a <a> link tag of the given name using a routed URL
  * based on the module/action passed as argument and the routing configuration.
- * If the condition is false, the given name is returned between <span> tags
+ * If the condition is false, the given name is returned between <span> tags.
  *
  * <b>Options:</b>
  * - 'tag' - the HTML tag that must enclose the name if the condition is false, defaults to <span>
@@ -211,11 +208,6 @@ function form_tag_for(sfForm $form, $routePrefix, $attributes = [])
  *    => <span>Delete this page</span>
  * </code>
  *
- * @param  bool   $condition     condition
- * @param  string $name          name of the link, i.e. string to appear between the <a> tags
- * @param  string $internal_uri  'module/action' or '@rule' of the action
- * @param  array  $options       additional HTML compliant <a> tag parameters
- *
  * @return string XHTML compliant <a href> tag or name
  *
  * @see    link_to
@@ -224,32 +216,33 @@ function link_to_if()
 {
     $arguments = func_get_args();
     if (empty($arguments[2]) || '@' == substr($arguments[2], 0, 1) || false !== strpos($arguments[2], '/')) {
-        [$condition, $name, $params, $options] = array_pad($arguments, 4, null);
+        list($condition, $name, $params, $options) = array_pad($arguments, 4, null);
     } else {
-        [$condition, $name, $routeName, $params, $options] = array_pad($arguments, 5, null);
+        list($condition, $name, $routeName, $params, $options) = array_pad($arguments, 5, null);
         $params = array_merge(['sf_route' => $routeName], is_object($params) ? ['sf_subject' => $params] : (array) $params);
     }
 
     $html_options = _parse_attributes($options);
     if ($condition) {
         unset($html_options['tag']);
+
         return link_to1($name, $params, $html_options);
-    } else {
-        unset($html_options['query_string']);
-        unset($html_options['absolute_url']);
-        unset($html_options['absolute']);
-
-        $tag = _get_option($html_options, 'tag', 'span');
-
-        return content_tag($tag, $name, $html_options);
     }
+
+    unset($html_options['query_string']);
+    unset($html_options['absolute_url']);
+    unset($html_options['absolute']);
+
+    $tag = _get_option($html_options, 'tag', 'span');
+
+    return content_tag($tag, $name, $html_options);
 }
 
 /**
  * If the condition passed as first argument is false,
  * creates a <a> link tag of the given name using a routed URL
  * based on the module/action passed as argument and the routing configuration.
- * If the condition is true, the given name is returned between <span> tags
+ * If the condition is true, the given name is returned between <span> tags.
  *
  * <b>Options:</b>
  * - 'tag' - the HTML tag that must enclose the name if the condition is true, defaults to <span>
@@ -268,11 +261,6 @@ function link_to_if()
  *    => <a href="/path/to/my/action">Delete this page</a>
  * </code>
  *
- * @param  bool   $condition     condition
- * @param  string $name          name of the link, i.e. string to appear between the <a> tags
- * @param  string $internal_uri  'module/action' or '@rule' of the action
- * @param  array  $options       additional HTML compliant <a> tag parameters
- *
  * @return string XHTML compliant <a href> tag or name
  *
  * @see    link_to
@@ -281,15 +269,17 @@ function link_to_unless()
 {
     $arguments = func_get_args();
     $arguments[0] = !$arguments[0];
+
     return call_user_func_array('link_to_if', $arguments);
 }
 
 /**
- * Returns a URL rooted at the web root
+ * Returns a URL rooted at the web root.
  *
- * @param   string  $path     The route to append
- * @param   bool    $absolute If true, an absolute path is returned (optional)
- * @return  The web URL root
+ * @param string $path     The route to append
+ * @param bool   $absolute If true, an absolute path is returned (optional)
+ *
+ * @return The web URL root
  */
 function public_path($path, $absolute = false)
 {
@@ -301,12 +291,12 @@ function public_path($path, $absolute = false)
         if ($request->isSecure()) {
             $source .= 's';
         }
-        $source .='://'.$request->getHost().$root;
+        $source .= '://'.$request->getHost().$root;
     } else {
         $source = $root;
     }
 
-    if (substr($path, 0, 1) != '/') {
+    if ('/' != substr($path, 0, 1)) {
         $path = '/'.$path;
     }
 
@@ -332,10 +322,12 @@ function public_path($path, $absolute = false)
  *    => <input value="Delete this page" type="button" onclick="document.location.href='/path/to/my/action';" />
  * </code>
  *
- * @param  string $name          name of the button
- * @param  string $internal_uri  'module/action' or '@rule' of the action
- * @param  array  $options       additional HTML compliant <input> tag parameters
+ * @param string $name         name of the button
+ * @param string $internal_uri 'module/action' or '@rule' of the action
+ * @param array  $options      additional HTML compliant <input> tag parameters
+ *
  * @return string XHTML compliant <input> tag
+ *
  * @see    url_for, link_to
  */
 function button_to($name, $internal_uri, $options = [])
@@ -370,7 +362,7 @@ function button_to($name, $internal_uri, $options = [])
         $html_options = _convert_options_to_javascript($html_options, $url);
         unset($html_options['popup']);
     } else {
-        $html_options['onclick'] = "document.location.href=".$url.";";
+        $html_options['onclick'] = 'document.location.href='.$url.';';
         $html_options = _convert_options_to_javascript($html_options);
     }
 
@@ -391,8 +383,8 @@ function button_to($name, $internal_uri, $options = [])
  *   <code><?php echo form_tag('@myroute'); ?></code>
  *   <code><?php echo form_tag('/module/action', array('name' => 'myformname', 'multipart' => true)); ?></code>
  *
- * @param  string $url_for_options  valid action, route or URL
- * @param  array  $options          optional HTML parameters for the <form> tag
+ * @param string $url_for_options valid action, route or URL
+ * @param array  $options         optional HTML parameters for the <form> tag
  *
  * @return string opening HTML <form> tag with options
  */
@@ -436,16 +428,18 @@ function form_tag($url_for_options = '', $options = [])
  *    => <a href="mailto:webmaster@example.com">send us an email</a>
  *  echo mail_to('webmaster@example.com', 'send us an email', array('encode' => true));
  *    => <a href="
-            &#x6d;a&#x69;&#x6c;&#x74;&#111;&#58;&#x77;&#x65;b&#x6d;as&#116;&#x65;&#114;
-            &#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#109;
-          ">send us an email</a>
+ * &#x6d;a&#x69;&#x6c;&#x74;&#111;&#58;&#x77;&#x65;b&#x6d;as&#116;&#x65;&#114;
+ * &#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#109;
+ * ">send us an email</a>
  * </code>
  *
- * @param  string $email          target email
- * @param  string $name           name of the link, i.e. string to appear between the <a> tags
- * @param  array  $options        additional HTML compliant <a> tag parameters
- * @param  array  $default_value
+ * @param string $email         target email
+ * @param string $name          name of the link, i.e. string to appear between the <a> tags
+ * @param array  $options       additional HTML compliant <a> tag parameters
+ * @param array  $default_value
+ *
  * @return string XHTML compliant <a href> tag
+ *
  * @see    link_to
  */
 function mail_to($email, $name = '', $options = [], $default_value = [])
@@ -495,7 +489,8 @@ function _convert_options_to_javascript($html_options, $url = 'this.href')
 
     if ($popup && $method) {
         throw new sfConfigurationException('You can\'t use "popup", "method" and "post" in the same link.');
-    } elseif ($confirm && $popup) {
+    }
+    if ($confirm && $popup) {
         $html_options['onclick'] = $onclick.'if ('._confirm_javascript_function($confirm).') { '._popup_javascript_function($popup, $url).' };return false;';
     } elseif ($confirm && $method) {
         $html_options['onclick'] = $onclick.'if ('._confirm_javascript_function($confirm).') { '._method_javascript_function($method).' };return false;';
@@ -523,13 +518,13 @@ function _popup_javascript_function($popup, $url = '')
 {
     if (is_array($popup)) {
         if (isset($popup[1])) {
-            return "var w=window.open(".$url.",'".$popup[0]."','".$popup[1]."');w.focus();";
-        } else {
-            return "var w=window.open(".$url.",'".$popup[0]."');w.focus();";
+            return 'var w=window.open('.$url.",'".$popup[0]."','".$popup[1]."');w.focus();";
         }
-    } else {
-        return "var w=window.open(".$url.");w.focus();";
+
+        return 'var w=window.open('.$url.",'".$popup[0]."');w.focus();";
     }
+
+    return 'var w=window.open('.$url.');w.focus();';
 }
 
 function _post_javascript_function()
@@ -553,7 +548,7 @@ function _method_javascript_function($method)
         $function .= sprintf("m.setAttribute('name', '%s'); m.setAttribute('value', '%s'); f.appendChild(m);", $form->getCSRFFieldName(), $form->getCSRFToken());
     }
 
-    $function .= "f.submit();";
+    $function .= 'f.submit();';
 
     return $function;
 }
@@ -562,13 +557,13 @@ function _encodeText($text)
 {
     $encoded_text = '';
 
-    for ($i = 0; $i < strlen($text); $i++) {
+    for ($i = 0; $i < strlen($text); ++$i) {
         $char = $text[$i];
-        $r = random_int(0, 100);
+        $r = mt_rand(0, 100);
 
-        # roughly 10% raw, 45% hex, 45% dec
-        # '@' *must* be encoded. I insist.
-        if ($r > 90 && $char != '@') {
+        // roughly 10% raw, 45% hex, 45% dec
+        // '@' *must* be encoded. I insist.
+        if ($r > 90 && '@' != $char) {
             $encoded_text .= $char;
         } elseif ($r < 45) {
             $encoded_text .= '&#x'.dechex(ord($char)).';';

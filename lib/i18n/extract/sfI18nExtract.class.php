@@ -14,11 +14,11 @@
 abstract class sfI18nExtract
 {
     protected $currentMessages = [];
-    protected $newMessages     = [];
+    protected $newMessages = [];
     protected $allSeenMessages = [];
-    protected $culture         = null;
-    protected $parameters      = [];
-    protected $i18n            = null;
+    protected $culture;
+    protected $parameters = [];
+    protected $i18n;
 
     /**
      * Class constructor.
@@ -33,9 +33,9 @@ abstract class sfI18nExtract
     /**
      * Initializes the current extract object.
      *
-     * @param sfI18N $i18n        A sfI18N instance
-     * @param string $culture     The culture
-     * @param array  $parameters  An array of parameters
+     * @param sfI18N $i18n       A sfI18N instance
+     * @param string $culture    The culture
+     * @param array  $parameters An array of parameters
      */
     public function initialize(sfI18N $i18n, $culture, $parameters = [])
     {

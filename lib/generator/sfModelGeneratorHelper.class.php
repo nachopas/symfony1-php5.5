@@ -19,6 +19,12 @@ abstract class sfModelGeneratorHelper
         return '<li class="sf_admin_action_edit">'.link_to(__($params['label'], [], 'sf_admin'), $this->getUrlForAction('edit'), $object).'</li>';
     }
 
+    /**
+     * @param mixed|Persistent $object
+     * @param array            $params
+     *
+     * @return string
+     */
     public function linkToDelete($object, $params)
     {
         if ($object->isNew()) {
@@ -38,6 +44,12 @@ abstract class sfModelGeneratorHelper
         return '<li class="sf_admin_action_save"><input type="submit" value="'.__($params['label'], [], 'sf_admin').'" /></li>';
     }
 
+    /**
+     * @param mixed|Persistent $object
+     * @param array            $params
+     *
+     * @return string
+     */
     public function linkToSaveAndAdd($object, $params)
     {
         if (!$object->isNew()) {

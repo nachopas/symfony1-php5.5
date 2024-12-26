@@ -2,7 +2,6 @@
 
 /**
  * Profile form.
- *
  */
 class ProfileForm extends BaseProfileForm
 {

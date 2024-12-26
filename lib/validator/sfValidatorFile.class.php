@@ -42,8 +42,8 @@ class sfValidatorFile extends sfValidatorBase
      *  * cant_write
      *  * extension
      *
-     * @param array $options   An array of options
-     * @param array $messages  An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -55,12 +55,23 @@ class sfValidatorFile extends sfValidatorBase
 
         $this->addOption('max_size');
         $this->addOption('mime_types');
-        $this->addOption('mime_type_guessers', [[$this, 'guessFromFileinfo'], [$this, 'guessFromMimeContentType'], [$this, 'guessFromFileBinary']]);
-        $this->addOption('mime_categories', ['web_images' => ['image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png', 'image/gif']]);
+        $this->addOption('mime_type_guessers', [
+            [$this, 'guessFromFileinfo'],
+            [$this, 'guessFromMimeContentType'],
+            [$this, 'guessFromFileBinary'],
+        ]);
+        $this->addOption('mime_categories', [
+            'web_images' => [
+                'image/jpeg',
+                'image/pjpeg',
+                'image/png',
+                'image/x-png',
+                'image/gif',
+            ]]);
         $this->addOption('validated_file_class', 'sfValidatedFile');
         $this->addOption('path', null);
 
-        $this->addMessage('max_size', 'File is too large (maximum is %max_size% bytes).');
+        $this->addMessage('max_size', 'File is too large (maximum is %max_size% kilobytes).');
         $this->addMessage('mime_types', 'Invalid mime type (%mime_type%).');
         $this->addMessage('partial', 'The uploaded file was only partially uploaded.');
         $this->addMessage('no_tmp_dir', 'Missing a temporary folder.');
@@ -104,27 +115,28 @@ class sfValidatorFile extends sfValidatorBase
         }
 
         switch ($value['error']) {
-      case UPLOAD_ERR_INI_SIZE:
-        $max = ini_get('upload_max_filesize');
-        if ($this->getOption('max_size')) {
-            $max = min($max, $this->getOption('max_size'));
+            case UPLOAD_ERR_INI_SIZE:
+                $max = $this->getMaxFilesize();
+                if ($this->getOption('max_size')) {
+                    $max = min($max, $this->getOption('max_size'));
+                }
+
+                throw new sfValidatorError($this, 'max_size', ['max_size' => round($max / 1024, 0), 'size' => (int) $value['size']]);
+            case UPLOAD_ERR_FORM_SIZE:
+                throw new sfValidatorError($this, 'max_size', ['max_size' => 0, 'size' => (int) $value['size']]);
+            case UPLOAD_ERR_PARTIAL:
+                throw new sfValidatorError($this, 'partial');
+            case UPLOAD_ERR_NO_TMP_DIR:
+                throw new sfValidatorError($this, 'no_tmp_dir');
+            case UPLOAD_ERR_CANT_WRITE:
+                throw new sfValidatorError($this, 'cant_write');
+            case UPLOAD_ERR_EXTENSION:
+                throw new sfValidatorError($this, 'extension');
         }
-        throw new sfValidatorError($this, 'max_size', ['max_size' => $max, 'size' => (int) $value['size']]);
-      case UPLOAD_ERR_FORM_SIZE:
-        throw new sfValidatorError($this, 'max_size', ['max_size' => 0, 'size' => (int) $value['size']]);
-      case UPLOAD_ERR_PARTIAL:
-        throw new sfValidatorError($this, 'partial');
-      case UPLOAD_ERR_NO_TMP_DIR:
-        throw new sfValidatorError($this, 'no_tmp_dir');
-      case UPLOAD_ERR_CANT_WRITE:
-        throw new sfValidatorError($this, 'cant_write');
-      case UPLOAD_ERR_EXTENSION:
-        throw new sfValidatorError($this, 'extension');
-    }
 
         // check file size
         if ($this->hasOption('max_size') && $this->getOption('max_size') < (int) $value['size']) {
-            throw new sfValidatorError($this, 'max_size', ['max_size' => $this->getOption('max_size'), 'size' => (int) $value['size']]);
+            throw new sfValidatorError($this, 'max_size', ['max_size' => round($this->getOption('max_size') / 1024, 0), 'size' => (int) $value['size']]);
         }
 
         $mimeType = $this->getMimeType((string) $value['tmp_name'], (string) $value['type']);
@@ -151,8 +163,8 @@ class sfValidatorFile extends sfValidatorBase
      * This method always returns a lower-cased string as mime types are case-insensitive
      * as per the RFC 2616 (http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.7).
      *
-     * @param  string $file      The absolute path of a file
-     * @param  string $fallback  The default mime type to return if not guessable
+     * @param string $file     The absolute path of a file
+     * @param string $fallback The default mime type to return if not guessable
      *
      * @return string The mime type of the file (fallback is returned if not guessable)
      */
@@ -161,7 +173,7 @@ class sfValidatorFile extends sfValidatorBase
         foreach ($this->getOption('mime_type_guessers') as $method) {
             $type = call_user_func($method, $file);
 
-            if (null !== $type && $type !== false) {
+            if (null !== $type && false !== $type) {
                 return strtolower($type);
             }
         }
@@ -170,9 +182,9 @@ class sfValidatorFile extends sfValidatorBase
     }
 
     /**
-     * Guess the file mime type with PECL Fileinfo extension
+     * Guess the file mime type with PECL Fileinfo extension.
      *
-     * @param  string $file  The absolute path of a file
+     * @param string $file The absolute path of a file
      *
      * @return string The mime type of the file (null if not guessable)
      */
@@ -197,9 +209,9 @@ class sfValidatorFile extends sfValidatorBase
     }
 
     /**
-     * Guess the file mime type with mime_content_type function (deprecated)
+     * Guess the file mime type with mime_content_type function (deprecated).
      *
-     * @param  string $file  The absolute path of a file
+     * @param string $file The absolute path of a file
      *
      * @return string The mime type of the file (null if not guessable)
      */
@@ -213,17 +225,19 @@ class sfValidatorFile extends sfValidatorBase
     }
 
     /**
-     * Guess the file mime type with the file binary (only available on *nix)
+     * Guess the file mime type with the file binary (only available on *nix).
      *
-     * @param  string $file  The absolute path of a file
+     * @param string $file The absolute path of a file
      *
      * @return string The mime type of the file (null if not guessable)
      */
     protected function guessFromFileBinary($file)
     {
         ob_start();
-        //need to use --mime instead of -i. see #6641
-        passthru(sprintf('file -b --mime %s 2>/dev/null', escapeshellarg($file)), $return);
+        // need to use --mime instead of -i. see #6641
+        $cmd = 'file -b --mime -- %s 2>/dev/null';
+        $file = (0 === strpos($file, '-') ? './' : '').$file;
+        passthru(sprintf($cmd, escapeshellarg($file)), $return);
         if ($return > 0) {
             ob_end_clean();
 
@@ -258,8 +272,36 @@ class sfValidatorFile extends sfValidatorBase
         // empty if the value is not an array
         // or if the value comes from PHP with an error of UPLOAD_ERR_NO_FILE
         return
-      (!is_array($value))
-        ||
-      (is_array($value) && isset($value['error']) && UPLOAD_ERR_NO_FILE === $value['error']);
+          (!is_array($value))
+          || (is_array($value) && isset($value['error']) && UPLOAD_ERR_NO_FILE === $value['error']);
+    }
+
+    /**
+     * Returns the maximum size of an uploaded file as configured in php.ini.
+     *
+     * @return type The maximum size of an uploaded file in bytes
+     */
+    protected function getMaxFilesize()
+    {
+        $max = trim(ini_get('upload_max_filesize'));
+
+        if ('' === $max) {
+            return PHP_INT_MAX;
+        }
+
+        $value = (int) $max;
+
+        switch (strtolower(substr($max, -1))) {
+            case 'g':
+                $value *= 1024;
+                // no break
+            case 'm':
+                $value *= 1024;
+                // no break
+            case 'k':
+                $value *= 1024;
+        }
+
+        return (int) $value;
     }
 }

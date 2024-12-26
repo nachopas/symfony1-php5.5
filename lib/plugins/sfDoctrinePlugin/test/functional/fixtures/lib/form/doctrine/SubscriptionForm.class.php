@@ -2,7 +2,6 @@
 
 /**
  * Subscription form.
- *
  */
 class SubscriptionForm extends BaseSubscriptionForm
 {

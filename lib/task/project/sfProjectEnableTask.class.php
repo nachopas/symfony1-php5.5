@@ -20,13 +20,16 @@ class sfProjectEnableTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('env', sfCommandArgument::REQUIRED, 'The environment name'), new sfCommandArgument('app', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The application name')]);
+        $this->addArguments([
+            new sfCommandArgument('env', sfCommandArgument::REQUIRED, 'The environment name'),
+            new sfCommandArgument('app', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, 'The application name'),
+        ]);
 
         $this->namespace = 'project';
         $this->name = 'enable';
         $this->briefDescription = 'Enables an application in a given environment';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [project:enable|INFO] task enables a specific environment:
 
   [./symfony project:enable frontend prod|INFO]
@@ -67,5 +70,7 @@ EOF;
                 $this->logSection('enable', sprintf('%s [%s] has been ENABLED', $app, $env));
             }
         }
+
+        return 0;
     }
 }

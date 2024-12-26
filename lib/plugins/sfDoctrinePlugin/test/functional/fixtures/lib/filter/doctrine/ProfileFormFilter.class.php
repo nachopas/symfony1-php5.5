@@ -2,7 +2,6 @@
 
 /**
  * Profile filter form.
- *
  */
 class ProfileFormFilter extends BaseProfileFormFilter
 {

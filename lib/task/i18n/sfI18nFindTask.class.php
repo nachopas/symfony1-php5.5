@@ -20,15 +20,19 @@ class sfI18nFindTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->namespace = 'i18n';
         $this->name = 'find';
         $this->briefDescription = 'Finds non "i18n ready" strings in an application';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [i18n:find|INFO] task finds non internationalized strings embedded in templates:
 
   [./symfony i18n:find frontend|INFO]
@@ -66,7 +70,7 @@ EOF;
                     $strings[$template] = [];
                 }
 
-                $dom = new DomDocument('1.0', sfConfig::get('sf_charset', 'UTF-8'));
+                $dom = new DOMDocument('1.0', sfConfig::get('sf_charset', 'UTF-8'));
                 $content = file_get_contents($template);
 
                 // remove doctype
@@ -83,15 +87,15 @@ EOF;
                             $strings[$template][] = $node->nodeValue;
                         }
                     } elseif ($node->childNodes) {
-                        for ($i = 0, $max = $node->childNodes->length; $i < $max; $i++) {
+                        for ($i = 0, $max = $node->childNodes->length; $i < $max; ++$i) {
                             $nodes[] = $node->childNodes->item($i);
                         }
-                    } elseif ('DOMProcessingInstruction' == ($node !== null ? get_class($node) : self::class) && 'php' == $node->target) {
+                    } elseif ('DOMProcessingInstruction' == get_class($node) && 'php' == $node->target) {
                         // processing instruction node
                         $tokens = token_get_all('<?php '.$node->nodeValue);
                         foreach ($tokens as $token) {
                             if (is_array($token)) {
-                                [$id, $text] = $token;
+                                list($id, $text) = $token;
 
                                 if (T_CONSTANT_ENCAPSED_STRING === $id) {
                                     $strings[$template][] = substr($text, 1, -1);
@@ -110,8 +114,10 @@ EOF;
 
             $this->logSection('i18n', sprintf('strings in "%s"', str_replace(sfConfig::get('sf_root_dir'), '', $template)), 1000);
             foreach ($messages as $message) {
-                $this->log("  $message\n");
+                $this->log("  {$message}\n");
             }
         }
+
+        return 0;
     }
 }

@@ -15,9 +15,9 @@
  */
 class sfTesterResponse extends sfTester
 {
-    protected $response       = null;
-    protected $dom            = null;
-    protected $domCssSelector = null;
+    protected $response;
+    protected $dom;
+    protected $domCssSelector;
 
     /**
      * Prepares the tester.
@@ -41,7 +41,9 @@ class sfTesterResponse extends sfTester
             if ('x' == $matches[1]) {
                 @$this->dom->loadXML($this->response->getContent());
             } else {
-                @$this->dom->loadHTML($this->response->getContent());
+                if ($content = $this->response->getContent()) {
+                    @$this->dom->loadHTML($content);
+                }
             }
             $this->domCssSelector = new sfDomCssSelector($this->dom);
         }
@@ -50,11 +52,11 @@ class sfTesterResponse extends sfTester
     /**
      * Tests that the response matches a given CSS selector.
      *
-     * @param  string $selector  The response selector or a sfDomCssSelector object
-     * @param  mixed  $value     Flag for the selector
-     * @param  array  $options   Options for the current test
+     * @param string $selector The response selector or a sfDomCssSelector object
+     * @param mixed  $value    Flag for the selector
+     * @param array  $options  Options for the current test
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function checkElement($selector, $value = true, $options = [])
     {
@@ -76,7 +78,7 @@ class sfTesterResponse extends sfTester
             $this->tester->is(count($values), $value, sprintf('response selector "%s" matches "%s" times', $selector, $value));
         } elseif (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match)) {
             $position = $options['position'] ?? 0;
-            if ($match[1] == '!') {
+            if ('!' == $match[1]) {
                 $this->tester->unlike(@$values[$position], substr($value, 1), sprintf('response selector "%s" does not match regex "%s"', $selector, substr($value, 1)));
             } else {
                 $this->tester->like(@$values[$position], $value, sprintf('response selector "%s" matches regex "%s"', $selector, $value));
@@ -96,10 +98,10 @@ class sfTesterResponse extends sfTester
     /**
      * Checks that a form is rendered correctly.
      *
-     * @param  sfForm|string $form     A form object or the name of a form class
-     * @param  string        $selector CSS selector for the root form element for this form
+     * @param sfForm|string $form     A form object or the name of a form class
+     * @param string        $selector CSS selector for the root form element for this form
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function checkForm($form, $selector = 'form')
     {
@@ -136,7 +138,7 @@ class sfTesterResponse extends sfTester
      * @param mixed $checkDTD Either true to validate against the response DTD or
      *                        provide the path to a *.xsd, *.rng or *.rnc schema
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      *
      * @throws LogicException If the response is neither XML nor (X)HTML
      */
@@ -150,7 +152,7 @@ class sfTesterResponse extends sfTester
 
             if (true === $checkDTD) {
                 $cache = sfConfig::get('sf_cache_dir').'/sf_tester_response/w3';
-                if ($cache[1] == ':') {
+                if (':' == $cache[1]) {
                     // On Windows systems the path will be like c:\symfony\cache\xml.dtd
                     // I did not manage to get DOMDocument loading a file protocol url including the drive letter
                     // file://c:\symfony\cache\xml.dtd or file://c:/symfony/cache/xml.dtd
@@ -180,18 +182,22 @@ class sfTesterResponse extends sfTester
             $dom->loadXML($content);
 
             switch (pathinfo($checkDTD, PATHINFO_EXTENSION)) {
-        case 'xsd':
-          $dom->schemaValidate($checkDTD);
-          $message = sprintf('response validates per XSD schema "%s"', basename($checkDTD));
-          break;
-        case 'rng':
-        case 'rnc':
-          $dom->relaxNGValidate($checkDTD);
-          $message = sprintf('response validates per relaxNG schema "%s"', basename($checkDTD));
-          break;
-        default:
-          $message = $dom->validateOnParse ? sprintf('response validates as "%s"', $dom->doctype->name) : 'response is well-formed "xml"';
-      }
+                case 'xsd':
+                    $dom->schemaValidate($checkDTD);
+                    $message = sprintf('response validates per XSD schema "%s"', basename($checkDTD));
+
+                    break;
+
+                case 'rng':
+                case 'rnc':
+                    $dom->relaxNGValidate($checkDTD);
+                    $message = sprintf('response validates per relaxNG schema "%s"', basename($checkDTD));
+
+                    break;
+
+                default:
+                    $message = $dom->validateOnParse ? sprintf('response validates as "%s"', $dom->doctype->name) : 'response is well-formed "xml"';
+            }
 
             if (count($errors = libxml_get_errors())) {
                 $lines = explode(PHP_EOL, $this->response->getContent());
@@ -219,10 +225,10 @@ class sfTesterResponse extends sfTester
     /**
      * Tests for a response header.
      *
-     * @param  string $key
-     * @param  string $value
+     * @param string $key
+     * @param string $value
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isHeader($key, $value)
     {
@@ -232,7 +238,7 @@ class sfTesterResponse extends sfTester
         $mustMatch = true;
         if (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $value, $match)) {
             $regex = $value;
-            if ($match[1] == '!') {
+            if ('!' == $match[1]) {
                 $mustMatch = false;
                 $regex = substr($value, 1);
             }
@@ -244,18 +250,21 @@ class sfTesterResponse extends sfTester
                     if (preg_match($regex, $header)) {
                         $ok = true;
                         $this->tester->pass(sprintf('response header "%s" matches "%s" (%s)', $key, $value, $this->response->getHttpHeader($key)));
+
                         break;
                     }
                 } else {
                     if (preg_match($regex, $header)) {
                         $ok = true;
                         $this->tester->fail(sprintf('response header "%s" does not match "%s" (%s)', $key, $value, $this->response->getHttpHeader($key)));
+
                         break;
                     }
                 }
             } elseif ($header == $value) {
                 $ok = true;
                 $this->tester->pass(sprintf('response header "%s" is "%s" (%s)', $key, $value, $this->response->getHttpHeader($key)));
+
                 break;
             }
         }
@@ -274,11 +283,11 @@ class sfTesterResponse extends sfTester
     /**
      * Tests if a cookie was set.
      *
-     * @param  string $name
-     * @param  string $value
-     * @param  array  $attributes Other cookie attributes to check (expires, path, domain, etc)
+     * @param string $name
+     * @param string $value
+     * @param array  $attributes Other cookie attributes to check (expires, path, domain, etc)
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function setsCookie($name, $value = null, $attributes = [])
     {
@@ -312,7 +321,7 @@ class sfTesterResponse extends sfTester
      *
      * @param string Regex
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function matches($regex)
     {
@@ -320,7 +329,7 @@ class sfTesterResponse extends sfTester
             throw new InvalidArgumentException(sprintf('"%s" is not a valid regular expression.', $regex));
         }
 
-        if ($match[1] == '!') {
+        if ('!' == $match[1]) {
             $this->tester->unlike($this->response->getContent(), substr($regex, 1), sprintf('response content does not match regex "%s"', substr($regex, 1)));
         } else {
             $this->tester->like($this->response->getContent(), $regex, sprintf('response content matches regex "%s"', $regex));
@@ -334,7 +343,7 @@ class sfTesterResponse extends sfTester
      *
      * @param string $statusCode Status code to check, default 200
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isStatusCode($statusCode = 200)
     {
@@ -346,9 +355,9 @@ class sfTesterResponse extends sfTester
     /**
      * Tests if the current request has been redirected.
      *
-     * @param  bool $boolean  Flag for redirection mode
+     * @param bool $boolean Flag for redirection mode
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function isRedirected($boolean = true)
     {
@@ -369,7 +378,7 @@ class sfTesterResponse extends sfTester
      */
     public function debug($realOutput = false)
     {
-        print $this->tester->error('Response debug');
+        echo $this->tester->error('Response debug');
 
         if (!$realOutput && null !== sfException::getLastException()) {
             // print the exception and the stack trace instead of the "normal" output
@@ -385,7 +394,15 @@ class sfTesterResponse extends sfTester
         }
 
         foreach ($this->response->getCookies() as $cookie) {
-            vprintf("Set-Cookie: %s=%s; %spath=%s%s%s%s\n", [$cookie['name'], $cookie['value'], null === $cookie['expire'] ? '' : sprintf('expires=%s; ', date('D d-M-Y H:i:s T', $cookie['expire'])), $cookie['path'], $cookie['domain'] ? sprintf('; domain=%s', $cookie['domain']) : '', $cookie['secure'] ? '; secure' : '', $cookie['httpOnly'] ? '; HttpOnly' : '']);
+            vprintf("Set-Cookie: %s=%s; %spath=%s%s%s%s\n", [
+                $cookie['name'],
+                $cookie['value'],
+                null === $cookie['expire'] ? '' : sprintf('expires=%s; ', date('D d-M-Y H:i:s T', $cookie['expire'])),
+                $cookie['path'],
+                $cookie['domain'] ? sprintf('; domain=%s', $cookie['domain']) : '',
+                $cookie['secure'] ? '; secure' : '',
+                $cookie['httpOnly'] ? '; HttpOnly' : '',
+            ]);
         }
 
         echo "\n";

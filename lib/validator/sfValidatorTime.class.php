@@ -29,8 +29,8 @@ class sfValidatorTime extends sfValidatorBase
      *
      *  * bad_format
      *
-     * @param array $options    An array of options
-     * @param array $messages   An array of error messages
+     * @param array $options  An array of options
+     * @param array $messages An array of error messages
      *
      * @see sfValidatorBase
      */
@@ -62,7 +62,7 @@ class sfValidatorTime extends sfValidatorBase
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
         } else {
-            $clean = (integer) $value;
+            $clean = (int) $value;
         }
 
         return $clean === $this->getEmptyValue() ? $clean : date($this->getOption('time_output'), $clean);
@@ -73,7 +73,7 @@ class sfValidatorTime extends sfValidatorBase
      *
      * The array can contains the following keys: hour, minute, second
      *
-     * @param  array $value  An array of date elements
+     * @param array $value An array of date elements
      *
      * @return int A timestamp
      */
@@ -81,7 +81,7 @@ class sfValidatorTime extends sfValidatorBase
     {
         // all elements must be empty or a number
         foreach (['hour', 'minute', 'second'] as $key) {
-            if (isset($value[$key]) && !preg_match('#^\d+$#', $value[$key]) && !empty($value[$key])) {
+            if (isset($value[$key]) && !ctype_digit((string) $value[$key]) && !empty($value[$key])) {
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
         }
@@ -89,17 +89,17 @@ class sfValidatorTime extends sfValidatorBase
         // if second is set, minute and hour must be set
         // if minute is set, hour must be set
         if (
-      $this->isValueSet($value, 'second') && (!$this->isValueSet($value, 'minute') || !$this->isValueSet($value, 'hour'))
-      ||
-      $this->isValueSet($value, 'minute') && !$this->isValueSet($value, 'hour')
-    ) {
+            $this->isValueSet($value, 'second') && (!$this->isValueSet($value, 'minute') || !$this->isValueSet($value, 'hour'))
+            ||
+            $this->isValueSet($value, 'minute') && !$this->isValueSet($value, 'hour')
+        ) {
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 
         $clean = mktime(
-            isset($value['hour']) ? intval($value['hour']) : 0,
-            isset($value['minute']) ? intval($value['minute']) : 0,
-            isset($value['second']) ? intval($value['second']) : 0
+            isset($value['hour']) ? (int) $value['hour'] : 0,
+            isset($value['minute']) ? (int) $value['minute'] : 0,
+            isset($value['second']) ? (int) $value['second'] : 0
         );
 
         if (false === $clean) {
@@ -123,10 +123,11 @@ class sfValidatorTime extends sfValidatorBase
             // array is not empty when a value is found
             foreach ($value as $key => $val) {
                 // int and string '0' are 'empty' values that are explicitly accepted
-                if ($val === 0 || $val === '0' || !empty($val)) {
+                if (0 === $val || '0' === $val || !empty($val)) {
                     return false;
                 }
             }
+
             return true;
         }
 

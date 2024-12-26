@@ -15,23 +15,23 @@
  */
 class sfCommandArgument
 {
-    const REQUIRED = 1;
-    const OPTIONAL = 2;
+    public const REQUIRED = 1;
+    public const OPTIONAL = 2;
 
-    const IS_ARRAY = 4;
+    public const IS_ARRAY = 4;
 
-    protected $name    = null;
-    protected $mode    = null;
-    protected $default = null;
-    protected $help    = '';
+    protected $name;
+    protected $mode;
+    protected $default;
+    protected $help = '';
 
     /**
      * Constructor.
      *
-     * @param string  $name    The argument name
-     * @param integer $mode    The argument mode: self::REQUIRED or self::OPTIONAL
-     * @param string  $help    A help text
-     * @param mixed   $default The default value (for self::OPTIONAL mode only)
+     * @param string $name    The argument name
+     * @param int    $mode    The argument mode: self::REQUIRED or self::OPTIONAL
+     * @param string $help    A help text
+     * @param mixed  $default The default value (for self::OPTIONAL mode only)
      *
      * @throws sfCommandException
      */
@@ -63,7 +63,7 @@ class sfCommandArgument
     /**
      * Returns true if the argument is required.
      *
-     * @return Boolean true if parameter mode is self::REQUIRED, false otherwise
+     * @return bool true if parameter mode is self::REQUIRED, false otherwise
      */
     public function isRequired()
     {
@@ -73,7 +73,7 @@ class sfCommandArgument
     /**
      * Returns true if the argument can take multiple values.
      *
-     * @return Boolean true if mode is self::IS_ARRAY, false otherwise
+     * @return bool true if mode is self::IS_ARRAY, false otherwise
      */
     public function isArray()
     {

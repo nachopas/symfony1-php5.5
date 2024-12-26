@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfPluginBaseTask.class.php');
+require_once __DIR__.'/sfPluginBaseTask.class.php';
 
 /**
  * Uninstall a plugin.
@@ -22,16 +22,21 @@ class sfPluginUninstallTask extends sfPluginBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The plugin name')]);
+        $this->addArguments([
+            new sfCommandArgument('name', sfCommandArgument::REQUIRED, 'The plugin name'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('channel', 'c', sfCommandOption::PARAMETER_REQUIRED, 'The PEAR channel name', null), new sfCommandOption('install_deps', 'd', sfCommandOption::PARAMETER_NONE, 'Whether to force installation of dependencies', null)]);
+        $this->addOptions([
+            new sfCommandOption('channel', 'c', sfCommandOption::PARAMETER_REQUIRED, 'The PEAR channel name', null),
+            new sfCommandOption('install_deps', 'd', sfCommandOption::PARAMETER_NONE, 'Whether to force installation of dependencies', null),
+        ]);
 
         $this->namespace = 'plugin';
         $this->name = 'uninstall';
 
         $this->briefDescription = 'Uninstalls a plugin';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [plugin:uninstall|INFO] task uninstalls a plugin:
 
   [./symfony plugin:uninstall sfGuardPlugin|INFO]
@@ -65,5 +70,7 @@ EOF;
         $this->logSection('plugin', sprintf('uninstalling plugin "%s"', $arguments['name']));
 
         $this->getPluginManager()->uninstallPlugin($arguments['name'], $options['channel']);
+
+        return 0;
     }
 }

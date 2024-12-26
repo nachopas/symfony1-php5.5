@@ -12,19 +12,30 @@
  * Base class for tasks that depends on a sfCommandApplication object.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
+ *
+ * @property sfApplicationConfiguration $configuration
  */
 abstract class sfCommandApplicationTask extends sfTask
 {
-    protected $mailer = null;
-    protected $routing = null;
-    protected $commandApplication = null;
+    /** @var sfSymfonyCommandApplication */
+    protected $commandApplication;
+
+    /** @var sfMailer */
+    private $mailer;
+
+    /** @var sfRouting */
+    private $routing;
+
+    /** @var sfServiceContainer */
+    private $serviceContainer;
+    private $factoryConfiguration;
 
     /**
      * Sets the command application instance for this task.
      *
      * @param sfCommandApplication $commandApplication A sfCommandApplication instance
      */
-    public function setCommandApplication(sfCommandApplication $commandApplication = null)
+    public function setCommandApplication(?sfCommandApplication $commandApplication = null)
     {
         $this->commandApplication = $commandApplication;
     }
@@ -41,6 +52,8 @@ abstract class sfCommandApplicationTask extends sfTask
 
     /**
      * @see sfTask
+     *
+     * @param mixed|null $size
      */
     public function logSection($section, $message, $size = null, $style = 'INFO')
     {
@@ -52,7 +65,7 @@ abstract class sfCommandApplicationTask extends sfTask
     /**
      * Creates a new task object.
      *
-     * @param  string $name The name of the task
+     * @param string $name The name of the task
      *
      * @return sfTask
      *
@@ -76,11 +89,11 @@ abstract class sfCommandApplicationTask extends sfTask
     /**
      * Executes another task in the context of the current one.
      *
-     * @param  string  $name      The name of the task to execute
-     * @param  array   $arguments An array of arguments to pass to the task
-     * @param  array   $options   An array of options to pass to the task
+     * @param string $name      The name of the task to execute
+     * @param array  $arguments An array of arguments to pass to the task
+     * @param array  $options   An array of options to pass to the task
      *
-     * @return Boolean The returned value of the task run() method
+     * @return bool The returned value of the task run() method
      *
      * @see createTask()
      */
@@ -101,7 +114,7 @@ abstract class sfCommandApplicationTask extends sfTask
      */
     protected function getMailer()
     {
-        if (!$this->mailer) {
+        if (null === $this->mailer) {
             $this->mailer = $this->initializeMailer();
         }
 
@@ -109,7 +122,7 @@ abstract class sfCommandApplicationTask extends sfTask
     }
 
     /**
-     * Initialize mailer
+     * Initialize mailer.
      *
      * @return sfMailer A sfMailer instance
      */
@@ -136,7 +149,7 @@ abstract class sfCommandApplicationTask extends sfTask
      */
     protected function getRouting()
     {
-        if (!$this->routing) {
+        if (null === $this->routing) {
             $this->routing = $this->initializeRouting();
         }
 
@@ -144,23 +157,38 @@ abstract class sfCommandApplicationTask extends sfTask
     }
 
     /**
-     * Initialize routing
+     * Initialize routing.
      *
      * @return sfRouting A sfRouting instance
      */
     protected function initializeRouting()
     {
-        $config = sfFactoryConfigHandler::getConfiguration($this->configuration->getConfigPaths('config/factories.yml'));
+        $config = $this->getFactoryConfiguration();
         $params = array_merge($config['routing']['param'], ['load_configuration' => false, 'logging' => false]);
 
         $handler = new sfRoutingConfigHandler();
         $routes = $handler->evaluate($this->configuration->getConfigPaths('config/routing.yml'));
 
+        /** @var sfRouting $routing */
         $routing = new $config['routing']['class']($this->dispatcher, null, $params);
         $routing->setRoutes($routes);
 
         $this->dispatcher->notify(new sfEvent($routing, 'routing.load_configuration'));
 
         return $routing;
+    }
+
+    /**
+     * Gets the factory configuration.
+     *
+     * @return array
+     */
+    protected function getFactoryConfiguration()
+    {
+        if (null === $this->factoryConfiguration) {
+            $this->factoryConfiguration = sfFactoryConfigHandler::getConfiguration($this->configuration->getConfigPaths('config/factories.yml'));
+        }
+
+        return $this->factoryConfiguration;
     }
 }

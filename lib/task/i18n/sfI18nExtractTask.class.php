@@ -26,15 +26,24 @@ class sfI18nExtractTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('culture', sfCommandArgument::REQUIRED, 'The target culture')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('culture', sfCommandArgument::REQUIRED, 'The target culture'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('display-new', null, sfCommandOption::PARAMETER_NONE, 'Output all new found strings'), new sfCommandOption('display-old', null, sfCommandOption::PARAMETER_NONE, 'Output all old strings'), new sfCommandOption('auto-save', null, sfCommandOption::PARAMETER_NONE, 'Save the new strings'), new sfCommandOption('auto-delete', null, sfCommandOption::PARAMETER_NONE, 'Delete old strings')]);
+        $this->addOptions([
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_OPTIONAL, 'The environment', 'dev'),
+            new sfCommandOption('display-new', null, sfCommandOption::PARAMETER_NONE, 'Output all new found strings'),
+            new sfCommandOption('display-old', null, sfCommandOption::PARAMETER_NONE, 'Output all old strings'),
+            new sfCommandOption('auto-save', null, sfCommandOption::PARAMETER_NONE, 'Save the new strings'),
+            new sfCommandOption('auto-delete', null, sfCommandOption::PARAMETER_NONE, 'Delete old strings'),
+        ]);
 
         $this->namespace = 'i18n';
         $this->name = 'extract';
         $this->briefDescription = 'Extracts i18n strings from php files';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [i18n:extract|INFO] task extracts i18n strings from your project files
 for the given application and target culture:
 
@@ -42,6 +51,10 @@ for the given application and target culture:
 
 By default, the task only displays the number of new and old strings
 it found in the current project.
+
+You can specify project environment by setting option:
+
+  [./symfony i18n:extract --env=ENVIRONMENT|INFO]
 
 If you want to display the new strings, use the [--display-new|COMMENT] option:
 
@@ -86,7 +99,7 @@ EOF;
         $this->logSection('i18n', sprintf('found "%d" old i18n strings', count($extract->getOldMessages())));
 
         if ($options['display-new']) {
-            $this->logSection('i18n', sprintf('display new i18n strings', count($extract->getOldMessages())));
+            $this->logSection('i18n', sprintf('display "%d" new i18n strings', count($extract->getOldMessages())));
             foreach ($extract->getNewMessages() as $message) {
                 $this->log('               '.$message."\n");
             }
@@ -99,7 +112,7 @@ EOF;
         }
 
         if ($options['display-old']) {
-            $this->logSection('i18n', sprintf('display old i18n strings', count($extract->getOldMessages())));
+            $this->logSection('i18n', sprintf('display "%d" old i18n strings', count($extract->getOldMessages())));
             foreach ($extract->getOldMessages() as $message) {
                 $this->log('               '.$message."\n");
             }
@@ -110,5 +123,7 @@ EOF;
 
             $extract->deleteOldMessages();
         }
+
+        return 0;
     }
 }

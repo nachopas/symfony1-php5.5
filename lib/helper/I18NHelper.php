@@ -13,25 +13,24 @@
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-
 function __($text, $args = [], $catalogue = 'messages')
 {
     if (sfConfig::get('sf_i18n')) {
         return sfContext::getInstance()->getI18N()->__($text, $args, $catalogue);
-    } else {
-        if (empty($args)) {
-            $args = [];
-        }
-
-        // replace object with strings
-        foreach ($args as $key => $value) {
-            if (is_object($value) && method_exists($value, '__toString')) {
-                $args[$key] = $value->__toString();
-            }
-        }
-
-        return strtr($text, $args);
     }
+
+    if (empty($args)) {
+        $args = [];
+    }
+
+    // replace object with strings
+    foreach ($args as $key => $value) {
+        if (is_object($value) && method_exists($value, '__toString')) {
+            $args[$key] = $value->__toString();
+        }
+    }
+
+    return strtr($text, $args);
 }
 
 /**
@@ -51,7 +50,7 @@ function __($text, $args = [], $catalogue = 'messages')
  *
  * @return string Result of the translation
  */
-function format_number_choice($text, $args = [], $number, $catalogue = 'messages')
+function format_number_choice($text, $args = [], $number = null, $catalogue = 'messages')
 {
     $translated = __($text, $args, $catalogue);
 
@@ -59,7 +58,7 @@ function format_number_choice($text, $args = [], $number, $catalogue = 'messages
 
     $retval = $choice->format($translated, $number);
 
-    if ($retval === false) {
+    if (false === $retval) {
         throw new sfException(sprintf('Unable to parse your choice "%s".', $translated));
     }
 

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfGeneratorBaseTask.class.php');
+require_once __DIR__.'/sfGeneratorBaseTask.class.php';
 
 /**
  * Generates a new module.
@@ -22,14 +22,17 @@ class sfGenerateModuleTask extends sfGeneratorBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'), new sfCommandArgument('module', sfCommandArgument::REQUIRED, 'The module name')]);
+        $this->addArguments([
+            new sfCommandArgument('application', sfCommandArgument::REQUIRED, 'The application name'),
+            new sfCommandArgument('module', sfCommandArgument::REQUIRED, 'The module name'),
+        ]);
 
         $this->namespace = 'generate';
         $this->name = 'module';
 
         $this->briefDescription = 'Generates a new module';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [generate:module|INFO] task creates the basic directory structure
 for a new module in an existing application:
 
@@ -59,7 +62,7 @@ EOF;
      */
     protected function execute($arguments = [], $options = [])
     {
-        $app    = $arguments['application'];
+        $app = $arguments['application'];
         $module = $arguments['module'];
 
         // Validate the module name
@@ -75,7 +78,12 @@ EOF;
 
         $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
-        $constants = ['PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony', 'APP_NAME'     => $app, 'MODULE_NAME'  => $module, 'AUTHOR_NAME'  => $properties['symfony']['author'] ?? 'Your name here'];
+        $constants = [
+            'PROJECT_NAME' => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony',
+            'APP_NAME' => $app,
+            'MODULE_NAME' => $module,
+            'AUTHOR_NAME' => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here',
+        ];
 
         if (is_readable(sfConfig::get('sf_data_dir').'/skeleton/module')) {
             $skeletonDir = sfConfig::get('sf_data_dir').'/skeleton/module';
@@ -96,5 +104,7 @@ EOF;
         // customize php and yml files
         $finder = sfFinder::type('file')->name('*.php', '*.yml');
         $this->getFilesystem()->replaceTokens($finder->in($moduleDir), '##', '##', $constants);
+
+        return 0;
     }
 }

@@ -24,13 +24,16 @@ class sfDoctrineBuildModelTask extends sfDoctrineBaseTask
      */
     protected function configure()
     {
-        $this->addOptions([new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true), new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev')]);
+        $this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_OPTIONAL, 'The application name', true),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+        ]);
 
         $this->namespace = 'doctrine';
         $this->name = 'build-model';
         $this->briefDescription = 'Creates classes for the current model';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [doctrine:build-model|INFO] task creates model classes from the schema:
 
   [./symfony doctrine:build-model|INFO]
@@ -96,7 +99,13 @@ EOF;
         }
 
         $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
-        $tokens = ['##PACKAGE##'    => $properties['symfony']['name'] ?? 'symfony', '##SUBPACKAGE##' => 'model', '##NAME##'       => $properties['symfony']['author'] ?? 'Your name here', ' <##EMAIL##>'   => '', "{\n\n}"         => "{\n}\n"];
+        $tokens = [
+            '##PACKAGE##' => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony',
+            '##SUBPACKAGE##' => 'model',
+            '##NAME##' => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here',
+            ' <##EMAIL##>' => '',
+            "{\n\n}" => "{\n}\n",
+        ];
 
         // cleanup new stub classes
         $after = $stubFinder->in($config['models_path']);

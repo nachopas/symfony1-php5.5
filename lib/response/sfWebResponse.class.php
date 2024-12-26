@@ -17,26 +17,87 @@
  */
 class sfWebResponse extends sfResponse
 {
-    const
-    FIRST  = 'first',
-    MIDDLE = '',
-    LAST   = 'last',
-    ALL    = 'ALL',
-    RAW    = 'RAW';
+    public const FIRST = 'first';
+    public const MIDDLE = '';
+    public const LAST = 'last';
+    public const ALL = 'ALL';
+    public const RAW = 'RAW';
 
-    protected $cookies     = [];
-    protected $statusCode  = 200;
-    protected $statusText  = 'OK';
-    protected $headerOnly  = false;
-    protected $headers     = [];
-    protected $metas       = [];
-    protected $httpMetas   = [];
-    protected $positions   = ['first', '', 'last'];
+    protected $cookies = [];
+    protected $statusCode = 200;
+    protected $statusText = 'OK';
+    protected $headerOnly = false;
+    protected $headers = [];
+    protected $metas = [];
+    protected $httpMetas = [];
+    protected $positions = ['first', '', 'last'];
     protected $stylesheets = [];
     protected $javascripts = [];
-    protected $slots       = [];
+    protected $slots = [];
 
-    protected static $statusTexts = ['100' => 'Continue', '101' => 'Switching Protocols', '200' => 'OK', '201' => 'Created', '202' => 'Accepted', '203' => 'Non-Authoritative Information', '204' => 'No Content', '205' => 'Reset Content', '206' => 'Partial Content', '300' => 'Multiple Choices', '301' => 'Moved Permanently', '302' => 'Found', '303' => 'See Other', '304' => 'Not Modified', '305' => 'Use Proxy', '306' => '(Unused)', '307' => 'Temporary Redirect', '400' => 'Bad Request', '401' => 'Unauthorized', '402' => 'Payment Required', '403' => 'Forbidden', '404' => 'Not Found', '405' => 'Method Not Allowed', '406' => 'Not Acceptable', '407' => 'Proxy Authentication Required', '408' => 'Request Timeout', '409' => 'Conflict', '410' => 'Gone', '411' => 'Length Required', '412' => 'Precondition Failed', '413' => 'Request Entity Too Large', '414' => 'Request-URI Too Long', '415' => 'Unsupported Media Type', '416' => 'Requested Range Not Satisfiable', '417' => 'Expectation Failed', '500' => 'Internal Server Error', '501' => 'Not Implemented', '502' => 'Bad Gateway', '503' => 'Service Unavailable', '504' => 'Gateway Timeout', '505' => 'HTTP Version Not Supported'];
+    protected static $statusTexts = [
+        '100' => 'Continue',
+        '101' => 'Switching Protocols',
+        '200' => 'OK',
+        '201' => 'Created',
+        '202' => 'Accepted',
+        '203' => 'Non-Authoritative Information',
+        '204' => 'No Content',
+        '205' => 'Reset Content',
+        '206' => 'Partial Content',
+        '300' => 'Multiple Choices',
+        '301' => 'Moved Permanently',
+        '302' => 'Found',
+        '303' => 'See Other',
+        '304' => 'Not Modified',
+        '305' => 'Use Proxy',
+        '306' => '(Unused)',
+        '307' => 'Temporary Redirect',
+        '400' => 'Bad Request',
+        '401' => 'Unauthorized',
+        '402' => 'Payment Required',
+        '403' => 'Forbidden',
+        '404' => 'Not Found',
+        '405' => 'Method Not Allowed',
+        '406' => 'Not Acceptable',
+        '407' => 'Proxy Authentication Required',
+        '408' => 'Request Timeout',
+        '409' => 'Conflict',
+        '410' => 'Gone',
+        '411' => 'Length Required',
+        '412' => 'Precondition Failed',
+        '413' => 'Request Entity Too Large',
+        '414' => 'Request-URI Too Long',
+        '415' => 'Unsupported Media Type',
+        '416' => 'Requested Range Not Satisfiable',
+        '417' => 'Expectation Failed',
+        '500' => 'Internal Server Error',
+        '501' => 'Not Implemented',
+        '502' => 'Bad Gateway',
+        '503' => 'Service Unavailable',
+        '504' => 'Gateway Timeout',
+        '505' => 'HTTP Version Not Supported',
+    ];
+
+    /**
+     * @see sfResponse
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return [$this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots];
+    }
+
+    /**
+     * @see sfResponse
+     *
+     * @param array $data
+     */
+    public function __unserialize($data)
+    {
+        list($this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots) = $data;
+    }
 
     /**
      * Initializes this sfWebResponse.
@@ -48,12 +109,10 @@ class sfWebResponse extends sfResponse
      *  * send_http_headers: Whether to send HTTP headers or not (true by default)
      *  * http_protocol:     The HTTP protocol to use for the response (HTTP/1.0 by default)
      *
-     * @param  sfEventDispatcher $dispatcher  An sfEventDispatcher instance
-     * @param  array             $options     An array of options
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
+     * @param array             $options    An array of options
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfResponse
+     * @throws sfInitializationException If an error occurs while initializing this sfResponse
      *
      * @see sfResponse
      */
@@ -86,7 +145,7 @@ class sfWebResponse extends sfResponse
      */
     public function setHeaderOnly($value = true)
     {
-        $this->headerOnly = (boolean) $value;
+        $this->headerOnly = (bool) $value;
     }
 
     /**
@@ -102,38 +161,45 @@ class sfWebResponse extends sfResponse
     /**
      * Sets a cookie.
      *
-     * @param  string  $name      HTTP header name
-     * @param  string  $value     Value for the cookie
-     * @param  string  $expire    Cookie expiration period
-     * @param  string  $path      Path
-     * @param  string  $domain    Domain name
-     * @param  bool    $secure    If secure
-     * @param  bool    $httpOnly  If uses only HTTP
+     * @param string $name     HTTP header name
+     * @param string $value    Value for the cookie
+     * @param string $expire   Cookie expiration period
+     * @param string $path     Path
+     * @param string $domain   Domain name
+     * @param bool   $secure   If secure
+     * @param bool   $httpOnly If uses only HTTP
      *
-     * @throws <b>sfException</b> If fails to set the cookie
+     * @throws sfException If fails to set the cookie
      */
     public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = false, $httpOnly = false)
     {
-        if ($expire !== null) {
+        if (null !== $expire) {
             if (is_numeric($expire)) {
                 $expire = (int) $expire;
             } else {
                 $expire = strtotime($expire);
-                if ($expire === false || $expire == -1) {
+                if (false === $expire || -1 == $expire) {
                     throw new sfException('Your expire parameter is not valid.');
                 }
             }
         }
 
-        $this->cookies[$name] = ['name'     => $name, 'value'    => $value, 'expire'   => $expire, 'path'     => $path, 'domain'   => $domain, 'secure'   => $secure ? true : false, 'httpOnly' => $httpOnly];
+        $this->cookies[$name] = [
+            'name' => $name,
+            'value' => $value,
+            'expire' => $expire,
+            'path' => $path,
+            'domain' => $domain,
+            'secure' => $secure ? true : false,
+            'httpOnly' => $httpOnly,
+        ];
     }
 
     /**
      * Sets response status code.
      *
-     * @param string $code  HTTP status code
-     * @param string $name  HTTP status text
-     *
+     * @param string $code HTTP status code
+     * @param string $name HTTP status text
      */
     public function setStatusCode($code, $name = null)
     {
@@ -154,7 +220,7 @@ class sfWebResponse extends sfResponse
     /**
      * Retrieves status code for the current web response.
      *
-     * @return integer Status code
+     * @return int Status code
      */
     public function getStatusCode()
     {
@@ -164,10 +230,9 @@ class sfWebResponse extends sfResponse
     /**
      * Sets a HTTP header.
      *
-     * @param string  $name     HTTP header name
-     * @param string  $value    Value (if null, remove the HTTP header)
-     * @param bool    $replace  Replace for the value
-     *
+     * @param string $name    HTTP header name
+     * @param string $value   Value (if null, remove the HTTP header)
+     * @param bool   $replace Replace for the value
      */
     public function setHttpHeader($name, $value, $replace = true)
     {
@@ -198,8 +263,8 @@ class sfWebResponse extends sfResponse
     /**
      * Gets HTTP header current value.
      *
-     * @param  string $name     HTTP header name
-     * @param  string $default  Default value returned if named HTTP header is not found
+     * @param string $name    HTTP header name
+     * @param string $default Default value returned if named HTTP header is not found
      *
      * @return string
      */
@@ -213,7 +278,7 @@ class sfWebResponse extends sfResponse
     /**
      * Checks if response has given HTTP header.
      *
-     * @param  string $name  HTTP header name
+     * @param string $name HTTP header name
      *
      * @return bool
      */
@@ -225,8 +290,7 @@ class sfWebResponse extends sfResponse
     /**
      * Sets response content type.
      *
-     * @param string $value  Content type
-     *
+     * @param string $value Content type
      */
     public function setContentType($value)
     {
@@ -246,7 +310,7 @@ class sfWebResponse extends sfResponse
     /**
      * Gets response content type.
      *
-     * @return array
+     * @return string
      */
     public function getContentType()
     {
@@ -268,7 +332,7 @@ class sfWebResponse extends sfResponse
         $status = $this->options['http_protocol'].' '.$this->statusCode.' '.$this->statusText;
         header($status);
 
-        if (substr(php_sapi_name(), 0, 3) == 'cgi') {
+        if ('cgi' == substr(php_sapi_name(), 0, 3)) {
             // fastcgi servers cannot send this status information because it was sent by them already due to the HTT/1.0 line
             // so we can safely unset them. see ticket #3191
             unset($this->headers['Status']);
@@ -285,14 +349,16 @@ class sfWebResponse extends sfResponse
         foreach ($this->headers as $name => $value) {
             header($name.': '.$value);
 
-            if ($value != '' && $this->options['logging']) {
+            if ('' != $value && $this->options['logging']) {
                 $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Send header "%s: %s"', $name, $value)]));
             }
         }
 
         // cookies
         foreach ($this->cookies as $cookie) {
-            setrawcookie($cookie['name'], $cookie['value'], ['expires' => $cookie['expire'], 'path' => $cookie['path'], 'domain' => $cookie['domain'], 'secure' => $cookie['secure'], 'httponly' => $cookie['httpOnly']]);
+            $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
+            $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
+            setrawcookie($cookie['name'], $cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
 
             if ($this->options['logging']) {
                 $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Send cookie "%s": "%s"', $cookie['name'], $cookie['value'])]));
@@ -304,7 +370,6 @@ class sfWebResponse extends sfResponse
 
     /**
      * Send content for the current web response.
-     *
      */
     public function sendContent()
     {
@@ -322,6 +387,7 @@ class sfWebResponse extends sfResponse
         $this->sendContent();
 
         if (function_exists('fastcgi_finish_request')) {
+            $this->dispatcher->notify(new sfEvent($this, 'response.fastcgi_finish_request'));
             fastcgi_finish_request();
         }
     }
@@ -329,7 +395,7 @@ class sfWebResponse extends sfResponse
     /**
      * Retrieves a normalized Header.
      *
-     * @param  string $name  Header name
+     * @param string $name Header name
      *
      * @return string Normalized header
      */
@@ -341,8 +407,8 @@ class sfWebResponse extends sfResponse
     /**
      * Retrieves a formated date.
      *
-     * @param  string $timestamp  Timestamp
-     * @param  string $type       Format type
+     * @param string $timestamp Timestamp
+     * @param string $type      Format type
      *
      * @return string Formatted date
      */
@@ -350,21 +416,23 @@ class sfWebResponse extends sfResponse
     {
         $type = strtolower($type);
 
-        if ($type == 'rfc1123') {
+        if ('rfc1123' == $type) {
             return substr(gmdate('r', $timestamp), 0, -5).'GMT';
-        } elseif ($type == 'rfc1036') {
-            return gmdate('l, d-M-y H:i:s ', $timestamp).'GMT';
-        } elseif ($type == 'asctime') {
-            return gmdate('D M j H:i:s', $timestamp);
-        } else {
-            throw new InvalidArgumentException('The second getDate() method parameter must be one of: rfc1123, rfc1036 or asctime.');
         }
+        if ('rfc1036' == $type) {
+            return gmdate('l, d-M-y H:i:s ', $timestamp).'GMT';
+        }
+        if ('asctime' == $type) {
+            return gmdate('D M j H:i:s', $timestamp);
+        }
+
+        throw new InvalidArgumentException('The second getDate() method parameter must be one of: rfc1123, rfc1036 or asctime.');
     }
 
     /**
      * Adds vary to a http header.
      *
-     * @param string $header  HTTP header
+     * @param string $header HTTP header
      */
     public function addVaryHttpHeader($header)
     {
@@ -384,8 +452,8 @@ class sfWebResponse extends sfResponse
     /**
      * Adds an control cache http header.
      *
-     * @param string $name   HTTP header
-     * @param string $value  Value for the http header
+     * @param string $name  HTTP header
+     * @param string $value Value for the http header
      */
     public function addCacheControlHttpHeader($name, $value = null)
     {
@@ -420,9 +488,9 @@ class sfWebResponse extends sfResponse
     /**
      * Adds a HTTP meta header.
      *
-     * @param string  $key      Key to replace
-     * @param string  $value    HTTP meta header value (if null, remove the HTTP meta)
-     * @param bool    $replace  Replace or not
+     * @param string $key     Key to replace
+     * @param string $value   HTTP meta header value (if null, remove the HTTP meta)
+     * @param bool   $replace Replace or not
      */
     public function addHttpMeta($key, $value, $replace = true)
     {
@@ -460,10 +528,10 @@ class sfWebResponse extends sfResponse
     /**
      * Adds a meta header.
      *
-     * @param string  $key      Name of the header
-     * @param string  $value    Meta header value (if null, remove the meta)
-     * @param bool    $replace  true if it's replaceable
-     * @param bool    $escape   true for escaping the header
+     * @param string $key     Name of the header
+     * @param string $value   Meta header value (if null, remove the meta)
+     * @param bool   $replace true if it's replaceable
+     * @param bool   $escape  true for escaping the header
      */
     public function addMeta($key, $value, $replace = true, $escape = true)
     {
@@ -500,8 +568,8 @@ class sfWebResponse extends sfResponse
     /**
      * Sets title for the current web response.
      *
-     * @param string  $title   Title name
-     * @param bool    $escape  true, for escaping the title
+     * @param string $title  Title name
+     * @param bool   $escape true, for escaping the title
      */
     public function setTitle($title, $escape = true)
     {
@@ -524,9 +592,9 @@ class sfWebResponse extends sfResponse
      * By default, the position is sfWebResponse::ALL,
      * and the method returns all stylesheets ordered by position.
      *
-     * @param  string  $position The position
+     * @param string $position The position
      *
-     * @return array   An associative array of stylesheet files as keys and options as values
+     * @return array An associative array of stylesheet files as keys and options as values
      */
     public function getStylesheets($position = self::ALL)
     {
@@ -539,7 +607,8 @@ class sfWebResponse extends sfResponse
             }
 
             return $stylesheets;
-        } elseif (self::RAW === $position) {
+        }
+        if (self::RAW === $position) {
             return $this->stylesheets;
         }
 
@@ -551,9 +620,9 @@ class sfWebResponse extends sfResponse
     /**
      * Adds a stylesheet to the current web response.
      *
-     * @param string $file      The stylesheet file
-     * @param string $position  Position
-     * @param array  $options   Stylesheet options
+     * @param string $file     The stylesheet file
+     * @param string $position Position
+     * @param array  $options  Stylesheet options
      */
     public function addStylesheet($file, $position = '', $options = [])
     {
@@ -575,12 +644,22 @@ class sfWebResponse extends sfResponse
     }
 
     /**
+     * Clear all previously added stylesheets.
+     */
+    public function clearStylesheets()
+    {
+        foreach (array_keys($this->getStylesheets()) as $file) {
+            $this->removeStylesheet($file);
+        }
+    }
+
+    /**
      * Retrieves javascript files from the current web response.
      *
      * By default, the position is sfWebResponse::ALL,
      * and the method returns all javascripts ordered by position.
      *
-     * @param  string $position  The position
+     * @param string $position The position
      *
      * @return array An associative array of javascript files as keys and options as values
      */
@@ -595,7 +674,8 @@ class sfWebResponse extends sfResponse
             }
 
             return $javascripts;
-        } elseif (self::RAW === $position) {
+        }
+        if (self::RAW === $position) {
             return $this->javascripts;
         }
 
@@ -607,9 +687,9 @@ class sfWebResponse extends sfResponse
     /**
      * Adds javascript code to the current web response.
      *
-     * @param string $file      The JavaScript file
-     * @param string $position  Position
-     * @param array  $options   Javascript options
+     * @param string $file     The JavaScript file
+     * @param string $position Position
+     * @param array  $options  Javascript options
      */
     public function addJavascript($file, $position = '', $options = [])
     {
@@ -631,6 +711,16 @@ class sfWebResponse extends sfResponse
     }
 
     /**
+     * Clear all previously added javascripts.
+     */
+    public function clearJavascripts()
+    {
+        foreach (array_keys($this->getJavascripts()) as $file) {
+            $this->removeJavascript($file);
+        }
+    }
+
+    /**
      * Retrieves slots from the current web response.
      *
      * @return string Javascript code
@@ -643,8 +733,8 @@ class sfWebResponse extends sfResponse
     /**
      * Sets a slot content.
      *
-     * @param string $name     Slot name
-     * @param string $content  Content
+     * @param string $name    Slot name
+     * @param string $content Content
      */
     public function setSlot($name, $content)
     {
@@ -682,17 +772,17 @@ class sfWebResponse extends sfResponse
     /**
      * Copies all properties from a given sfWebResponse object to the current one.
      *
-     * @param sfWebResponse $response  An sfWebResponse instance
+     * @param sfWebResponse $response An sfWebResponse instance
      */
     public function copyProperties(sfWebResponse $response)
     {
-        $this->options     = $response->getOptions();
-        $this->headers     = $response->getHttpHeaders();
-        $this->metas       = $response->getMetas();
-        $this->httpMetas   = $response->getHttpMetas();
+        $this->options = $response->getOptions();
+        $this->headers = $response->getHttpHeaders();
+        $this->metas = $response->getMetas();
+        $this->httpMetas = $response->getHttpMetas();
         $this->stylesheets = $response->getStylesheets(self::RAW);
         $this->javascripts = $response->getJavascripts(self::RAW);
-        $this->slots       = $response->getSlots();
+        $this->slots = $response->getSlots();
 
         // HTTP protocol must be from the current request
         // this fix is not nice but that's the only way to fix it and keep BC (see #9254)
@@ -702,7 +792,7 @@ class sfWebResponse extends sfResponse
     /**
      * Merges all properties from a given sfWebResponse object to the current one.
      *
-     * @param sfWebResponse $response  An sfWebResponse instance
+     * @param sfWebResponse $response An sfWebResponse instance
      */
     public function merge(sfWebResponse $response)
     {
@@ -719,7 +809,7 @@ class sfWebResponse extends sfResponse
      */
     public function serialize()
     {
-        return serialize([$this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots]);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -727,13 +817,13 @@ class sfWebResponse extends sfResponse
      */
     public function unserialize($serialized)
     {
-        [$this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots] = unserialize($serialized);
+        $this->__unserialize(unserialize($serialized));
     }
 
     /**
      * Validate a position name.
      *
-     * @param  string $position
+     * @param string $position
      *
      * @throws InvalidArgumentException if the position is not available
      */
@@ -747,7 +837,7 @@ class sfWebResponse extends sfResponse
     /**
      * Fixes the content type by adding the charset for text content types.
      *
-     * @param  string $contentType  The content type
+     * @param string $contentType The content type
      *
      * @return string The content type with the charset if needed
      */
@@ -764,5 +854,29 @@ class sfWebResponse extends sfResponse
         }
 
         return $contentType;
+    }
+
+    /**
+     * Preprend title.
+     *
+     * @param string $title     Title name
+     * @param string $separator Separator string (default: " - ")
+     * @param bool   $escape    true, for escaping the title
+     */
+    public function prependTitle($title, $separator = ' - ', $escape = true)
+    {
+        if (!isset($this->metas['title'])) {
+            $this->setTitle($title);
+
+            return;
+        }
+
+        // FIXME: If you use the i18n layer and escape the data here, it won't work
+        // see include_metas() in AssetHelper
+        if ($escape) {
+            $title = htmlspecialchars($title, ENT_QUOTES, $this->options['charset']);
+        }
+
+        $this->metas['title'] = $title.$separator.$this->metas['title'];
     }
 }

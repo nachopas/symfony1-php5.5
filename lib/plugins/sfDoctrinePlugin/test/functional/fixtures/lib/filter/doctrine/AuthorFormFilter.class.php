@@ -2,7 +2,6 @@
 
 /**
  * Author filter form.
- *
  */
 class AuthorFormFilter extends BaseAuthorFormFilter
 {

@@ -17,16 +17,27 @@
  */
 abstract class sfController
 {
-    protected $context           = null;
-    protected $dispatcher        = null;
+    /** @var sfContext */
+    protected $context;
+
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var string[] */
     protected $controllerClasses = [];
-    protected $renderMode        = sfView::RENDER_CLIENT;
-    protected $maxForwards       = 5;
+
+    /** @var int */
+    protected $renderMode = sfView::RENDER_CLIENT;
+
+    /** @var int */
+    protected $maxForwards = 5;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param sfContext $context A sfContext implementation instance
      */
     public function __construct($context)
     {
@@ -40,7 +51,7 @@ abstract class sfController
      */
     public function initialize($context)
     {
-        $this->context    = $context;
+        $this->context = $context;
         $this->dispatcher = $context->getEventDispatcher();
     }
 
@@ -74,15 +85,15 @@ abstract class sfController
      * Looks for a controller and optionally throw exceptions if existence is required (i.e.
      * in the case of {@link getController()}).
      *
-     * @param string  $moduleName      The name of the module
-     * @param string  $controllerName  The name of the controller within the module
-     * @param string  $extension       Either 'action' or 'component' depending on the type of controller to look for
-     * @param boolean $throwExceptions Whether to throw exceptions if the controller doesn't exist
+     * @param string $moduleName      The name of the module
+     * @param string $controllerName  The name of the controller within the module
+     * @param string $extension       Either 'action' or 'component' depending on the type of controller to look for
+     * @param bool   $throwExceptions Whether to throw exceptions if the controller doesn't exist
+     *
+     * @return bool true if the controller exists, false otherwise
      *
      * @throws sfConfigurationException thrown if the module is not enabled
      * @throws sfControllerException    thrown if the controller doesn't exist and the $throwExceptions parameter is set to true
-     *
-     * @return boolean true if the controller exists, false otherwise
      */
     protected function controllerExists($moduleName, $controllerName, $extension, $throwExceptions)
     {
@@ -97,12 +108,12 @@ abstract class sfController
             $this->context->getConfigCache()->import('modules/'.$moduleName.'/config/generator.yml', false, true);
 
             // one action per file or one file for all actions
-            $classFile   = strtolower($extension);
+            $classFile = strtolower($extension);
             $classSuffix = ucfirst(strtolower($extension));
-            $file        = $dir.'/'.$controllerName.$classSuffix.'.class.php';
+            $file = $dir.'/'.$controllerName.$classSuffix.'.class.php';
             if (is_readable($file)) {
                 // action class exists
-                require_once($file);
+                require_once $file;
 
                 $this->controllerClasses[$moduleName.'_'.$controllerName.'_'.$classSuffix] = $controllerName.$classSuffix;
 
@@ -112,7 +123,7 @@ abstract class sfController
             $module_file = $dir.'/'.$classFile.'s.class.php';
             if (is_readable($module_file)) {
                 // module class exists
-                require_once($module_file);
+                require_once $module_file;
 
                 if (!class_exists($moduleName.$classSuffix.'s', false)) {
                     if ($throwExceptions) {
@@ -132,6 +143,7 @@ abstract class sfController
                 }
 
                 $this->controllerClasses[$moduleName.'_'.$controllerName.'_'.$classSuffix] = $moduleName.$classSuffix.'s';
+
                 return true;
             }
         }
@@ -188,7 +200,8 @@ abstract class sfController
 
         // include module configuration
         $viewClass = sfConfig::get('mod_'.strtolower($moduleName).'_view_class', false);
-        require($this->context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml'));
+
+        require $this->context->getConfigCache()->checkConfig('modules/'.$moduleName.'/config/module.yml');
         if (false !== $viewClass) {
             sfConfig::set('mod_'.strtolower($moduleName).'_view_class', $viewClass);
         }
@@ -198,7 +211,7 @@ abstract class sfController
             // check for a module config.php
             $moduleConfig = sfConfig::get('sf_app_module_dir').'/'.$moduleName.'/config/config.php';
             if (is_readable($moduleConfig)) {
-                require_once($moduleConfig);
+                require_once $moduleConfig;
             }
 
             // create a new filter chain
@@ -262,7 +275,7 @@ abstract class sfController
      * @param string $controllerName A component name
      * @param string $extension      Either 'action' or 'component' depending on the type of controller to look for
      *
-     * @return object A controller implementation instance, if the controller exists, otherwise null
+     * @return sfAction A controller implementation instance, if the controller exists, otherwise null
      *
      * @see getComponent(), getAction()
      */
@@ -270,7 +283,9 @@ abstract class sfController
     {
         $classSuffix = ucfirst(strtolower($extension));
         if (!isset($this->controllerClasses[$moduleName.'_'.$controllerName.'_'.$classSuffix])) {
-            $this->controllerExists($moduleName, $controllerName, $extension, true);
+            if (!$this->controllerExists($moduleName, $controllerName, $extension, true)) {
+                return null;
+            }
         }
 
         $class = $this->controllerClasses[$moduleName.'_'.$controllerName.'_'.$classSuffix];
@@ -322,7 +337,7 @@ abstract class sfController
         $file = sfConfig::get('sf_app_module_dir').'/'.$moduleName.'/view/'.$actionName.$viewName.'View.class.php';
 
         if (is_readable($file)) {
-            require_once($file);
+            require_once $file;
 
             $class = $actionName.$viewName.'View';
 
@@ -348,6 +363,9 @@ abstract class sfController
      * @param string $viewName A View class name
      *
      * @return string The generated content
+     *
+     * @throws Exception
+     * @throws sfException
      */
     public function getPresentationFor($module, $action, $viewName = null)
     {
@@ -392,7 +410,7 @@ abstract class sfController
         $actionEntry = $actionStack->getEntry($index);
 
         // get raw content
-        $presentation =& $actionEntry->getPresentation();
+        $presentation = &$actionEntry->getPresentation();
 
         // put render mode back
         $this->setRenderMode($renderMode);
@@ -404,7 +422,8 @@ abstract class sfController
 
             if ($actionEntry->getModuleName() == sfConfig::get('sf_login_module') && $actionEntry->getActionName() == sfConfig::get('sf_login_action')) {
                 throw new sfException('Your action is secured, but the user is not authenticated.');
-            } elseif ($actionEntry->getModuleName() == sfConfig::get('sf_secure_module') && $actionEntry->getActionName() == sfConfig::get('sf_secure_action')) {
+            }
+            if ($actionEntry->getModuleName() == sfConfig::get('sf_secure_module') && $actionEntry->getActionName() == sfConfig::get('sf_secure_action')) {
                 throw new sfException('Your action is secured, but the user does not have access.');
             }
         }
@@ -425,13 +444,11 @@ abstract class sfController
      *                  - sfView::RENDER_VAR
      *                  - sfView::RENDER_NONE
      *
-     * @return true
-     *
      * @throws sfRenderException If an invalid render mode has been set
      */
     public function setRenderMode($mode)
     {
-        if ($mode == sfView::RENDER_CLIENT || $mode == sfView::RENDER_VAR || $mode == sfView::RENDER_NONE) {
+        if (sfView::RENDER_CLIENT == $mode || sfView::RENDER_VAR == $mode || sfView::RENDER_NONE == $mode) {
             $this->renderMode = $mode;
 
             return;
@@ -444,7 +461,7 @@ abstract class sfController
     /**
      * Indicates whether or not we were called using the CLI version of PHP.
      *
-     * @return bool true, if using cli, otherwise false.
+     * @return bool true, if using cli, otherwise false
      */
     public function inCLI()
     {
@@ -458,6 +475,8 @@ abstract class sfController
      * @param array  $arguments The method arguments
      *
      * @return mixed The returned value of the called method
+     *
+     * @throws sfException
      */
     public function __call($method, $arguments)
     {

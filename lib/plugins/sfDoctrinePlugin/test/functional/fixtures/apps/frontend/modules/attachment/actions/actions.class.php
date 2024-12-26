@@ -8,7 +8,7 @@
 class attachmentActions extends sfActions
 {
     /**
-     * Executes index action
+     * Executes index action.
      *
      * @param sfRequest $request A request object
      */
@@ -18,13 +18,12 @@ class attachmentActions extends sfActions
         unset($this->form['id']);
 
         if (
-      $request->isMethod('post')
-      &&
-      $this->form->bindAndSave(
-          $request->getParameter($this->form->getName()),
-          $request->getFiles($this->form->getName())
-      )
-    ) {
+            $request->isMethod('post')
+            && $this->form->bindAndSave(
+                $request->getParameter($this->form->getName()),
+                $request->getFiles($this->form->getName())
+            )
+        ) {
             return sfView::SUCCESS;
         }
 
@@ -38,13 +37,12 @@ class attachmentActions extends sfActions
 
         $this->form = new AttachmentForm($attachment);
         if (
-      $request->isMethod('post')
-      &&
-      $this->form->bindAndSave(
-          $request->getParameter($this->form->getName()),
-          $request->getFiles($this->form->getName())
-      )
-    ) {
+            $request->isMethod('post')
+            && $this->form->bindAndSave(
+                $request->getParameter($this->form->getName()),
+                $request->getFiles($this->form->getName())
+            )
+        ) {
             return sfView::SUCCESS;
         }
 

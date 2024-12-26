@@ -42,7 +42,12 @@
  */
 function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = [])
 {
-    return tag('link', ['rel'   => $tag_options['rel'] ?? 'alternate', 'type'  => $tag_options['type'] ?? 'application/'.$type.'+xml', 'title' => $tag_options['title'] ?? ucfirst($type), 'href'  => url_for($url, true)]);
+    return tag('link', [
+        'rel' => isset($tag_options['rel']) ? $tag_options['rel'] : 'alternate',
+        'type' => isset($tag_options['type']) ? $tag_options['type'] : 'application/'.$type.'+xml',
+        'title' => isset($tag_options['title']) ? $tag_options['title'] : ucfirst($type),
+        'href' => url_for($url, true),
+    ]);
 }
 
 /**
@@ -63,6 +68,7 @@ function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = [])
  * @param bool   $absolute return absolute path ?
  *
  * @return string file path to the JavaScript file
+ *
  * @see    javascript_include_tag
  */
 function javascript_path($source, $absolute = false)
@@ -86,6 +92,7 @@ function javascript_path($source, $absolute = false)
  * @param array additional HTML compliant <link> tag parameters
  *
  * @return string XHTML compliant <script> tag(s)
+ *
  * @see    javascript_path
  */
 function javascript_include_tag()
@@ -144,6 +151,7 @@ function javascript_include_tag()
  * @param bool   $absolute return absolute path ?
  *
  * @return string file path to the stylesheet file
+ *
  * @see    stylesheet_tag
  */
 function stylesheet_path($source, $absolute = false)
@@ -177,6 +185,7 @@ function stylesheet_path($source, $absolute = false)
  * @param array  additional HTML compliant <link> tag parameters
  *
  * @return string XHTML compliant <link> tag(s)
+ *
  * @see    stylesheet_path
  */
 function stylesheet_tag()
@@ -269,6 +278,7 @@ function decorate_with($layout)
  * @param bool   $absolute return absolute path ?
  *
  * @return string file path to the image file
+ *
  * @see    image_tag
  */
 function image_path($source, $absolute = false)
@@ -296,6 +306,7 @@ function image_path($source, $absolute = false)
  * @param array  $options additional HTML compliant <img> tag parameters
  *
  * @return string XHTML compliant <img> tag
+ *
  * @see    image_path
  */
 function image_tag($source, $options = [])
@@ -331,7 +342,9 @@ function image_tag($source, $options = [])
     }
 
     if (isset($options['size'])) {
-        [$options['width'], $options['height']] = explode('x', $options['size'], 2);
+        list($width, $height) = explode('x', $options['size'], 2);
+        $options['height'] = $height;
+        $options['width'] = $width;
         unset($options['size']);
     }
 
@@ -340,7 +353,7 @@ function image_tag($source, $options = [])
 
 function _compute_public_path($source, $dir, $ext, $absolute = false)
 {
-    if (strpos($source, '://') || strpos($source, '//') === 0) {
+    if (strpos($source, '://') || 0 === strpos($source, '//')) {
         return $source;
     }
 
@@ -360,7 +373,7 @@ function _compute_public_path($source, $dir, $ext, $absolute = false)
         $source .= '.'.$ext;
     }
 
-    if ($sf_relative_url_root && 0 !== strpos($source, (string) $sf_relative_url_root)) {
+    if ($sf_relative_url_root && 0 !== strpos($source, $sf_relative_url_root)) {
         $source = $sf_relative_url_root.$source;
     }
 
@@ -388,6 +401,7 @@ function _compute_public_path($source, $dir, $ext, $absolute = false)
  * <b>Note:</b> Modify the view.yml or use sfWebResponse::addMeta() to change, add or remove metas.
  *
  * @return string XHTML compliant <meta> tag(s)
+ *
  * @see    include_http_metas
  * @see    sfWebResponse::addMeta()
  */
@@ -413,6 +427,7 @@ function include_metas()
  * <b>Note:</b> Modify the view.yml or use sfWebResponse::addHttpMeta() to change, add or remove HTTP metas.
  *
  * @return string XHTML compliant <meta> tag(s)
+ *
  * @see    include_metas
  * @see    sfWebResponse::addHttpMeta()
  */
@@ -471,6 +486,16 @@ function include_javascripts()
 }
 
 /**
+ * Clear all javascripts of the response object.
+ *
+ * @see sfResponse->clearJavascripts()
+ */
+function clear_javascripts()
+{
+    sfContext::getInstance()->getResponse()->clearJavascripts();
+}
+
+/**
  * Returns <link> tags for all stylesheets configured in view.yml or added to the response object.
  *
  * You can use this helper to decide the location of stylesheets in pages.
@@ -502,6 +527,15 @@ function include_stylesheets()
     echo get_stylesheets();
 }
 
+/* Clear all stylesheets of the response object.
+ *
+ * @see sfResponse->clearStylesheets()
+ */
+function clear_stylesheets()
+{
+    sfContext::getInstance()->getResponse()->clearStylesheets();
+}
+
 /**
  * Returns a <script> include tag for the given internal URI.
  *
@@ -512,6 +546,7 @@ function include_stylesheets()
  * @param array  $options  An array of options
  *
  * @return string XHTML compliant <script> tag(s)
+ *
  * @see    javascript_include_tag
  */
 function dynamic_javascript_include_tag($uri, $absolute = false, $options = [])
@@ -577,7 +612,7 @@ function _dynamic_path($uri, $format, $absolute = false)
 function get_javascripts_for_form(sfForm $form)
 {
     $html = '';
-    foreach ($form->getJavascripts() as $file) {
+    foreach ($form->getJavaScripts() as $file) {
         $html .= javascript_include_tag($file);
     }
 
@@ -596,14 +631,12 @@ function include_javascripts_for_form(sfForm $form)
 
 /**
  * Adds javascripts from the supplied form to the response object.
- *
- * @param sfForm $form
  */
 function use_javascripts_for_form(sfForm $form)
 {
     $response = sfContext::getInstance()->getResponse();
 
-    foreach ($form->getJavascripts() as $file) {
+    foreach ($form->getJavaScripts() as $file) {
         $response->addJavascript($file);
     }
 }
@@ -648,8 +681,6 @@ function include_stylesheets_for_form(sfForm $form)
 
 /**
  * Adds stylesheets from the supplied form to the response object.
- *
- * @param sfForm $form
  */
 function use_stylesheets_for_form(sfForm $form)
 {

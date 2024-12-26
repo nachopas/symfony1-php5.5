@@ -29,31 +29,31 @@ class sfPostgreSQLDatabase extends sfDatabase
     /**
      * Connects to the database.
      *
-     * @throws <b>sfDatabaseException</b> If a connection could not be created
+     * @throws sfDatabaseException If a connection could not be created
      */
     public function connect()
     {
         $database = $this->getParameter('database');
-        $host     = $this->getParameter('host');
+        $host = $this->getParameter('host');
         $password = $this->getParameter('password');
-        $port     = $this->getParameter('port');
+        $port = $this->getParameter('port');
         $username = $this->getParameter('username');
 
         // construct connection string
-        $string = ($database != null ? (' dbname='   .$database) : '').
-              ($host != null     ? (' host='     .$host)     : '').
-              ($password != null ? (' password=' .$password) : '').
-              ($port != null     ? (' port='     .$port)     : '').
-              ($username != null ? (' user='     .$username) : '');
+        $string = (null != $database ? (' dbname='.$database) : '').
+                  (null != $host ? (' host='.$host) : '').
+                  (null != $password ? (' password='.$password) : '').
+                  (null != $port ? (' port='.$port) : '').
+                  (null != $username ? (' user='.$username) : '');
 
         // let's see if we need a persistent connection
         $persistent = $this->getParameter('persistent', false);
-        $connect    = $persistent ? 'pg_pconnect' : 'pg_connect';
+        $connect = $persistent ? 'pg_pconnect' : 'pg_connect';
 
         $this->connection = @$connect($string);
 
         // make sure the connection went through
-        if ($this->connection === false) {
+        if (false === $this->connection) {
             // the connection's foobar'd
             throw new sfDatabaseException('Failed to create a PostgreSQLDatabase connection.');
         }
@@ -66,11 +66,11 @@ class sfPostgreSQLDatabase extends sfDatabase
     /**
      * Executes the shutdown procedure.
      *
-     * @throws <b>sfDatabaseException</b> If an error occurs while shutting down this database
+     * @throws sfDatabaseException If an error occurs while shutting down this database
      */
     public function shutdown()
     {
-        if ($this->connection != null) {
+        if (null != $this->connection) {
             @pg_close($this->connection);
         }
     }

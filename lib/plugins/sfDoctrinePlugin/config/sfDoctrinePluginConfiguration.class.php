@@ -9,7 +9,7 @@
  */
 
 /**
- * sfDoctrinePluginConfiguration Class
+ * sfDoctrinePluginConfiguration Class.
  *
  * @author     Jonathan H. Wage <jonwage@gmail.com>
  */
@@ -64,15 +64,20 @@ class sfDoctrinePluginConfiguration extends sfPluginConfiguration
      */
     public function getModelBuilderOptions()
     {
-        $options = ['generateBaseClasses'  => true, 'generateTableClasses' => true, 'packagesPrefix'       => 'Plugin', 'suffix'               => '.class.php', 'baseClassesDirectory' => 'base', 'baseClassName'        => 'sfDoctrineRecord'];
-
-        // for BC
-        $options = array_merge($options, sfConfig::get('doctrine_model_builder_options', []));
+        $options = [
+            'generateBaseClasses' => true,
+            'generateTableClasses' => true,
+            'packagesPrefix' => 'Plugin',
+            'suffix' => '.class.php',
+            'baseClassesDirectory' => 'base',
+            'baseClassName' => 'sfDoctrineRecord',
+        ];
 
         // filter options through the dispatcher
-        $options = $this->dispatcher->filter(new sfEvent($this, 'doctrine.filter_model_builder_options'), $options)->getReturnValue();
-
-        return $options;
+        return $this->dispatcher
+            ->filter(new sfEvent($this, 'doctrine.filter_model_builder_options'), $options)
+            ->getReturnValue()
+        ;
     }
 
     /**
@@ -82,11 +87,15 @@ class sfDoctrinePluginConfiguration extends sfPluginConfiguration
      */
     public function getCliConfig()
     {
-        $config = ['data_fixtures_path' => array_merge([sfConfig::get('sf_data_dir').'/fixtures'], $this->configuration->getPluginSubPaths('/data/fixtures')), 'models_path'        => sfConfig::get('sf_lib_dir').'/model/doctrine', 'migrations_path'    => sfConfig::get('sf_lib_dir').'/migration/doctrine', 'sql_path'           => sfConfig::get('sf_data_dir').'/sql', 'yaml_schema_path'   => sfConfig::get('sf_config_dir').'/doctrine'];
+        $config = [
+            'data_fixtures_path' => array_merge([sfConfig::get('sf_data_dir').'/fixtures'], $this->configuration->getPluginSubPaths('/data/fixtures')),
+            'models_path' => sfConfig::get('sf_lib_dir').'/model/doctrine',
+            'migrations_path' => sfConfig::get('sf_lib_dir').'/migration/doctrine',
+            'sql_path' => sfConfig::get('sf_data_dir').'/sql',
+            'yaml_schema_path' => sfConfig::get('sf_config_dir').'/doctrine',
+        ];
 
         // filter config through the dispatcher
-        $config = $this->dispatcher->filter(new sfEvent($this, 'doctrine.filter_cli_config'), $config)->getReturnValue();
-
-        return $config;
+        return $this->dispatcher->filter(new sfEvent($this, 'doctrine.filter_cli_config'), $config)->getReturnValue();
     }
 }

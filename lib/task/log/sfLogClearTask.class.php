@@ -24,7 +24,7 @@ class sfLogClearTask extends sfBaseTask
         $this->name = 'clear';
         $this->briefDescription = 'Clears log files';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [log:clear|INFO] task clears all symfony log files:
 
   [./symfony log:clear|INFO]
@@ -38,5 +38,7 @@ EOF;
     {
         $logs = sfFinder::type('file')->in(sfConfig::get('sf_log_dir'));
         $this->getFilesystem()->remove($logs);
+
+        return 0;
     }
 }

@@ -2,7 +2,6 @@
 
 /**
  * AuthorInheritance filter form.
- *
  */
 class AuthorInheritanceFormFilter extends BaseAuthorInheritanceFormFilter
 {

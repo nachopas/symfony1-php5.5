@@ -21,7 +21,10 @@
  * exception.
  *
  * @see        sfOutputEscaper
+ *
  * @author     Mike Squire <mike@somosis.co.uk>
+ *
+ * @version    SVN: $Id$
  */
 class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator implements Iterator, ArrayAccess
 {
@@ -35,8 +38,8 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
     /**
      * Constructs a new escaping iteratoror using the escaping method and value supplied.
      *
-     * @param string      $escapingMethod  The escaping method to use
-     * @param Traversable $value           The iterator to escape
+     * @param string      $escapingMethod The escaping method to use
+     * @param Traversable $value          The iterator to escape
      */
     public function __construct($escapingMethod, Traversable $value)
     {
@@ -50,9 +53,8 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
 
     /**
      * Resets the iterator (as required by the Iterator interface).
-     *
-     * @return bool true, if the iterator rewinds successfully otherwise false
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         return $this->iterator->rewind();
@@ -63,6 +65,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
      *
      * @return mixed The escaped value
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return sfOutputEscaper::escape($this->escapingMethod, $this->iterator->current());
@@ -73,6 +76,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
      *
      * @return string Iterator key
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->iterator->key();
@@ -81,6 +85,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
     /**
      * Moves to the next element in the iterator (as required by the Iterator interface).
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         return $this->iterator->next();
@@ -92,6 +97,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
      *
      * @return bool true if the current element is valid; false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->iterator->valid();
@@ -100,10 +106,11 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
     /**
      * Returns true if the supplied offset isset in the array (as required by the ArrayAccess interface).
      *
-     * @param  string $offset  The offset of the value to check existance of
+     * @param string $offset The offset of the value to check existance of
      *
      * @return bool true if the offset isset; false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->value[$offset]);
@@ -112,10 +119,11 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
     /**
      * Returns the element associated with the offset supplied (as required by the ArrayAccess interface).
      *
-     * @param  string $offset  The offset of the value to get
+     * @param string $offset The offset of the value to get
      *
      * @return mixed The escaped value
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return sfOutputEscaper::escape($this->escapingMethod, $this->value[$offset]);
@@ -128,11 +136,12 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
      * This (and the other sfOutputEscaper classes) are designed to be read only
      * so this is an illegal operation.
      *
-     * @param  string $offset  (ignored)
-     * @param  string $value   (ignored)
+     * @param string $offset (ignored)
+     * @param string $value  (ignored)
      *
      * @throws sfException
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new sfException('Cannot set values.');
@@ -145,10 +154,11 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
      * This (and the other sfOutputEscaper classes) are designed to be read only
      * so this is an illegal operation.
      *
-     * @param  string $offset  (ignored)
+     * @param string $offset (ignored)
      *
      * @throws sfException
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new sfException('Cannot unset values.');

@@ -2,7 +2,6 @@
 
 /**
  * CamelCase filter form.
- *
  */
 class CamelCaseFormFilter extends BaseCamelCaseFormFilter
 {

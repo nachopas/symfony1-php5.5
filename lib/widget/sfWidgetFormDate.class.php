@@ -28,8 +28,8 @@ class sfWidgetFormDate extends sfWidgetForm
      *  * can_be_empty: Whether the widget accept an empty value (true by default)
      *  * empty_values: An array of values to use for the empty value (empty string for year, month, and day by default)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetForm
      */
@@ -48,10 +48,10 @@ class sfWidgetFormDate extends sfWidgetForm
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The date displayed in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The date displayed in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -64,7 +64,7 @@ class sfWidgetFormDate extends sfWidgetForm
         if (is_array($value)) {
             $value = array_merge($default, $value);
         } else {
-            $value = (string) $value == (string) (integer) $value ? (integer) $value : strtotime($value);
+            $value = (string) $value == (string) (int) $value ? (int) $value : strtotime((string) $value);
             if (false === $value) {
                 $value = $default;
             } else {
@@ -85,39 +85,45 @@ class sfWidgetFormDate extends sfWidgetForm
     /**
      * @param string $name
      * @param string $value
-     * @param array $options
-     * @param array $attributes
+     * @param array  $options
+     * @param array  $attributes
+     *
      * @return string rendered widget
      */
     protected function renderDayWidget($name, $value, $options, $attributes)
     {
         $widget = new sfWidgetFormSelect($options, $attributes);
+
         return $widget->render($name, $value);
     }
 
     /**
      * @param string $name
      * @param string $value
-     * @param array $options
-     * @param array $attributes
+     * @param array  $options
+     * @param array  $attributes
+     *
      * @return string rendered widget
      */
     protected function renderMonthWidget($name, $value, $options, $attributes)
     {
         $widget = new sfWidgetFormSelect($options, $attributes);
+
         return $widget->render($name, $value);
     }
 
     /**
      * @param string $name
      * @param string $value
-     * @param array $options
-     * @param array $attributes
+     * @param array  $options
+     * @param array  $attributes
+     *
      * @return string rendered widget
      */
     protected function renderYearWidget($name, $value, $options, $attributes)
     {
         $widget = new sfWidgetFormSelect($options, $attributes);
+
         return $widget->render($name, $value);
     }
 }

@@ -17,19 +17,18 @@
  */
 class sfMailer extends Swift_Mailer
 {
-    const
-    REALTIME       = 'realtime',
-    SPOOL          = 'spool',
-    SINGLE_ADDRESS = 'single_address',
-    NONE           = 'none';
+    public const REALTIME = 'realtime';
+    public const SPOOL = 'spool';
+    public const SINGLE_ADDRESS = 'single_address';
+    public const NONE = 'none';
 
-    protected $spool             = null;
-    protected $logger            = null;
-    protected $strategy          = 'realtime';
-    protected $address           = '';
-    protected $realtimeTransport = null;
-    protected $force             = false;
-    protected $redirectingPlugin = null;
+    protected $spool;
+    protected $logger;
+    protected $strategy = 'realtime';
+    protected $address = '';
+    protected $realtimeTransport;
+    protected $force = false;
+    protected $redirectingPlugin;
 
     /**
      * Constructor.
@@ -52,12 +51,24 @@ class sfMailer extends Swift_Mailer
     public function __construct(sfEventDispatcher $dispatcher, $options)
     {
         // options
-        $options = array_merge(['charset' => 'UTF-8', 'logging' => false, 'delivery_strategy' => self::REALTIME, 'transport' => ['class' => 'Swift_MailTransport', 'param' => []]], $options);
+        $options = array_merge([
+            'charset' => 'UTF-8',
+            'logging' => false,
+            'delivery_strategy' => self::REALTIME,
+            'transport' => [
+                'class' => 'Swift_MailTransport',
+                'param' => [],
+            ],
+        ], $options);
 
         $constantName = 'sfMailer::'.strtoupper($options['delivery_strategy']);
         $this->strategy = defined($constantName) ? constant($constantName) : false;
         if (!$this->strategy) {
             throw new InvalidArgumentException(sprintf('Unknown mail delivery strategy "%s" (should be one of realtime, spool, single_address, or none)', $options['delivery_strategy']));
+        }
+
+        if (sfMailer::NONE == $this->strategy) {
+            $options['transport']['class'] = 'Swift_NullTransport';
         }
 
         // transport
@@ -67,11 +78,11 @@ class sfMailer extends Swift_Mailer
             foreach ($options['transport']['param'] as $key => $value) {
                 $method = 'set'.ucfirst($key);
                 if (method_exists($transport, $method)) {
-                    $transport->$method($value);
+                    $transport->{$method}($value);
                 } elseif (method_exists($transport, 'getExtensionHandlers')) {
                     foreach ($transport->getExtensionHandlers() as $handler) {
                         if (in_array(strtolower($method), array_map('strtolower', (array) $handler->exposeMixinMethods()))) {
-                            $transport->$method($value);
+                            $transport->{$method}($value);
                         }
                     }
                 }
@@ -89,7 +100,7 @@ class sfMailer extends Swift_Mailer
                 $r = new ReflectionClass($options['spool_class']);
                 $this->spool = $r->newInstanceArgs($arguments);
             } else {
-                $this->spool = new $options['spool_class'];
+                $this->spool = new $options['spool_class']();
             }
 
             $transport = new Swift_SpoolTransport($this->spool);
@@ -126,7 +137,7 @@ class sfMailer extends Swift_Mailer
     /**
      * Gets the realtime transport instance.
      *
-     * @return Swift_Transport The realtime transport instance.
+     * @return Swift_Transport the realtime transport instance
      */
     public function getRealtimeTransport()
     {
@@ -136,7 +147,7 @@ class sfMailer extends Swift_Mailer
     /**
      * Sets the realtime transport instance.
      *
-     * @param Swift_Transport $transport The realtime transport instance.
+     * @param Swift_Transport $transport the realtime transport instance
      */
     public function setRealtimeTransport(Swift_Transport $transport)
     {
@@ -146,7 +157,7 @@ class sfMailer extends Swift_Mailer
     /**
      * Gets the logger instance.
      *
-     * @return sfMailerMessageLoggerPlugin The logger instance.
+     * @return sfMailerMessageLoggerPlugin the logger instance
      */
     public function getLogger()
     {
@@ -156,7 +167,7 @@ class sfMailer extends Swift_Mailer
     /**
      * Sets the logger instance.
      *
-     * @param sfMailerMessageLoggerPlugin $logger The logger instance.
+     * @param sfMailerMessageLoggerPlugin $logger the logger instance
      */
     public function setLogger($logger)
     {
@@ -200,8 +211,8 @@ class sfMailer extends Swift_Mailer
     /**
      * Creates a new message.
      *
-     * @param string|array $from    The from address
-     * @param string|array $to      The recipient(s)
+     * @param array|string $from    The from address
+     * @param array|string $to      The recipient(s)
      * @param string       $subject The subject
      * @param string       $body    The body
      *
@@ -210,18 +221,18 @@ class sfMailer extends Swift_Mailer
     public function compose($from = null, $to = null, $subject = null, $body = null)
     {
         return Swift_Message::newInstance()
-      ->setFrom($from)
-      ->setTo($to)
-      ->setSubject($subject)
-      ->setBody($body)
-    ;
+            ->setFrom($from)
+            ->setTo($to)
+            ->setSubject($subject)
+            ->setBody($body)
+        ;
     }
 
     /**
      * Sends a message.
      *
-     * @param string|array $from    The from address
-     * @param string|array $to      The recipient(s)
+     * @param array|string $from    The from address
+     * @param array|string $to      The recipient(s)
      * @param string       $subject The subject
      * @param string       $body    The body
      *
@@ -247,12 +258,12 @@ class sfMailer extends Swift_Mailer
     /**
      * Sends the given message.
      *
-     * @param Swift_Transport $transport         A transport instance
-     * @param string[]        &$failedRecipients An array of failures by-reference
+     * @param Swift_Mime_Message|Swift_Mime_SimpleMessage $message           the message to send
+     * @param string[]                                    &$failedRecipients An array of failures by-reference
      *
-     * @return int|false The number of sent emails
+     * @return false|int The number of sent emails
      */
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send($message, &$failedRecipients = null)
     {
         if ($this->force) {
             $this->force = false;

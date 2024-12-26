@@ -16,7 +16,8 @@
  */
 abstract class sfYamlConfigHandler extends sfConfigHandler
 {
-    protected $yamlConfig = null;
+    /** @var array */
+    protected $yamlConfig;
 
     /**
      * Parses an array of YAMLs files and merges them in one configuration array.
@@ -31,7 +32,7 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
         foreach ($configFiles as $configFile) {
             // the first level is an environment and its value must be an array
             $values = [];
-            foreach (self::parseYaml($configFile) as $env => $value) {
+            foreach (static::parseYaml($configFile) as $env => $value) {
                 if (null !== $value) {
                     $values[$env] = $value;
                 }
@@ -48,10 +49,10 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
      *
      * @param string $configFile An absolute filesystem path to a configuration file
      *
-     * @return string A parsed .yml configuration
+     * @return array|string A parsed .yml configuration
      *
      * @throws sfConfigurationException If a requested configuration file does not exist or is not readable
-     * @throws sfParseException If a requested configuration file is improperly formatted
+     * @throws sfParseException         If a requested configuration file is improperly formatted
      */
     public static function parseYaml($configFile)
     {
@@ -61,14 +62,14 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
         }
 
         // parse our config
-        $config = sfYaml::load($configFile);
+        $config = sfYaml::load($configFile, sfConfig::get('sf_charset', 'UTF-8'));
 
-        if ($config === false) {
+        if (false === $config) {
             // configuration couldn't be parsed
             throw new sfParseException(sprintf('Configuration file "%s" could not be parsed', $configFile));
         }
 
-        return $config ?? [];
+        return null === $config ? [] : $config;
     }
 
     /**
@@ -77,7 +78,7 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
      * @param string $keyName  The key name
      * @param string $category The category name
      *
-     * @return string The value associated with this key name and category
+     * @return array The value associated with this key name and category
      */
     protected function mergeConfigValue($keyName, $category)
     {
@@ -107,7 +108,8 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
     {
         if (isset($this->yamlConfig[$category][$keyName])) {
             return $this->yamlConfig[$category][$keyName];
-        } elseif (isset($this->yamlConfig['all'][$keyName])) {
+        }
+        if (isset($this->yamlConfig['all'][$keyName])) {
             return $this->yamlConfig['all'][$keyName];
         }
 

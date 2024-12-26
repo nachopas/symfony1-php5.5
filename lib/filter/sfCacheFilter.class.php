@@ -15,11 +15,11 @@
  */
 class sfCacheFilter extends sfFilter
 {
-    protected $cacheManager = null;
-    protected $request      = null;
-    protected $response     = null;
-    protected $routing      = null;
-    protected $cache        = [];
+    protected $cacheManager;
+    protected $request;
+    protected $response;
+    protected $routing;
+    protected $cache = [];
 
     /**
      * Initializes this Filter.
@@ -27,18 +27,16 @@ class sfCacheFilter extends sfFilter
      * @param sfContext $context    The current application context
      * @param array     $parameters An associative array of initialization parameters
      *
-     * @return bool true, if initialization completes successfully, otherwise false
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this Filter
+     * @throws sfInitializationException If an error occurs while initializing this Filter
      */
     public function initialize($context, $parameters = [])
     {
         parent::initialize($context, $parameters);
 
         $this->cacheManager = $context->getViewCacheManager();
-        $this->request      = $context->getRequest();
-        $this->response     = $context->getResponse();
-        $this->routing      = $context->getRouting();
+        $this->request = $context->getRequest();
+        $this->response = $context->getResponse();
+        $this->routing = $context->getRouting();
     }
 
     /**
@@ -147,7 +145,6 @@ class sfCacheFilter extends sfFilter
      *
      * @param string $uri An internal URI
      */
-
     protected function setCacheValidation($uri)
     {
         // don't add cache validation (Last-Modified) if

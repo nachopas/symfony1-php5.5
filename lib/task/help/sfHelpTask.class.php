@@ -20,13 +20,17 @@ class sfHelpTask extends sfCommandApplicationTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('task_name', sfCommandArgument::OPTIONAL, 'The task name', 'help')]);
+        $this->addArguments([
+            new sfCommandArgument('task_name', sfCommandArgument::OPTIONAL, 'The task name', 'help'),
+        ]);
 
-        $this->addOptions([new sfCommandOption('xml', null, sfCommandOption::PARAMETER_NONE, 'To output help as XML')]);
+        $this->addOptions([
+            new sfCommandOption('xml', null, sfCommandOption::PARAMETER_NONE, 'To output help as XML'),
+        ]);
 
         $this->briefDescription = 'Displays help for a task';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [help|INFO] task displays help for a given task:
 
   [./symfony help test:all|INFO]
@@ -53,6 +57,8 @@ EOF;
         } else {
             $this->outputAsText($task);
         }
+
+        return 0;
     }
 
     protected function outputAsText(sfTask $task)
@@ -79,8 +85,8 @@ EOF;
         if ($task->getArguments()) {
             $messages[] = $this->formatter->format('Arguments:', 'COMMENT');
             foreach ($task->getArguments() as $argument) {
-                $default = null !== $argument->getDefault() && (!is_array($argument->getDefault()) || count($argument->getDefault())) ? $this->formatter->format(sprintf(' (default: %s)', is_array($argument->getDefault()) ? str_replace("\n", '', print_r($argument->getDefault(), true)): $argument->getDefault()), 'COMMENT') : '';
-                $messages[] = sprintf(" %-${max}s %s%s", $this->formatter->format($argument->getName(), 'INFO'), $argument->getHelp(), $default);
+                $default = null !== $argument->getDefault() && (!is_array($argument->getDefault()) || count($argument->getDefault())) ? $this->formatter->format(sprintf(' (default: %s)', is_array($argument->getDefault()) ? str_replace("\n", '', print_r($argument->getDefault(), true)) : $argument->getDefault()), 'COMMENT') : '';
+                $messages[] = sprintf(" %-{$max}s %s%s", $this->formatter->format($argument->getName(), 'INFO'), $argument->getHelp(), $default);
             }
 
             $messages[] = '';
@@ -90,7 +96,7 @@ EOF;
             $messages[] = $this->formatter->format('Options:', 'COMMENT');
 
             foreach ($task->getOptions() as $option) {
-                $default = $option->acceptParameter() && null !== $option->getDefault() && (!is_array($option->getDefault()) || count($option->getDefault())) ? $this->formatter->format(sprintf(' (default: %s)', is_array($option->getDefault()) ? str_replace("\n", '', print_r($option->getDefault(), true)): $option->getDefault()), 'COMMENT') : '';
+                $default = $option->acceptParameter() && null !== $option->getDefault() && (!is_array($option->getDefault()) || count($option->getDefault())) ? $this->formatter->format(sprintf(' (default: %s)', is_array($option->getDefault()) ? str_replace("\n", '', print_r($option->getDefault(), true)) : $option->getDefault()), 'COMMENT') : '';
                 $multiple = $option->isArray() ? $this->formatter->format(' (multiple values allowed)', 'COMMENT') : '';
                 $messages[] = sprintf(' %-'.$max.'s %s%s%s%s', $this->formatter->format('--'.$option->getName(), 'INFO'), $option->getShortcut() ? sprintf('(-%s) ', $option->getShortcut()) : '', $option->getHelp(), $default, $multiple);
             }

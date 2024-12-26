@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__.'/../vendor/lime/lime.php');
+require_once __DIR__.'/../vendor/lime/lime.php';
 
 /*
  * This file is part of the symfony package.
@@ -23,9 +23,9 @@ class sfTestBrowser extends sfTestFunctional
     /**
      * Initializes the browser tester instance.
      *
-     * @param string $hostname  Hostname to browse
-     * @param string $remote    Remote address to spook
-     * @param array  $options   Options for sfBrowser
+     * @param string $hostname Hostname to browse
+     * @param string $remote   Remote address to spook
+     * @param array  $options  Options for sfBrowser
      */
     public function __construct($hostname = null, $remote = null, $options = [])
     {

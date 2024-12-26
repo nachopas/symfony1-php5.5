@@ -19,12 +19,12 @@
  */
 class sfConfigCache
 {
-    protected $configuration = null;
-    protected $handlers      = [];
-    protected $userHandlers  = [];
+    protected $configuration;
+    protected $handlers = [];
+    protected $userHandlers = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param sfApplicationConfiguration $configuration A sfApplicationConfiguration instance
      */
@@ -40,16 +40,16 @@ class sfConfigCache
      * @param array  $configs An array of absolute filesystem paths to configuration files
      * @param string $cache   An absolute filesystem path to the cache file that will be written
      *
-     * @throws <b>sfConfigurationException</b> If a requested configuration file does not have an associated configuration handler
+     * @throws sfConfigurationException If a requested configuration file does not have an associated configuration handler
      */
     protected function callHandler($handler, $configs, $cache)
     {
-        if (count($this->handlers) == 0) {
+        if (0 == count($this->handlers)) {
             // we need to load the handlers first
             $this->loadConfigHandlers();
         }
 
-        if (count($this->userHandlers) != 0) {
+        if (0 != count($this->userHandlers)) {
             // we load user defined handlers
             $this->mergeUserConfigHandlers();
         }
@@ -97,7 +97,7 @@ class sfConfigCache
     }
 
     /**
-     * Returns the config handler configured for the given name
+     * Returns the config handler configured for the given name.
      *
      * @param string $name The config handler name
      *
@@ -122,12 +122,12 @@ class sfConfigCache
      * If the configuration file path is relative, symfony will look in directories
      * defined in the sfConfiguration::getConfigPaths() method.
      *
-     * @param string  $configPath A filesystem path to a configuration file
-     * @param boolean $optional   If true, config path does not need to exist
+     * @param string $configPath A filesystem path to a configuration file
+     * @param bool   $optional   If true, config path does not need to exist
      *
      * @return string An absolute filesystem path to the cache filename associated with this specified configuration file
      *
-     * @throws <b>sfConfigurationException</b> If a requested configuration file does not exist
+     * @throws sfConfigurationException If a requested configuration file does not exist
      *
      * @see sfConfiguration::getConfigPaths()
      */
@@ -173,6 +173,7 @@ class sfConfigCache
         }
 
         if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) {
+            // @var $timer sfTimer
             $timer->addTime();
         }
 
@@ -196,13 +197,13 @@ class sfConfigCache
      */
     public function getCacheName($config)
     {
-        if (strlen($config) > 3 && ctype_alpha($config[0]) && $config[1] == ':' && ($config[2] == '\\' || $config[2] == '/')) {
+        if (strlen($config) > 3 && ctype_alpha($config[0]) && ':' == $config[1] && ('\\' == $config[2] || '/' == $config[2])) {
             // file is a windows absolute path, strip off the drive letter
             $config = substr($config, 3);
         }
 
         // replace unfriendly filename characters with an underscore
-        $config  = str_replace(['\\', '/', ' '], '_', $config);
+        $config = str_replace(['\\', '/', ' '], '_', $config);
         $config .= '.php';
 
         return sfConfig::get('sf_config_cache_dir').'/'.$config;
@@ -227,16 +228,16 @@ class sfConfigCache
 
         // include cache file
         if ($once) {
-            include_once($cache);
+            include_once $cache;
         } else {
-            include($cache);
+            include $cache;
         }
     }
 
     /**
      * Loads all configuration application and module level handlers.
      *
-     * @throws <b>sfConfigurationException</b> If a configuration related error occurs.
+     * @throws sfConfigurationException If a configuration related error occurs
      */
     protected function loadConfigHandlers()
     {
@@ -298,13 +299,12 @@ class sfConfigCache
     protected function writeCacheFile($config, $cache, $data)
     {
         $current_umask = umask(0000);
-        if (!is_dir(dirname($cache))) {
-            if (false === @mkdir(dirname($cache), 0777, true)) {
-                throw new sfCacheException(sprintf('Failed to make cache directory "%s" while generating cache for configuration file "%s".', dirname($cache), $config));
-            }
+        $cacheDir = dirname($cache);
+        if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
+            throw new sfCacheException(sprintf('Failed to make cache directory "%s" while generating cache for configuration file "%s".', $cacheDir, $config));
         }
 
-        $tmpFile = tempnam(dirname($cache), basename($cache));
+        $tmpFile = tempnam($cacheDir, basename($cache));
 
         if (!$fp = @fopen($tmpFile, 'wb')) {
             throw new sfCacheException(sprintf('Failed to write cache file "%s" generated from configuration file "%s".', $tmpFile, $config));
@@ -329,9 +329,9 @@ class sfConfigCache
     /**
      * Registers a configuration handler.
      *
-     * @param string $handler The handler to use when parsing a configuration file
-     * @param class  $class   A configuration handler class
-     * @param string $params  An array of options for the handler class initialization
+     * @param string                        $handler The handler to use when parsing a configuration file
+     * @param class-string<sfConfigHandler> $class   A configuration handler class
+     * @param string[]                      $params  An array of options for the handler class initialization
      */
     public function registerConfigHandler($handler, $class, $params = [])
     {
@@ -340,8 +340,7 @@ class sfConfigCache
 
     /**
      * Merges configuration handlers from the config_handlers.yml
-     * and the ones defined with registerConfigHandler()
-     *
+     * and the ones defined with registerConfigHandler().
      */
     protected function mergeUserConfigHandlers()
     {

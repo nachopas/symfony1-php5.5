@@ -2,7 +2,6 @@
 
 /**
  * UniqueTest filter form.
- *
  */
 class UniqueTestFormFilter extends BaseUniqueTestFormFilter
 {

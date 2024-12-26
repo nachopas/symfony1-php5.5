@@ -29,8 +29,8 @@ class sfWidgetFormTime extends sfWidgetForm
      *  * can_be_empty:           Whether the widget accept an empty value (true by default)
      *  * empty_values:           An array of values to use for the empty value (empty string for hours, minutes, and seconds by default)
      *
-     * @param array $options     An array of options
-     * @param array $attributes  An array of default HTML attributes
+     * @param array $options    An array of options
+     * @param array $attributes An array of default HTML attributes
      *
      * @see sfWidgetForm
      */
@@ -50,10 +50,10 @@ class sfWidgetFormTime extends sfWidgetForm
     /**
      * Renders the widget.
      *
-     * @param  string $name        The element name
-     * @param  string $value       The time displayed in this widget
-     * @param  array  $attributes  An array of HTML attributes to be merged with the default HTML attributes
-     * @param  array  $errors      An array of errors for the field
+     * @param string $name       The element name
+     * @param string $value      The time displayed in this widget
+     * @param array  $attributes An array of HTML attributes to be merged with the default HTML attributes
+     * @param array  $errors     An array of errors for the field
      *
      * @return string An HTML tag string
      *
@@ -66,7 +66,7 @@ class sfWidgetFormTime extends sfWidgetForm
         if (is_array($value)) {
             $value = array_merge($default, $value);
         } else {
-            $value = ctype_digit($value) ? (integer) $value : strtotime($value);
+            $value = ctype_digit((string) $value) ? (int) $value : strtotime((string) $value);
             if (false === $value) {
                 $value = $default;
             } else {

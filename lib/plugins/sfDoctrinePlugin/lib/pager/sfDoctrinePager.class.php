@@ -16,12 +16,39 @@
  */
 class sfDoctrinePager extends sfPager implements Serializable
 {
-    protected $query             = null;
-    protected $tableMethodName   = null;
+    protected $query;
+    protected $tableMethodName;
     protected $tableMethodCalled = false;
 
     /**
-     * Get the name of the table method used to retrieve the query object for the pager
+     * Serializes the current instance for php 7.4+.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        $vars = get_object_vars($this);
+        unset($vars['query']);
+
+        return $vars;
+    }
+
+    /**
+     * Unserializes a sfDoctrinePager instance for php 7.4+.
+     *
+     * @param array $data
+     */
+    public function __unserialize($data)
+    {
+        foreach ($data as $name => $values) {
+            $this->{$name} = $values;
+        }
+
+        $this->tableMethodCalled = false;
+    }
+
+    /**
+     * Get the name of the table method used to retrieve the query object for the pager.
      *
      * @return string $tableMethodName
      */
@@ -31,10 +58,9 @@ class sfDoctrinePager extends sfPager implements Serializable
     }
 
     /**
-     * Set the name of the table method used to retrieve the query object for the pager
+     * Set the name of the table method used to retrieve the query object for the pager.
      *
      * @param string $tableMethodName
-     * @return void
      */
     public function setTableMethod($tableMethodName)
     {
@@ -42,19 +68,17 @@ class sfDoctrinePager extends sfPager implements Serializable
     }
 
     /**
-     * Serialize the pager object
+     * Serialize the pager object.
      *
      * @return string $serialized
      */
     public function serialize()
     {
-        $vars = get_object_vars($this);
-        unset($vars['query']);
-        return serialize($vars);
+        return serialize($this->__serialize());
     }
 
     /**
-     * Unserialize a pager object
+     * Unserialize a pager object.
      *
      * @param string $serialized
      */
@@ -62,11 +86,7 @@ class sfDoctrinePager extends sfPager implements Serializable
     {
         $array = unserialize($serialized);
 
-        foreach ($array as $name => $values) {
-            $this->$name = $values;
-        }
-
-        $this->tableMethodCalled = false;
+        return $this->__unserialize($array);
     }
 
     /**
@@ -78,9 +98,9 @@ class sfDoctrinePager extends sfPager implements Serializable
     {
         $query = clone $this->getQuery();
         $query
-      ->offset(0)
-      ->limit(0)
-    ;
+            ->offset(0)
+            ->limit(0)
+        ;
 
         return $query;
     }
@@ -99,9 +119,9 @@ class sfDoctrinePager extends sfPager implements Serializable
 
         $query = $this->getQuery();
         $query
-      ->offset(0)
-      ->limit(0)
-    ;
+            ->offset(0)
+            ->limit(0)
+        ;
 
         if (0 == $this->getPage() || 0 == $this->getMaxPerPage() || 0 == $this->getNbResults()) {
             $this->setLastPage(0);
@@ -111,9 +131,9 @@ class sfDoctrinePager extends sfPager implements Serializable
             $this->setLastPage(ceil($this->getNbResults() / $this->getMaxPerPage()));
 
             $query
-        ->offset($offset)
-        ->limit($this->getMaxPerPage())
-      ;
+                ->offset($offset)
+                ->limit($this->getMaxPerPage())
+            ;
         }
     }
 
@@ -126,7 +146,7 @@ class sfDoctrinePager extends sfPager implements Serializable
     {
         if (!$this->tableMethodCalled && $this->tableMethodName) {
             $method = $this->tableMethodName;
-            $this->query = Doctrine_Core::getTable($this->getClass())->$method($this->query);
+            $this->query = Doctrine_Core::getTable($this->getClass())->{$method}($this->query);
             $this->tableMethodCalled = true;
         } elseif (!$this->query) {
             $this->query = Doctrine_Core::getTable($this->getClass())->createQuery();
@@ -136,7 +156,7 @@ class sfDoctrinePager extends sfPager implements Serializable
     }
 
     /**
-     * Set query object for the pager
+     * Set query object for the pager.
      *
      * @param Doctrine_Query $query
      */
@@ -146,9 +166,9 @@ class sfDoctrinePager extends sfPager implements Serializable
     }
 
     /**
-     * Retrieve the object for a certain offset
+     * Retrieve the object for a certain offset.
      *
-     * @param integer $offset
+     * @param int $offset
      *
      * @return Doctrine_Record
      */
@@ -156,9 +176,9 @@ class sfDoctrinePager extends sfPager implements Serializable
     {
         $queryForRetrieve = clone $this->getQuery();
         $queryForRetrieve
-      ->offset($offset - 1)
-      ->limit(1)
-    ;
+            ->offset($offset - 1)
+            ->limit(1)
+        ;
 
         $results = $queryForRetrieve->execute();
 
@@ -166,11 +186,11 @@ class sfDoctrinePager extends sfPager implements Serializable
     }
 
     /**
-     * Get all the results for the pager instance
+     * Get all the results for the pager instance.
      *
      * @param mixed $hydrationMode A hydration mode identifier
      *
-     * @return Doctrine_Collection|array
+     * @return array|Doctrine_Collection
      */
     public function getResults($hydrationMode = null)
     {

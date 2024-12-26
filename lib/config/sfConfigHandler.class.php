@@ -19,12 +19,14 @@
  */
 abstract class sfConfigHandler
 {
-    protected $parameterHolder = null;
+    /** @var sfParameterHolder */
+    protected $parameterHolder;
 
     /**
      * Class constructor.
      *
      * @see initialize()
+     *
      * @param array|null $parameters
      */
     public function __construct($parameters = null)
@@ -37,9 +39,7 @@ abstract class sfConfigHandler
      *
      * @param array $parameters An associative array of initialization parameters
      *
-     * @return void
-     *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this ConfigHandler
+     * @throws sfInitializationException If an error occurs while initializing this ConfigHandler
      */
     public function initialize($parameters = null)
     {
@@ -48,14 +48,14 @@ abstract class sfConfigHandler
     }
 
     /**
-     * Executes this configuration handler
+     * Executes this configuration handler.
      *
      * @param array $configFiles An array of filesystem path to a configuration file
      *
      * @return string Data to be written to a cache file
      *
-     * @throws <b>sfConfigurationException</b> If a requested configuration file does not exist or is not readable
-     * @throws <b>sfParseException</b> If a requested configuration file is improperly formatted
+     * @throws sfConfigurationException If a requested configuration file does not exist or is not readable
+     * @throws sfParseException         If a requested configuration file is improperly formatted
      */
     abstract public function execute($configFiles);
 
@@ -66,7 +66,7 @@ abstract class sfConfigHandler
      *
      * @param mixed $value The value on which to run the replacement procedure
      *
-     * @return string|mixed|array The new value
+     * @return array|mixed|string The new value
      */
     public static function replaceConstants($value)
     {
@@ -118,6 +118,7 @@ abstract class sfConfigHandler
      * Returns the configuration for the current config handler.
      *
      * @param array $configFiles An array of ordered configuration files
+     *
      * @throws LogicException no matter what
      */
     public static function getConfiguration(array $configFiles)

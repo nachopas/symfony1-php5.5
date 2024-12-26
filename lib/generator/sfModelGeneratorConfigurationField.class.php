@@ -7,8 +7,8 @@
  */
 class sfModelGeneratorConfigurationField
 {
-    protected $name   = null;
-    protected $config = null;
+    protected $name;
+    protected $config;
 
     /**
      * Constructor.
@@ -42,9 +42,9 @@ class sfModelGeneratorConfigurationField
      *
      * If the key is null, the method returns all the configuration array.
      *
-     * @param string  $key     A key string
-     * @param mixed   $default The default value if the key does not exist
-     * @param Boolean $escaped Whether to escape single quote (false by default)
+     * @param string $key     A key string
+     * @param mixed  $default The default value if the key does not exist
+     * @param bool   $escaped Whether to escape single quote (false by default)
      *
      * @return mixed The configuration value associated with the key
      */
@@ -72,7 +72,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Returns true if the column maps a database column.
      *
-     * @return boolean true if the column maps a database column, false otherwise
+     * @return bool true if the column maps a database column, false otherwise
      */
     public function isReal()
     {
@@ -82,7 +82,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Returns true if the column is a partial.
      *
-     * @return boolean true if the column is a partial, false otherwise
+     * @return bool true if the column is a partial, false otherwise
      */
     public function isPartial()
     {
@@ -92,7 +92,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Sets or unsets the partial flag.
      *
-     * @param Boolean $boolean true if the field is a partial, false otherwise
+     * @param bool $boolean true if the field is a partial, false otherwise
      */
     public function setPartial($boolean)
     {
@@ -102,7 +102,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Returns true if the column is a component.
      *
-     * @return boolean true if the column is a component, false otherwise
+     * @return bool true if the column is a component, false otherwise
      */
     public function isComponent()
     {
@@ -112,7 +112,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Sets or unsets the component flag.
      *
-     * @param Boolean $boolean true if the field is a component, false otherwise
+     * @param bool $boolean true if the field is a component, false otherwise
      */
     public function setComponent($boolean)
     {
@@ -122,7 +122,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Returns true if the column has a link.
      *
-     * @return boolean true if the column has a link, false otherwise
+     * @return bool true if the column has a link, false otherwise
      */
     public function isLink()
     {
@@ -132,7 +132,7 @@ class sfModelGeneratorConfigurationField
     /**
      * Sets or unsets the link flag.
      *
-     * @param Boolean $boolean true if the field is a link, false otherwise
+     * @param bool $boolean true if the field is a link, false otherwise
      */
     public function setLink($boolean)
     {
@@ -204,18 +204,24 @@ class sfModelGeneratorConfigurationField
         }
 
         switch ($flag) {
-      case '=':
-        $this->setLink(true);
-        break;
-      case '_':
-        $this->setPartial(true);
-        break;
-      case '~':
-        $this->setComponent(true);
-        break;
-      default:
-        throw new InvalidArgumentException(sprintf('Flag "%s" does not exist.', $flag));
-    }
+            case '=':
+                $this->setLink(true);
+
+                break;
+
+            case '_':
+                $this->setPartial(true);
+
+                break;
+
+            case '~':
+                $this->setComponent(true);
+
+                break;
+
+            default:
+                throw new InvalidArgumentException(sprintf('Flag "%s" does not exist.', $flag));
+        }
     }
 
     /**
@@ -233,9 +239,11 @@ class sfModelGeneratorConfigurationField
     {
         if ($this->isLink()) {
             return '=';
-        } elseif ($this->isPartial()) {
+        }
+        if ($this->isPartial()) {
             return '_';
-        } elseif ($this->isComponent()) {
+        }
+        if ($this->isComponent()) {
             return '~';
         }
 

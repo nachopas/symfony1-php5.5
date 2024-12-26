@@ -15,7 +15,15 @@
  */
 class sfClassManipulator
 {
-    protected static $signatureTokens = [T_FINAL, T_ABSTRACT, T_STATIC, T_PUBLIC, T_PROTECTED, T_PRIVATE, T_FUNCTION];
+    protected static $signatureTokens = [
+        T_FINAL,
+        T_ABSTRACT,
+        T_STATIC,
+        T_PUBLIC,
+        T_PROTECTED,
+        T_PRIVATE,
+        T_FUNCTION,
+    ];
 
     protected $code = '';
     protected $file = false;
@@ -155,7 +163,7 @@ class sfClassManipulator
         $break = false;
 
         $tokens = token_get_all($this->code);
-        for ($i = 0; $i < count($tokens); $i++) {
+        for ($i = 0; $i < count($tokens); ++$i) {
             $token = $tokens[$i];
 
             if (is_array($token)) {
@@ -184,10 +192,10 @@ class sfClassManipulator
             if (count($lines) > 1 || $break) {
                 $line = $break ? '' : array_pop($lines);
                 foreach (array_chunk($lines, 2) as $chunk) {
-                    [$l, $eol] = array_pad($chunk, 2, '');
+                    list($l, $eol) = array_pad($chunk, 2, '');
 
                     if (1 == $insideSetup) {
-                        [$before, $setup] = $this->splitSetup($l);
+                        list($before, $setup) = $this->splitSetup($l);
                         $code .= $before;
                         $code .= call_user_func($callable, $setup.$eol);
                     } else {

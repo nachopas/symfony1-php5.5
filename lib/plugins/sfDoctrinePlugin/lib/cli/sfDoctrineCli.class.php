@@ -10,7 +10,7 @@
  */
 
 /**
- * sfDoctrineCli
+ * sfDoctrineCli.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
@@ -21,10 +21,9 @@ class sfDoctrineCli extends Doctrine_Cli
     protected $symfonyFormatter;
 
     /**
-     * Set the symfony dispatcher of the cli instance
+     * Set the symfony dispatcher of the cli instance.
      *
      * @param object $dispatcher
-     * @return void
      */
     public function setSymfonyDispatcher($dispatcher)
     {
@@ -32,10 +31,9 @@ class sfDoctrineCli extends Doctrine_Cli
     }
 
     /**
-     * Set the symfony formatter to use for the cli
+     * Set the symfony formatter to use for the cli.
      *
      * @param object $formatter
-     * @return void
      */
     public function setSymfonyFormatter($formatter)
     {
@@ -47,6 +45,7 @@ class sfDoctrineCli extends Doctrine_Cli
      *
      * @param string $notification
      * @param string $style
+     *
      * @return false
      */
     public function notify($notification = null, $style = 'HEADER')
@@ -55,10 +54,10 @@ class sfDoctrineCli extends Doctrine_Cli
     }
 
     /**
-     * Notify symfony of an exception thrown by the Doctrine cli
+     * Notify symfony of an exception thrown by the Doctrine cli.
      *
      * @param Doctrine_Exception $exception
-     * @return void
+     *
      * @throws sfException
      */
     public function notifyException(Exception $exception)

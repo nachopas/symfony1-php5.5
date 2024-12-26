@@ -47,78 +47,92 @@ class sfCultureInfo
 {
     /**
      * ICU data filename extension.
+     *
      * @var string
      */
     protected $dataFileExt = '.dat';
 
     /**
      * The ICU data array.
+     *
      * @var array
      */
     protected $data = [];
 
     /**
      * The current culture.
+     *
      * @var string
      */
     protected $culture;
 
     /**
      * Directory where the ICU data is stored.
+     *
      * @var string
      */
     protected $dataDir;
 
     /**
      * A list of ICU date files loaded.
+     *
      * @var array
      */
     protected $dataFiles = [];
 
     /**
      * The current date time format info.
+     *
      * @var sfDateTimeFormatInfo
      */
     protected $dateTimeFormat;
 
     /**
      * The current number format info.
+     *
      * @var sfNumberFormatInfo
      */
     protected $numberFormat;
-  
+
     /**
      * A list of properties that are accessable/writable.
+     *
      * @var array
      */
     protected $properties = [];
 
     /**
      * Culture type, all.
+     *
      * @see getCultures()
+     *
      * @var int
      */
-    const ALL = 0;
+    public const ALL = 0;
 
     /**
      * Culture type, neutral.
+     *
      * @see getCultures()
+     *
      * @var int
      */
-    const NEUTRAL = 1;
+    public const NEUTRAL = 1;
 
     /**
      * Culture type, specific.
      *
      * @see getCultures()
+     *
      * @var int
      */
-    const SPECIFIC = 2;
+    public const SPECIFIC = 2;
 
     /**
      * Gets the sfCultureInfo that for this culture string.
      *
-     * @param string  $culture The culture for this instance
+     * @param string $culture The culture for this instance
+     *
      * @return sfCultureInfo Invariant culture info is "en"
      */
     public static function getInstance($culture = 'en')
@@ -135,7 +149,8 @@ class sfCultureInfo
     /**
      * Displays the culture name.
      *
-     * @return string the culture name.
+     * @return string the culture name
+     *
      * @see getName()
      */
     public function __toString()
@@ -148,16 +163,15 @@ class sfCultureInfo
      * as an attribute/property to retrieve the value.
      *
      * @param string $name The property to get
-     * @return mixed
      */
     public function __get($name)
     {
         $getProperty = 'get'.$name;
         if (in_array($getProperty, $this->properties)) {
-            return $this->$getProperty();
-        } else {
-            throw new sfException(sprintf('Property %s does not exists.', $name));
+            return $this->{$getProperty}();
         }
+
+        throw new sfException(sprintf('Property %s does not exists.', $name));
     }
 
     /**
@@ -171,7 +185,7 @@ class sfCultureInfo
     {
         $setProperty = 'set'.$name;
         if (in_array($setProperty, $this->properties)) {
-            $this->$setProperty($value);
+            $this->{$setProperty}($value);
         } else {
             throw new sfException(sprintf('Property %s can not be set.', $name));
         }
@@ -184,7 +198,8 @@ class sfCultureInfo
      * "<language>_(country/region/variant)".
      *
      * @param string $culture a culture name, e.g. "en_AU".
-     * @return return new sfCultureInfo.
+     *
+     * @return return new sfCultureInfo
      */
     public function __construct($culture = 'en')
     {
@@ -207,7 +222,7 @@ class sfCultureInfo
      * Gets the default directory for the ICU data.
      * The default is the "data" directory for this class.
      *
-     * @return string directory containing the ICU data.
+     * @return string directory containing the ICU data
      */
     protected static function dataDir()
     {
@@ -217,7 +232,7 @@ class sfCultureInfo
     /**
      * Gets the filename extension for ICU data. Default is ".dat".
      *
-     * @return string filename extension for ICU data.
+     * @return string filename extension for ICU data
      */
     protected static function fileExt()
     {
@@ -229,7 +244,8 @@ class sfCultureInfo
      * culture data exists.
      *
      * @param string $culture a culture
-     * @return boolean true if valid, false otherwise.
+     *
+     * @return bool true if valid, false otherwise
      */
     public static function validCulture($culture)
     {
@@ -260,7 +276,7 @@ class sfCultureInfo
     /**
      * Loads the ICU culture data for the specific culture identifier.
      *
-     * @param string $culture the culture identifier.
+     * @param string $culture the culture identifier
      */
     protected function loadCultureData($culture)
     {
@@ -269,7 +285,7 @@ class sfCultureInfo
 
         $files = [$current_part];
 
-        for ($i = 1, $max = count($file_parts); $i < $max; $i++) {
+        for ($i = 1, $max = count($file_parts); $i < $max; ++$i) {
             $current_part .= '_'.$file_parts[$i];
             $files[] = $current_part;
         }
@@ -277,11 +293,11 @@ class sfCultureInfo
         foreach ($files as $file) {
             $filename = $this->dataDir.$file.$this->dataFileExt;
 
-            if (is_file($filename) == false) {
+            if (false == is_file($filename)) {
                 throw new sfException(sprintf('Data file for "%s" was not found.', $file));
             }
 
-            if (in_array($filename, $this->dataFiles) == false) {
+            if (false == in_array($filename, $this->dataFiles)) {
                 array_unshift($this->dataFiles, $file);
 
                 $data = &$this->getData($filename);
@@ -301,11 +317,12 @@ class sfCultureInfo
      * this function.
      *
      * @param string $filename the ICU data filename
+     *
      * @return array ICU data
      */
     protected function &getData($filename)
     {
-        static $data  = [];
+        static $data = [];
         static $files = [];
 
         if (!in_array($filename, $files)) {
@@ -327,9 +344,10 @@ class sfCultureInfo
      * in the "en" data file. Thus to retrieve all the data regarding
      * currency for "en_AU", you need to use findInfo("Currencies,true);.
      *
-     * @param string  $path   the data you want to find.
-     * @param boolean $merge  merge the data from its parents.
-     * @return mixed the specific ICU data.
+     * @param string $path  the data you want to find
+     * @param bool   $merge merge the data from its parents
+     *
+     * @return mixed the specific ICU data
      */
     protected function findInfo($path = '/', $merge = false)
     {
@@ -365,6 +383,7 @@ class sfCultureInfo
                 $array1[$key] = $value;
             }
         }
+
         return $array1;
     }
 
@@ -373,8 +392,9 @@ class sfCultureInfo
      * slash "/" separated path. e.g to find $info['hello']['world'],
      * the path "hello/world" will return the corresponding value.
      *
-     * @param array   $info  the array for search
-     * @param string  $path  slash "/" separated array path.
+     * @param array  $info the array for search
+     * @param string $path slash "/" separated array path
+     *
      * @return mixed the value array using the path
      */
     protected function searchArray($info, $path = '/')
@@ -383,7 +403,7 @@ class sfCultureInfo
 
         $array = $info;
 
-        for ($i = 0, $max = count($index); $i < $max; $i++) {
+        for ($i = 0, $max = count($index); $i < $max; ++$i) {
             $k = $index[$i];
             if ($i < $max - 1 && isset($array[$k])) {
                 $array = $array[$k];
@@ -392,12 +412,12 @@ class sfCultureInfo
             }
         }
     }
-  
+
     /**
      * Gets the culture name in the format
      * "<languagecode2>_(country/regioncode2)".
      *
-     * @return string culture name.
+     * @return string culture name
      */
     public function getName()
     {
@@ -408,7 +428,7 @@ class sfCultureInfo
      * Gets the sfDateTimeFormatInfo that defines the culturally appropriate
      * format of displaying dates and times.
      *
-     * @return sfDateTimeFormatInfo date time format information for the culture.
+     * @return sfDateTimeFormatInfo date time format information for the culture
      */
     public function getDateTimeFormat()
     {
@@ -424,7 +444,7 @@ class sfCultureInfo
     /**
      * Sets the date time format information.
      *
-     * @param sfDateTimeFormatInfo $dateTimeFormat the new date time format info.
+     * @param sfDateTimeFormatInfo $dateTimeFormat the new date time format info
      */
     public function setDateTimeFormat($dateTimeFormat)
     {
@@ -434,7 +454,7 @@ class sfCultureInfo
     /**
      * Gets the default calendar used by the culture, e.g. "gregorian".
      *
-     * @return string the default calendar.
+     * @return string the default calendar
      */
     public function getCalendar()
     {
@@ -446,7 +466,7 @@ class sfCultureInfo
      * to display. Returns <code>array('Language','Country');</code>
      * 'Country' is omitted if the culture is neutral.
      *
-     * @return array array with language and country as elements, localized.
+     * @return array array with language and country as elements, localized
      */
     public function getNativeName()
     {
@@ -456,9 +476,9 @@ class sfCultureInfo
         $region = $this->findInfo("Countries/{$reg}");
         if ($region) {
             return $language.' ('.$region.')';
-        } else {
-            return $language;
         }
+
+        return $language;
     }
 
     /**
@@ -466,7 +486,7 @@ class sfCultureInfo
      * Returns <code>array('Language','Country');</code>
      * 'Country' is omitted if the culture is neutral.
      *
-     * @return array array with language and country as elements.
+     * @return array array with language and country as elements
      */
     public function getEnglishName()
     {
@@ -475,7 +495,7 @@ class sfCultureInfo
         $culture = static::getInvariantCulture();
 
         $language = $culture->findInfo("Languages/{$lang}");
-        if (count($language) == 0) {
+        if (is_array($language) && 0 == count($language)) {
             return $this->culture;
         }
 
@@ -488,9 +508,9 @@ class sfCultureInfo
      * Gets the sfCultureInfo that is culture-independent (invariant).
      * Any changes to the invariant culture affects all other
      * instances of the invariant culture.
-     * The invariant culture is assumed to be "en";
+     * The invariant culture is assumed to be "en";.
      *
-     * @return sfCultureInfo invariant culture info is "en".
+     * @return sfCultureInfo invariant culture info is "en"
      */
     public static function getInvariantCulture()
     {
@@ -508,18 +528,18 @@ class sfCultureInfo
      * represents a neutral culture. Returns true if the culture
      * only contains two characters.
      *
-     * @return boolean true if culture is neutral, false otherwise.
+     * @return bool true if culture is neutral, false otherwise
      */
     public function getIsNeutralCulture()
     {
-        return strlen($this->culture) == 2;
+        return 2 == strlen($this->culture);
     }
 
     /**
      * Gets the sfNumberFormatInfo that defines the culturally appropriate
      * format of displaying numbers, currency, and percentage.
      *
-     * @return sfNumberFormatInfo the number format info for current culture.
+     * @return sfNumberFormatInfo the number format info for current culture
      */
     public function getNumberFormat()
     {
@@ -538,7 +558,7 @@ class sfCultureInfo
     /**
      * Sets the number format information.
      *
-     * @param sfNumberFormatInfo $numberFormat the new number format info.
+     * @param sfNumberFormatInfo $numberFormat the new number format info
      */
     public function setNumberFormat($numberFormat)
     {
@@ -547,13 +567,13 @@ class sfCultureInfo
 
     /**
      * Gets the sfCultureInfo that represents the parent culture of the
-     * current sfCultureInfo
+     * current sfCultureInfo.
      *
-     * @return sfCultureInfo parent culture information.
+     * @return sfCultureInfo parent culture information
      */
     public function getParent()
     {
-        if (strlen($this->culture) == 2) {
+        if (2 == strlen($this->culture)) {
             return static::getInvariantCulture();
         }
 
@@ -567,8 +587,9 @@ class sfCultureInfo
      * This function can be called statically.
      *
      * @param int $type culture type, sfCultureInfo::ALL, sfCultureInfo::NEUTRAL
-     * or sfCultureInfo::SPECIFIC.
-     * @return array list of culture information available.
+     *                  or sfCultureInfo::SPECIFIC
+     *
+     * @return array list of culture information available
      */
     public static function getCultures($type = sfCultureInfo::ALL)
     {
@@ -582,7 +603,7 @@ class sfCultureInfo
         while (false !== ($entry = $dir->read())) {
             if (is_file($dataDir.$entry) && substr($entry, -4) == $dataExt && $entry != 'root'.$dataExt) {
                 $culture = substr($entry, 0, -4);
-                if (strlen($culture) == 2) {
+                if (2 == strlen($culture)) {
                     $neutral[] = $culture;
                 } else {
                     $specific[] = $culture;
@@ -592,24 +613,30 @@ class sfCultureInfo
         $dir->close();
 
         switch ($type) {
-      case sfCultureInfo::ALL:
-        $all =  array_merge($neutral, $specific);
-        sort($all);
-        return $all;
-        break;
-      case sfCultureInfo::NEUTRAL:
-        return $neutral;
-        break;
-      case sfCultureInfo::SPECIFIC:
-        return $specific;
-        break;
-    }
+            case sfCultureInfo::ALL:
+                $all = array_merge($neutral, $specific);
+                sort($all);
+
+                return $all;
+
+                break;
+
+            case sfCultureInfo::NEUTRAL:
+                return $neutral;
+
+                break;
+
+            case sfCultureInfo::SPECIFIC:
+                return $specific;
+
+                break;
+        }
     }
 
     /**
      * Get the country name in the current culture for the given code.
      *
-     * @param  string $code A valid country code
+     * @param string $code A valid country code
      *
      * @return string The country name in the current culture
      */
@@ -627,7 +654,7 @@ class sfCultureInfo
     /**
      * Get the currency name in the current culture for the given code.
      *
-     * @param  string $code A valid currency code
+     * @param string $code A valid currency code
      *
      * @return string The currency name in the current culture
      */
@@ -645,7 +672,7 @@ class sfCultureInfo
     /**
      * Get the language name in the current culture for the given code.
      *
-     * @param  string $code A valid language code
+     * @param string $code A valid language code
      *
      * @return string The language name in the current culture
      */
@@ -663,9 +690,9 @@ class sfCultureInfo
     /**
      * Gets a list of countries in the language of the localized version.
      *
-     * @param  array $countries An array of countries used to restrict the returned array (null by default, which means all countries)
+     * @param array $countries An array of countries used to restrict the returned array (null by default, which means all countries)
      *
-     * @return array a list of localized country names.
+     * @return array a list of localized country names
      */
     public function getCountries($countries = null)
     {
@@ -694,10 +721,10 @@ class sfCultureInfo
     /**
      * Gets a list of currencies in the language of the localized version.
      *
-     * @param  array   $currencies An array of currencies used to restrict the returned array (null by default, which means all currencies)
-     * @param  Boolean $full       Whether to return the symbol and the name or not (false by default)
+     * @param array $currencies An array of currencies used to restrict the returned array (null by default, which means all currencies)
+     * @param bool  $full       Whether to return the symbol and the name or not (false by default)
      *
-     * @return array a list of localized currencies.
+     * @return array a list of localized currencies
      */
     public function getCurrencies($currencies = null, $full = false)
     {
@@ -732,9 +759,9 @@ class sfCultureInfo
     /**
      * Gets a list of languages in the language of the localized version.
      *
-     * @param  array $languages An array of languages used to restrict the returned array (null by default, which means all languages)
+     * @param array $languages An array of languages used to restrict the returned array (null by default, which means all languages)
      *
-     * @return array list of localized language names.
+     * @return array list of localized language names
      */
     public function getLanguages($languages = null)
     {
@@ -757,7 +784,7 @@ class sfCultureInfo
     /**
      * Gets a list of scripts in the language of the localized version.
      *
-     * @return array list of localized script names.
+     * @return array list of localized script names
      */
     public function getScripts()
     {
@@ -767,25 +794,26 @@ class sfCultureInfo
     /**
      * Gets a list of timezones in the language of the localized version.
      *
-     * @return array list of localized timezones.
+     * @return array list of localized timezones
      */
     public function getTimeZones()
     {
-        //new format since ICU 3.8
-        //zoneStrings contains metaTimezones
+        // new format since ICU 3.8
+        // zoneStrings contains metaTimezones
         $metadata = $this->findInfo('zoneStrings', true);
-        //TimeZones contains the Timezone name => metaTimezone identifier
+        // TimeZones contains the Timezone name => metaTimezone identifier
         $timeZones = $this->findInfo('TimeZones', true);
         foreach ($timeZones as $key => $value) {
             $timeZones[$key] = $metadata['meta:'.$value];
             $timeZones[$key]['identifier'] = $key;
             $timeZones[$key]['city'] = str_replace('_', ' ', substr($key, strpos($key, '/') + 1));
         }
+
         return $timeZones;
     }
 
     /**
-     * sorts the passed array according to the locale of this sfCultureInfo class
+     * sorts the passed array according to the locale of this sfCultureInfo class.
      *
      * @param  array the array to be sorted with "asort" and this locale
      */

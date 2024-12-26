@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfPluginBaseTask.class.php');
+require_once __DIR__.'/sfPluginBaseTask.class.php';
 
 /**
  * Lists installed plugins.
@@ -27,7 +27,7 @@ class sfPluginListTask extends sfPluginBaseTask
 
         $this->briefDescription = 'Lists installed plugins';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [plugin:list|INFO] task lists all installed plugins:
 
   [./symfony plugin:list|INFO]
@@ -47,5 +47,7 @@ EOF;
             $alias = $this->getPluginManager()->getEnvironment()->getRegistry()->getChannel($package->getChannel())->getAlias();
             $this->log(sprintf(' %-40s %10s-%-6s %s', $this->formatter->format($package->getPackage(), 'INFO'), $package->getVersion(), $package->getState() ?: null, $this->formatter->format(sprintf('# %s (%s)', $package->getChannel(), $alias), 'COMMENT')));
         }
+
+        return 0;
     }
 }

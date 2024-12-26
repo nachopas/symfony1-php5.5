@@ -31,7 +31,8 @@ class sfFrontWebController extends sfWebController
             sfFilter::$filterCalled = [];
 
             // determine our module and action
-            $request    = $this->context->getRequest();
+            /** @var sfWebRequest $request */
+            $request = $this->context->getRequest();
             $moduleName = $request->getParameter('module');
             $actionName = $request->getParameter('action');
 

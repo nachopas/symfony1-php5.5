@@ -16,8 +16,8 @@
 abstract class sfTester
 {
     protected $inABlock = false;
-    protected $browser  = null;
-    protected $tester   = null;
+    protected $browser;
+    protected $tester;
 
     /**
      * Constructor.
@@ -28,7 +28,7 @@ abstract class sfTester
     public function __construct(sfTestFunctionalBase $browser, $tester)
     {
         $this->browser = $browser;
-        $this->tester  = $tester;
+        $this->tester = $tester;
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class sfTester
     /**
      * Returns the object that each test method must return.
      *
-     * @return sfTestFunctionalBase|sfTester
+     * @return sfTester|sfTestFunctionalBase
      */
     public function getObjectToReturn()
     {

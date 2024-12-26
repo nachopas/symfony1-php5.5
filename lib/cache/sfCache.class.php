@@ -15,9 +15,9 @@
  */
 abstract class sfCache
 {
-    const OLD = 1;
-    const ALL = 2;
-    const SEPARATOR = ':';
+    public const OLD = 1;
+    public const ALL = 2;
+    public const SEPARATOR = ':';
 
     protected $options = [];
 
@@ -25,6 +25,8 @@ abstract class sfCache
      * Class constructor.
      *
      * @see initialize()
+     *
+     * @param array $options
      */
     public function __construct($options = [])
     {
@@ -46,15 +48,15 @@ abstract class sfCache
      *
      * * lifetime (optional): The default life time (default value: 86400)
      *
-     * @throws <b>sfInitializationException</b> If an error occurs while initializing this sfCache instance.
+     * @throws sfInitializationException If an error occurs while initializing this sfCache instance
      */
     public function initialize($options = [])
     {
         $this->options = array_merge([
-      'automatic_cleaning_factor' => 1000,
-      'lifetime'                  => 86400,
-      'prefix'                    => md5(__DIR__),
-    ], $options);
+            'automatic_cleaning_factor' => 1000,
+            'lifetime' => 86400,
+            'prefix' => md5(__DIR__),
+        ], $options);
 
         $this->options['prefix'] .= self::SEPARATOR;
     }
@@ -74,7 +76,7 @@ abstract class sfCache
      *
      * @param string $key The cache key
      *
-     * @return Boolean true if the cache exists, false otherwise
+     * @return bool true if the cache exists, false otherwise
      */
     abstract public function has($key);
 
@@ -85,7 +87,7 @@ abstract class sfCache
      * @param string $data     The data to put in cache
      * @param int    $lifetime The lifetime
      *
-     * @return Boolean true if no problem
+     * @return bool true if no problem
      */
     abstract public function set($key, $data, $lifetime = null);
 
@@ -94,7 +96,7 @@ abstract class sfCache
      *
      * @param string $key The cache key
      *
-     * @return Boolean true if no problem
+     * @return bool true if no problem
      */
     abstract public function remove($key);
 
@@ -103,7 +105,7 @@ abstract class sfCache
      *
      * @param string $pattern The cache key pattern
      *
-     * @return Boolean true if no problem
+     * @return bool true if no problem
      *
      * @see patternToRegexp
      */
@@ -112,11 +114,11 @@ abstract class sfCache
     /**
      * Cleans the cache.
      *
-     * @param string $mode The clean mode
-     *                     sfCache::ALL: remove all keys (default)
-     *                     sfCache::OLD: remove all expired keys
+     * @param int $mode The clean mode
+     *                  sfCache::ALL: remove all keys (default)
+     *                  sfCache::OLD: remove all expired keys
      *
-     * @return Boolean true if no problem
+     * @return bool true if no problem
      */
     abstract public function clean($mode = self::ALL);
 
@@ -134,7 +136,7 @@ abstract class sfCache
      *
      * @param string $key The cache key
      *
-     * @return int The last modified time
+     * @return int The last modified time (timestamp)
      */
     abstract public function getLastModified($key);
 
@@ -158,19 +160,21 @@ abstract class sfCache
     /**
      * Computes lifetime.
      *
-     * @param integer $lifetime Lifetime in seconds
+     * @param int $lifetime Lifetime in seconds
      *
-     * @return integer Lifetime in seconds
+     * @return int Lifetime in seconds
      */
     public function getLifetime($lifetime)
     {
-        return $lifetime ?? $this->getOption('lifetime');
+        return null === $lifetime ? $this->getOption('lifetime') : $lifetime;
     }
 
     /**
      * Gets the backend object.
      *
-     * @return object The backend object
+     * @return mixed The backend object
+     *
+     * @throws sfException
      */
     public function getBackend()
     {

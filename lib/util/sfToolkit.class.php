@@ -20,9 +20,9 @@ class sfToolkit
     /**
      * Extract the class or interface name from filename.
      *
-     * @param  string $filename  A filename.
+     * @param string $filename a filename
      *
-     * @return string A class or interface name, if one can be extracted, otherwise null.
+     * @return string a class or interface name, if one can be extracted, otherwise null
      */
     public static function extractClassName($filename)
     {
@@ -44,7 +44,7 @@ class sfToolkit
     /**
      * Clear all files in a given directory.
      *
-     * @param string $directory  An absolute filesystem path to a directory.
+     * @param string $directory an absolute filesystem path to a directory
      */
     public static function clearDirectory($directory)
     {
@@ -83,7 +83,7 @@ class sfToolkit
     /**
      * Clear all files and directories corresponding to a glob pattern.
      *
-     * @param string $pattern  An absolute filesystem pattern.
+     * @param string $pattern an absolute filesystem pattern
      */
     public static function clearGlob($pattern)
     {
@@ -108,19 +108,19 @@ class sfToolkit
     /**
      * Determine if a filesystem path is absolute.
      *
-     * @param  string $path  A filesystem path.
+     * @param string $path a filesystem path
      *
-     * @return bool true, if the path is absolute, otherwise false.
+     * @return bool true, if the path is absolute, otherwise false
      */
     public static function isPathAbsolute($path)
     {
-        if ($path[0] == '/' || $path[0] == '\\' ||
-        (
-            strlen($path) > 3 && ctype_alpha($path[0]) &&
-         $path[1] == ':' &&
-         ($path[2] == '\\' || $path[2] == '/')
-        )
-       ) {
+        if ('/' == $path[0] || '\\' == $path[0]
+            || (
+                strlen($path) > 3 && ctype_alpha($path[0])
+             && ':' == $path[1]
+             && ('\\' == $path[2] || '/' == $path[2])
+            )
+        ) {
             return true;
         }
 
@@ -128,11 +128,11 @@ class sfToolkit
     }
 
     /**
-     * Strips comments from php source code
+     * Strips comments from php source code.
      *
-     * @param  string $source  PHP source code.
+     * @param string $source PHP source code
      *
-     * @return string Comment free source code.
+     * @return string comment free source code
      */
     public static function stripComments($source)
     {
@@ -161,9 +161,9 @@ class sfToolkit
     }
 
     /**
-     * Strip slashes recursively from array
+     * Strip slashes recursively from array.
      *
-     * @param  array $value  the value to strip
+     * @param array $value the value to strip
      *
      * @return array clean value with slashes stripped
      */
@@ -194,45 +194,50 @@ class sfToolkit
     public static function arrayDeepMerge()
     {
         switch (func_num_args()) {
-      case 0:
-        return false;
-      case 1:
-        return func_get_arg(0);
-      case 2:
-        $args = func_get_args();
-        $args[2] = [];
-        if (is_array($args[0]) && is_array($args[1])) {
-            foreach (array_unique(array_merge(array_keys($args[0]), array_keys($args[1]))) as $key) {
-                $isKey0 = array_key_exists($key, $args[0]);
-                $isKey1 = array_key_exists($key, $args[1]);
-                if ($isKey0 && $isKey1 && is_array($args[0][$key]) && is_array($args[1][$key])) {
-                    $args[2][$key] = self::arrayDeepMerge($args[0][$key], $args[1][$key]);
-                } elseif ($isKey0 && $isKey1) {
-                    $args[2][$key] = $args[1][$key];
-                } elseif (!$isKey1) {
-                    $args[2][$key] = $args[0][$key];
-                } elseif (!$isKey0) {
-                    $args[2][$key] = $args[1][$key];
+            case 0:
+                return false;
+
+            case 1:
+                return func_get_arg(0);
+
+            case 2:
+                $args = func_get_args();
+                $args[2] = [];
+                if (is_array($args[0]) && is_array($args[1])) {
+                    foreach (array_unique(array_merge(array_keys($args[0]), array_keys($args[1]))) as $key) {
+                        $isKey0 = array_key_exists($key, $args[0]);
+                        $isKey1 = array_key_exists($key, $args[1]);
+                        if ($isKey0 && $isKey1 && is_array($args[0][$key]) && is_array($args[1][$key])) {
+                            $args[2][$key] = self::arrayDeepMerge($args[0][$key], $args[1][$key]);
+                        } elseif ($isKey0 && $isKey1) {
+                            $args[2][$key] = $args[1][$key];
+                        } elseif (!$isKey1) {
+                            $args[2][$key] = $args[0][$key];
+                        } elseif (!$isKey0) {
+                            $args[2][$key] = $args[1][$key];
+                        }
+                    }
+
+                    return $args[2];
                 }
-            }
-            return $args[2];
-        } else {
-            return $args[1];
+
+                return $args[1];
+
+            default:
+                $args = func_get_args();
+                $args[1] = sfToolkit::arrayDeepMerge($args[0], $args[1]);
+                array_shift($args);
+
+                return call_user_func_array(['sfToolkit', 'arrayDeepMerge'], $args);
+
+                break;
         }
-        // no break
-      default:
-        $args = func_get_args();
-        $args[1] = sfToolkit::arrayDeepMerge($args[0], $args[1]);
-        array_shift($args);
-        return call_user_func_array(['sfToolkit', 'arrayDeepMerge'], $args);
-        break;
-    }
     }
 
     /**
-     * Converts string to array
+     * Converts string to array.
      *
-     * @param  string $string  the value to convert to array
+     * @param string $string the value to convert to array
      *
      * @return array
      */
@@ -247,7 +252,7 @@ class sfToolkit
       \s*(?:
         (?=\w+\s*=) | \s*$  # followed by another key= or the end of the string
       )
-    /x', $string, $matches, PREG_SET_ORDER);
+    /x', (string) $string, $matches, PREG_SET_ORDER);
 
         $attributes = [];
         foreach ($matches as $val) {
@@ -260,15 +265,13 @@ class sfToolkit
     /**
      * Finds the type of the passed value, returns the value as the new type.
      *
-     * @param  string $value
-     * @param  bool   $quoted  Quote?
-     *
-     * @return mixed
+     * @param string $value
+     * @param bool   $quoted Quote?
      */
     public static function literalize($value, $quoted = false)
     {
         // lowercase our value for comparison
-        $value  = trim($value);
+        $value = trim($value);
         $lvalue = strtolower($value);
 
         if (in_array($lvalue, ['null', '~', ''])) {
@@ -294,7 +297,7 @@ class sfToolkit
     /**
      * Replaces constant identifiers in a scalar value.
      *
-     * @param  string $value  the value to perform the replacement on
+     * @param string $value the value to perform the replacement on
      *
      * @return string the value with substitutions made
      */
@@ -304,51 +307,34 @@ class sfToolkit
             return $value;
         }
 
-        return preg_replace_callback('/%(.+?)%/', fn ($v) => sfConfig::has(strtolower($v[1])) ? sfConfig::get(strtolower($v[1])) : '%'.$v[1].'%', $value);
+        return preg_replace_callback('/%(.+?)%/', function ($v) {
+            return sfConfig::has(strtolower($v[1])) ? sfConfig::get(strtolower($v[1])) : '%'.$v[1].'%';
+        }, $value);
     }
 
     /**
-     * Returns subject replaced with regular expression matchs
+     * Returns subject replaced with regular expression matchs.
      *
-     * @param mixed $search        subject to search
-     * @param array $replacePairs  array of search => replace pairs
+     * @param mixed $search       subject to search
+     * @param array $replacePairs array of search => replace pairs
      */
     public static function pregtr($search, $replacePairs)
     {
-        return preg_replace(array_keys($replacePairs), array_values($replacePairs), $search);
+        return preg_replace(array_keys($replacePairs), array_values($replacePairs), (string) $search);
     }
 
     /**
-     * Returns subject replaced with regular expression matches.
-     * This function accepts callback replacements only. Use sfToolkit::pregtr to do simple preg_replace.
+     * Checks if array values are empty.
      *
-     * @param mixed $search        subject to search
-     * @param array $replacePairs  array of search => replace callback pairs
-     */
-    public static function pregtrcb($search, $replacePairs)
-    {
-        foreach ($replacePairs as $pattern=>$callback) {
-            $search = preg_replace_callback(
-                $pattern,
-                $callback,
-                $search
-            );
-        }
-
-        return $search;
-    }
-
-    /**
-     * Checks if array values are empty
+     * @param array $array the array to check
      *
-     * @param  array $array  the array to check
-     * @return boolean true if empty, otherwise false
+     * @return bool true if empty, otherwise false
      */
     public static function isArrayValuesEmpty($array)
     {
         static $isEmpty = true;
         foreach ($array as $value) {
-            $isEmpty = is_array($value) ? self::isArrayValuesEmpty($value) : '' === (string)$value;
+            $isEmpty = is_array($value) ? self::isArrayValuesEmpty($value) : '' === (string) $value;
             if (!$isEmpty) {
                 break;
             }
@@ -366,11 +352,11 @@ class sfToolkit
      *
      * @param string
      *
-     * @return bool true if $string is valid UTF-8 and false otherwise.
+     * @return bool true if $string is valid UTF-8 and false otherwise
      */
     public static function isUTF8($string)
     {
-        for ($idx = 0, $strlen = strlen($string); $idx < $strlen; $idx++) {
+        for ($idx = 0, $strlen = strlen($string); $idx < $strlen; ++$idx) {
             $byte = ord($string[$idx]);
 
             if ($byte & 0x80) {
@@ -405,9 +391,9 @@ class sfToolkit
     /**
      * Returns an array value for a path.
      *
-     * @param array  $values   The values to search
-     * @param string $name     The token name
-     * @param array  $default  Default if not found
+     * @param array  $values  The values to search
+     * @param string $name    The token name
+     * @param array  $default Default if not found
      *
      * @return array
      */
@@ -430,10 +416,13 @@ class sfToolkit
                 if (!is_array($array)) {
                     return $default;
                 }
+
                 break;
-            } elseif (!isset($array[substr($name, $pos + 1, $end - $pos - 1)])) {
+            }
+            if (!isset($array[substr($name, $pos + 1, $end - $pos - 1)])) {
                 return $default;
-            } elseif (is_array($array)) {
+            }
+            if (is_array($array)) {
                 $array = $array[substr($name, $pos + 1, $end - $pos - 1)];
                 $offset = $end;
             } else {
@@ -447,8 +436,9 @@ class sfToolkit
     /**
      * Get path to php cli.
      *
-     * @throws sfException If no php cli found
      * @return string
+     *
+     * @throws sfException If no php cli found
      */
     public static function getPhpCli()
     {
@@ -472,18 +462,18 @@ class sfToolkit
      *
      * This file comes from Prado (BSD License)
      *
-     * @param  string $string string to convert to UTF-8
-     * @param  string $from   current encoding
+     * @param string $string string to convert to UTF-8
+     * @param string $from   current encoding
      *
-     * @return string UTF-8 encoded string, original string if iconv failed.
+     * @return string UTF-8 encoded string, original string if iconv failed
      */
     public static function I18N_toUTF8($string, $from)
     {
         $from = strtoupper($from);
-        if ($from != 'UTF-8') {
+        if ('UTF-8' != $from) {
             $s = iconv($from, 'UTF-8', $string);  // to UTF-8
 
-            return $s !== false ? $s : $string; // it could return false
+            return false !== $s ? $s : $string; // it could return false
         }
 
         return $string;
@@ -494,18 +484,18 @@ class sfToolkit
      *
      * This file comes from Prado (BSD License)
      *
-     * @param  string $string  the UTF-8 string for conversion
-     * @param  string $to      new encoding
+     * @param string $string the UTF-8 string for conversion
+     * @param string $to     new encoding
      *
-     * @return string encoded string.
+     * @return string encoded string
      */
     public static function I18N_toEncoding($string, $to)
     {
         $to = strtoupper($to);
-        if ($to != 'UTF-8') {
+        if ('UTF-8' != $to) {
             $s = iconv('UTF-8', $to, $string);
 
-            return $s !== false ? $s : $string;
+            return false !== $s ? $s : $string;
         }
 
         return $string;
@@ -514,10 +504,10 @@ class sfToolkit
     /**
      * Adds a path to the PHP include_path setting.
      *
-     * @param   mixed  $path     Single string path or an array of paths
-     * @param   string $position Either 'front' or 'back'
+     * @param mixed  $path     Single string path or an array of paths
+     * @param string $position Either 'front' or 'back'
      *
-     * @return  string The old include path
+     * @return string The old include path
      */
     public static function addIncludePath($path, $position = 'front')
     {
@@ -537,15 +527,19 @@ class sfToolkit
         }
 
         switch ($position) {
-      case 'front':
-        array_unshift($paths, $path);
-        break;
-      case 'back':
-        $paths[] = $path;
-        break;
-      default:
-        throw new InvalidArgumentException(sprintf('Unrecognized position: "%s"', $position));
-    }
+            case 'front':
+                array_unshift($paths, $path);
+
+                break;
+
+            case 'back':
+                $paths[] = $path;
+
+                break;
+
+            default:
+                throw new InvalidArgumentException(sprintf('Unrecognized position: "%s"', $position));
+        }
 
         return set_include_path(implode(PATH_SEPARATOR, $paths));
     }

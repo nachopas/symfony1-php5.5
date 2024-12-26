@@ -24,8 +24,8 @@ class sfSymfonyPluginManager extends sfPluginManager
      *
      * See sfPluginManager for other options.
      *
-     * @param sfEventDispatcher $dispatcher   An event dispatcher instance
-     * @param sfPearEnvironment $environment  A sfPearEnvironment instance
+     * @param sfEventDispatcher $dispatcher  An event dispatcher instance
+     * @param sfPearEnvironment $environment A sfPearEnvironment instance
      */
     public function initialize(sfEventDispatcher $dispatcher, sfPearEnvironment $environment)
     {
@@ -119,7 +119,7 @@ class sfSymfonyPluginManager extends sfPluginManager
      * This is a static method that does not rely on the PEAR environment
      * as we don't want this method to have PEAR as a dependency.
      *
-     * @param string $plugin The name of the plugin
+     * @param string $plugin    The name of the plugin
      * @param string $configDir The config directory
      */
     public static function disablePlugin($plugin, $configDir)
@@ -198,9 +198,9 @@ class sfSymfonyPluginManager extends sfPluginManager
     /**
      * Returns true if the plugin is comptatible with the dependency.
      *
-     * @param  array   $dependency A dependency array
+     * @param array $dependency A dependency array
      *
-     * @return Boolean true if the plugin is compatible, false otherwise
+     * @return bool true if the plugin is compatible, false otherwise
      */
     protected function isPluginCompatibleWithDependency($dependency)
     {

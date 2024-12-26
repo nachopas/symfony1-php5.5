@@ -20,14 +20,16 @@ class sfConfigureAuthorTask extends sfBaseTask
      */
     protected function configure()
     {
-        $this->addArguments([new sfCommandArgument('author', sfCommandArgument::REQUIRED, 'The project author')]);
+        $this->addArguments([
+            new sfCommandArgument('author', sfCommandArgument::REQUIRED, 'The project author'),
+        ]);
 
         $this->namespace = 'configure';
         $this->name = 'author';
 
         $this->briefDescription = 'Configure project author';
 
-        $this->detailedDescription = <<<EOF
+        $this->detailedDescription = <<<'EOF'
 The [configure:author|INFO] task configures the author for a project:
 
   [./symfony configure:author "Fabien Potencier <fabien.potencier@symfony-project.com>"|INFO]
@@ -61,5 +63,7 @@ EOF;
         }
 
         file_put_contents($file, $ini);
+
+        return 0;
     }
 }

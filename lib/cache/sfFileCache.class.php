@@ -15,11 +15,11 @@
  */
 class sfFileCache extends sfCache
 {
-    const READ_DATA = 1;
-    const READ_TIMEOUT = 2;
-    const READ_LAST_MODIFIED = 4;
+    public const READ_DATA = 1;
+    public const READ_TIMEOUT = 2;
+    public const READ_LAST_MODIFIED = 4;
 
-    const EXTENSION = '.cache';
+    public const EXTENSION = '.cache';
 
     /**
      * Initializes this sfCache instance.
@@ -45,17 +45,19 @@ class sfFileCache extends sfCache
 
     /**
      * @see sfCache
+     *
+     * @param mixed|null $default
      */
     public function get($key, $default = null)
     {
         $file_path = $this->getFilePath($key);
-        if (!file_exists($file_path)) {
+        if (!is_file($file_path)) {
             return $default;
         }
 
         $data = $this->read($file_path, self::READ_DATA);
 
-        if ($data[self::READ_DATA] === null) {
+        if (null === $data[self::READ_DATA]) {
             return $default;
         }
 
@@ -68,15 +70,18 @@ class sfFileCache extends sfCache
     public function has($key)
     {
         $path = $this->getFilePath($key);
-        return file_exists($path) && $this->isValid($path);
+
+        return is_file($path) && $this->isValid($path);
     }
 
     /**
      * @see sfCache
+     *
+     * @param mixed|null $lifetime
      */
     public function set($key, $data, $lifetime = null)
     {
-        if ($this->getOption('automatic_cleaning_factor') > 0 && random_int(1, $this->getOption('automatic_cleaning_factor')) == 1) {
+        if ($this->getOption('automatic_cleaning_factor') > 0 && 1 == mt_rand(1, $this->getOption('automatic_cleaning_factor'))) {
             $this->clean(sfCache::OLD);
         }
 
@@ -117,6 +122,8 @@ class sfFileCache extends sfCache
                 @unlink($path);
             }
         }
+
+        return true;
     }
 
     /**
@@ -145,7 +152,7 @@ class sfFileCache extends sfCache
     {
         $path = $this->getFilePath($key);
 
-        if (!file_exists($path)) {
+        if (!is_file($path)) {
             return 0;
         }
 
@@ -161,7 +168,7 @@ class sfFileCache extends sfCache
     {
         $path = $this->getFilePath($key);
 
-        if (!file_exists($path)) {
+        if (!is_file($path)) {
             return 0;
         }
 
@@ -170,12 +177,14 @@ class sfFileCache extends sfCache
         if ($data[self::READ_TIMEOUT] < time()) {
             return 0;
         }
+
         return $data[self::READ_LAST_MODIFIED];
     }
 
     protected function isValid($path)
     {
         $data = $this->read($path, self::READ_TIMEOUT);
+
         return time() < $data[self::READ_TIMEOUT];
     }
 
@@ -211,16 +220,21 @@ class sfFileCache extends sfCache
         }
 
         @flock($fp, LOCK_SH);
-        $data[self::READ_TIMEOUT] = intval(@stream_get_contents($fp, 12, 0));
-        if ($type != self::READ_TIMEOUT && time() < $data[self::READ_TIMEOUT]) {
+        $data[self::READ_TIMEOUT] = (int) @stream_get_contents($fp, 12, 0);
+        if (self::READ_TIMEOUT != $type && time() < $data[self::READ_TIMEOUT]) {
             if ($type & self::READ_LAST_MODIFIED) {
-                $data[self::READ_LAST_MODIFIED] = intval(@stream_get_contents($fp, 12, 12));
+                $data[self::READ_LAST_MODIFIED] = (int) @stream_get_contents($fp, 12, 12);
             }
             if ($type & self::READ_DATA) {
                 fseek($fp, 0, SEEK_END);
                 $length = ftell($fp) - 24;
                 fseek($fp, 24);
-                $data[self::READ_DATA] = @fread($fp, $length);
+
+                if ($length > 0) {
+                    $data[self::READ_DATA] = @fread($fp, $length);
+                } else {
+                    $data[self::READ_DATA] = '';
+                }
             }
         } else {
             $data[self::READ_LAST_MODIFIED] = null;
@@ -235,11 +249,11 @@ class sfFileCache extends sfCache
     /**
      * Writes the given data in the cache file.
      *
-     * @param string  $path    The file path
-     * @param string  $data    The data to put in cache
-     * @param integer $timeout The timeout timestamp
+     * @param string $path    The file path
+     * @param string $data    The data to put in cache
+     * @param int    $timeout The timeout timestamp
      *
-     * @return boolean true if ok, otherwise false
+     * @return bool true if ok, otherwise false
      *
      * @throws sfCacheException
      */
@@ -248,12 +262,12 @@ class sfFileCache extends sfCache
         $current_umask = umask();
         umask(0000);
 
-        if (!is_dir(dirname($path))) {
-            // create directory structure if needed
-            mkdir(dirname($path), 0777, true);
+        $cacheDir = dirname($path);
+        if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir)) {
+            throw new sfCacheException(sprintf('Cache was not able to create a directory "%s".', $cacheDir));
         }
 
-        $tmpFile = tempnam(dirname($path), basename($path));
+        $tmpFile = tempnam($cacheDir, basename($path));
 
         if (!$fp = @fopen($tmpFile, 'wb')) {
             throw new sfCacheException(sprintf('Unable to write cache file "%s".', $tmpFile));

@@ -10,13 +10,16 @@
  */
 
 /**
- * Standard connection listener
+ * Standard connection listener.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>
  */
 class sfDoctrineConnectionListener extends Doctrine_EventListener
 {
+    protected $connection;
+    protected $encoding;
+
     public function __construct($connection, $encoding)
     {
         $this->connection = $connection;

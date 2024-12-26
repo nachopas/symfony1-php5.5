@@ -15,21 +15,25 @@
  */
 abstract class sfTask
 {
-    protected $namespace           = '';
-    protected $name                = null;
-    protected $aliases             = [];
-    protected $briefDescription    = '';
+    protected $namespace = '';
+    protected $name;
+    protected $aliases = [];
+    protected $briefDescription = '';
     protected $detailedDescription = '';
-    protected $arguments           = [];
-    protected $options             = [];
-    protected $dispatcher          = null;
-    protected $formatter           = null;
+    protected $arguments = [];
+    protected $options = [];
+
+    /** @var sfEventDispatcher */
+    protected $dispatcher;
+
+    /** @var sfFormatter */
+    protected $formatter;
 
     /**
      * Constructor.
      *
-     * @param sfEventDispatcher $dispatcher  An sfEventDispatcher instance
-     * @param sfFormatter       $formatter   An sfFormatter instance
+     * @param sfEventDispatcher $dispatcher An sfEventDispatcher instance
+     * @param sfFormatter       $formatter  An sfFormatter instance
      */
     public function __construct(sfEventDispatcher $dispatcher, sfFormatter $formatter)
     {
@@ -41,13 +45,13 @@ abstract class sfTask
     /**
      * Initializes the sfTask instance.
      *
-     * @param sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param sfFormatter       $formatter   A sfFormatter instance
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param sfFormatter       $formatter  A sfFormatter instance
      */
     public function initialize(sfEventDispatcher $dispatcher, sfFormatter $formatter)
     {
         $this->dispatcher = $dispatcher;
-        $this->formatter  = $formatter;
+        $this->formatter = $formatter;
     }
 
     /**
@@ -70,7 +74,7 @@ abstract class sfTask
     /**
      * Sets the formatter instance.
      *
-     * @param sfFormatter The formatter instance
+     * @param sfFormatter $formatter The formatter instance
      */
     public function setFormatter(sfFormatter $formatter)
     {
@@ -80,10 +84,10 @@ abstract class sfTask
     /**
      * Runs the task from the CLI.
      *
-     * @param sfCommandManager $commandManager  An sfCommandManager instance
-     * @param mixed            $options         The command line options
+     * @param sfCommandManager $commandManager An sfCommandManager instance
+     * @param mixed            $options        The command line options
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function runFromCLI(sfCommandManager $commandManager, $options = null)
     {
@@ -96,10 +100,10 @@ abstract class sfTask
     /**
      * Runs the task.
      *
-     * @param array|string $arguments  An array of arguments or a string representing the CLI arguments and options
-     * @param array        $options    An array of options
+     * @param array|string $arguments An array of arguments or a string representing the CLI arguments and options
+     * @param array        $options   An array of options
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function run($arguments = [], $options = [])
     {
@@ -138,6 +142,7 @@ abstract class sfTask
             if (is_string($name)) {
                 if (false === $value || null === $value || (isset($indexedOptions[$name]) && $indexedOptions[$name]->isArray() && !$value)) {
                     unset($options[$name]);
+
                     continue;
                 }
 
@@ -160,7 +165,7 @@ abstract class sfTask
     /**
      * Returns the argument objects.
      *
-     * @return sfCommandArgument An array of sfCommandArgument objects.
+     * @return sfCommandArgument[] an array of sfCommandArgument objects
      */
     public function getArguments()
     {
@@ -170,7 +175,7 @@ abstract class sfTask
     /**
      * Adds an array of argument objects.
      *
-     * @param array $arguments  An array of arguments
+     * @param sfCommandArgument[] $arguments An array of arguments
      */
     public function addArguments($arguments)
     {
@@ -183,6 +188,11 @@ abstract class sfTask
      * This method always use the sfCommandArgument class to create an option.
      *
      * @see sfCommandArgument::__construct()
+     *
+     * @param string     $name
+     * @param int        $mode
+     * @param string     $help
+     * @param mixed|null $default
      */
     public function addArgument($name, $mode = null, $help = '', $default = null)
     {
@@ -192,7 +202,7 @@ abstract class sfTask
     /**
      * Returns the options objects.
      *
-     * @return sfCommandOption An array of sfCommandOption objects.
+     * @return sfCommandOption[] an array of sfCommandOption objects
      */
     public function getOptions()
     {
@@ -202,7 +212,7 @@ abstract class sfTask
     /**
      * Adds an array of option objects.
      *
-     * @param array $options    An array of options
+     * @param array $options An array of options
      */
     public function addOptions($options)
     {
@@ -215,6 +225,12 @@ abstract class sfTask
      * This method always use the sfCommandOption class to create an option.
      *
      * @see sfCommandOption::__construct()
+     *
+     * @param string     $name
+     * @param string     $shortcut
+     * @param int        $mode
+     * @param string     $help
+     * @param mixed|null $default
      */
     public function addOption($name, $shortcut = null, $mode = null, $help = '', $default = null)
     {
@@ -232,7 +248,7 @@ abstract class sfTask
     }
 
     /**
-     * Returns the task name
+     * Returns the task name.
      *
      * @return string The task name
      */
@@ -286,7 +302,10 @@ abstract class sfTask
     public function getDetailedDescription()
     {
         $formatter = $this->getFormatter();
-        return preg_replace_callback('/\[(.+?)\|(\w+)\]/s', fn ($match) => $formatter->format($match['1'], $match['2']), $this->detailedDescription);
+
+        return preg_replace_callback('/\[(.+?)\|(\w+)\]/s', function ($match) use ($formatter) {
+            return $formatter->format($match['1'], $match['2']);
+        }, $this->detailedDescription);
     }
 
     /**
@@ -355,7 +374,7 @@ abstract class sfTask
     /**
      * Logs a message.
      *
-     * @param mixed $messages  The message as an array of lines of a single string
+     * @param mixed $messages The message as an array of lines of a single string
      */
     public function log($messages)
     {
@@ -369,10 +388,10 @@ abstract class sfTask
     /**
      * Logs a message in a section.
      *
-     * @param string  $section  The section name
-     * @param string  $message  The message
-     * @param int     $size     The maximum size of a line
-     * @param string  $style    The color scheme to apply to the section string (INFO, ERROR, or COMMAND)
+     * @param string $section The section name
+     * @param string $message The message
+     * @param int    $size    The maximum size of a line
+     * @param string $style   The color scheme to apply to the section string (INFO, ERROR, or COMMAND)
      */
     public function logSection($section, $message, $size = null, $style = 'INFO')
     {
@@ -382,7 +401,7 @@ abstract class sfTask
     /**
      * Logs a message as a block of text.
      *
-     * @param string|array $messages The message to display in the block
+     * @param array|string $messages The message to display in the block
      * @param string       $style    The style to use
      */
     public function logBlock($messages, $style)
@@ -392,7 +411,7 @@ abstract class sfTask
         }
 
         $style = str_replace('_LARGE', '', $style, $count);
-        $large = (Boolean) $count;
+        $large = (bool) $count;
 
         $len = 0;
         $lines = [];
@@ -417,11 +436,11 @@ abstract class sfTask
     /**
      * Asks a question to the user.
      *
-     * @param string|array $question The question to ask
+     * @param array|string $question The question to ask
      * @param string       $style    The style to use (QUESTION by default)
      * @param string       $default  The default answer if none is given by the user
      *
-     * @param string       The user answer
+     * @return string The user answer
      */
     public function ask($question, $style = 'QUESTION', $default = null)
     {
@@ -441,11 +460,11 @@ abstract class sfTask
      *
      * The question will be asked until the user answer by nothing, yes, or no.
      *
-     * @param string|array $question The question to ask
+     * @param array|string $question The question to ask
      * @param string       $style    The style to use (QUESTION by default)
-     * @param Boolean      $default  The default answer if the user enters nothing
+     * @param bool         $default  The default answer if the user enters nothing
      *
-     * @param Boolean      true if the user has confirmed, false otherwise
+     * @return bool true if the user has confirmed, false otherwise
      */
     public function askConfirmation($question, $style = 'QUESTION', $default = true)
     {
@@ -456,9 +475,9 @@ abstract class sfTask
 
         if (false === $default) {
             return $answer && 'y' == strtolower($answer[0]);
-        } else {
-            return !$answer || 'y' == strtolower($answer[0]);
         }
+
+        return !$answer || 'y' == strtolower($answer[0]);
     }
 
     /**
@@ -470,11 +489,9 @@ abstract class sfTask
      *  * attempts: Max number of times to ask before giving up (false by default, which means infinite)
      *  * style:    Style for question output (QUESTION by default)
      *
-     * @param   string|array    $question
-     * @param   sfValidatorBase $validator
-     * @param   array           $options
+     * @param array|string $question
      *
-     * @return  mixed
+     * @throws sfValidatorError
      */
     public function askAndValidate($question, sfValidatorBase $validator, array $options = [])
     {
@@ -482,7 +499,11 @@ abstract class sfTask
             $question = [$question];
         }
 
-        $options = array_merge(['value'    => null, 'attempts' => false, 'style'    => 'QUESTION'], $options);
+        $options = array_merge([
+            'value' => null,
+            'attempts' => false,
+            'style' => 'QUESTION',
+        ], $options);
 
         // does the provided value passes the validator?
         if ($options['value']) {
@@ -493,6 +514,7 @@ abstract class sfTask
         }
 
         // no, ask the user for a valid user
+        /** @var sfValidatorError|null $error */
         $error = null;
         while (false === $options['attempts'] || $options['attempts']--) {
             if (null !== $error) {
@@ -580,16 +602,16 @@ abstract class sfTask
             }
         }
 
-        return $dom->saveXml();
+        return $dom->saveXML();
     }
 
     /**
      * Executes the current task.
      *
-     * @param array    $arguments  An array of arguments
-     * @param array    $options    An array of options
+     * @param array $arguments An array of arguments
+     * @param array $options   An array of options
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     abstract protected function execute($arguments = [], $options = []);
 

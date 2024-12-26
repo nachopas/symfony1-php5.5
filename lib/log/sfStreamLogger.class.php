@@ -15,7 +15,8 @@
  */
 class sfStreamLogger extends sfLogger
 {
-    protected $stream = null;
+    /** @var resource */
+    protected $stream;
 
     /**
      * Initializes this logger.
@@ -24,30 +25,30 @@ class sfStreamLogger extends sfLogger
      *
      * - stream: A PHP stream
      *
-     * @param  sfEventDispatcher $dispatcher  A sfEventDispatcher instance
-     * @param  array             $options     An array of options.
+     * @param sfEventDispatcher $dispatcher A sfEventDispatcher instance
+     * @param array             $options    an array of options
      *
-     * @return Boolean      true, if initialization completes successfully, otherwise false.
+     * @throws sfConfigurationException
      */
     public function initialize(sfEventDispatcher $dispatcher, $options = [])
     {
         if (!isset($options['stream'])) {
             throw new sfConfigurationException('You must provide a "stream" option for this logger.');
-        } else {
-            if (is_resource($options['stream']) && 'stream' != get_resource_type($options['stream'])) {
-                throw new sfConfigurationException('The provided "stream" option is not a stream.');
-            }
+        }
+
+        if (is_resource($options['stream']) && 'stream' != get_resource_type($options['stream'])) {
+            throw new sfConfigurationException('The provided "stream" option is not a stream.');
         }
 
         $this->stream = $options['stream'];
 
-        return parent::initialize($dispatcher, $options);
+        parent::initialize($dispatcher, $options);
     }
 
     /**
      * Sets the PHP stream to use for this logger.
      *
-     * @param stream $stream A php stream
+     * @param resource $stream A php stream
      */
     public function setStream($stream)
     {
@@ -57,8 +58,8 @@ class sfStreamLogger extends sfLogger
     /**
      * Logs a message.
      *
-     * @param string $message   Message
-     * @param string $priority  Message priority
+     * @param string $message  Message
+     * @param int    $priority Message priority
      */
     protected function doLog($message, $priority)
     {

@@ -15,10 +15,17 @@
  */
 class sfAutoloadAgain
 {
-    protected static $instance = null;
+    protected static $instance;
 
     protected $registered = false;
-    protected $reloaded   = false;
+    protected $reloaded = false;
+
+    /**
+     * Constructor.
+     */
+    protected function __construct()
+    {
+    }
 
     /**
      * Returns the singleton autoloader.
@@ -35,18 +42,11 @@ class sfAutoloadAgain
     }
 
     /**
-     * Constructor.
-     */
-    protected function __construct()
-    {
-    }
-
-    /**
      * Reloads the autoloader.
      *
-     * @param  string $class
+     * @param string $class
      *
-     * @return boolean
+     * @return bool
      */
     public function autoload($class)
     {
@@ -65,7 +65,7 @@ class sfAutoloadAgain
                 }
             }
         } else {
-            $position  = array_search([self::class, 'autoload'], $autoloads, true);
+            $position = array_search([__CLASS__, 'autoload'], $autoloads, true);
         }
 
         if (isset($autoloads[$position + 1])) {
@@ -89,7 +89,7 @@ class sfAutoloadAgain
     /**
      * Returns true if the autoloader is registered.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRegistered()
     {
