@@ -106,7 +106,7 @@ class sfMemcacheCache extends sfCache
      */
     public function set($key, $data, $lifetime = null)
     {
-        $lifetime = null === $lifetime ? $this->getOption('lifetime') : $lifetime;
+        $lifetime ??= $this->getOption('lifetime');
 
         // save metadata
         $this->setMetadata($key, $lifetime);
@@ -201,9 +201,7 @@ class sfMemcacheCache extends sfCache
     {
         $values = [];
         $prefix = $this->getOption('prefix');
-        $prefixed_keys = array_map(function ($k) use ($prefix) {
-            return $prefix.$k;
-        }, $keys);
+        $prefixed_keys = array_map(fn($k) => $prefix.$k, $keys);
 
         foreach ($this->memcache->get($prefixed_keys) as $key => $value) {
             $values[str_replace($prefix, '', $key)] = $value;

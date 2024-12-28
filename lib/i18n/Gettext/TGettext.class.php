@@ -37,7 +37,6 @@
  *
  * @author      Michael Wallner <mike@php.net>
  *
- * @version     $Revision: 9856 $
  */
 class TGettext
 {

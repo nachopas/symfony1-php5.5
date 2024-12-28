@@ -74,7 +74,7 @@ class sfValidatorSchemaCompare extends sfValidatorSchema
             throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
         }
 
-        $leftValue  = $values[$this->getOption('left_field')] ?? null;
+        $leftValue = $values[$this->getOption('left_field')] ?? null;
         $rightValue = $values[$this->getOption('right_field')] ?? null;
 
         switch ($this->getOption('operator')) {

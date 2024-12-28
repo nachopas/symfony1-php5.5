@@ -115,9 +115,7 @@ EOF;
             } else {
                 $this->logBlock(array_merge(
                     ['The following errors occurred:', ''],
-                    array_map(function ($e) {
-                        return ' - '.$e->getMessage();
-                    }, $migration->getErrors())
+                    array_map(fn($e) => ' - '.$e->getMessage(), $migration->getErrors())
                 ), 'ERROR_LARGE');
             }
 

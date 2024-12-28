@@ -83,7 +83,7 @@ EOF;
         $this->log('');
 
         $width = 0;
-        foreach ($tasks as $name => $task) {
+        foreach ($tasks as $task) {
             $width = strlen($task->getName()) > $width ? strlen($task->getName()) : $width;
         }
         $width += strlen($this->formatter->format('  ', 'INFO'));
@@ -98,7 +98,7 @@ EOF;
         // display tasks
         ksort($tasks);
         $currentNamespace = '';
-        foreach ($tasks as $name => $task) {
+        foreach ($tasks as $task) {
             if (!$namespace && $currentNamespace != $task->getNamespace()) {
                 $currentNamespace = $task->getNamespace();
                 $messages[] = $this->formatter->format($task->getNamespace(), 'COMMENT');
@@ -130,7 +130,7 @@ EOF;
         ksort($tasks);
         $currentNamespace = 'foobar';
         $namespaceArrayXML = [];
-        foreach ($tasks as $name => $task) {
+        foreach ($tasks as $task) {
             if (!$namespace && $currentNamespace != $task->getNamespace()) {
                 $currentNamespace = $task->getNamespace();
                 $namespacesXML->appendChild($namespaceArrayXML[$task->getNamespace()] = $dom->createElement('namespace'));

@@ -201,7 +201,12 @@ class Doctrine_DataDict_Mssql extends Doctrine_DataDict
                 $length = $field['length'] ?? null;
         }
 
-        return ['type'     => $type, 'length'   => $length, 'unsigned' => $unsigned, 'fixed'    => $fixed];
+        return [
+            'type'     => $type,
+            'length'   => $length,
+            'unsigned' => $unsigned,
+            'fixed'    => $fixed,
+        ];
     }
 
     /**

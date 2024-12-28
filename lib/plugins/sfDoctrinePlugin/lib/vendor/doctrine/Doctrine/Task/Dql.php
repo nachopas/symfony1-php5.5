@@ -30,7 +30,8 @@
 class Doctrine_Task_Dql extends Doctrine_Task
 {
     public $description          =   'Execute dql query and display the results',
-           $requiredArguments    =   ['models_path'    =>  'Specify path to your Doctrine_Record definitions.', 'dql_query'      =>  'Specify the complete dql query to execute.'],
+           $requiredArguments    =   ['models_path'    =>  'Specify path to your Doctrine_Record definitions.',
+                                      'dql_query'      =>  'Specify the complete dql query to execute.'],
            $optionalArguments    =   ['params'         =>  'Comma separated list of the params to replace the ? tokens in the dql'];
 
     public function execute()

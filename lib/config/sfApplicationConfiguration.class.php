@@ -163,11 +163,10 @@ abstract class sfApplicationConfiguration extends ProjectConfiguration
      */
     protected function initializePlugins()
     {
-        foreach ($this->pluginConfigurations as $name => $configuration) {
+        foreach ($this->pluginConfigurations as $configuration) {
             if (
                 false === $configuration->initialize()
-                &&
-                is_readable($config = $configuration->getRootDir().'/config/config.php')
+                && is_readable($config = $configuration->getRootDir().'/config/config.php')
             ) {
                 require $config;
             }
@@ -181,7 +180,7 @@ abstract class sfApplicationConfiguration extends ProjectConfiguration
      */
     public function filterAutoloadConfig(sfEvent $event, array $config)
     {
-        foreach ($this->pluginConfigurations as $name => $configuration) {
+        foreach ($this->pluginConfigurations as $configuration) {
             $config = $configuration->filterAutoloadConfig($event, $config);
         }
 
@@ -209,8 +208,7 @@ abstract class sfApplicationConfiguration extends ProjectConfiguration
     {
         if (
             $this->hasLockFile(sfConfig::get('sf_data_dir').DIRECTORY_SEPARATOR.$this->getApplication().'_'.$this->getEnvironment().'-cli.lck', 5)
-            ||
-            $this->hasLockFile(sfConfig::get('sf_data_dir').DIRECTORY_SEPARATOR.$this->getApplication().'_'.$this->getEnvironment().'.lck')
+            || $this->hasLockFile(sfConfig::get('sf_data_dir').DIRECTORY_SEPARATOR.$this->getApplication().'_'.$this->getEnvironment().'.lck')
         ) {
             // application is not available - we'll find the most specific unavailable page...
             $files = [

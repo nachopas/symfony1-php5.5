@@ -30,8 +30,8 @@ class sfI18nYamlValidateExtractor extends sfI18nYamlExtractor
 
         // fields
         if (isset($config['fields'])) {
-            foreach ($config['fields'] as $field => $validation) {
-                foreach ($validation as $type => $parameters) {
+            foreach ($config['fields'] as $validation) {
+                foreach ($validation as $parameters) {
                     if (!is_array($parameters)) {
                         continue;
                     }
@@ -64,7 +64,7 @@ class sfI18nYamlValidateExtractor extends sfI18nYamlExtractor
 
         // required messages
         if (isset($config['names'])) {
-            foreach ($config['names'] as $key => $value) {
+            foreach ($config['names'] as $value) {
                 if (isset($value['required_msg'])) {
                     $strings[] = $value['required_msg'];
                 }
@@ -73,7 +73,7 @@ class sfI18nYamlValidateExtractor extends sfI18nYamlExtractor
 
         // validators
         foreach ($config as $key => $value) {
-            if (isset($value['param']) && isset($value['class'])) {
+            if (isset($value['param'], $value['class'])) {
                 foreach ($value['param'] as $key => $value) {
                     if (preg_match('/(msg|error)$/', $key)) {
                         $strings[] = $value;

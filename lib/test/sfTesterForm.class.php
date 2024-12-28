@@ -46,7 +46,7 @@ class sfTesterForm extends sfTester
         if (null === $this->form) {
             $action = $this->browser->getContext()->getActionStack()->getLastEntry()->getActionInstance();
 
-            foreach ($action->getVarHolder()->getAll() as $name => $value) {
+            foreach ($action->getVarHolder()->getAll() as $value) {
                 if ($value instanceof sfForm && $value->isBound()) {
                     $this->form = $value;
 
@@ -190,7 +190,7 @@ class sfTesterForm extends sfTester
         }
 
         if ('action' == $parameters['sf_type']) {
-            foreach ($parameters as $key => $value) {
+            foreach ($parameters as $value) {
                 if ($value instanceof sfForm && $value->isBound()) {
                     $this->form = $value;
 

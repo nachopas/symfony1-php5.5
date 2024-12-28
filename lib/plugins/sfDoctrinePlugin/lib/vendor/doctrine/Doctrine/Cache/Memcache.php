@@ -133,7 +133,7 @@ class Doctrine_Cache_Memcache extends Doctrine_Cache_Driver
         $keys = [];
         $allSlabs = $this->_memcache->getExtendedStats('slabs');
 
-        foreach ($allSlabs as $server => $slabs) {
+        foreach ($allSlabs as $slabs) {
             foreach (array_keys($slabs) as $slabId) {
                 $dump = $this->_memcache->getExtendedStats('cachedump', (int) $slabId);
                 foreach ($dump as $entries) {

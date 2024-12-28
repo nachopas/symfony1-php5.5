@@ -74,7 +74,7 @@ class sfI18nYamlGeneratorExtractor extends sfI18nYamlExtractor
 
     protected function getFromFields($fields)
     {
-        foreach ($fields as $field => $options) {
+        foreach ($fields as $options) {
             if (isset($options['name'])) {
                 $this->strings[] = $options['name'];
             }

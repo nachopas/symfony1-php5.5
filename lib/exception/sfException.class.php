@@ -101,12 +101,12 @@ class sfException extends Exception
 
         if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
             try {
-                $this->outputStackTrace($exception);
+                static::outputStackTrace($exception);
             } catch (Throwable $e) {
             }
         } else {
             try {
-                $this->outputStackTrace($exception);
+                static::outputStackTrace($exception);
             } catch (Exception $e) {
             }
         }
@@ -285,8 +285,8 @@ class sfException extends Exception
             $args = $traceData[$i]['args'] ?? [];
             $traces[] = sprintf(
                 $lineFormat,
-                ($traceData[$i]['class'] ?? ''),
-                ($traceData[$i]['type'] ?? ''),
+                $traceData[$i]['class'] ?? '',
+                $traceData[$i]['type'] ?? '',
                 $traceData[$i]['function'],
                 self::formatArgs($args, false, $format),
                 self::formatFile($file, $line, $format, null === $file ? 'n/a' : sfDebug::shortenFilePath($file)),

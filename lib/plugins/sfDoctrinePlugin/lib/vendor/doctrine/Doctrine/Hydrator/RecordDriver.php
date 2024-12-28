@@ -111,11 +111,11 @@ class Doctrine_Hydrator_RecordDriver extends Doctrine_Hydrator_Graph
     public function flush()
     {
         // take snapshots from all initialized collections
-        foreach ($this->_collections as $key => $coll) {
+        foreach ($this->_collections as $coll) {
             $coll->takeSnapshot();
         }
         $this->_initializedRelations = null;
-        $this->_collections = null;
+        $this->_collections = [];
         $this->_tables = null;
     }
 }

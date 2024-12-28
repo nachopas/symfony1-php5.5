@@ -56,7 +56,7 @@ abstract class sfBrowserBase
 
         // setup our fake environment
         $this->hostname = $hostname ?? 'localhost';
-        $this->remote   = $remote ?? '127.0.0.1';
+        $this->remote = $remote ?? '127.0.0.1';
 
         // we set a session id (fake cookie / persistence)
         $this->newSession();
@@ -705,7 +705,7 @@ abstract class sfBrowserBase
      */
     public function doClickElement(DOMElement $item, $arguments = [], $options = [])
     {
-        $method = strtolower(isset($options['method']) ? $options['method'] : 'get');
+        $method = strtolower($options['method'] ?? 'get');
 
         if ('a' == $item->nodeName) {
             if (in_array($method, ['post', 'put', 'delete'])) {
@@ -737,7 +737,7 @@ abstract class sfBrowserBase
         if (!$url || '#' == $url) {
             $url = $this->stack[$this->stackPosition]['uri'];
         }
-        $method = strtolower($options['method'] ?? ($item->getAttribute('method') ?: 'get'));
+        $method = strtolower($options['method'] ?? $item->getAttribute('method') ?: 'get');
 
         // merge form default values and arguments
         $defaults = [];
@@ -833,9 +833,7 @@ abstract class sfBrowserBase
     {
         if (false !== $pos = strpos($name, '[')) {
             $var = &$vars;
-            $tmps = array_filter(preg_split('/(\[ | \[\] | \])/x', $name), function ($s) {
-                return '' !== $s;
-            });
+            $tmps = array_filter(preg_split('/(\[ | \[\] | \])/x', $name), fn($s) => '' !== $s);
             foreach ($tmps as $tmp) {
                 $var = &$var[$tmp];
             }

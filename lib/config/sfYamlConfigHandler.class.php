@@ -69,7 +69,7 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
             throw new sfParseException(sprintf('Configuration file "%s" could not be parsed', $configFile));
         }
 
-        return null === $config ? [] : $config;
+        return $config ?? [];
     }
 
     /**
@@ -106,14 +106,7 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
      */
     protected function getConfigValue($keyName, $category, $defaultValue = null)
     {
-        if (isset($this->yamlConfig[$category][$keyName])) {
-            return $this->yamlConfig[$category][$keyName];
-        }
-        if (isset($this->yamlConfig['all'][$keyName])) {
-            return $this->yamlConfig['all'][$keyName];
-        }
-
-        return $defaultValue;
+        return $this->yamlConfig[$category][$keyName] ?? $this->yamlConfig['all'][$keyName] ?? $defaultValue;
     }
 
     public static function flattenConfiguration($config)

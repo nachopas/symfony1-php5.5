@@ -10,7 +10,7 @@
  */
 
 /**
- * sfDoctrine exception class
+ * sfDoctrine exception class.
  *
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Jonathan H. Wage <jonwage@gmail.com>

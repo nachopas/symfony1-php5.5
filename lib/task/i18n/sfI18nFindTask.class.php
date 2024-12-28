@@ -90,7 +90,7 @@ EOF;
                         for ($i = 0, $max = $node->childNodes->length; $i < $max; ++$i) {
                             $nodes[] = $node->childNodes->item($i);
                         }
-                    } elseif ('DOMProcessingInstruction' == get_class($node) && 'php' == $node->target) {
+                    } elseif ('DOMProcessingInstruction' == ($node !== null ? get_class($node) : self::class) && 'php' == $node->target) {
                         // processing instruction node
                         $tokens = token_get_all('<?php '.$node->nodeValue);
                         foreach ($tokens as $token) {

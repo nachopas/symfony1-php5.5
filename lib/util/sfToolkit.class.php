@@ -307,9 +307,7 @@ class sfToolkit
             return $value;
         }
 
-        return preg_replace_callback('/%(.+?)%/', function ($v) {
-            return sfConfig::has(strtolower($v[1])) ? sfConfig::get(strtolower($v[1])) : '%'.$v[1].'%';
-        }, $value);
+        return preg_replace_callback('/%(.+?)%/', fn($v) => sfConfig::has(strtolower($v[1])) ? sfConfig::get(strtolower($v[1])) : '%'.$v[1].'%', $value);
     }
 
     /**

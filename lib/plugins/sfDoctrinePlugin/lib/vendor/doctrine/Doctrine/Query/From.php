@@ -56,7 +56,7 @@ class Doctrine_Query_From extends Doctrine_Query_Part
 
         $last = '';
 
-        foreach ($parts as $k => $part) {
+        foreach ($parts as $part) {
             $part = trim($part);
 
             if (empty($part)) {

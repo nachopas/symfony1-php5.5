@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfDoctrineBaseTask.class.php');
+require_once __DIR__.'/sfDoctrineBaseTask.class.php';
 
 /**
  * Create classes for the current model.
@@ -100,9 +100,9 @@ EOF;
 
         $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
         $tokens = [
-            '##PACKAGE##' => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony',
+            '##PACKAGE##' => $properties['symfony']['name'] ?? 'symfony',
             '##SUBPACKAGE##' => 'model',
-            '##NAME##' => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here',
+            '##NAME##' => $properties['symfony']['author'] ?? 'Your name here',
             ' <##EMAIL##>' => '',
             "{\n\n}" => "{\n}\n",
         ];

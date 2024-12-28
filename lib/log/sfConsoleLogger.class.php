@@ -25,6 +25,6 @@ class sfConsoleLogger extends sfStreamLogger
     {
         $options['stream'] = defined('STDOUT') ? STDOUT : fopen('php://stdout', 'w');
 
-        return parent::initialize($dispatcher, $options);
+        parent::initialize($dispatcher, $options);
     }
 }

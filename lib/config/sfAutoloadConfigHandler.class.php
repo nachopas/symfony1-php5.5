@@ -151,15 +151,15 @@ class sfAutoloadConfigHandler extends sfYamlConfigHandler
 
         $configFiles = array_merge($pluginConfigFiles, $configFiles);
 
-        $config = self::replaceConstants(self::parseYamls($configFiles));
+        $config = static::replaceConstants(static::parseYamls($configFiles));
 
         foreach ($config['autoload'] as $name => $values) {
             if (isset($values['path'])) {
-                $config['autoload'][$name]['path'] = self::replacePath($values['path']);
+                $config['autoload'][$name]['path'] = static::replacePath($values['path']);
             }
         }
 
-        $event = $configuration->getEventDispatcher()->filter(new sfEvent(__CLASS__, 'autoload.filter_config'), $config);
+        $event = $configuration->getEventDispatcher()->filter(new sfEvent(self::class, 'autoload.filter_config'), $config);
         $config = $event->getReturnValue();
 
         return $config;

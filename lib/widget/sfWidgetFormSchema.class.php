@@ -200,7 +200,7 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
      */
     public function getFormFormatterName()
     {
-        return null === $this->options['form_formatter'] ? self::$defaultFormatterName : $this->options['form_formatter'];
+        return $this->options['form_formatter'] ?? self::$defaultFormatterName;
     }
 
     /**

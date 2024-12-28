@@ -37,7 +37,7 @@ class sfVarLogger extends sfLogger
             $this->xdebugLogging = false;
         }
 
-        return parent::initialize($dispatcher, $options);
+        parent::initialize($dispatcher, $options);
     }
 
     /**
@@ -160,8 +160,7 @@ class sfVarLogger extends sfLogger
 
             if (
                 !class_exists($class)
-                ||
-                (!in_array($class, ['sfLogger', 'sfEventDispatcher']) && !is_subclass_of($class, 'sfLogger') && !is_subclass_of($class, 'sfEventDispatcher'))
+                || (!in_array($class, ['sfLogger', 'sfEventDispatcher']) && !is_subclass_of($class, 'sfLogger') && !is_subclass_of($class, 'sfEventDispatcher'))
             ) {
                 $traces = array_slice($traces, $i);
 

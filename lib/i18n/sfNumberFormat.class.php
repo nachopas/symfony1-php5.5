@@ -13,6 +13,7 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 
 /**
@@ -54,6 +55,7 @@
  * For each culture, the symbol for each currency may be different.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 class sfNumberFormat
 {

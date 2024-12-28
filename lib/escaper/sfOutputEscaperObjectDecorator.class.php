@@ -110,7 +110,7 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
     public function count()
     {
         // See https://github.com/symfony/polyfill/commit/d330c0094a47d8edceeea1ed553d6e08215a9fc2
-        if (is_array($this->value) || $this->value instanceof Countable || $this->value instanceof ResourceBundle || $this->value instanceof SimpleXMLElement) {
+        if (is_countable($this->value) || $this->value instanceof ResourceBundle || $this->value instanceof SimpleXMLElement) {
             return count($this->value);
         }
 

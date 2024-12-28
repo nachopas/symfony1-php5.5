@@ -107,7 +107,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
             // interpolate parameters
             foreach ($params as $param) {
                 $param = htmlspecialchars((string) $param, ENT_QUOTES, sfConfig::get('sf_charset'));
-                $query = join(var_export(is_scalar($param) ? $param : (string) $param, true), explode('?', $query, 2));
+                $query = implode(var_export(is_scalar($param) ? $param : (string) $param, true), explode('?', $query, 2));
             }
 
             // slow query
@@ -123,7 +123,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
                     break;
                 }
 
-                if (false !== strpos($log['message'], $event->getQuery())) {
+                if (false !== strpos($log['message'], (string) $event->getQuery())) {
                     // assume queries are being requested in order
                     unset($logs[$i]);
                     $backtrace = '&nbsp;'.$this->getToggleableDebugStack($log['debug_backtrace']);

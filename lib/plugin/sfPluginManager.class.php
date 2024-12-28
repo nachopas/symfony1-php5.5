@@ -113,9 +113,9 @@ class sfPluginManager
      */
     protected function doInstallPlugin($plugin, $options = [])
     {
-        $channel   = $options['channel'] ?? $this->environment->getConfig()->get('default_channel');
+        $channel = $options['channel'] ?? $this->environment->getConfig()->get('default_channel');
         $stability = $options['stability'] ?? $this->environment->getConfig()->get('preferred_state', null, $channel);
-        $version   = $options['version'] ?? null;
+        $version = $options['version'] ?? null;
 
         $isPackage = true;
         if (0 === strpos($plugin, 'http://') || file_exists($plugin)) {
@@ -384,9 +384,9 @@ class sfPluginManager
      */
     public function getPluginLicense($plugin, $options = [])
     {
-        $channel   = $options['channel'] ?? $this->environment->getConfig()->get('default_channel');
+        $channel = $options['channel'] ?? $this->environment->getConfig()->get('default_channel');
         $stability = $options['stability'] ?? $this->environment->getConfig()->get('preferred_state', null, $channel);
-        $version   = $options['version'] ?? null;
+        $version = $options['version'] ?? null;
 
         $rest = $this->environment->getRest();
         $rest->setChannel($channel ?? $this->environment->getConfig()->get('default_channel'));

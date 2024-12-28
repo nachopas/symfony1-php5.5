@@ -122,7 +122,7 @@ class sfRoute implements Serializable
         }
 
         // check the static prefix uf the URL first. Only use the more expensive preg_match when it matches
-        if ('' !== $this->staticPrefix && 0 !== strpos($url, $this->staticPrefix)) {
+        if ('' !== $this->staticPrefix && 0 !== strpos($url, (string) $this->staticPrefix)) {
             return false;
         }
         if (!preg_match($this->regex, $url, $matches)) {
@@ -279,7 +279,7 @@ class sfRoute implements Serializable
         foreach ($tokens as $token) {
             switch ($token[0]) {
                 case 'variable':
-                    if (!$optional || !isset($this->defaults[$token[3]]) || $parameters[$token[3]] != $this->defaults[$token[3]]) {
+                    if (!$optional || !isset($this->defaults[$token[3]]) || (isset($parameters[$token[3]]) && $parameters[$token[3]] != $this->defaults[$token[3]])) {
                         $url[] = urlencode($parameters[$token[3]]);
                         $optional = false;
                     }
@@ -661,9 +661,7 @@ class sfRoute implements Serializable
             'extra_parameters_as_query_string' => true,
         ], $this->getDefaultOptions(), $this->options);
 
-        $preg_quote_hash = static function ($a) {
-            return preg_quote($a, '#');
-        };
+        $preg_quote_hash = (static fn($a) => preg_quote($a, '#'));
 
         // compute some regexes
         $this->options['variable_prefix_regex'] = '(?:'.implode('|', array_map($preg_quote_hash, $this->options['variable_prefixes'])).')';

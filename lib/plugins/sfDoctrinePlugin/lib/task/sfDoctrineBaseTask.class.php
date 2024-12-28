@@ -140,7 +140,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
                         $models[$model]['package'] = $plugin->getName().'.lib.model.doctrine';
                     }
 
-                    if (!isset($models[$model]['package_custom_path']) && 0 === strpos($models[$model]['package'], $plugin->getName())) {
+                    if (!isset($models[$model]['package_custom_path']) && 0 === strpos($models[$model]['package'], (string) $plugin->getName())) {
                         $models[$model]['package_custom_path'] = $plugin->getRootDir().'/lib/model/doctrine';
                     }
                 }
@@ -165,7 +165,7 @@ abstract class sfDoctrineBaseTask extends sfBaseTask
         }
 
         // create one consolidated schema file
-        $file = realpath(sys_get_temp_dir()).'/doctrine_schema_'.rand(11111, 99999).'.yml';
+        $file = realpath(sys_get_temp_dir()).'/doctrine_schema_'.random_int(11111, 99999).'.yml';
         $this->logSection('file+', $file);
         file_put_contents($file, sfYaml::dump($models, 4));
 

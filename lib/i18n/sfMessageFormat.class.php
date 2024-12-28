@@ -13,6 +13,7 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 
 /**
@@ -36,6 +37,7 @@
  * </code>
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 class sfMessageFormat
 {

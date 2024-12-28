@@ -181,7 +181,7 @@ abstract class sfTestFunctionalBase
     public function getAndCheck($module, $action, $url = null, $code = 200)
     {
         return $this->
-      get($url ?? sprintf('/%s/%s', $module, $action))->
+          get($url ?? sprintf('/%s/%s', $module, $action))->
           with('request')->begin()->
             isParameter('module', $module)->
             isParameter('action', $action)->
@@ -470,8 +470,8 @@ abstract class sfTestFunctionalBase
             $args = $traceData[$i]['args'] ?? [];
             $this->test()->error(sprintf(
                 $lineFormat,
-                ($traceData[$i]['class'] ?? ''),
-                ($traceData[$i]['type'] ?? ''),
+                $traceData[$i]['class'] ?? '',
+                $traceData[$i]['type'] ?? '',
                 $traceData[$i]['function'],
                 $file,
                 $line

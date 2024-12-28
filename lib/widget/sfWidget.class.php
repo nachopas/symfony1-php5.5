@@ -395,6 +395,6 @@ abstract class sfWidget
      */
     protected function attributesToHtmlCallback($k, $v)
     {
-        return false === $v || null === $v || ('' === $v && 'value' != $k) ? '' : sprintf(' %s="%s"', $k, $this->escapeOnce($v));
+        return false === $v || null === $v || ('' === $v && 'value' != $k) ? '' : sprintf(' %s="%s"', $k, static::escapeOnce($v));
     }
 }

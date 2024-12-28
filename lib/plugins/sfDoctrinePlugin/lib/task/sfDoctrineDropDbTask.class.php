@@ -69,9 +69,7 @@ EOF;
             !$options['no-confirmation']
             && !$this->askConfirmation(array_merge(
                 [sprintf('This command will remove all data in the following "%s" connection(s):', $environment), ''],
-                array_map(function ($v) {
-                    return ' - '.$v;
-                }, array_keys($databases)),
+                array_map(fn($v) => ' - '.$v, array_keys($databases)),
                 ['', 'Are you sure you want to proceed? (y/N)']
             ), 'QUESTION_LARGE', false)
         ) {

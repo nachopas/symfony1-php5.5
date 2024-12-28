@@ -31,7 +31,8 @@ class Doctrine_Task_Compile extends Doctrine_Task
 {
     public $description          =   'Compile doctrine classes in to one single php file',
            $requiredArguments    =   [],
-           $optionalArguments    =   ['drivers'        =>  'Specify list of drivers you wish to compile. Ex: mysql|mssql|sqlite', 'compiled_path'  =>  'The path where you want to write the compiled doctrine libs.'];
+           $optionalArguments    =   ['drivers'        =>  'Specify list of drivers you wish to compile. Ex: mysql|mssql|sqlite',
+                                           'compiled_path'  =>  'The path where you want to write the compiled doctrine libs.'];
     
     public function execute()
     {

@@ -29,6 +29,9 @@
  */
 class Doctrine_Hydrator_ArrayShallowDriver extends Doctrine_Hydrator_ScalarDriver
 {
+    /**
+     * @return array
+     */
     public function hydrateResultSet($stmt)
     {
         $cache = [];

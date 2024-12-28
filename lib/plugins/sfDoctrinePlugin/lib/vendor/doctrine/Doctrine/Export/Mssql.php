@@ -293,7 +293,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
 
         //RENAME (COLUMN)
         if ( ! empty($rename) && is_array($rename)) {
-            foreach ($rename as $renameName => $renamedField) {
+            foreach ($rename as $renamedField) {
 
                 $field = $changes['rename'][$renamedField];
                 $renamedField = $this->conn->quoteIdentifier($renamedField);
@@ -456,7 +456,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
         }
         
         if (isset($options['foreignKeys'])) {
-            foreach ((array) $options['foreignKeys'] as $k => $definition) {
+            foreach ((array) $options['foreignKeys'] as $definition) {
                 if (is_array($definition)) {
                     $sql[] = $this->createForeignKeySql($name, $definition);
                 }

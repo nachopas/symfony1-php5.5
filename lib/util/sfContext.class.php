@@ -42,7 +42,7 @@ class sfContext implements ArrayAccess
      *
      * @throws sfFactoryException
      */
-    public static function createInstance(sfApplicationConfiguration $configuration, $name = null, $class = __CLASS__)
+    public static function createInstance(sfApplicationConfiguration $configuration, $name = null, $class = self::class)
     {
         if (null === $name) {
             $name = $configuration->getApplication();
@@ -96,7 +96,7 @@ class sfContext implements ArrayAccess
      *
      * @throws sfException
      */
-    public static function getInstance($name = null, $class = __CLASS__)
+    public static function getInstance($name = null, $class = self::class)
     {
         if (null === $name) {
             $name = self::$current;
@@ -302,7 +302,7 @@ class sfContext implements ArrayAccess
      */
     public function getDatabaseManager()
     {
-        return isset($this->factories['databaseManager']) ? $this->factories['databaseManager'] : null;
+        return $this->factories['databaseManager'] ?? null;
     }
 
     /**

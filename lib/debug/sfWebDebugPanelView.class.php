@@ -13,7 +13,6 @@
  *
  * @author      Kris Wallsmith <kris.wallsmith@symfony-project.com>
  *
- * @version     SVN: $Id$
  */
 class sfWebDebugPanelView extends sfWebDebugPanel
 {
@@ -74,8 +73,7 @@ class sfWebDebugPanelView extends sfWebDebugPanel
         foreach (array_reverse($this->webDebug->getLogger()->getLogs()) as $log) {
             if (
                 ($class == $log['type'] || (class_exists($log['type'], false) && is_subclass_of($log['type'], $class)))
-                &&
-                preg_match('/^Render "(.*)"$/', $log['message'], $match)
+                && preg_match('/^Render "(.*)"$/', $log['message'], $match)
             ) {
                 return $match[1];
             }

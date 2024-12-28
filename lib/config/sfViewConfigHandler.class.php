@@ -252,8 +252,7 @@ EOF;
         foreach ((array) $assets as $asset) {
             $position = '';
             if (is_array($asset)) {
-                reset($asset);
-                $key = key($asset);
+                $key = array_key_first($asset);
                 $options = $asset[$key];
                 if (isset($options['position'])) {
                     $position = $options['position'];

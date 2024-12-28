@@ -120,7 +120,7 @@ EOF;
     protected function execute($arguments = [], $options = [])
     {
         if (!$mode = $this->calculateMode($options)) {
-            throw new InvalidArgumentException(sprintf("You must include one or more of the following build options:\n--%s\n\nSee this task's help page for more information:\n\n  php symfony help doctrine:build", join(', --', array_keys($this->getBuildOptions()))));
+            throw new InvalidArgumentException(sprintf("You must include one or more of the following build options:\n--%s\n\nSee this task's help page for more information:\n\n  php symfony help doctrine:build", implode(', --', array_keys($this->getBuildOptions()))));
         }
 
         if (self::BUILD_DB == (self::BUILD_DB & $mode)) {
@@ -250,7 +250,7 @@ EOF;
         $mode = 0;
         foreach ($this->getBuildOptions() as $name => $value) {
             if (isset($options[$name]) && true === $options[$name]) {
-                $mode = $mode | $value;
+                $mode |= $value;
             }
         }
 
@@ -266,7 +266,7 @@ EOF;
     {
         $options = [];
         foreach ($this->options as $option) {
-            if (defined($constant = __CLASS__.'::OPTION_'.str_replace('-', '_', strtoupper($option->getName())))) {
+            if (defined($constant = self::class.'::OPTION_'.str_replace('-', '_', strtoupper($option->getName())))) {
                 $options[$option->getName()] = constant($constant);
             }
         }

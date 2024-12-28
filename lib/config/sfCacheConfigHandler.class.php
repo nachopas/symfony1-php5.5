@@ -62,6 +62,14 @@ class sfCacheConfigHandler extends sfYamlConfigHandler
     }
 
     /**
+     * @see sfConfigHandler
+     */
+    public static function getConfiguration(array $configFiles)
+    {
+        return static::flattenConfiguration(static::parseYamls($configFiles));
+    }
+
+    /**
      * Returns a single addCache statement.
      *
      * @param string $actionName The action name
@@ -105,13 +113,5 @@ class sfCacheConfigHandler extends sfYamlConfigHandler
         );
 
         return implode("\n", $data);
-    }
-
-    /**
-     * @see sfConfigHandler
-     */
-    public static function getConfiguration(array $configFiles)
-    {
-        return static::flattenConfiguration(static::parseYamls($configFiles));
     }
 }

@@ -166,7 +166,7 @@ class sfDomCssSelector implements Countable, Iterator
                         foreach ($matches as $match) {
                             $attrName = $match[1];
                             $attrOperator = $match[2];
-                            $attrValue = '' === $match[4] ? (isset($match[5]) ? $match[5] : '') : $match[4];
+                            $attrValue = '' === $match[4] ? ($match[5] ?? '') : $match[4];
 
                             switch ($attrOperator) {
                                 case '=': // Equality
@@ -389,7 +389,7 @@ class sfDomCssSelector implements Countable, Iterator
         for ($i = 0, $max = count($nodes); $i < $max; ++$i) {
             switch ($selector['selector']) {
                 case 'contains':
-                    if (false !== strpos($nodes[$i]->textContent, $selector['parameter'])) {
+                    if (false !== strpos($nodes[$i]->textContent, (string) $selector['parameter'])) {
                         $matchingNodes[] = $nodes[$i];
                     }
 

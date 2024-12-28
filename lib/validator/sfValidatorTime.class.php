@@ -90,8 +90,7 @@ class sfValidatorTime extends sfValidatorBase
         // if minute is set, hour must be set
         if (
             $this->isValueSet($value, 'second') && (!$this->isValueSet($value, 'minute') || !$this->isValueSet($value, 'hour'))
-            ||
-            $this->isValueSet($value, 'minute') && !$this->isValueSet($value, 'hour')
+            || $this->isValueSet($value, 'minute') && !$this->isValueSet($value, 'hour')
         ) {
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
@@ -121,7 +120,7 @@ class sfValidatorTime extends sfValidatorBase
     {
         if (is_array($value)) {
             // array is not empty when a value is found
-            foreach ($value as $key => $val) {
+            foreach ($value as $val) {
                 // int and string '0' are 'empty' values that are explicitly accepted
                 if (0 === $val || '0' === $val || !empty($val)) {
                     return false;

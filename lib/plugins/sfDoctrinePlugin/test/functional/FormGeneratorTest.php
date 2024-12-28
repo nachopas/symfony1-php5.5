@@ -10,7 +10,8 @@
 
 $app = 'backend';
 $fixtures = 'fixtures';
-require_once(__DIR__.'/../bootstrap/functional.php');
+
+require_once __DIR__.'/../bootstrap/functional.php';
 
 $t = new lime_test(41);
 

@@ -30,7 +30,8 @@
 class Doctrine_Task_GenerateMigration extends Doctrine_Task
 {
     public $description          =   'Generate new migration class definition',
-           $requiredArguments    =   ['class_name'      => 'Name of the migration class to generate', 'migrations_path' => 'Specify the complete path to your migration classes folder.'],
+           $requiredArguments    =   ['class_name'      => 'Name of the migration class to generate',
+                                           'migrations_path' => 'Specify the complete path to your migration classes folder.'],
            $optionalArguments    =   [];
     
     public function execute()

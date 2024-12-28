@@ -43,9 +43,9 @@
 function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = [])
 {
     return tag('link', [
-        'rel' => isset($tag_options['rel']) ? $tag_options['rel'] : 'alternate',
-        'type' => isset($tag_options['type']) ? $tag_options['type'] : 'application/'.$type.'+xml',
-        'title' => isset($tag_options['title']) ? $tag_options['title'] : ucfirst($type),
+        'rel' => $tag_options['rel'] ?? 'alternate',
+        'type' => $tag_options['type'] ?? 'application/'.$type.'+xml',
+        'title' => $tag_options['title'] ?? ucfirst($type),
         'href' => url_for($url, true),
     ]);
 }
@@ -373,7 +373,7 @@ function _compute_public_path($source, $dir, $ext, $absolute = false)
         $source .= '.'.$ext;
     }
 
-    if ($sf_relative_url_root && 0 !== strpos($source, $sf_relative_url_root)) {
+    if ($sf_relative_url_root && 0 !== strpos($source, (string) $sf_relative_url_root)) {
         $source = $sf_relative_url_root.$source;
     }
 

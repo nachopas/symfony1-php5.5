@@ -13,8 +13,9 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
- 
+
 /**
  * sfNumberFormatInfo class.
  *
@@ -33,8 +34,8 @@
  * To create a sfNumberFormatInfo for the invariant culture, use the
  * InvariantInfo::getInvariantInfo().
  *
- *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 class sfNumberFormatInfo
 {
@@ -525,11 +526,7 @@ class sfNumberFormatInfo
      */
     public function getCurrencySymbol($currency = 'USD')
     {
-        if (isset($this->pattern['symbol'])) {
-            return $this->pattern['symbol'];
-        }
-
-        return $this->data['Currencies'][$currency][0];
+        return $this->pattern['symbol'] ?? $this->data['Currencies'][$currency][0];
     }
 
     /**

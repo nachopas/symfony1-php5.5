@@ -49,7 +49,7 @@ class sfWebDebugLogger extends sfVarLogger
 
         $this->registerErrorHandler();
 
-        return parent::initialize($dispatcher, $options);
+        parent::initialize($dispatcher, $options);
     }
 
     /**

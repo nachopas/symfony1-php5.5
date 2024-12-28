@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-include(__DIR__.'/../../../../../test/bootstrap/unit.php');
+include __DIR__.'/../../../../../test/bootstrap/unit.php';
 
 if (!isset($root_dir)) {
     $root_dir = realpath(__DIR__.sprintf('/../%s/fixtures', $type ?? 'functional'));

@@ -13,6 +13,7 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 
 /**
@@ -42,6 +43,7 @@
  * For example, Australian English is "en_AU".
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 class sfCultureInfo
 {

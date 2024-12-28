@@ -11,7 +11,6 @@
 /**
  * Unit test library.
  *
- * @package    lime
  * @author     Fabien Potencier <fabien.potencier@gmail.com>
  */
 class lime_test
@@ -45,8 +44,8 @@ class lime_test
     $caller = $this->find_caller(debug_backtrace());
     self::$all_results[] = [
       'file'  => $caller[0],
-      'tests' => array(),
-      'stats' => array('plan' => $plan, 'total' => 0, 'failed' => array(), 'passed' => array(), 'skipped' => array(), 'errors' => array()),
+      'tests' => [],
+      'stats' => ['plan' => $plan, 'total' => 0, 'failed' => [], 'passed' => [], 'skipped' => [], 'errors' => []],
     ];
 
     $this->results = &self::$all_results[count(self::$all_results) - 1];
@@ -246,7 +245,7 @@ class lime_test
 
     if (!$result = $this->ok(!$value, $message))
     {
-      $this->set_last_test_errors([sprintf("      %s", var_export($exp2, true)), '          ne', sprintf("      %s", var_export($exp2, true))]);
+      $this->set_last_test_errors([sprintf("      %s", var_export($exp1, true)), '          ne', sprintf("      %s", var_export($exp2, true))]);
     }
 
     return $result;
@@ -608,7 +607,7 @@ class lime_output
   public function __construct($force_colors = false, $base_dir = null)
   {
     $this->colorizer = new lime_colorizer($force_colors);
-    $this->base_dir = $base_dir === null ? getcwd() : $base_dir;
+    $this->base_dir = $base_dir ?? getcwd();
   }
 
   public function diag()
@@ -616,7 +615,7 @@ class lime_output
     $messages = func_get_args();
     foreach ($messages as $message)
     {
-      echo $this->colorizer->colorize('# '.join("\n# ", (array) $message), 'COMMENT')."\n";
+      echo $this->colorizer->colorize('# '.implode("\n# ", (array) $message), 'COMMENT')."\n";
     }
   }
 
@@ -708,30 +707,22 @@ class lime_output
       $colorizer = $this->colorizer;
       $message = preg_replace_callback(
         '/(?:^|\.)((?:not ok|dubious|errors) *\d*)\b/',
-        function ($match) use ($colorizer) {
-          return $colorizer->colorize($match[1], 'ERROR');
-        },
+        fn($match) => $colorizer->colorize($match[1], 'ERROR'),
         $message
       );
       $message = preg_replace_callback(
         '/(?:^|\.)(ok *\d*)\b/',
-        function ($match) use ($colorizer) {
-          return $colorizer->colorize($match[1], 'INFO');
-        },
+        fn($match) => $colorizer->colorize($match[1], 'INFO'),
         $message
       );
       $message = preg_replace_callback(
         '/"(.+?)"/',
-        function ($match) use ($colorizer) {
-          return $colorizer->colorize($match[1], 'PARAMETER');
-        },
+        fn($match) => $colorizer->colorize($match[1], 'PARAMETER'),
         $message
       );
       $message = preg_replace_callback(
         '/(\->|\:\:)?([a-zA-Z0-9_]+?)\(\)/',
-        function ($match) use ($colorizer) {
-          return $colorizer->colorize($match[1].$match[2].'()', 'PARAMETER');
-        },
+        fn($match) => $colorizer->colorize($match[1].$match[2].'()', 'PARAMETER'),
         $message
       );
     }
@@ -851,7 +842,7 @@ class lime_harness extends lime_registration
     ], $options);
 
     $this->php_cli = $this->find_php_cli($this->options['php_cli']);
-    $this->output = $this->options['output'] ? $this->options['output'] : new lime_output($this->options['force_colors']);
+    $this->output = $this->options['output'] ?: new lime_output($this->options['force_colors']);
   }
 
   protected function find_php_cli($php_cli = null)
@@ -901,7 +892,7 @@ class lime_harness extends lime_registration
   public function to_array()
   {
     $results = [];
-    foreach ($this->stats['files'] as $file => $stat)
+    foreach ($this->stats['files'] as $stat)
     {
       $results = array_merge($results, $stat['output']);
     }

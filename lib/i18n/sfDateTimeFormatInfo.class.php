@@ -13,6 +13,7 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 
 /**
@@ -64,6 +65,7 @@
  * </code>
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 class sfDateTimeFormatInfo
 {
@@ -290,11 +292,7 @@ class sfDateTimeFormatInfo
      */
     public function getAbbreviatedMonthNames()
     {
-        if (isset($this->data['monthNames']['format']['abbreviated'])) {
-            return $this->data['monthNames']['format']['abbreviated'];
-        }
-
-        return $this->data['monthNames']['format']['wide'];
+        return $this->data['monthNames']['format']['abbreviated'] ?? $this->data['monthNames']['format']['wide'];
     }
 
     /**

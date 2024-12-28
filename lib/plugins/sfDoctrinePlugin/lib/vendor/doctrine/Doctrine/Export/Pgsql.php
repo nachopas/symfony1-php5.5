@@ -358,7 +358,7 @@ class Doctrine_Export_Pgsql extends Doctrine_Export
         
         if (isset($options['foreignKeys'])) {
 
-            foreach ((array) $options['foreignKeys'] as $k => $definition) {
+            foreach ((array) $options['foreignKeys'] as $definition) {
                 if (is_array($definition)) {
                     $sql[] = $this->createForeignKeySql($name, $definition);
                 }

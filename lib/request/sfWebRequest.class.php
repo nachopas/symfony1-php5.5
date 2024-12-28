@@ -562,11 +562,8 @@ class sfWebRequest extends sfRequest
 
         return
           (isset($pathArray['HTTPS']) && ('on' == strtolower($pathArray['HTTPS']) || 1 == $pathArray['HTTPS']))
-          ||
-          ($this->getOption('trust_proxy') && isset($pathArray['HTTP_SSL_HTTPS']) && ('on' == strtolower($pathArray['HTTP_SSL_HTTPS']) || 1 == $pathArray['HTTP_SSL_HTTPS']))
-          ||
-          $this->getOption('trust_proxy') && $this->isForwardedSecure()
-        ;
+          || ($this->getOption('trust_proxy') && isset($pathArray['HTTP_SSL_HTTPS']) && ('on' == strtolower($pathArray['HTTP_SSL_HTTPS']) || 1 == $pathArray['HTTP_SSL_HTTPS']))
+          || ($this->getOption('trust_proxy') && $this->isForwardedSecure());
     }
 
     /**
@@ -822,11 +819,7 @@ class sfWebRequest extends sfRequest
      */
     public function getGetParameter($name, $default = null)
     {
-        if (isset($this->getParameters[$name])) {
-            return $this->getParameters[$name];
-        }
-
-        return sfToolkit::getArrayValueForPath($this->getParameters, $name, $default);
+        return $this->getParameters[$name] ?? sfToolkit::getArrayValueForPath($this->getParameters, $name, $default);
     }
 
     /**
@@ -839,11 +832,7 @@ class sfWebRequest extends sfRequest
      */
     public function getPostParameter($name, $default = null)
     {
-        if (isset($this->postParameters[$name])) {
-            return $this->postParameters[$name];
-        }
-
-        return sfToolkit::getArrayValueForPath($this->postParameters, $name, $default);
+        return $this->postParameters[$name] ?? sfToolkit::getArrayValueForPath($this->postParameters, $name, $default);
     }
 
     /**
@@ -856,11 +845,7 @@ class sfWebRequest extends sfRequest
      */
     public function getUrlParameter($name, $default = null)
     {
-        if (isset($this->requestParameters[$name])) {
-            return $this->requestParameters[$name];
-        }
-
-        return sfToolkit::getArrayValueForPath($this->requestParameters, $name, $default);
+        return $this->requestParameters[$name] ?? sfToolkit::getArrayValueForPath($this->requestParameters, $name, $default);
     }
 
     /**

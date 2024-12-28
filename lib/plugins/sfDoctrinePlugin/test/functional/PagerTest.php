@@ -9,7 +9,8 @@
  */
 
 $app = 'frontend';
-require_once(__DIR__.'/../bootstrap/functional.php');
+
+require_once __DIR__.'/../bootstrap/functional.php';
 
 $t = new lime_test(23);
 

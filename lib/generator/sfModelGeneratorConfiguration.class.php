@@ -108,10 +108,10 @@ abstract class sfModelGeneratorConfiguration
         foreach (array_keys($config['default']) as $field) {
             $formConfig = array_merge($config['default'][$field], $config['form'][$field] ?? []);
 
-            $this->configuration['list']['fields'][$field]   = new sfModelGeneratorConfigurationField($field, array_merge(['label' => sfInflector::humanize(sfInflector::underscore($field))], $config['default'][$field], $config['list'][$field] ?? []));
+            $this->configuration['list']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge(['label' => sfInflector::humanize(sfInflector::underscore($field))], $config['default'][$field], $config['list'][$field] ?? []));
             $this->configuration['filter']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge($config['default'][$field], $config['filter'][$field] ?? []));
-            $this->configuration['new']['fields'][$field]    = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, $config['new'][$field] ?? []));
-            $this->configuration['edit']['fields'][$field]   = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, $config['edit'][$field] ?? []));
+            $this->configuration['new']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, $config['new'][$field] ?? []));
+            $this->configuration['edit']['fields'][$field] = new sfModelGeneratorConfigurationField($field, array_merge($formConfig, $config['edit'][$field] ?? []));
         }
 
         // "virtual" fields for list

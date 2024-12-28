@@ -356,7 +356,7 @@ class Doctrine_Cli
     protected function classIsTask($className)
     {
         $reflectionClass = new ReflectionClass($className);
-        return (bool) $reflectionClass->isSubClassOf(self::TASK_BASE_CLASS);
+        return (bool) $reflectionClass->isSubclassOf(self::TASK_BASE_CLASS);
     }
 
     /**
@@ -635,7 +635,7 @@ class Doctrine_Cli
     {
         $taskNames = [];
 
-        foreach ($registeredTask as $className => $task) {
+        foreach ($registeredTask as $task) {
             $taskName = $task->getTaskName();
             $taskNames[$taskName] = $taskName;
         }

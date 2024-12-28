@@ -81,8 +81,7 @@ class sfRoutingConfigHandler extends sfYamlConfigHandler
         foreach ($config as $name => $params) {
             if (
                 (isset($params['type']) && 'collection' == $params['type'])
-                ||
-                (isset($params['class']) && false !== strpos($params['class'], 'Collection'))
+                || (isset($params['class']) && false !== strpos($params['class'], 'Collection'))
             ) {
                 $options = $params['options'] ?? [];
                 $options['name'] = $name;
@@ -90,7 +89,12 @@ class sfRoutingConfigHandler extends sfYamlConfigHandler
 
                 $routes[$name] = [$params['class'] ?? 'sfRouteCollection', [$options]];
             } else {
-                $routes[$name] = [$params['class'] ?? 'sfRoute', [$params['url'] ?: '/', $params['params'] ?? $params['param'] ?? [], $params['requirements'] ?? [], $params['options'] ?? []]];
+                $routes[$name] = [$params['class'] ?? 'sfRoute', [
+                    $params['url'] ?: '/',
+                    $params['params'] ?? $params['param'] ?? [],
+                    $params['requirements'] ?? [],
+                    $params['options'] ?? [],
+                ]];
             }
         }
 

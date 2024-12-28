@@ -98,7 +98,7 @@ class Doctrine_Export_Schema
             $table['columns'] = $data['columns'];
             
             $relations = $recordTable->getRelations();
-            foreach ($relations as $key => $relation) {
+            foreach ($relations as $relation) {
                 $relationData = $relation->toArray();
                 
                 $relationKey = $relationData['alias'];

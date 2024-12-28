@@ -56,7 +56,7 @@ class sfDatabaseConfigHandler extends sfYamlConfigHandler
     {
         list($includes, $data) = $this->parse($configFiles);
 
-        foreach ($includes as $i => $include) {
+        foreach ($includes as $include) {
             require_once $include;
         }
 

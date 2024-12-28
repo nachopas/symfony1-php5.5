@@ -71,7 +71,7 @@ abstract class sfConfigHandler
     public static function replaceConstants($value)
     {
         if (is_array($value)) {
-            array_walk_recursive($value, function (&$value) {
+            array_walk_recursive($value, function (&$value): void {
                 $value = sfToolkit::replaceConstants($value);
             });
         } else {
@@ -91,7 +91,7 @@ abstract class sfConfigHandler
     public static function replacePath($path)
     {
         if (is_array($path)) {
-            array_walk_recursive($path, function (&$path) {
+            array_walk_recursive($path, function (&$path): void {
                 $path = sfConfigHandler::replacePath($path);
             });
         } else {

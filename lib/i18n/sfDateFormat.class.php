@@ -12,6 +12,7 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 
 /**
@@ -30,6 +31,7 @@
  * in the properties of a DateTimeFormatInfo.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
+ *
  */
 class sfDateFormat
 {

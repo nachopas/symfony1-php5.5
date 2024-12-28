@@ -53,7 +53,7 @@ EOF;
 
         $connections = [];
         $models = $arguments['models'];
-        foreach ($models as $key => $model) {
+        foreach ($models as $model) {
             $model = trim($model);
             $conn = Doctrine_Core::getTable($model)->getConnection();
             $connections[$conn->getName()][] = $model;

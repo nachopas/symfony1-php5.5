@@ -50,6 +50,24 @@ class sfValidatorError extends Exception implements Serializable
     }
 
     /**
+     * Serializes the current instance for php 7.4+.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return [$this->validator, $this->arguments, $this->code, $this->message];
+    }
+
+    /**
+     * Unserializes a sfValidatorError instance for php 7.4+.
+     */
+    public function __unserialize($data)
+    {
+        [$this->validator, $this->arguments, $this->code, $this->message] = $data;
+    }
+
+    /**
      * Returns the input value that triggered this error.
      *
      * @return mixed The input value

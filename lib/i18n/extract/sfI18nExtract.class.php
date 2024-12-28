@@ -156,7 +156,7 @@ abstract class sfI18nExtract
     protected function loadCurrentMessages()
     {
         $this->currentMessages = [];
-        foreach ($this->i18n->getMessageSource()->read() as $catalogue => $translations) {
+        foreach ($this->i18n->getMessageSource()->read() as $translations) {
             foreach ($translations as $key => $values) {
                 $this->currentMessages[] = $key;
             }

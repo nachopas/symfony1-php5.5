@@ -381,7 +381,7 @@ class Doctrine_Export_Sqlite extends Doctrine_Export
         }
 
         if ( ! empty($rename) && is_array($rename)) {
-            foreach ($rename as $renameName => $renamedField) {
+            foreach ($rename as $renamedField) {
                 if ($query) {
                     $query.= ', ';
                 }

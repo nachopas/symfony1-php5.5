@@ -416,12 +416,12 @@ abstract class sfCommandApplication
 
         fwrite(STDERR, "\n");
         foreach ($messages as $message) {
-            fwrite(STDERR, $this->formatter->format($message, 'ERROR', STDERR)."\n");
+            fwrite(STDERR, $this->formatter->format($message, 'ERROR')."\n");
         }
         fwrite(STDERR, "\n");
 
         if (null !== $this->currentTask && $e instanceof sfCommandArgumentsException) {
-            fwrite(STDERR, $this->formatter->format(sprintf($this->currentTask->getSynopsis(), $this->getName()), 'INFO', STDERR)."\n");
+            fwrite(STDERR, $this->formatter->format(sprintf($this->currentTask->getSynopsis(), $this->getName()), 'INFO')."\n");
             fwrite(STDERR, "\n");
         }
 
@@ -444,7 +444,7 @@ abstract class sfCommandApplication
                 $file = $trace[$i]['file'] ?? 'n/a';
                 $line = $trace[$i]['line'] ?? 'n/a';
 
-                fwrite(STDERR, sprintf(" %s%s%s at %s:%s\n", $class, $type, $function, $this->formatter->format($file, 'INFO', STDERR), $this->formatter->format($line, 'INFO', STDERR)));
+                fwrite(STDERR, sprintf(" %s%s%s at %s:%s\n", $class, $type, $function, $this->formatter->format($file, 'INFO'), $this->formatter->format($line, 'INFO')));
             }
 
             fwrite(STDERR, "\n");

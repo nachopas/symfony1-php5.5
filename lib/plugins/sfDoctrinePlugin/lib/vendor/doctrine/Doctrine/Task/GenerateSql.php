@@ -30,7 +30,8 @@
 class Doctrine_Task_GenerateSql extends Doctrine_Task
 {
     public $description          =   'Generate sql for all existing database connections.',
-           $requiredArguments    =   ['models_path'    =>  'Specify complete path to your Doctrine_Record definitions.', 'sql_path'       =>  'Path to write the generated sql.'],
+           $requiredArguments    =   ['models_path'    =>  'Specify complete path to your Doctrine_Record definitions.',
+                                           'sql_path'       =>  'Path to write the generated sql.'],
            $optionalArguments    =   [];
     
     public function execute()

@@ -39,7 +39,7 @@ class sfAggregateLogger extends sfLogger
             $this->addLoggers($options['loggers']);
         }
 
-        return parent::initialize($dispatcher, $options);
+        parent::initialize($dispatcher, $options);
     }
 
     /**

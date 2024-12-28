@@ -111,7 +111,7 @@ class sfTesterDoctrine extends sfTester
         // sequence events
         ksort($events);
 
-        if (is_integer($limit)) {
+        if (is_int($limit)) {
             $events = array_slice($events, $limit * -1);
         } elseif (preg_match('/^(!)?([^a-zA-Z0-9\\\\]).+?\\2[ims]?$/', $limit, $match)) {
             if ('!' == $match[1]) {

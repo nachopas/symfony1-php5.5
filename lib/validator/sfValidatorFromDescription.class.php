@@ -86,7 +86,7 @@ class sfValidatorFromDescription extends sfValidatorDecorator
                 $i += strlen($match[0]);
                 $rightField = $match[1];
 
-                $tokens[] = new sfValidatorFDToken('sfValidatorSchemaCompare', [$leftField, $operator, $rightField, $arguments[0], isset($arguments[1]) ? $arguments[1] : []]);
+                $tokens[] = new sfValidatorFDToken('sfValidatorSchemaCompare', [$leftField, $operator, $rightField, $arguments[0], $arguments[1] ?? []]);
             } elseif (preg_match('/^(and|or)/i', substr($string, $i), $match)) {
                 // all, any validador
                 $i += strlen($match[0]);
@@ -265,9 +265,7 @@ class sfValidatorFDToken
 
     public function asPhp()
     {
-        return sprintf('new %s(%s)', $this->class, implode(', ', array_map(function ($a) {
-            return var_export($a, true);
-        }, $this->arguments)));
+        return sprintf('new %s(%s)', $this->class, implode(', ', array_map(fn($a) => var_export($a, true), $this->arguments)));
     }
 
     public function getValidator()
@@ -325,9 +323,7 @@ class sfValidatorFDTokenOperator
             $this->class,
             is_object($tokenLeft) && in_array(get_class($tokenLeft), ['sfValidatorFDToken', 'sfValidatorFDTokenFilter']) ? $tokenLeft->asPhp() : $tokenLeft,
             is_object($tokenRight) && in_array(get_class($tokenRight), ['sfValidatorFDToken', 'sfValidatorFDTokenFilter']) ? $tokenRight->asPhp() : $tokenRight,
-            implode(', ', array_map(function ($a) {
-                return var_export($a, true);
-            }, $this->arguments))
+            implode(', ', array_map(fn($a) => var_export($a, true), $this->arguments))
         );
     }
 

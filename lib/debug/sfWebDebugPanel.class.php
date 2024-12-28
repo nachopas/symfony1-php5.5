@@ -115,7 +115,7 @@ abstract class sfWebDebugPanel
             $file = $trace['file'] ?? null;
             $line = $trace['line'] ?? null;
 
-            $isProjectFile = $file && 0 === strpos($file, sfConfig::get('sf_root_dir')) && !preg_match('/(cache|plugins|vendor)/', $file);
+            $isProjectFile = $file && 0 === strpos($file, (string) sfConfig::get('sf_root_dir')) && !preg_match('/(cache|plugins|vendor)/', $file);
 
             $html .= sprintf('<span%s>#%s &raquo; ', $isProjectFile ? ' class="sfWebDebugHighlight"' : '', $keys[$j] + 1);
 
@@ -166,7 +166,7 @@ abstract class sfWebDebugPanel
                 '<a href="%s" class="sfWebDebugFileLink" title="%s">%s</a>',
                 htmlspecialchars(strtr($linkFormat, ['%f' => $file, '%l' => $line]), ENT_QUOTES, sfConfig::get('sf_charset')),
                 htmlspecialchars($shortFile, ENT_QUOTES, sfConfig::get('sf_charset')),
-                null === $text ? $shortFile : $text
+                $text ?? $shortFile
             );
         }
         if (null === $text) {
