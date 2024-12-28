@@ -29,7 +29,6 @@ require_once __DIR__.'/TGettext.class.php';
  *
  * @author      Michael Wallner <mike@php.net>
  *
- * @version     $Revision: 9856 $
  */
 class TGettext_MO extends TGettext
 {

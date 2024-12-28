@@ -166,7 +166,7 @@ abstract class sfCache
      */
     public function getLifetime($lifetime)
     {
-        return null === $lifetime ? $this->getOption('lifetime') : $lifetime;
+        return $lifetime ?? $this->getOption('lifetime');
     }
 
     /**

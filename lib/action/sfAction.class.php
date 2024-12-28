@@ -405,7 +405,7 @@ abstract class sfAction extends sfComponent
     public function setTemplate($name, $module = null)
     {
         if (sfConfig::get('sf_logging_enabled')) {
-            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Change template to "%s/%s"', null === $module ? 'CURRENT' : $module, $name)]));
+            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Change template to "%s/%s"', $module ?? 'CURRENT', $name)]));
         }
 
         if (null !== $module) {
