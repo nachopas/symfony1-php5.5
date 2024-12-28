@@ -41,7 +41,7 @@ class sfFormField
      * @param string           $value  The field value
      * @param sfValidatorError $error  A sfValidatorError instance
      */
-    public function __construct(sfWidgetForm $widget, ?sfFormField $parent = null, $name, $value, ?sfValidatorError $error = null)
+    public function __construct(sfWidgetForm $widget, ?sfFormField $parent = null, $name = null, $value = null, ?sfValidatorError $error = null)
     {
         $this->widget = $widget;
         $this->parent = $parent;
@@ -314,10 +314,10 @@ class sfFormField
             return true;
         }
 
-        if ($this->error instanceof sfValidatorErrorSchema) {
-            return $this->error->count() > 0;
+        if ($this->error instanceof sfValidatorError) {
+            return true;
         }
 
-        return null !== $this->error;
+        return false;
     }
 }

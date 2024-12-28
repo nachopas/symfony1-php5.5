@@ -38,7 +38,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
         $instances = [];
 
         // available list of factories
-        $factories = ['view_cache_manager', 'logger', 'i18n', 'controller', 'request', 'response', 'routing', 'storage', 'user', 'view_cache', 'mailer', 'service_container'];
+        $factories = ['view_cache_manager', 'logger', 'i18n', 'controller', 'request', 'response', 'routing', 'storage', 'user', 'view_cache', 'mailer'];
 
         // let's do our fancy work
         foreach ($factories as $factory) {

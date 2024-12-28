@@ -28,7 +28,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
      * @param string             $value  The field value
      * @param sfValidatorError   $error  A sfValidatorError instance
      */
-    public function __construct(sfWidgetFormSchema $widget, $name, $value, ?sfFormField $parent = null, ?sfValidatorError $error = null)
+    public function __construct(sfWidgetFormSchema $widget, $name = null, $value = null, ?sfFormField $parent = null, ?sfValidatorError $error = null)
     {
         parent::__construct($widget, $name, $value, $parent, $error);
 
@@ -109,9 +109,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
                 $class = 'sfFormFieldSchema';
 
                 if ($error && !$error instanceof sfValidatorErrorSchema) {
-                    $current = $error;
-                    $error = new sfValidatorErrorSchema($error->getValidator());
-                    $error->addError($current);
+                    $error = new sfValidatorErrorSchema($error->getValidator(), [$error]);
                 }
             } else {
                 $class = 'sfFormField';
@@ -127,7 +125,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
      * Throws an exception saying that values cannot be set (implements the ArrayAccess interface).
      *
      * @param string $offset (ignored)
-     * @param string $value  (ignored)
+     * @param string $value (ignored)
      *
      * @throws LogicException
      */
