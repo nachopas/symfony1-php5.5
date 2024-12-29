@@ -126,7 +126,7 @@ class sfPluginManager
             $download = $plugin;
             $isPackage = false;
         } elseif (false !== strpos($plugin, '/')) {
-            list($channel, $plugin) = explode('/', $plugin);
+            [$channel, $plugin] = explode('/', $plugin);
         }
 
         $this->dispatcher->notify(new sfEvent($this, 'plugin.pre_install', ['channel' => $channel, 'plugin' => $plugin, 'is_package' => $isPackage]));
@@ -241,7 +241,7 @@ class sfPluginManager
     public function uninstallPlugin($plugin, $channel = null)
     {
         if (false !== strpos($plugin, '/')) {
-            list($channel, $plugin) = explode('/', $plugin);
+            [$channel, $plugin] = explode('/', $plugin);
         }
 
         $channel ??= $this->environment->getConfig()->get('default_channel');

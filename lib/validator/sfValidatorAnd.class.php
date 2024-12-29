@@ -92,12 +92,12 @@ class sfValidatorAnd extends sfValidatorBase
     protected function doClean($value)
     {
         $clean = $value;
-        $errors = new sfValidatorErrorSchema($this);
+        $errors = [];
         foreach ($this->validators as $validator) {
             try {
                 $clean = $validator->clean($clean);
             } catch (sfValidatorError $e) {
-                $errors->addError($e);
+                $errors[] = $e;
 
                 if ($this->getOption('halt_on_error')) {
                     break;
@@ -105,12 +105,12 @@ class sfValidatorAnd extends sfValidatorBase
             }
         }
 
-        if ($errors->count()) {
+        if (count($errors)) {
             if ($this->getMessage('invalid')) {
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
 
-            throw $errors;
+            throw new sfValidatorErrorSchema($this, $errors);
         }
 
         return $clean;

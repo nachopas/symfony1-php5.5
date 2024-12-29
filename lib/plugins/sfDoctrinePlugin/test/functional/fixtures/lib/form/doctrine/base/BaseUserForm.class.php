@@ -11,9 +11,23 @@ abstract class BaseUserForm extends BaseFormDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['id'               => new sfWidgetFormInputHidden(), 'username'         => new sfWidgetFormInputText(), 'password'         => new sfWidgetFormInputText(), 'test'             => new sfWidgetFormInputText(), 'groups_list'      => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group']), 'permissions_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Permission'])]);
+        $this->setWidgets([
+            'id' => new sfWidgetFormInputHidden(),
+            'username' => new sfWidgetFormInputText(),
+            'password' => new sfWidgetFormInputText(),
+            'test' => new sfWidgetFormInputText(),
+            'groups_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group']),
+            'permissions_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Permission']),
+        ]);
 
-        $this->setValidators(['id'               => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'username'         => new sfValidatorString(['max_length' => 255, 'required' => false]), 'password'         => new sfValidatorString(['max_length' => 255, 'required' => false]), 'test'             => new sfValidatorString(['max_length' => 255, 'required' => false]), 'groups_list'      => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false]), 'permissions_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Permission', 'required' => false])]);
+        $this->setValidators([
+            'id' => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]),
+            'username' => new sfValidatorString(['max_length' => 255, 'required' => false]),
+            'password' => new sfValidatorString(['max_length' => 255, 'required' => false]),
+            'test' => new sfValidatorString(['max_length' => 255, 'required' => false]),
+            'groups_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false]),
+            'permissions_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Permission', 'required' => false]),
+        ]);
 
         $this->validatorSchema->setPostValidator(
             new sfValidatorDoctrineUnique(['model' => 'User', 'column' => ['username']])

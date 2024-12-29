@@ -34,7 +34,26 @@ class Doctrine_AuditLog extends Doctrine_Record_Generator
      *
      * @var array
      */
-    protected $_options = ['className'         => '%CLASS%Version', 'version'           => ['name'   => 'version', 'alias'  => null, 'type'   => 'integer', 'length' => 8, 'options' => ['primary' => true]], 'tableName'         => false, 'generateFiles'     => false, 'table'             => false, 'pluginTable'       => false, 'children'          => [], 'auditLog'          => true, 'deleteVersions'    => true, 'cascadeDelete'     => true, 'excludeFields'     => [], 'appLevelDelete'    => false];
+    protected $_options = [
+        'className'         => '%CLASS%Version',
+        'version'           => [
+            'name'   => 'version',
+            'alias'  => null,
+            'type'   => 'integer',
+            'length' => 8,
+            'options' => ['primary' => true]
+        ],
+        'tableName'         => false,
+        'generateFiles'     => false,
+        'table'             => false,
+        'pluginTable'       => false,
+        'children'          => [],
+        'auditLog'          => true,
+        'deleteVersions'    => true,
+        'cascadeDelete'     => true,
+        'excludeFields'     => [],
+        'appLevelDelete'    => false
+    ];
 
     /**
      * Accepts array of options to configure the AuditLog
@@ -86,10 +105,11 @@ class Doctrine_AuditLog extends Doctrine_Record_Generator
 
         // the version column should be part of the primary key definition
         $this->hasColumn(
-	        $this->_options['version']['name'],
+            $this->_options['version']['name'],
             $this->_options['version']['type'],
             $this->_options['version']['length'],
-            $this->_options['version']['options']);
+            $this->_options['version']['options']
+        );
     }
 
     /**
@@ -143,7 +163,7 @@ class Doctrine_AuditLog extends Doctrine_Record_Generator
         $q = Doctrine_Core::getTable($className)
             ->createQuery()
             ->select($select)
-            ->where(implode(' AND ',$conditions));
+            ->where(implode(' AND ', $conditions));
 
         $result = $q->execute($values, Doctrine_Core::HYDRATE_ARRAY);
 

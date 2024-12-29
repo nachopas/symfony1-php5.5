@@ -50,7 +50,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
      */
     public function addError(sfValidatorError $error, $name = null)
     {
-        if (null === $name || is_integer($name)) {
+        if (null === $name || is_int($name)) {
             if ($error instanceof sfValidatorErrorSchema) {
                 $this->addErrors($error);
             } else {
@@ -90,7 +90,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
     /**
      * Adds an array of errors.
      *
-     * @param array $errors  An array of sfValidatorError instances
+     * @param array $errors An array of sfValidatorError instances
      *
      * @return sfValidatorErrorSchema The current error schema instance
      */
@@ -322,6 +322,6 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
      */
     public function unserialize($serialized)
     {
-        list($this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors) = unserialize($serialized);
+        [$this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors] = unserialize($serialized);
     }
 }

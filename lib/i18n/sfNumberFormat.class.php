@@ -298,8 +298,8 @@ class sfNumberFormat
             return $string;
         }
 
-        list($significand, $exp) = explode('E', $string);
-        list(, $decimal) = explode('.', $significand);
+        [$significand, $exp] = explode('E', $string);
+        [, $decimal] = explode('.', $significand);
         if ('-' === $exp[0]) {
             $exp = str_replace('-', '', $exp);
 

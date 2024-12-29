@@ -661,7 +661,7 @@ class sfRoute implements Serializable
             'extra_parameters_as_query_string' => true,
         ], $this->getDefaultOptions(), $this->options);
 
-        $preg_quote_hash = (static fn($a) => preg_quote($a, '#'));
+        $preg_quote_hash = (fn ($a) => preg_quote($a, '#'));
 
         // compute some regexes
         $this->options['variable_prefix_regex'] = '(?:'.implode('|', array_map($preg_quote_hash, $this->options['variable_prefixes'])).')';

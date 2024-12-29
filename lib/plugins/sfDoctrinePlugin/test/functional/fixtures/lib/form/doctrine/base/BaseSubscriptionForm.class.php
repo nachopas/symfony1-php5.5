@@ -11,9 +11,17 @@ abstract class BaseSubscriptionForm extends BaseFormDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['id'     => new sfWidgetFormInputHidden(), 'name'   => new sfWidgetFormInputText(), 'status' => new sfWidgetFormChoice(['choices' => ['New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
+        $this->setWidgets([
+            'id' => new sfWidgetFormInputHidden(),
+            'name' => new sfWidgetFormInputText(),
+            'status' => new sfWidgetFormChoice(['choices' => ['New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']]),
+        ]);
 
-        $this->setValidators(['id'     => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'name'   => new sfValidatorString(['max_length' => 255, 'required' => false]), 'status' => new sfValidatorChoice(['choices' => [0 => 'New', 1 => 'Active', 2 => 'Pending', 3 => 'Expired'], 'required' => false])]);
+        $this->setValidators([
+            'id' => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]),
+            'name' => new sfValidatorString(['max_length' => 255, 'required' => false]),
+            'status' => new sfValidatorChoice(['choices' => [0 => 'New', 1 => 'Active', 2 => 'Pending', 3 => 'Expired'], 'required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('subscription[%s]');
 

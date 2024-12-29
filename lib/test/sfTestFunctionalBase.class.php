@@ -270,12 +270,12 @@ abstract class sfTestFunctionalBase
     public function click($name, $arguments = [], $options = [])
     {
         if ($name instanceof DOMElement) {
-            list($uri, $method, $parameters) = $this->doClickElement($name, $arguments, $options);
+            [$uri, $method, $parameters] = $this->doClickElement($name, $arguments, $options);
         } else {
             try {
-                list($uri, $method, $parameters) = $this->doClick($name, $arguments, $options);
+                [$uri, $method, $parameters] = $this->doClick($name, $arguments, $options);
             } catch (InvalidArgumentException $e) {
-                list($uri, $method, $parameters) = $this->doClickCssSelector($name, $arguments, $options);
+                [$uri, $method, $parameters] = $this->doClickCssSelector($name, $arguments, $options);
             }
         }
 

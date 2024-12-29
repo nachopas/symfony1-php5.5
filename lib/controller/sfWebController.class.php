@@ -51,7 +51,7 @@ abstract class sfWebController extends sfController
                 $parameters = substr($parameters, 0, $pos);
             }
 
-            list($route, $parameters) = $this->convertUrlStringToParameters($parameters);
+            [$route, $parameters] = $this->convertUrlStringToParameters($parameters);
         } elseif (is_array($parameters)) {
             if (isset($parameters['sf_route'])) {
                 $route = $parameters['sf_route'];
@@ -110,7 +110,7 @@ abstract class sfWebController extends sfController
         if ($url && '@' == $url[0]) {
             $route = substr($url, 1);
         } elseif (false !== strpos($url, '/')) {
-            list($params['module'], $params['action']) = explode('/', $url);
+            [$params['module'], $params['action']] = explode('/', $url);
         } elseif (!$queryString) {
             $route = $givenUrl;
         } else {

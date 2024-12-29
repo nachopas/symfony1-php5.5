@@ -160,7 +160,7 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
     /**
      * Sets the generic default formatter name used by the class. If you want all
      * of your forms to be generated with the <code>list</code> format, you can
-     * do it in a project or application configuration class:.
+     * do it in a project or application configuration class:
      *
      * <pre>
      * class ProjectConfiguration extends sfProjectConfiguration
@@ -469,9 +469,7 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
         }
 
         if ($errors && $widget instanceof sfWidgetFormSchema && !$errors instanceof sfValidatorErrorSchema) {
-            $schema = new sfValidatorErrorSchema($errors->getValidator());
-            $schema->addError($errors);
-            $errors = $schema;
+            $errors = new sfValidatorErrorSchema($errors->getValidator(), [$errors]);
         }
 
         // we clone the widget because we want to change the id format temporarily
@@ -500,7 +498,7 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
         }
 
         if (!is_array($values) && !$values instanceof ArrayAccess) {
-            throw new InvalidArgumentException('You must pass an array of values or an instanceof ArrayAccess to render a widget schema');
+            throw new InvalidArgumentException('You must pass an array of values to render a widget schema');
         }
 
         $formFormat = $this->getFormFormatter();
@@ -671,7 +669,7 @@ class sfWidgetFormSchema extends sfWidgetForm implements ArrayAccess
     /**
      * Returns an array of fields.
      *
-     * @return sfWidget[] An array of sfWidget instance
+     * @return sfWidget An array of sfWidget instance
      */
     public function getFields()
     {

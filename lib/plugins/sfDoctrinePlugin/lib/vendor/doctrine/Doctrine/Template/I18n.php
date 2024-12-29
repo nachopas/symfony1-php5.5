@@ -32,7 +32,7 @@ class Doctrine_Template_I18n extends Doctrine_Template
     /**
      * __construct
      *
-     * @param string $array 
+     * @param string $array
      * @return void
      */
     public function __construct(array $options = [])
@@ -48,7 +48,7 @@ class Doctrine_Template_I18n extends Doctrine_Template
      */
     public function setUp()
     {
-        $this->_plugin->initialize($this->_table); 
+        $this->_plugin->initialize($this->_table);
     }
 
     /**

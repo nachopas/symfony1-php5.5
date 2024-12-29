@@ -24,7 +24,7 @@ class sfI18nYamlValidateExtractor extends sfI18nYamlExtractor
     {
         $strings = [];
 
-        $config = sfYaml::load($content, sfConfig::get('sf_charset', 'UTF-8'));
+        $config = sfYaml::load($content);
 
         // New validate.yml format
 

@@ -39,6 +39,7 @@ class sfAPCCache extends sfCache
     public function get($key, $default = null)
     {
         $value = $this->fetch($this->getOption('prefix').$key, $has);
+
         return $has ? $value : $default;
     }
 
@@ -48,6 +49,7 @@ class sfAPCCache extends sfCache
     public function has($key)
     {
         $this->fetch($this->getOption('prefix').$key, $has);
+
         return $has;
     }
 
@@ -59,8 +61,9 @@ class sfAPCCache extends sfCache
         if (null !== $has) {
             $success = $has;
         } else {
-            $success = $value !== false;
+            $success = false !== $value;
         }
+
         return $value;
     }
 

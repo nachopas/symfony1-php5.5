@@ -251,8 +251,8 @@ class sfI18N
      */
     public function getTimestampForCulture($dateTime, $culture = null)
     {
-        list($day, $month, $year) = $this->getDateForCulture($dateTime, null === $culture ? $this->culture : $culture);
-        list($hour, $minute) = $this->getTimeForCulture($dateTime, null === $culture ? $this->culture : $culture);
+        [$day, $month, $year] = $this->getDateForCulture($dateTime, $culture ?? $this->culture);
+        [$hour, $minute] = $this->getTimeForCulture($dateTime, $culture ?? $this->culture);
 
         // mktime behavior change with php8
         $hour ??= 0;

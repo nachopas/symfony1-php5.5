@@ -26,7 +26,7 @@ class sfSessionStorage extends sfStorage
     protected static $sessionStarted = false;
 
     /**
-     * Available options:.
+     * Available options:
      *
      *  * session_name:            The cookie name (symfony by default)
      *  * session_id:              The session id (null by default)

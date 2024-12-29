@@ -216,9 +216,9 @@ function link_to_if()
 {
     $arguments = func_get_args();
     if (empty($arguments[2]) || '@' == substr($arguments[2], 0, 1) || false !== strpos($arguments[2], '/')) {
-        list($condition, $name, $params, $options) = array_pad($arguments, 4, null);
+        [$condition, $name, $params, $options] = array_pad($arguments, 4, null);
     } else {
-        list($condition, $name, $routeName, $params, $options) = array_pad($arguments, 5, null);
+        [$condition, $name, $routeName, $params, $options] = array_pad($arguments, 5, null);
         $params = array_merge(['sf_route' => $routeName], is_object($params) ? ['sf_subject' => $params] : (array) $params);
     }
 

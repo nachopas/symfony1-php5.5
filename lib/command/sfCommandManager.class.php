@@ -306,7 +306,7 @@ class sfCommandManager
     protected function parseLongOption($argument)
     {
         if (false !== strpos($argument, '=')) {
-            list($name, $value) = explode('=', $argument, 2);
+            [$name, $value] = explode('=', $argument, 2);
 
             if (!$this->optionSet->hasOption($name)) {
                 $this->errors[] = sprintf('The "--%s" option does not exist.', $name);

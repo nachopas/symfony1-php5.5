@@ -31,7 +31,7 @@ class sfDatabaseConfigHandler extends sfYamlConfigHandler
      */
     public function execute($configFiles)
     {
-        list($includes, $data) = $this->parse($configFiles);
+        [$includes, $data] = $this->parse($configFiles);
 
         foreach ($includes as $i => $include) {
             $includes[$i] = sprintf("require_once('%s');", $include);
@@ -54,7 +54,7 @@ class sfDatabaseConfigHandler extends sfYamlConfigHandler
 
     public function evaluate($configFiles)
     {
-        list($includes, $data) = $this->parse($configFiles);
+        [$includes, $data] = $this->parse($configFiles);
 
         foreach ($includes as $include) {
             require_once $include;

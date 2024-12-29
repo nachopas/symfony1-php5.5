@@ -93,6 +93,17 @@ class sfDoctrineDatabase extends sfDatabase
             $this->_doctrineConnection->addListener($this->profiler, 'symfony_profiler');
         }
 
+        // Invoke the configuration methods for the connection if they exist (deprecated in favor of the "doctrine.configure_connection" event)
+        $method = sprintf('configureDoctrineConnection%s', ucwords($this->_doctrineConnection->getName()));
+
+        if (method_exists($configuration, 'configureDoctrineConnection') && !method_exists($configuration, $method)) {
+            $configuration->configureDoctrineConnection($this->_doctrineConnection);
+        }
+
+        if (method_exists($configuration, $method)) {
+            $configuration->$method($this->_doctrineConnection);
+        }
+
         $dispatcher->notify(new sfEvent($manager, 'doctrine.configure_connection', ['connection' => $this->_doctrineConnection, 'database' => $this]));
     }
 

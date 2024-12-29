@@ -234,7 +234,7 @@ class TGettext
             if (2 != count($array)) {
                 return false;
             }
-            list($this->meta, $this->strings) = $array;
+            [$this->meta, $this->strings] = $array;
         } else {
             $this->meta = @$array['meta'];
             $this->strings = @$array['strings'];

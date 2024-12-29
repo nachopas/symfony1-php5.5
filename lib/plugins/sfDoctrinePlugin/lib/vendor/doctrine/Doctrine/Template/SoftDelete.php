@@ -35,7 +35,15 @@ class Doctrine_Template_SoftDelete extends Doctrine_Template
      *
      * @var string
      */
-    protected $_options = ['name'          =>  'deleted_at', 'type'          =>  'timestamp', 'length'        =>  null, 'options'       =>  ['notnull' => false], 'hardDelete' => false];
+    protected $_options = [
+        'name'          => 'deleted_at',
+        'type'          => 'timestamp',
+        'length'        => null,
+        'options'       => [
+            'notnull' => false
+        ],
+        'hardDelete' => false
+    ];
 
     protected $_listener;
 
@@ -51,7 +59,7 @@ class Doctrine_Template_SoftDelete extends Doctrine_Template
             $this->_options['length'] = 1;
             $this->_options['options'] = ['default' => false, 'notnull' => true];
         }
-    
+
         $this->hasColumn($this->_options['name'], $this->_options['type'], $this->_options['length'], $this->_options['options']);
 
         $this->_listener = new Doctrine_Template_Listener_SoftDelete($this->_options);

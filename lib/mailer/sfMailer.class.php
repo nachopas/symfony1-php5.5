@@ -67,10 +67,6 @@ class sfMailer extends Swift_Mailer
             throw new InvalidArgumentException(sprintf('Unknown mail delivery strategy "%s" (should be one of realtime, spool, single_address, or none)', $options['delivery_strategy']));
         }
 
-        if (sfMailer::NONE == $this->strategy) {
-            $options['transport']['class'] = 'Swift_NullTransport';
-        }
-
         // transport
         $class = $options['transport']['class'];
         $transport = new $class();

@@ -36,7 +36,21 @@ class Doctrine_Template_Versionable extends Doctrine_Template
      *
      * @var array
      */
-    protected $_options = ['version'           => ['name'   => 'version', 'alias'  => null, 'type'   => 'integer', 'length' => 8, 'options' => []], 'generateRelations' => true, 'tableName'         => false, 'generateFiles'     => false, 'auditLog'          => true, 'deleteVersions'    => true, 'listener'          => 'Doctrine_AuditLog_Listener'];
+    protected $_options = [
+        'version'           => [
+            'name'   => 'version',
+            'alias'  => null,
+            'type'   => 'integer',
+            'length' => 8,
+            'options' => []
+        ],
+        'generateRelations' => true,
+        'tableName'         => false,
+        'generateFiles'     => false,
+        'auditLog'          => true,
+        'deleteVersions'    => true,
+        'listener'          => 'Doctrine_AuditLog_Listener'
+    ];
 
     /**
      * __construct
@@ -46,7 +60,7 @@ class Doctrine_Template_Versionable extends Doctrine_Template
      */
     public function __construct(array $options = [])
     {
-	    parent::__construct($options);
+        parent::__construct($options);
         $this->_plugin = new Doctrine_AuditLog($this->_options);
     }
 
@@ -79,7 +93,7 @@ class Doctrine_Template_Versionable extends Doctrine_Template
         return $this->_plugin;
     }
 
-     /**
+    /**
      * revert
      * reverts this record to given version, this method only works if versioning plugin
      * is enabled
@@ -92,13 +106,13 @@ class Doctrine_Template_Versionable extends Doctrine_Template
     {
         $auditLog = $this->_plugin;
 
-        if ( ! $auditLog->getOption('auditLog')) {
+        if (! $auditLog->getOption('auditLog')) {
             throw new Doctrine_Record_Exception('Audit log is turned off, no version history is recorded.');
         }
 
         $data = $auditLog->getVersion($this->getInvoker(), $version);
 
-        if ( ! isset($data[0])) {
+        if (! isset($data[0])) {
             throw new Doctrine_Record_Exception('Version ' . $version . ' does not exist!');
         }
 

@@ -333,7 +333,7 @@ class sfDomCssSelector implements Countable, Iterator
         }
 
         foreach ($tokens as &$token) {
-            list($token['name'], $token['selector']) = $this->tokenize_selector_name($token['name']);
+            [$token['name'], $token['selector']] = $this->tokenize_selector_name($token['name']);
         }
 
         return $tokens;

@@ -468,7 +468,7 @@ class sfFinder
         $one_name_rule = false;
 
         foreach ($this->names as $args) {
-            list($not, $regex) = $args;
+            [$not, $regex] = $args;
             $not ? $one_not_name_rule = true : $one_name_rule = true;
             if (preg_match($regex, $entry)) {
                 // We must match ONLY ONE "not_name" or "name" rule:

@@ -22,7 +22,7 @@
 /**
  * Doctrine_Search_Analyzer_Utf8
  *
- * This class is used to analyze (ie tokenize) an input $text in 
+ * This class is used to analyze (ie tokenize) an input $text in
  * $encoding encoding, and return an array of words to be indexed.
  *
  * @author      Brice Figureau <brice+doctrine@daysofwonder.com>
@@ -47,7 +47,7 @@ class Doctrine_Search_Analyzer_Utf8 extends Doctrine_Search_Analyzer_Standard
         $text = str_replace('  ', ' ', $text);
 
         $terms = explode(' ', $text);
-        
+
         $ret = [];
         if ( ! empty($terms)) {
             foreach ($terms as $i => $term) {

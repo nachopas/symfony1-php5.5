@@ -9,9 +9,13 @@ abstract class BaseFormGeneratorTest2FormFilter extends BaseFormFilterDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['name' => new sfWidgetFormFilterInput()]);
+        $this->setWidgets([
+            'name' => new sfWidgetFormFilterInput(),
+        ]);
 
-        $this->setValidators(['name' => new sfValidatorPass(['required' => false])]);
+        $this->setValidators([
+            'name' => new sfValidatorPass(['required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('form_generator_test2_filters[%s]');
 
@@ -29,6 +33,9 @@ abstract class BaseFormGeneratorTest2FormFilter extends BaseFormFilterDoctrine
 
     public function getFields()
     {
-        return ['id'   => 'Number', 'name' => 'Text'];
+        return [
+            'id' => 'Number',
+            'name' => 'Text',
+        ];
     }
 }

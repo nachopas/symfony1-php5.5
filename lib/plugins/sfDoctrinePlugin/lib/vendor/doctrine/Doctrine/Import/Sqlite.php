@@ -131,11 +131,24 @@ class Doctrine_Import_Sqlite extends Doctrine_Import
 
         $description = [];
         $columns     = [];
-        foreach ($result as $key => $val) {
+        foreach ($result as $val) {
             $val = array_change_key_case($val, CASE_LOWER);
             $decl = $this->conn->dataDict->getPortableDeclaration($val);
 
-            $description = ['name'          => $val['name'], 'ntype'         => $val['type'], 'type'          => $decl['type'][0], 'alltypes'      => $decl['type'], 'notnull'       => (bool) $val['notnull'], 'default'       => $val['dflt_value'], 'primary'       => (bool) $val['pk'], 'length'        => null, 'scale'         => null, 'precision'     => null, 'unsigned'      => null, 'autoincrement' => (bool) ($val['pk'] == 1 && $decl['type'][0] == 'integer')];
+            $description = [
+                    'name'          => $val['name'],
+                    'ntype'         => $val['type'],
+                    'type'          => $decl['type'][0],
+                    'alltypes'      => $decl['type'],
+                    'notnull'       => (bool) $val['notnull'],
+                    'default'       => $val['dflt_value'],
+                    'primary'       => (bool) $val['pk'],
+                    'length'        => null,
+                    'scale'         => null,
+                    'precision'     => null,
+                    'unsigned'      => null,
+                    'autoincrement' => (bool) ($val['pk'] == 1 && $decl['type'][0] == 'integer'),
+                    ];
             $columns[$val['name']] = $description;
         }
         return $columns;

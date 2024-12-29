@@ -57,7 +57,7 @@ class Doctrine_Query_Groupby extends Doctrine_Query_Part
                             $e = explode('.', $term[0]);
 
                             $field = array_pop($e);
-                            
+
                             // Check if field name still has comma
                             if (($pos = strpos($field, ',')) !== false) {
                                 $field = substr($field, 0, $pos);
@@ -113,7 +113,7 @@ class Doctrine_Query_Groupby extends Doctrine_Query_Part
                             $componentAlias = $this->query->getRootAlias();
 
                             $found = false;
-                            
+
                             // Check if field name still has comma
                             if (($pos = strpos($term[0], ',')) !== false) {
                                 $term[0] = substr($term[0], 0, $pos);

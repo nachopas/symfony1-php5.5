@@ -9,9 +9,15 @@ abstract class BaseSubscriptionFormFilter extends BaseFormFilterDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['name'   => new sfWidgetFormFilterInput(), 'status' => new sfWidgetFormChoice(['choices' => ['' => '', 'New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
+        $this->setWidgets([
+            'name' => new sfWidgetFormFilterInput(),
+            'status' => new sfWidgetFormChoice(['choices' => ['' => '', 'New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']]),
+        ]);
 
-        $this->setValidators(['name'   => new sfValidatorPass(['required' => false]), 'status' => new sfValidatorChoice(['required' => false, 'choices' => ['New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']])]);
+        $this->setValidators([
+            'name' => new sfValidatorPass(['required' => false]),
+            'status' => new sfValidatorChoice(['required' => false, 'choices' => ['New' => 'New', 'Active' => 'Active', 'Pending' => 'Pending', 'Expired' => 'Expired']]),
+        ]);
 
         $this->widgetSchema->setNameFormat('subscription_filters[%s]');
 
@@ -29,6 +35,10 @@ abstract class BaseSubscriptionFormFilter extends BaseFormFilterDoctrine
 
     public function getFields()
     {
-        return ['id'     => 'Number', 'name'   => 'Text', 'status' => 'Enum'];
+        return [
+            'id' => 'Number',
+            'name' => 'Text',
+            'status' => 'Enum',
+        ];
     }
 }

@@ -132,10 +132,7 @@ class sfValidatorSchemaCompare extends sfValidatorSchema
                 throw $error;
             }
 
-            $errorSchema = new sfValidatorErrorSchema($this);
-            $errorSchema->addError($error, $this->getOption('left_field'));
-
-            throw $errorSchema;
+            throw new sfValidatorErrorSchema($this, [$this->getOption('left_field') => $error]);
         }
 
         return $values;

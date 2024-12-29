@@ -26,7 +26,7 @@
  * @link        www.doctrine-project.org
  * @since       1.0
  */
-class Doctrine_Query_Parser 
+class Doctrine_Query_Parser
 {
-        
+
 }

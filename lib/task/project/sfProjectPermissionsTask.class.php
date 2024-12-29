@@ -65,7 +65,7 @@ EOF;
         if (count($this->failed)) {
             $this->logBlock(array_merge(
                 ['Permissions on the following file(s) could not be fixed:', ''],
-                array_map(fn($f) => ' - '.sfDebug::shortenFilePath($f), $this->failed)
+                array_map(fn ($f) => ' - '.sfDebug::shortenFilePath($f), $this->failed)
             ), 'ERROR_LARGE');
 
             return 1;

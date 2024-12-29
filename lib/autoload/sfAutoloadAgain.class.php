@@ -59,6 +59,8 @@ class sfAutoloadAgain
 
         // as of PHP 5.2.11, spl_autoload_functions() returns the object as the first element of the array instead of the class name
         $position = 0;
+        // @rector-ignore: Rector\CodeQuality\Rector\Foreach_\RemoveUnusedForeachKeyRector
+        // @rector-ignore: Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector
         if (version_compare(PHP_VERSION, '5.2.11', '>=')) {
             foreach ($autoloads as $position => $autoload) {
                 if (is_array($autoload) && $this === $autoload[0]) {

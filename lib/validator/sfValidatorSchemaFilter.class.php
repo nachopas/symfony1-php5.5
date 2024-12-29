@@ -51,10 +51,7 @@ class sfValidatorSchemaFilter extends sfValidatorSchema
         try {
             $values[$this->getOption('field')] = $this->getOption('validator')->clean($value);
         } catch (sfValidatorError $error) {
-            $errorSchema = new sfValidatorErrorSchema($this);
-            $errorSchema->addError($error, $this->getOption('field'));
-
-            throw $errorSchema;
+            throw new sfValidatorErrorSchema($this, [$this->getOption('field') => $error]);
         }
 
         return $values;

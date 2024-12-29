@@ -180,7 +180,6 @@ class sfValidatorFromDescription extends sfValidatorDecorator
             switch (get_class($token)) {
                 case 'sfValidatorFDToken':
                     $outputStack[] = $token;
-
                     break;
 
                 case 'sfValidatorFDTokenLeftBracket':
@@ -265,7 +264,7 @@ class sfValidatorFDToken
 
     public function asPhp()
     {
-        return sprintf('new %s(%s)', $this->class, implode(', ', array_map(fn($a) => var_export($a, true), $this->arguments)));
+        return sprintf('new %s(%s)', $this->class, implode(', ', array_map(fn ($a) => var_export($a, true), $this->arguments)));
     }
 
     public function getValidator()
@@ -318,12 +317,11 @@ class sfValidatorFDTokenOperator
 
     public function asPhp($tokenLeft, $tokenRight)
     {
-        return sprintf(
-            'new %s(array(%s, %s), %s)',
+        return sprintf('new %s(array(%s, %s), %s)',
             $this->class,
             is_object($tokenLeft) && in_array(get_class($tokenLeft), ['sfValidatorFDToken', 'sfValidatorFDTokenFilter']) ? $tokenLeft->asPhp() : $tokenLeft,
             is_object($tokenRight) && in_array(get_class($tokenRight), ['sfValidatorFDToken', 'sfValidatorFDTokenFilter']) ? $tokenRight->asPhp() : $tokenRight,
-            implode(', ', array_map(fn($a) => var_export($a, true), $this->arguments))
+            implode(', ', array_map(fn ($a) => var_export($a, true), $this->arguments))
         );
     }
 

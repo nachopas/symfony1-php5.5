@@ -233,7 +233,6 @@ class sfNumberFormatInfo
         return self::getInstance($culture, self::SCIENTIFIC);
     }
 
-
     /**
      * Parses the given pattern and return a list of known properties.
      *

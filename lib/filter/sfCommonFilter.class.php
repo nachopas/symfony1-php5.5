@@ -34,10 +34,10 @@ class sfCommonFilter extends sfFilter
             $this->context->getConfiguration()->loadHelpers(['Tag', 'Asset']);
             $html = '';
             if (!sfConfig::get('symfony.asset.javascripts_included', false)) {
-                $html .= get_javascripts($response);
+                $html .= get_javascripts();
             }
             if (!sfConfig::get('symfony.asset.stylesheets_included', false)) {
-                $html .= get_stylesheets($response);
+                $html .= get_stylesheets();
             }
 
             if ($html) {

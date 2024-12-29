@@ -120,8 +120,7 @@ class sfYamlParser
                                 }
                                 $merged = array_merge($parsedItem, $merged);
                             }
-                        }
-                        else {
+                        } else {
                             // Associative array, merge
                             $merged = array_merge($merged, $parsed);
                         }
@@ -327,6 +326,7 @@ class sfYamlParser
 
             return $this->parseFoldedScalar($matches['separator'], preg_replace('#\d+#', '', $modifiers), intval(abs($modifiers)));
         }
+
         return sfYamlInline::load($value);
     }
 

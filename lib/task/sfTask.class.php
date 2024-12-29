@@ -303,9 +303,7 @@ abstract class sfTask
     {
         $formatter = $this->getFormatter();
 
-        return preg_replace_callback('/\[(.+?)\|(\w+)\]/s', function ($match) use ($formatter) {
-            return $formatter->format($match['1'], $match['2']);
-        }, $this->detailedDescription);
+        return preg_replace_callback('/\[(.+?)\|(\w+)\]/s', fn ($match) => $formatter->format($match['1'], $match['2']), $this->detailedDescription);
     }
 
     /**

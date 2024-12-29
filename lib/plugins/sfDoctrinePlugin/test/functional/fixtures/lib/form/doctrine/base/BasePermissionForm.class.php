@@ -11,9 +11,19 @@ abstract class BasePermissionForm extends BaseFormDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['id'          => new sfWidgetFormInputHidden(), 'name'        => new sfWidgetFormInputText(), 'users_list'  => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'User']), 'groups_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group'])]);
+        $this->setWidgets([
+            'id' => new sfWidgetFormInputHidden(),
+            'name' => new sfWidgetFormInputText(),
+            'users_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'User']),
+            'groups_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group']),
+        ]);
 
-        $this->setValidators(['id'          => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]), 'name'        => new sfValidatorString(['max_length' => 255, 'required' => false]), 'users_list'  => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'User', 'required' => false]), 'groups_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false])]);
+        $this->setValidators([
+            'id' => new sfValidatorChoice(['choices' => [$this->getObject()->get('id')], 'empty_value' => $this->getObject()->get('id'), 'required' => false]),
+            'name' => new sfValidatorString(['max_length' => 255, 'required' => false]),
+            'users_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'User', 'required' => false]),
+            'groups_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('permission[%s]');
 

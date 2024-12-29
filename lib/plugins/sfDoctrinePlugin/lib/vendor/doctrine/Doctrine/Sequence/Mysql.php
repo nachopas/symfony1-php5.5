@@ -42,7 +42,7 @@ class Doctrine_Sequence_Mysql extends Doctrine_Sequence
         $sequenceName  = $this->conn->quoteIdentifier($seqName, true);
         $seqcolName    = $this->conn->quoteIdentifier($this->conn->getAttribute(Doctrine_Core::ATTR_SEQCOL_NAME), true);
         $query         = 'INSERT INTO ' . $sequenceName . ' (' . $seqcolName . ') VALUES (NULL)';
-        
+
         try {
             $this->conn->exec($query);
         } catch(Doctrine_Connection_Exception $e) {
@@ -68,7 +68,7 @@ class Doctrine_Sequence_Mysql extends Doctrine_Sequence
             $query = 'DELETE FROM ' . $sequenceName . ' WHERE ' . $seqcolName . ' < ' . $value;
             $this->conn->exec($query);
         }
-        
+
         return $value;
     }
 

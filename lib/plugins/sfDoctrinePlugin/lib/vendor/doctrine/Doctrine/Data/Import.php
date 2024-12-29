@@ -80,7 +80,7 @@ class Doctrine_Data_Import extends Doctrine_Data
                 } else if (is_dir($dir)) {
                     $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
                                                             RecursiveIteratorIterator::LEAVES_ONLY);
-                    $filesOrdered = [];                                        
+                    $filesOrdered = [];
                     foreach ($it as $file) {
                         $filesOrdered[] = $file;
                     }
@@ -135,7 +135,7 @@ class Doctrine_Data_Import extends Doctrine_Data
                         $rel = $table->getRelation($key);
                         $relClassName = $rel->getTable()->getOption('name');
                         $relRowKey = $rowKey . '_' . $relClassName;
-            
+
                         if ($rel->getType() == Doctrine_Relation::ONE) {
                             $val = [$relRowKey => $value];
                             $this->_rows[$className][$rowKey][$key] = $relRowKey;
@@ -143,7 +143,7 @@ class Doctrine_Data_Import extends Doctrine_Data
                             $val = $value;
                             $this->_rows[$className][$rowKey][$key] = array_keys($val);
                         }
-            
+
                         $this->_buildRows($relClassName, $val);
                     }
                 }
@@ -180,7 +180,7 @@ class Doctrine_Data_Import extends Doctrine_Data
      */
     protected function _getImportedObject($rowKey, Doctrine_Record $record, $relationName, $referringRowKey)
     {
-        $relation = $record->getTable()->getRelation($relationName); 
+        $relation = $record->getTable()->getRelation($relationName);
         $rowKey = $this->_getRowKeyPrefix($relation->getTable()) . $rowKey;
 
         if ( ! isset($this->_importedObjects[$rowKey])) {
@@ -272,13 +272,11 @@ class Doctrine_Data_Import extends Doctrine_Data
             if (isset($data['NestedSet']) && $data['NestedSet'] == true) {
                 unset($data['NestedSet']);
                 return true;
-            } else {
-                $first = current($data);
-                return array_key_exists('children', $first);
             }
-        } else {
-            return false;
+            $first = current($data);
+            return array_key_exists('children', $first);
         }
+        return false;
     }
 
     /**

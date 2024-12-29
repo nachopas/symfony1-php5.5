@@ -46,7 +46,7 @@ class sfViewParameterHolder extends sfParameterHolder
      */
     public function __unserialize($data)
     {
-        list($this->parameters, $escapingMethod, $escaping) = $data;
+        [$this->parameters, $escapingMethod, $escaping] = $data;
         $this->initialize(sfContext::hasInstance() ? sfContext::getInstance()->getEventDispatcher() : new sfEventDispatcher());
 
         $this->setEscapingMethod($escapingMethod);

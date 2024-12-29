@@ -80,12 +80,12 @@ class sfValidatorOr extends sfValidatorBase
      */
     protected function doClean($value)
     {
-        $errors = new sfValidatorErrorSchema($this);
+        $errors = [];
         foreach ($this->validators as $validator) {
             try {
                 return $validator->clean($value);
             } catch (sfValidatorError $e) {
-                $errors->addError($e);
+                $errors[] = $e;
             }
         }
 
@@ -93,7 +93,7 @@ class sfValidatorOr extends sfValidatorBase
             throw new sfValidatorError($this, 'invalid', ['value' => $value]);
         }
 
-        throw $errors;
+        throw new sfValidatorErrorSchema($this, $errors);
     }
 
     /**
@@ -114,8 +114,7 @@ class sfValidatorOr extends sfValidatorBase
                 $messages = $this->getMessagesWithoutDefaults();
 
                 if ($options || $messages) {
-                    $validators .= sprintf(
-                        '(%s%s)',
+                    $validators .= sprintf('(%s%s)',
                         $options ? sfYamlInline::dump($options) : ($messages ? '{}' : ''),
                         $messages ? ', '.sfYamlInline::dump($messages) : ''
                     );
