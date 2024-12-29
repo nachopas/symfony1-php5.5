@@ -69,7 +69,6 @@ class sfWidgetFormDateTime extends sfWidgetForm
         ]);
     }
 
-
     /**
      * Returns the date widget.
      *

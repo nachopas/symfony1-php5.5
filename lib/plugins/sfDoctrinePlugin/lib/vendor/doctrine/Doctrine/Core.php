@@ -1175,7 +1175,7 @@ class Doctrine_Core
         $extensions = Doctrine_Manager::getInstance()
             ->getExtensions();
 
-        foreach ($extensions as $name => $path) {
+        foreach ($extensions as $path) {
             $class = $path . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
             if (file_exists($class)) {
