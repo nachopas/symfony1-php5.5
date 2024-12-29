@@ -66,7 +66,7 @@ class Doctrine_Import_Oracle extends Doctrine_Import
      */
     public function listTriggers($database = null)
     {
-        $query = "SELECT trigger_name FROM sys.user_triggers"; 
+        $query = "SELECT trigger_name FROM sys.user_triggers";
         return $this->conn->fetchColumn($query);
     }
 
@@ -131,7 +131,19 @@ QEND;
             $val = array_change_key_case($val, CASE_LOWER);
             $decl = $this->conn->dataDict->getPortableDeclaration($val);
 
-            $descr[$val['column_name']] = ['name'       => $val['column_name'], 'notnull'    => (bool) ($val['nullable'] === 'N'), 'ntype'      => $val['data_type'], 'type'       => $decl['type'][0], 'alltypes'   => $decl['type'], 'fixed'      => (bool) $decl['fixed'], 'unsigned'   => (bool) $decl['unsigned'], 'default'    => $val['data_default'], 'length'     => $val['data_length'], 'primary'    => (bool) $val['primary'], 'scale'      => $val['scale'] ?? null];
+            $descr[$val['column_name']] = [
+               'name'       => $val['column_name'],
+               'notnull'    => (bool) ($val['nullable'] === 'N'),
+               'ntype'      => $val['data_type'],
+               'type'       => $decl['type'][0],
+               'alltypes'   => $decl['type'],
+               'fixed'      => (bool) $decl['fixed'],
+               'unsigned'   => (bool) $decl['unsigned'],
+               'default'    => $val['data_default'],
+               'length'     => $val['data_length'],
+               'primary'    => (bool) $val['primary'],
+               'scale'      => $val['scale'] ?? null,
+            ];
         }
 
         return $descr;
@@ -154,7 +166,7 @@ QEND;
 
         return array_map([$this->conn->formatter, 'fixIndexName'], $indexes);
     }
-    
+
     /**
      * list table relations
      */
@@ -173,7 +185,9 @@ QEND;
         $results = $this->conn->fetchAssoc($sql, [':tableName' => $table]);
         foreach ($results as $result) {
             $result = array_change_key_case($result, CASE_LOWER);
-            $relations[] = ['table'   => $result['referenced_table_name'], 'local'   => $result['local_column_name'], 'foreign' => $result['referenced_column_name']];
+            $relations[] = ['table'   => $result['referenced_table_name'],
+                                 'local'   => $result['local_column_name'],
+                                 'foreign' => $result['referenced_column_name']];
         }
         return $relations;
     }

@@ -150,7 +150,7 @@ class sfYamlParser
             {
               throw new InvalidArgumentException(sprintf("YAML merge keys used with a scalar value instead of an array at line %s (%s)", $this->getRealCurrentLineNb() + 1, $this->currentLine));
             }
-            else if (isset($parsed[0]))
+            if (isset($parsed[0]))
             {
               // Numeric array, merge individual elements
               foreach (array_reverse($parsed) as $parsedItem)
@@ -417,10 +417,7 @@ class sfYamlParser
 
       return $this->parseFoldedScalar($matches['separator'], preg_replace('#\d+#', '', $modifiers), intval(abs($modifiers)));
     }
-    else
-    {
-      return sfYamlInline::load($value);
-    }
+    return sfYamlInline::load($value);
   }
 
   /**

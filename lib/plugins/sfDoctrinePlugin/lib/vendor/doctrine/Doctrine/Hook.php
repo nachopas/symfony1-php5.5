@@ -42,7 +42,12 @@ class Doctrine_Hook
     /**
      * @var array $hooks                    hooks array
      */
-    protected $hooks        = ['where', 'orderby', 'limit', 'offset'];
+    protected $hooks = [
+        'where',
+        'orderby',
+        'limit',
+        'offset',
+    ];
 
     /**
      * @var array $fieldParsers             custom field parsers array
@@ -55,7 +60,15 @@ class Doctrine_Hook
      * @var array $typeParsers              type parsers array
      *                                      keys as type names and values as parser names / objects
      */
-    protected $typeParsers  = ['char'      => 'Doctrine_Hook_WordLike', 'string'    => 'Doctrine_Hook_WordLike', 'varchar'   => 'Doctrine_Hook_WordLike', 'integer'   => 'Doctrine_Hook_Integer', 'enum'      => 'Doctrine_Hook_Integer', 'time'      => 'Doctrine_Hook_Time', 'date'      => 'Doctrine_Hook_Date'];
+    protected $typeParsers  = [
+        'char'      => 'Doctrine_Hook_WordLike',
+        'string'    => 'Doctrine_Hook_WordLike',
+        'varchar'   => 'Doctrine_Hook_WordLike',
+        'integer'   => 'Doctrine_Hook_Integer',
+        'enum'      => 'Doctrine_Hook_Integer',
+        'time'      => 'Doctrine_Hook_Time',
+        'date'      => 'Doctrine_Hook_Date',
+    ];
 
     /**
      * @param Doctrine_Query $query         the base query
@@ -68,9 +81,9 @@ class Doctrine_Hook
         } elseif ($query instanceof Doctrine_Query) {
             $this->query = $query;
         } else {
-            throw new Doctrine_Exception('Constructor argument should be either Doctrine_Query object or valid DQL query');          
+            throw new Doctrine_Exception('Constructor argument should be either Doctrine_Query object or valid DQL query');
         }
-        
+
         $this->query->getSqlQuery();
     }
 
@@ -90,7 +103,7 @@ class Doctrine_Hook
      * @param string $type              type name
      * @param string|object $parser     parser name or custom parser object
      */
-    public function setTypeParser($type, $parser) 
+    public function setTypeParser($type, $parser)
     {
         $this->typeParsers[$type] = $parser;
     }
@@ -116,7 +129,7 @@ class Doctrine_Hook
      */
     public function hookWhere($params)
     {
-        if ( ! is_array($params)) {
+        if (! is_array($params)) {
             return false;
         }
         foreach ($params as $name => $value) {
@@ -131,13 +144,13 @@ class Doctrine_Hook
                 $map   = $this->query->getQueryComponent($alias);
                 $table = $map['table'];
 
-                if ( ! $table) {
+                if (! $table) {
                     throw new Doctrine_Exception('Unknown alias ' . $alias);
                 }
 
                 if ($def = $table->getDefinitionOf($column)) {
 
-                $def[0] = gettype($value);
+                    $def[0] = gettype($value);
                     if (isset($this->typeParsers[$def[0]])) {
                         $name   = $this->typeParsers[$def[0]];
                         $parser = new $name;
@@ -163,7 +176,7 @@ class Doctrine_Hook
      */
     public function hookOrderby($params)
     {
-        if ( ! is_array($params)) {
+        if (! is_array($params)) {
             return false;
         }
         foreach ($params as $name) {
@@ -183,7 +196,7 @@ class Doctrine_Hook
                 $map   = $this->query->getQueryComponent($alias);
                 $table = $map['table'];
 
-                if ($def = $table->getDefinitionOf($column)) {   
+                if ($def = $table->getDefinitionOf($column)) {
                     $this->query->addOrderBy($alias . '.' . $column . ' ' . $order);
                 }
             }
@@ -192,9 +205,9 @@ class Doctrine_Hook
     }
 
     /**
-     * set the hook limit 
-     * 
-     * @param integer $limit 
+     * set the hook limit
+     *
+     * @param integer $limit
      * @return void
      */
     public function hookLimit($limit)

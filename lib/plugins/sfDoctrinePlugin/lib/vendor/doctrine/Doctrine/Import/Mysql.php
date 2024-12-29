@@ -28,7 +28,14 @@
  */
 class Doctrine_Import_Mysql extends Doctrine_Import
 {
-    protected $sql  = ['listDatabases'   => 'SHOW DATABASES', 'listTableFields' => 'DESCRIBE %s', 'listSequences'   => 'SHOW TABLES', 'listTables'      => 'SHOW TABLES', 'listUsers'       => 'SELECT DISTINCT USER FROM USER', 'listViews'       => "SHOW FULL TABLES %s WHERE Table_type = 'VIEW'"];
+    protected $sql  = [
+        'listDatabases'   => 'SHOW DATABASES',
+        'listTableFields' => 'DESCRIBE %s',
+        'listSequences'   => 'SHOW TABLES',
+        'listTables'      => 'SHOW TABLES',
+        'listUsers'       => 'SELECT DISTINCT USER FROM USER',
+        'listViews'       => "SHOW FULL TABLES %s WHERE Table_type = 'VIEW'",
+    ];
 
     /**
      * lists all database sequences
@@ -39,7 +46,7 @@ class Doctrine_Import_Mysql extends Doctrine_Import
     public function listSequences($database = null)
     {
         $query = 'SHOW TABLES';
-        if ( ! is_null($database)) {
+        if (! is_null($database)) {
             $query .= ' FROM ' . $database;
         }
         $tableNames = $this->conn->fetchColumn($query);
@@ -73,13 +80,13 @@ class Doctrine_Import_Mysql extends Doctrine_Import
 
         $result = [];
         foreach ($indexes as $indexData) {
-            if ( ! $indexData[$nonUnique]) {
+            if (! $indexData[$nonUnique]) {
                 if ($indexData[$keyName] !== 'PRIMARY') {
                     $index = $this->conn->formatter->fixIndexName($indexData[$keyName]);
                 } else {
                     $index = 'PRIMARY';
                 }
-                if ( ! empty($index)) {
+                if (! empty($index)) {
                     $result[] = $index;
                 }
             }
@@ -90,7 +97,7 @@ class Doctrine_Import_Mysql extends Doctrine_Import
     /**
      * lists table relations
      *
-     * Expects an array of this format to be returned with all the relationships in it where the key is 
+     * Expects an array of this format to be returned with all the relationships in it where the key is
      * the name of the foreign table, and the value is an array containing the local and foreign column
      * name
      *
@@ -111,10 +118,13 @@ class Doctrine_Import_Mysql extends Doctrine_Import
         $relations = [];
         $sql = "SELECT column_name, REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM information_schema.key_column_usage WHERE table_name = '" . $tableName . "' AND table_schema = '" . $this->conn->getDatabaseName() . "' and REFERENCED_COLUMN_NAME is not NULL";
         $results = $this->conn->fetchAssoc($sql);
-        foreach ($results as $result)
-        {
+        foreach ($results as $result) {
             $result = array_change_key_case($result, CASE_LOWER);
-            $relations[] = ['table'   => $result['referenced_table_name'], 'local'   => $result['column_name'], 'foreign' => $result['referenced_column_name']];
+            $relations[] = [
+                'table'   => $result['referenced_table_name'],
+                'local'   => $result['column_name'],
+                'foreign' => $result['referenced_column_name']
+            ];
         }
         return $relations;
     }
@@ -132,7 +142,7 @@ class Doctrine_Import_Mysql extends Doctrine_Import
 
         $description = [];
         $columns = [];
-        foreach ($result as $key => $val) {
+        foreach ($result as $val) {
 
             $val = array_change_key_case($val, CASE_LOWER);
 
@@ -141,7 +151,20 @@ class Doctrine_Import_Mysql extends Doctrine_Import
             $values = $decl['values'] ?? [];
             $val['default'] = $val['default'] == 'CURRENT_TIMESTAMP' ? null : $val['default'];
 
-            $description = ['name'          => $val['field'], 'type'          => $decl['type'][0], 'alltypes'      => $decl['type'], 'ntype'         => $val['type'], 'length'        => $decl['length'], 'fixed'         => (bool) $decl['fixed'], 'unsigned'      => (bool) $decl['unsigned'], 'values'        => $values, 'primary'       => (strtolower($val['key']) == 'pri'), 'default'       => $val['default'], 'notnull'       => (bool) ($val['null'] != 'YES'), 'autoincrement' => (bool) (strpos($val['extra'], 'auto_increment') !== false)];
+            $description = [
+                'name'          => $val['field'],
+                'type'          => $decl['type'][0],
+                'alltypes'      => $decl['type'],
+                'ntype'         => $val['type'],
+                'length'        => $decl['length'],
+                'fixed'         => (bool) $decl['fixed'],
+                'unsigned'      => (bool) $decl['unsigned'],
+                'values'        => $values,
+                'primary'       => (strtolower($val['key']) == 'pri'),
+                'default'       => $val['default'],
+                'notnull'       => (bool) ($val['null'] != 'YES'),
+                'autoincrement' => (bool) (strpos($val['extra'], 'auto_increment') !== false),
+            ];
             if (isset($decl['scale'])) {
                 $description['scale'] = $decl['scale'];
             }

@@ -132,8 +132,7 @@ class sfWebDebugPanelDoctrine extends sfWebDebugPanel
                 }
             }
 
-            $html[] = sprintf(
-                '
+            $html[] = sprintf('
         <li%s>
           <p class="sfWebDebugDatabaseQuery">%s</p>
           <div class="sfWebDebugDatabaseLogInfo">%sms, "%s" connection%s</div>

@@ -59,19 +59,36 @@ class Doctrine_Locking_Manager_Pessimistic
 
         if ($this->conn->getAttribute(Doctrine_Core::ATTR_EXPORT) & Doctrine_Core::EXPORT_TABLES) {
             $columns = [];
-            $columns['object_type']        = ['type'    => 'string', 'length'  => 50, 'notnull' => true, 'primary' => true];
+            $columns['object_type'] = [
+                'type'    => 'string',
+                'length'  => 50,
+                'notnull' => true,
+                'primary' => true,
+            ];
 
-            $columns['object_key']         = ['type'    => 'string', 'length'  => 250, 'notnull' => true, 'primary' => true];
+            $columns['object_key'] = [
+                'type'    => 'string',
+                'length'  => 250,
+                'notnull' => true,
+                'primary' => true,
+            ];
 
-            $columns['user_ident']         = ['type'    => 'string', 'length'  => 50, 'notnull' => true];
+            $columns['user_ident'] = [
+                'type'    => 'string',
+                'length'  => 50,
+                'notnull' => true,
+            ];
 
-            $columns['timestamp_obtained'] = ['type'    => 'integer', 'length'  => 10, 'notnull' => true];
+            $columns['timestamp_obtained'] = [
+                'type'    => 'integer',
+                'length'  => 10,
+                'notnull' => true,
+            ];
 
             $options = ['primary' => ['object_type', 'object_key']];
             try {
                 $this->conn->export->createTable($this->_lockTable, $columns, $options);
-            } catch(Exception $e) {
-
+            } catch (Exception $e) {
             }
         }
     }
@@ -103,8 +120,8 @@ class Doctrine_Locking_Manager_Pessimistic
             $this->conn->beginTransaction();
 
             $stmt = $dbh->prepare('INSERT INTO ' . $this->_lockTable
-                                  . ' (object_type, object_key, user_ident, timestamp_obtained)'
-                                  . ' VALUES (:object_type, :object_key, :user_ident, :ts_obtained)');
+                . ' (object_type, object_key, user_ident, timestamp_obtained)'
+                . ' VALUES (:object_type, :object_key, :user_ident, :ts_obtained)');
 
             $stmt->bindParam(':object_type', $objectType);
             $stmt->bindParam(':object_key', $key);
@@ -115,21 +132,21 @@ class Doctrine_Locking_Manager_Pessimistic
                 $stmt->execute();
                 $gotLock = true;
 
-            // we catch an Exception here instead of PDOException since we might also be catching Doctrine_Exception
-            } catch(Exception $pkviolation) {
+                // we catch an Exception here instead of PDOException since we might also be catching Doctrine_Exception
+            } catch (Exception $pkviolation) {
                 // PK violation occured => existing lock!
             }
 
-            if ( ! $gotLock) {
+            if (! $gotLock) {
                 $lockingUserIdent = $this->_getLockingUserIdent($objectType, $key);
                 if ($lockingUserIdent !== null && $lockingUserIdent == $userIdent) {
                     $gotLock = true; // The requesting user already has a lock
                     // Update timestamp
-                    $stmt = $dbh->prepare('UPDATE ' . $this->_lockTable 
-                                          . ' SET timestamp_obtained = :ts'
-                                          . ' WHERE object_type = :object_type AND'
-                                          . ' object_key  = :object_key  AND'
-                                          . ' user_ident  = :user_ident');
+                    $stmt = $dbh->prepare('UPDATE ' . $this->_lockTable
+                        . ' SET timestamp_obtained = :ts'
+                        . ' WHERE object_type = :object_type AND'
+                        . ' object_key  = :object_key  AND'
+                        . ' user_ident  = :user_ident');
                     $stmt->bindParam(':ts', $time);
                     $stmt->bindParam(':object_type', $objectType);
                     $stmt->bindParam(':object_key', $key);
@@ -201,12 +218,12 @@ class Doctrine_Locking_Manager_Pessimistic
         try {
             $dbh = $this->conn->getDbh();
             $stmt = $dbh->prepare('SELECT user_ident FROM ' . $this->_lockTable
-                                  . ' WHERE object_type = :object_type AND object_key = :object_key');
+                . ' WHERE object_type = :object_type AND object_key = :object_key');
             $stmt->bindParam(':object_type', $objectType);
             $stmt->bindParam(':object_key', $key);
             $success = $stmt->execute();
 
-            if ( ! $success) {
+            if (! $success) {
                 throw new Doctrine_Locking_Exception("Failed to determine locking user");
             }
 

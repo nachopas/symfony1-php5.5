@@ -39,9 +39,9 @@ abstract class Doctrine_Query_Condition extends Doctrine_Query_Part
     public function parse($str)
     {
         $tmp = trim($str);
-        
+
         $parts = $this->_tokenizer->bracketExplode($str, [' OR '], '(', ')');
-        
+
         if (count($parts) > 1) {
             $ret = [];
             foreach ($parts as $part) {
@@ -66,7 +66,7 @@ abstract class Doctrine_Query_Condition extends Doctrine_Query_Part
                     $tmp[] = $parts[$i];
                 }
             }
-            
+
             $parts = $tmp;
             unset($tmp);
 
@@ -81,17 +81,16 @@ abstract class Doctrine_Query_Condition extends Doctrine_Query_Part
                 // Fix for #710
                 if (substr($parts[0],0,1) == '(' && substr($parts[0], -1) == ')') {
                     return $this->parse(substr($parts[0], 1, -1));
+                }
+                // Processing NOT here
+                if (strtoupper(substr($parts[0], 0, 4)) === 'NOT ') {
+                    $r = 'NOT ('.$this->parse(substr($parts[0], 4)).')';
                 } else {
-                    // Processing NOT here
-                    if (strtoupper(substr($parts[0], 0, 4)) === 'NOT ') {
-                        $r = 'NOT ('.$this->parse(substr($parts[0], 4)).')';
-                    } else {
-                        return $this->load($parts[0]);
-                    }
+                    return $this->load($parts[0]);
                 }
             }
         }
-        
+
         return '(' . $r . ')';
     }
 

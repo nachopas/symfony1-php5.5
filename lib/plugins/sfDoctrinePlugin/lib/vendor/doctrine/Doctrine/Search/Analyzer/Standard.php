@@ -266,9 +266,9 @@ class Doctrine_Search_Analyzer_Standard extends Doctrine_Search_Analyzer impleme
         $text = str_replace('  ', ' ', $text);
 
         $terms = explode(' ', $text);
-        
+
         $ret = [];
-        if ( ! empty($terms)) {
+        if (!empty($terms)) {
             foreach ($terms as $i => $term) {
                 if (empty($term)) {
                     continue;

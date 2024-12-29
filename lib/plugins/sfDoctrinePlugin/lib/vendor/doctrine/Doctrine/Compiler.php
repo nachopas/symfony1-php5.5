@@ -40,30 +40,39 @@ class Doctrine_Compiler
      */
     public static function compile($target = null, $includedDrivers = [])
     {
-        if ( ! is_array($includedDrivers)) {
+        if (!is_array($includedDrivers)) {
             $includedDrivers = [$includedDrivers];
         }
-        
+
         $excludedDrivers = [];
-        
+
         // If we have an array of specified drivers then lets determine which drivers we should exclude
-        if ( ! empty($includedDrivers)) {
-            $drivers = ['db2', 'mssql', 'mysql', 'oracle', 'pgsql', 'sqlite'];
-            
+        if (! empty($includedDrivers)) {
+            $drivers = [
+                'db2',
+                'mssql',
+                'mysql',
+                'oracle',
+                'pgsql',
+                'sqlite'
+            ];
+
             $excludedDrivers = array_diff($drivers, $includedDrivers);
         }
-        
+
         $path = Doctrine_Core::getPath();
         $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path . '/Doctrine'), RecursiveIteratorIterator::LEAVES_ONLY);
 
         foreach ($it as $file) {
             $e = explode('.', $file->getFileName());
-            
-            //@todo what is a versioning file? do we have these anymore? None 
+
+            //@todo what is a versioning file? do we have these anymore? None
             //exists in my version of doctrine from svn.
             // we don't want to require versioning files
-            if (end($e) === 'php' && strpos($file->getFileName(), '.inc') === false
-                && strpos($file->getFileName(), 'sfYaml') === false) {
+            if (
+                end($e) === 'php' && strpos($file->getFileName(), '.inc') === false
+                && strpos($file->getFileName(), 'sfYaml') === false
+            ) {
                 require_once $file->getPathName();
             }
         }
@@ -78,21 +87,21 @@ class Doctrine_Compiler
             if ($e[0] !== 'Doctrine') {
                 continue;
             }
-            
+
             // Exclude drivers
-            if ( ! empty($excludedDrivers)) {
+            if (! empty($excludedDrivers)) {
                 foreach ($excludedDrivers as $excludedDriver) {
                     $excludedDriver = ucfirst($excludedDriver);
-                    
+
                     if (in_array($excludedDriver, $e)) {
-                        continue(2);
+                        continue (2);
                     }
                 }
             }
-            
+
             $refl  = new ReflectionClass($class);
             $file  = $refl->getFileName();
-            
+
             $lines = file($file);
 
             $start = $refl->getStartLine() - 1;
@@ -112,8 +121,8 @@ class Doctrine_Compiler
         if ($fp === false) {
             throw new Doctrine_Compiler_Exception("Couldn't write compiled data. Failed to open $target");
         }
-        
-        fwrite($fp, "<?php ". implode('', $ret));
+
+        fwrite($fp, "<?php " . implode('', $ret));
         fclose($fp);
 
         $stripped = php_strip_whitespace($target);
@@ -121,7 +130,7 @@ class Doctrine_Compiler
         if ($fp === false) {
             throw new Doctrine_Compiler_Exception("Couldn't write compiled data. Failed to open $file");
         }
-        
+
         fwrite($fp, $stripped);
         fclose($fp);
 

@@ -45,7 +45,7 @@ class Doctrine_Validator_Future extends Doctrine_Validator_Driver
         if (count($e) !== 3) {
             return false;
         }
-        
+
         if (is_array($this->args) && isset($this->args['timezone'])) {
             switch (strtolower($this->args['timezone'])) {
                 case 'gmt':
@@ -58,19 +58,19 @@ class Doctrine_Validator_Future extends Doctrine_Validator_Driver
         } else {
             $now = getdate();
         }
-        
+
         if ($now['year'] > $e[0]) {
             return false;
-        } else if ($now['year'] == $e[0]) {
+        }
+        if ($now['year'] == $e[0]) {
             if ($now['mon'] > $e[1]) {
                 return false;
-            } else if ($now['mon'] == $e[1]) {
-                return $now['mday'] < $e[2];
-            } else {
-                return true;
             }
-        } else {
+            if ($now['mon'] == $e[1]) {
+                return $now['mday'] < $e[2];
+            }
             return true;
         }
+        return true;
     }
 }

@@ -34,13 +34,13 @@ class Doctrine_Search_Query
      * @var Doctrine_Table $_table          the index table
      */
     protected $_table = [];
-    
+
     protected $_sql = '';
-    
+
     protected $_params = [];
-    
+
     protected $_words = [];
-    
+
     protected $_tokenizer;
 
     protected $_condition;
@@ -87,7 +87,7 @@ class Doctrine_Search_Query
                 $select = 'SELECT ' . $foreignId;
             }
         }
-        
+
         $from = 'FROM ' . $this->_table->getTableName();
         $where = 'WHERE ';
         $where .= $this->parseClause($text);
@@ -107,7 +107,7 @@ class Doctrine_Search_Query
     public function parseClause($originalClause, $recursive = false)
     {
         $clause = $this->_tokenizer->bracketTrim($originalClause);
-        
+
         $brackets = false;
 
         if ($clause !== $originalClause) {
@@ -115,7 +115,7 @@ class Doctrine_Search_Query
         }
 
         $foreignId = current(array_diff($this->_table->getColumnNames(), ['keyword', 'field', 'position']));
-        
+
         $terms = $this->_tokenizer->sqlExplode($clause, ' OR ', '(', ')');
 
         $ret = [];
@@ -140,24 +140,24 @@ class Doctrine_Search_Query
             }
         } else {
             $terms = $this->_tokenizer->sqlExplode($clause, ' ', '(', ')');
-            
+
             if (count($terms) === 1 && ! $recursive) {
                 $return = $this->parseTerm($clause);
             } else {
                 foreach ($terms as $k => $term) {
                     $term = trim($term);
-    
+
                     if ($term === 'AND') {
                         continue;
                     }
-    
+
                     if (substr($term, 0, 1) === '-') {
                         $operator = 'NOT IN';
                         $term = substr($term, 1);
                     } else {
                         $operator = 'IN';
                     }
-    
+
                     if ($this->isExpression($term)) {
                         $ret[$k] = $this->parseClause($term, true);
                     } else {
@@ -170,20 +170,17 @@ class Doctrine_Search_Query
 
         if ($brackets) {
             return '(' . $return . ')';
-        } else {
-            return $return;
         }
+        return $return;
     }
 
     public function isExpression($term)
     {
         if (strpos($term, '(') !== false) {
             return true;
-        } else {
-            $terms = $this->_tokenizer->quoteExplode($term);
-            
-            return (count($terms) > 1);
         }
+        $terms = $this->_tokenizer->quoteExplode($term);
+        return (count($terms) > 1);
     }
 
     public function parseTerm($term)

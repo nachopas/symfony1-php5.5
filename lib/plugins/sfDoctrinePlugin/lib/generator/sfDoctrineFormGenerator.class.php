@@ -162,7 +162,7 @@ class sfDoctrineFormGenerator extends sfGenerator
                     if (class_exists($e[0]) && class_exists($modelName)) {
                         $parent = new ReflectionClass('Doctrine_Record');
                         $reflection = new ReflectionClass($modelName);
-                        if ($reflection->isSubclassOf($parent)) {
+                        if ($reflection->isSubClassOf($parent)) {
                             $this->pluginModels[$modelName] = $pluginName;
 
                             if ($reflection->isInstantiable()) {
@@ -219,10 +219,8 @@ class sfDoctrineFormGenerator extends sfGenerator
         foreach ($this->table->getRelations() as $relation) {
             if (
                 Doctrine_Relation::MANY == $relation->getType()
-                &&
-                isset($relation['refTable'])
-                &&
-                (null === $this->getParentModel() || !Doctrine_Core::getTable($this->getParentModel())->hasRelation($relation->getAlias()))
+                && isset($relation['refTable'])
+                && (null === $this->getParentModel() || !Doctrine_Core::getTable($this->getParentModel())->hasRelation($relation->getAlias()))
             ) {
                 $relations[] = $relation;
             }
@@ -573,7 +571,7 @@ class sfDoctrineFormGenerator extends sfGenerator
         }
 
         $indexes = $this->table->getOption('indexes');
-        foreach ($indexes as $name => $index) {
+        foreach ($indexes as $index) {
             $index['fields'] = (array) $index['fields'];
 
             if (isset($index['type']) && 'unique' == $index['type']) {

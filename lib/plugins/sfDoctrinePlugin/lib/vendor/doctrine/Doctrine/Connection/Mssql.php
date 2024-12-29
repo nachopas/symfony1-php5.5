@@ -44,7 +44,23 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
     public function __construct(Doctrine_Manager $manager, $adapter)
     {
         // initialize all driver options
-        $this->supported = ['sequences'             => 'emulated', 'indexes'               => true, 'affected_rows'         => true, 'transactions'          => true, 'summary_functions'     => true, 'order_by_text'         => true, 'current_id'            => 'emulated', 'limit_queries'         => 'emulated', 'LOBs'                  => true, 'replace'               => 'emulated', 'sub_selects'           => true, 'auto_increment'        => true, 'primary_key'           => true, 'result_introspection'  => true, 'prepared_statements'   => 'emulated'];
+        $this->supported = [
+            'sequences'             => 'emulated',
+            'indexes'               => true,
+            'affected_rows'         => true,
+            'transactions'          => true,
+            'summary_functions'     => true,
+            'order_by_text'         => true,
+            'current_id'            => 'emulated',
+            'limit_queries'         => 'emulated',
+            'LOBs'                  => true,
+            'replace'               => 'emulated',
+            'sub_selects'           => true,
+            'auto_increment'        => true,
+            'primary_key'           => true,
+            'result_introspection'  => true,
+            'prepared_statements'   => 'emulated',
+        ];
 
         $this->properties['varchar_max_length'] = 8000;
 
@@ -67,17 +83,17 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         if ($checkOption && ! $this->getAttribute(Doctrine_Core::ATTR_QUOTE_IDENTIFIER)) {
             return $identifier;
         }
-        
-        if (strpos($identifier, '.') !== false) { 
-            $parts = explode('.', $identifier); 
-            $quotedParts = []; 
-            foreach ($parts as $p) { 
-                $quotedParts[] = $this->quoteIdentifier($p); 
+
+        if (strpos($identifier, '.') !== false) {
+            $parts = explode('.', $identifier);
+            $quotedParts = [];
+            foreach ($parts as $p) {
+                $quotedParts[] = $this->quoteIdentifier($p);
             }
-            
-            return implode('.', $quotedParts); 
+
+            return implode('.', $quotedParts);
         }
-        
+
         return '[' . trim($identifier, '[]') . ']';
     }
 
@@ -97,7 +113,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
     public function modifyLimitQuery($query, $limit = false, $offset = false, $isManip = false, $isSubQuery = false, Doctrine_Query $queryOrigin = null)
     {
         if ($limit === false || !($limit > 0)) {
-            return $query; 
+            return $query;
         }
 
         $orderby = stristr($query, 'ORDER BY');
@@ -105,7 +121,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         if ($offset !== false && $orderby === false) {
             throw new Doctrine_Connection_Exception("OFFSET cannot be used in MSSQL without ORDER BY due to emulation reasons.");
         }
-        
+
         $limit = intval($limit);
         $offset = intval($offset);
 
@@ -114,7 +130,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         }
 
         if ($offset == 0) {
-           $query = preg_replace('/^SELECT( DISTINCT)?\s/i', 'SELECT\1 TOP ' . $limit . ' ', $query);
+            $query = preg_replace('/^SELECT( DISTINCT)?\s/i', 'SELECT\1 TOP ' . $limit . ' ', $query);
         } else {
             $over = stristr($query, 'ORDER BY');
 
@@ -129,10 +145,9 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
             $query = substr($query, strlen('SELECT '));
             $select = 'SELECT';
 
-            if (0 === strpos($query, 'DISTINCT'))
-            {
-              $query = substr($query, strlen('DISTINCT '));
-              $select .= ' DISTINCT';
+            if (0 === strpos($query, 'DISTINCT')) {
+                $query = substr($query, strlen('DISTINCT '));
+                $select .= ' DISTINCT';
             }
 
             $start = $offset + 1;
@@ -145,8 +160,8 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
     }
 
     /**
-     * Parse an OrderBy-Statement into chunks 
-     * 
+     * Parse an OrderBy-Statement into chunks
+     *
      * @param string $orderby
      */
     private function parseOrderBy($orderby)
@@ -157,31 +172,31 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         $parsed  = str_ireplace('ORDER BY', '', $orderby);
 
         preg_match_all('/(\w+\(.+?\)\s+(ASC|DESC)),?/', $orderby, $matches);
-        
+
         $matchesWithExpressions = $matches[1];
 
         foreach ($matchesWithExpressions as $match) {
             $chunks[] = $match;
             $parsed = str_replace($match, '##' . (count($chunks) - 1) . '##', $parsed);
         }
-        
+
         $tokens = preg_split('/,/', $parsed);
-        
+
         for ($i = 0, $iMax = count($tokens); $i < $iMax; $i++) {
             $tokens[$i] = trim(preg_replace_callback('/##(\d+)##/', fn($m) => $chunks[$m[1]], $tokens[$i]));
         }
 
         return $tokens;
     }
-    
+
     /**
      * Order and Group By are not possible on columns from type text.
-     * This method fix this issue by wrap the given term (column) into a CAST directive. 
-     * 
+     * This method fix this issue by wrap the given term (column) into a CAST directive.
+     *
      * @see DC-828
      * @param Doctrine_Table $table
      * @param string $field
-     * @param string $term The term which will changed if it's necessary, depending to the field type. 
+     * @param string $term The term which will changed if it's necessary, depending to the field type.
      * @return string
      */
     public function modifyOrderByColumn(Doctrine_Table $table, $field, $term)
@@ -191,7 +206,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         if ($def['type'] == 'string' && $def['length'] === NULL) {
             $term = 'CAST(' . $term . ' AS varchar(8000))';
         }
-        
+
         return $term;
     }
 
@@ -205,7 +220,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
     {
         return $this->modifyLimitQuery($query, $limit, $offset, $isManip, true);
     }
-    
+
     /**
      * return version information about the server
      *
@@ -222,11 +237,23 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         }
         // cache server_info
         $this->serverInfo = $serverInfo;
-        if ( ! $native) {
+        if (! $native) {
             if (preg_match('/([0-9]+)\.([0-9]+)\.([0-9]+)/', $serverInfo, $tmp)) {
-                $serverInfo = ['major' => $tmp[1], 'minor' => $tmp[2], 'patch' => $tmp[3], 'extra' => null, 'native' => $serverInfo];
+                $serverInfo = [
+                    'major' => $tmp[1],
+                    'minor' => $tmp[2],
+                    'patch' => $tmp[3],
+                    'extra' => null,
+                    'native' => $serverInfo,
+                ];
             } else {
-                $serverInfo = ['major' => null, 'minor' => null, 'patch' => null, 'extra' => null, 'native' => $serverInfo];
+                $serverInfo = [
+                    'major' => null,
+                    'minor' => null,
+                    'patch' => null,
+                    'extra' => null,
+                    'native' => $serverInfo,
+                ];
             }
         }
         return $serverInfo;
@@ -243,7 +270,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         $query = 'SELECT * FROM ' . $seqName;
         try {
             $this->exec($query);
-        } catch(Doctrine_Connection_Exception $e) {
+        } catch (Doctrine_Connection_Exception $e) {
             if ($e->getPortableCode() == Doctrine_Core::ERR_NOSUCHTABLE) {
                 return false;
             }
@@ -262,7 +289,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
      */
     public function execute($query, array $params = [])
     {
-        if(! empty($params)) {
+        if (! empty($params)) {
             $query = $this->replaceBoundParamsWithInlineValuesInQuery($query, $params);
         }
 
@@ -278,7 +305,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
      */
     public function exec($query, array $params = [])
     {
-        if(! empty($params)) {
+        if (! empty($params)) {
             $query = $this->replaceBoundParamsWithInlineValuesInQuery($query, $params);
         }
 
@@ -293,19 +320,19 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
      * @param string $query
      * @param array $params
      */
-    protected function replaceBoundParamsWithInlineValuesInQuery($query, array $params) {
+    protected function replaceBoundParamsWithInlineValuesInQuery($query, array $params)
+    {
 
-        foreach($params as $key => $value) {
+        foreach ($params as $key => $value) {
             $re = '/(?<=WHERE|VALUES|SET|JOIN)(.*?)(\?)/';
             $query = preg_replace($re, "\\1##{$key}##", $query, 1);
         }
-        
+
 
         $self = $this;
         $query = preg_replace_callback('/##(\d+)##/', fn($m) => (null === $params[$m[1]]) ? 'NULL' : $self->quote($params[$m[1]]), $query);
 
         return $query;
-
     }
 
     /**
@@ -322,11 +349,11 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
 
         $settingNullIdentifier = false;
         $fields = array_change_key_case($fields);
-        foreach($identifiers as $identifier) {
+        foreach ($identifiers as $identifier) {
             $lcIdentifier = strtolower($identifier);
 
-            if(array_key_exists($lcIdentifier, $fields)) {
-                if(is_null($fields[$lcIdentifier])) {
+            if (array_key_exists($lcIdentifier, $fields)) {
+                if (is_null($fields[$lcIdentifier])) {
                     $settingNullIdentifier = true;
                     unset($fields[$lcIdentifier]);
                 }
@@ -337,7 +364,7 @@ class Doctrine_Connection_Mssql extends Doctrine_Connection_Common
         if ($settingNullIdentifier) {
             $count = $this->exec('INSERT INTO ' . $this->quoteIdentifier($table->getTableName()) . ' DEFAULT VALUES');
 
-            if(! $count) {
+            if (! $count) {
                 return $count;
             }
 

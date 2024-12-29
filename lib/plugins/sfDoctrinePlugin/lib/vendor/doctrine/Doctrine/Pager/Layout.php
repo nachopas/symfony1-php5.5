@@ -59,9 +59,9 @@ class Doctrine_Pager_Layout
      * @var string $_urlMask      URL to be assigned for each page. Masks are used as: {%var_name}
      */
     private $_urlMask;
-    
+
     /**
-     * @var array $_maskReplacements      Stores references of masks and their correspondent 
+     * @var array $_maskReplacements      Stores references of masks and their correspondent
      *                                    (replaces defined masks with new masks or values)
      */
     private $_maskReplacements = [];
@@ -192,7 +192,7 @@ class Doctrine_Pager_Layout
     /**
      * setTemplate
      *
-     * Defines the Template to be applied for inactive pages 
+     * Defines the Template to be applied for inactive pages
      * (also active page if selected template not defined)
      *
      * @param $template       Template to be applied for inactive pages
@@ -247,7 +247,7 @@ class Doctrine_Pager_Layout
      *
      * @param $separatorTemplate       Separator template, applied between each page
      * @return void
-     */ 
+     */
     public function setSeparatorTemplate($separatorTemplate)
     {
         $this->_separatorTemplate = $separatorTemplate;
@@ -265,11 +265,14 @@ class Doctrine_Pager_Layout
      *                       changes the bahavior of replacement mask to replacement
      *                       value
      * @return void
-     */ 
+     */
     public function addMaskReplacement($oldMask, $newMask, $asValue = false)
     {
         if (($oldMask = trim($oldMask)) != 'page_number') {
-            $this->_maskReplacements[$oldMask] = ['newMask' => $newMask, 'asValue' => ($asValue === false) ? false : true];
+            $this->_maskReplacements[$oldMask] = [
+                'newMask' => $newMask,
+                'asValue' => ($asValue === false) ? false : true
+            ];
         }
     }
 
@@ -280,7 +283,7 @@ class Doctrine_Pager_Layout
      *
      * @param $oldMask       Replacement Mask to be removed
      * @return void
-     */ 
+     */
     public function removeMaskReplacement($oldMask)
     {
         if (isset($this->_maskReplacements[$oldMask])) {
@@ -288,15 +291,14 @@ class Doctrine_Pager_Layout
             unset($this->_maskReplacements[$oldMask]);
         }
     }
-    
-    
+
     /**
      * cleanMaskReplacements
      *
      * Remove all mask replacements
      *
      * @return void
-     */ 
+     */
     public function cleanMaskReplacements()
     {
         $this->_maskReplacements = null;
@@ -309,10 +311,10 @@ class Doctrine_Pager_Layout
      * Displays the pager on screen based on templates and options defined
      *
      * @param $options    Optional parameters to be applied in template and url mask
-     * @param $return     Optional parameter if you want to capture the output of this method call 
+     * @param $return     Optional parameter if you want to capture the output of this method call
      *                    (Default value is false), instead of printing it
      * @return void       If you would like to capture the output of Doctrine_Pager_Layout::display(),
-     *                    use the $return  parameter. If this parameter is set to TRUE, this method 
+     *                    use the $return  parameter. If this parameter is set to TRUE, this method
      *                    will return its output, instead of printing it (which it does by default)
      */
     public function display($options = [], $return = false)
@@ -384,7 +386,7 @@ class Doctrine_Pager_Layout
      * Parse the template of a given page and return the processed template
      *
      * @param array    Optional parameters to be applied in template and url mask
-     * @return string  
+     * @return string
      */
     protected function _parseTemplate($options = [])
     {
@@ -469,7 +471,7 @@ class Doctrine_Pager_Layout
      * Parse the mask replacements, changing from to-be replaced mask with new masks/values
      *
      * @param $str    String to have masks replaced
-     * @return string  
+     * @return string
      */
     protected function _parseMaskReplacements($str)
     {

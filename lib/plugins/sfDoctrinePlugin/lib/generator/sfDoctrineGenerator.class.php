@@ -147,7 +147,7 @@ class sfDoctrineGenerator extends sfModelGenerator
                 'is_partial' => false,
                 'is_component' => false,
                 'type' => $this->getType($column),
-            ], isset($this->config['fields'][$name]) ? $this->config['fields'][$name] : []);
+            ], $this->config['fields'][$name] ?? []);
         }
 
         foreach ($this->getManyToManyTables() as $tables) {
@@ -159,7 +159,7 @@ class sfDoctrineGenerator extends sfModelGenerator
                 'is_partial' => false,
                 'is_component' => false,
                 'type' => 'Text',
-            ], isset($this->config['fields'][$name]) ? $this->config['fields'][$name] : []);
+            ], $this->config['fields'][$name] ?? []);
         }
 
         if (isset($this->config['fields'])) {

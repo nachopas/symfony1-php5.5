@@ -58,9 +58,9 @@ EOF;
             $this->configuration->getPluginSubPaths('/lib/filter/doctrine')
         );
 
-        $prefixPattern = $this->valuesToRegex($options['prefix'] ? $options['prefix'] : ['', 'Base', 'Plugin']);
-        $suffixPattern = $this->valuesToRegex($options['suffix'] ? $options['suffix'] : ['', 'Table', 'Form', 'FormFilter']);
-        $extensionPattern = $this->valuesToRegex($options['extension'] ? $options['extension'] : ['.php', '.class.php']);
+        $prefixPattern = $this->valuesToRegex($options['prefix'] ?: ['', 'Base', 'Plugin']);
+        $suffixPattern = $this->valuesToRegex($options['suffix'] ?: ['', 'Table', 'Form', 'FormFilter']);
+        $extensionPattern = $this->valuesToRegex($options['extension'] ?: ['.php', '.class.php']);
 
         $total = 0;
 
@@ -71,9 +71,7 @@ EOF;
             if ($files) {
                 if (!$options['no-confirmation'] && !$this->askConfirmation(array_merge(
                     ['The following '.$modelName.' files will be deleted:', ''],
-                    array_map(function ($v) {
-                        return ' - '.sfDebug::shortenFilePath($v);
-                    }, $files),
+                    array_map(fn ($v) => ' - '.sfDebug::shortenFilePath($v), $files),
                     ['', 'Continue? (y/N)']
                 ), 'QUESTION_LARGE', false)) {
                     $this->logSection('doctrine', 'Aborting delete of "'.$modelName.'" files');

@@ -75,7 +75,7 @@ class Doctrine_Query_Tokenizer
                     //$parts[$token] = array();
                     $parts[$token] = '';
                 break;
-            
+
                 case 'order':
                 case 'group':
                     $i = ($index + 1);
@@ -88,10 +88,10 @@ class Doctrine_Query_Tokenizer
                         //$parts[$p][] = $token;
                     }
                 break;
-            
+
                 case 'by':
                     break;
-            
+
                 default:
                     if ( ! isset($p)) {
                         throw new Doctrine_Query_Tokenizer_Exception(
@@ -120,9 +120,8 @@ class Doctrine_Query_Tokenizer
     {
         if (substr($str, 0, 1) === $e1 && substr($str, -1) === $e2) {
             return substr($str, 1, -1);
-        } else {
-            return $str;
         }
+        return $str;
     }
 
     /**
@@ -381,10 +380,10 @@ class Doctrine_Query_Tokenizer
                 }
 
                 $terms = array_merge($terms, $subterms);
-                $i += sizeof($subterms);
+                $i += count($subterms);
             }
         }
-        
+
         return $terms;
     }
 
@@ -439,9 +438,9 @@ class Doctrine_Query_Tokenizer
 
     /**
      * This expects input from clauseExplodeNonQuoted.
-     * It will go through the result and merges any bracket terms with 
+     * It will go through the result and merges any bracket terms with
      * unbalanced bracket count.
-     * Note that only the third parameter in each term is used to get the 
+     * Note that only the third parameter in each term is used to get the
      * bracket overhang. This is needed to be able to handle quoted strings
      * wich contain brackets
      *
@@ -475,7 +474,7 @@ class Doctrine_Query_Tokenizer
             if ( ! isset($res[$i])) {
                 $res[$i] = [$val[0], $val[1], $val[2]];
             } else {
-                $res[$i][0] .= $res[$i][1] . $val[0]; 
+                $res[$i][0] .= $res[$i][1] . $val[0];
                 $res[$i][1] = $val[1];
                 $res[$i][2] += $val[2];
             }

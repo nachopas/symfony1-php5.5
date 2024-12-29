@@ -67,7 +67,7 @@ class Doctrine_Validator_Email extends Doctrine_Validator_Driver
         $subDomain = "($domainRef|$domainLiteral)";
         $word = "($atom|$quotedString)";
         $domain = "$subDomain(\\x2e$subDomain)+";
-        
+
         /*
           following pseudocode to allow strict checking - ask pookey about this if you're puzzled
 
@@ -75,13 +75,13 @@ class Doctrine_Validator_Email extends Doctrine_Validator_Driver
               $domain = "$sub_domain(\\x2e$sub_domain)*";
           }
         */
-        
+
         $localPart = "$word(\\x2e$word)*";
         $addrSpec = "$localPart\\x40$domain";
-        
+
         return (bool) preg_match("!^$addrSpec$!D", $value);
     }
-    
+
     /**
      * Check DNS Records for MX type
      *
@@ -93,24 +93,25 @@ class Doctrine_Validator_Email extends Doctrine_Validator_Driver
         // We have different behavior here depending of OS and PHP version
         if (strtolower(substr(PHP_OS, 0, 3)) == 'win' && version_compare(PHP_VERSION, '5.3.0', '<')) {
             $output = [];
-            
+
             @exec('nslookup -type=MX '.escapeshellcmd($host) . ' 2>&1', $output);
-            
+
             if (empty($output)) {
                 throw new Doctrine_Exception('Unable to execute DNS lookup. Are you sure PHP can call exec()?');
-            }    
+            }
 
             foreach ($output as $line) {
-                if (preg_match('/^'.$host.'/', $line)) { 
-                    return true; 
+                if (preg_match('/^'.$host.'/', $line)) {
+                    return true;
                 }
             }
-            
+
             return false;
-        } else if (function_exists('checkdnsrr')) {
+        }
+        if (function_exists('checkdnsrr')) {
             return checkdnsrr($host, 'MX');
         }
-        
+
         throw new Doctrine_Exception('Could not retrieve DNS record information. Remove check_mx = true to prevent this warning');
     }
 }

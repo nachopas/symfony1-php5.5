@@ -82,12 +82,12 @@ EOF;
         $properties = parse_ini_file(sfConfig::get('sf_config_dir').'/properties.ini', true);
 
         $this->constants = [
-            'PROJECT_NAME' => isset($properties['symfony']['name']) ? $properties['symfony']['name'] : 'symfony',
+            'PROJECT_NAME' => $properties['symfony']['name'] ?? 'symfony',
             'APP_NAME' => $arguments['application'],
             'MODULE_NAME' => $arguments['module'],
             'UC_MODULE_NAME' => ucfirst($arguments['module']),
             'MODEL_CLASS' => $arguments['model'],
-            'AUTHOR_NAME' => isset($properties['symfony']['author']) ? $properties['symfony']['author'] : 'Your name here',
+            'AUTHOR_NAME' => $properties['symfony']['author'] ?? 'Your name here',
         ];
 
         $method = $options['generate-in-cache'] ? 'executeInit' : 'executeGenerate';
@@ -106,8 +106,8 @@ EOF;
             'theme' => $options['theme'],
             'non_verbose_templates' => $options['non-verbose-templates'],
             'with_show' => $options['with-show'],
-            'singular' => $options['singular'] ? $options['singular'] : sfInflector::underscore($arguments['model']),
-            'plural' => $options['plural'] ? $options['plural'] : sfInflector::underscore($arguments['model'].'s'),
+            'singular' => $options['singular'] ?: sfInflector::underscore($arguments['model']),
+            'plural' => $options['plural'] ?: sfInflector::underscore($arguments['model'].'s'),
             'route_prefix' => $options['route-prefix'],
             'with_doctrine_route' => $options['with-doctrine-route'],
             'actions_base_class' => $options['actions-base-class'],

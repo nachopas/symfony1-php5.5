@@ -9,9 +9,21 @@ abstract class BaseUserFormFilter extends BaseFormFilterDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['username'         => new sfWidgetFormFilterInput(), 'password'         => new sfWidgetFormFilterInput(), 'test'             => new sfWidgetFormFilterInput(), 'groups_list'      => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group']), 'permissions_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Permission'])]);
+        $this->setWidgets([
+            'username' => new sfWidgetFormFilterInput(),
+            'password' => new sfWidgetFormFilterInput(),
+            'test' => new sfWidgetFormFilterInput(),
+            'groups_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group']),
+            'permissions_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Permission']),
+        ]);
 
-        $this->setValidators(['username'         => new sfValidatorPass(['required' => false]), 'password'         => new sfValidatorPass(['required' => false]), 'test'             => new sfValidatorPass(['required' => false]), 'groups_list'      => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false]), 'permissions_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Permission', 'required' => false])]);
+        $this->setValidators([
+            'username' => new sfValidatorPass(['required' => false]),
+            'password' => new sfValidatorPass(['required' => false]),
+            'test' => new sfValidatorPass(['required' => false]),
+            'groups_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false]),
+            'permissions_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Permission', 'required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('user_filters[%s]');
 
@@ -33,9 +45,9 @@ abstract class BaseUserFormFilter extends BaseFormFilterDoctrine
         }
 
         $query
-      ->leftJoin($query->getRootAlias().'.UserGroup UserGroup')
-      ->andWhereIn('UserGroup.group_id', $values)
-    ;
+          ->leftJoin($query->getRootAlias().'.UserGroup UserGroup')
+          ->andWhereIn('UserGroup.group_id', $values)
+        ;
     }
 
     public function addPermissionsListColumnQuery(Doctrine_Query $query, $field, $values)
@@ -49,9 +61,9 @@ abstract class BaseUserFormFilter extends BaseFormFilterDoctrine
         }
 
         $query
-      ->leftJoin($query->getRootAlias().'.UserPermission UserPermission')
-      ->andWhereIn('UserPermission.permission_id', $values)
-    ;
+          ->leftJoin($query->getRootAlias().'.UserPermission UserPermission')
+          ->andWhereIn('UserPermission.permission_id', $values)
+        ;
     }
 
     public function getModelName()
@@ -61,6 +73,13 @@ abstract class BaseUserFormFilter extends BaseFormFilterDoctrine
 
     public function getFields()
     {
-        return ['id'               => 'Number', 'username'         => 'Text', 'password'         => 'Text', 'test'             => 'Text', 'groups_list'      => 'ManyKey', 'permissions_list' => 'ManyKey'];
+        return [
+            'id' => 'Number',
+            'username' => 'Text',
+            'password' => 'Text',
+            'test' => 'Text',
+            'groups_list' => 'ManyKey',
+            'permissions_list' => 'ManyKey',
+        ];
     }
 }

@@ -51,10 +51,9 @@ class Doctrine_Validator_Regexp extends Doctrine_Validator_Driver
                 }
             }
             return true;
-        } else {
-            if (preg_match($this->args, $value)) {
-                return true;
-            }
+        }
+        if (preg_match($this->args, $value)) {
+            return true;
         }
 
         return false;

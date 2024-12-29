@@ -71,7 +71,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
     public function getTemporaryTableQuery()
     {
         return '';
-    }  
+    }
 
     public function dropIndexSql($table, $name)
     {
@@ -225,7 +225,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
 
             $dropped = [];
             foreach ($changes['remove'] as $fieldName => $field) {
-                
+
                 $fieldName = $this->conn->quoteIdentifier($fieldName, true);
                 $dropped[] = $fieldName;
             }
@@ -436,7 +436,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
         }
 
         $query = 'CREATE TABLE ' . $this->conn->quoteIdentifier($name, true) . ' (' . $queryFields;
-        
+
         $check = $this->getCheckDeclaration($fields);
 
         if ( ! empty($check)) {
@@ -446,7 +446,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
         $query .= ')';
 
         $sql[] = $query;
-        
+
         if (isset($options['indexes']) && ! empty($options['indexes'])) {
             foreach($options['indexes'] as $index => $definition) {
                 if (is_array($definition)) {
@@ -454,7 +454,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
                 }
             }
         }
-        
+
         if (isset($options['foreignKeys'])) {
             foreach ((array) $options['foreignKeys'] as $definition) {
                 if (is_array($definition)) {
@@ -477,7 +477,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
     public function getNotNullFieldDeclaration(array $definition)
     {
         return (
-            (isset($definition['notnull']) && $definition['notnull']) || 
+            (isset($definition['notnull']) && $definition['notnull']) ||
             (isset($definition['primary']) && $definition['primary'])
         ) ? ' NOT NULL' : ' NULL';
     }
@@ -515,7 +515,7 @@ class Doctrine_Export_Mssql extends Doctrine_Export
                 ? 'NULL'
                 : $this->conn->quote($field['default'], $field['type']));
         }
-        
+
         return $default;
     }
 }

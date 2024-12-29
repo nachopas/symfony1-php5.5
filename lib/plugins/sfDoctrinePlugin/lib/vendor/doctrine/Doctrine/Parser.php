@@ -34,7 +34,7 @@ abstract class Doctrine_Parser
      *
      * Override in the parser driver
      *
-     * @param string $array 
+     * @param string $array
      * @return void
      * @author Jonathan H. Wage
      */
@@ -45,8 +45,8 @@ abstract class Doctrine_Parser
      *
      * Override in the parser driver
      *
-     * @param string $array 
-     * @param string $path 
+     * @param string $array
+     * @param string $path
      * @param string $charset The charset of the data being dumped
      * @return void
      * @author Jonathan H. Wage
@@ -58,7 +58,7 @@ abstract class Doctrine_Parser
      *
      * Get instance of the specified parser
      *
-     * @param string $type 
+     * @param string $type
      * @return void
      * @author Jonathan H. Wage
      */
@@ -74,8 +74,8 @@ abstract class Doctrine_Parser
      *
      * Interface for loading and parsing data from a file
      *
-     * @param string $path 
-     * @param string $type 
+     * @param string $path
+     * @param string $type
      * @return void
      * @author Jonathan H. Wage
      */
@@ -91,9 +91,9 @@ abstract class Doctrine_Parser
      *
      * Interface for pulling and dumping data to a file
      *
-     * @param string $array 
-     * @param string $path 
-     * @param string $type 
+     * @param string $array
+     * @param string $path
+     * @param string $type
      * @param string $charset The charset of the data being dumped
      * @return void
      * @author Jonathan H. Wage
@@ -111,7 +111,7 @@ abstract class Doctrine_Parser
      * Get contents whether it is the path to a file file or a string of txt.
      * Either should allow php code in it.
      *
-     * @param string $path 
+     * @param string $path
      * @return void
      */
     public function doLoad($path)
@@ -125,7 +125,7 @@ abstract class Doctrine_Parser
         }
 
         include($path);
-        
+
         // Fix #1569. Need to check if it's still all valid
         $contents = ob_get_clean(); //iconv("UTF-8", "UTF-8", ob_get_clean());
 
@@ -135,15 +135,15 @@ abstract class Doctrine_Parser
     /**
      * doDump
      *
-     * @param string $data 
-     * @param string $path 
+     * @param string $data
+     * @param string $path
      * @return void
      */
     public function doDump($data, $path = null)
     {
       if ($path !== null) {
-          return file_put_contents($path, $data);
-      }
+            return file_put_contents($path, $data);
+        }
       return $data;
     }
 }

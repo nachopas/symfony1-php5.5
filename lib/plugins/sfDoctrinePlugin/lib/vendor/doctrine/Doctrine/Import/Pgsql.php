@@ -30,7 +30,9 @@
 class Doctrine_Import_Pgsql extends Doctrine_Import
 {
 
-    protected $sql = ['listDatabases' => 'SELECT datname FROM pg_database', 'listFunctions' => "SELECT
+    protected $sql = [
+        'listDatabases' => 'SELECT datname FROM pg_database',
+        'listFunctions' => "SELECT
                                                 proname
                                             FROM
                                                 pg_proc pr,
@@ -41,13 +43,15 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                                 AND tp.typname <> 'trigger'
                                                 AND pr.pronamespace IN
                                                     (SELECT oid FROM pg_namespace
-                                                     WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema'", 'listSequences' => "SELECT
+                                                     WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema'",
+        'listSequences' => "SELECT
                                                 regexp_replace(relname, '_seq$', '')
                                             FROM
                                                 pg_class
                                             WHERE relkind = 'S' AND relnamespace IN
                                                 (SELECT oid FROM pg_namespace
-                                                 WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema')", 'listTables'    => "SELECT
+                                                 WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema')",
+        'listTables'    => "SELECT
                                                 c.relname AS table_name
                                             FROM pg_class c, pg_user u
                                             WHERE c.relowner = u.usesysid
@@ -60,7 +64,10 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                             WHERE c.relkind = 'r'
                                                 AND NOT EXISTS (SELECT 1 FROM pg_views WHERE viewname = c.relname)
                                                 AND NOT EXISTS (SELECT 1 FROM pg_user WHERE usesysid = c.relowner)
-                                                AND c.relname !~ '^pg_'", 'listViews'     => 'SELECT viewname FROM pg_views', 'listUsers'     => 'SELECT usename FROM pg_user', 'listTableConstraints' => "SELECT
+                                                AND c.relname !~ '^pg_'",
+        'listViews'     => 'SELECT viewname FROM pg_views',
+        'listUsers'     => 'SELECT usename FROM pg_user',
+        'listTableConstraints' => "SELECT
                                                         relname
                                                    FROM
                                                         pg_class
@@ -70,7 +77,8 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                                         WHERE pg_class.relname = %s
                                                             AND pg_class.oid = pg_index.indrelid
                                                             AND (indisunique = 't' OR indisprimary = 't')
-                                                        )", 'listTableIndexes'     => "SELECT
+                                                        )",
+        'listTableIndexes'     => "SELECT
                                                         relname
                                                    FROM
                                                         pg_class
@@ -81,7 +89,8 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                                             AND pg_class.oid=pg_index.indrelid
                                                             AND indisunique != 't'
                                                             AND indisprimary != 't'
-                                                        )", 'listTableColumns'     => "SELECT
+                                                        )",
+        'listTableColumns'     => "SELECT
                                                      ordinal_position as attnum,
                                                      column_name as field,
                                                      udt_name as type,
@@ -99,7 +108,8 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                                      character_maximum_length as length
                                                    FROM information_schema.COLUMNS
                                                    WHERE table_name = %s
-                                                   ORDER BY ordinal_position", 'listTableRelations'   => "SELECT pg_catalog.pg_get_constraintdef(oid, true) as condef
+                                                   ORDER BY ordinal_position",
+        'listTableRelations'   => "SELECT pg_catalog.pg_get_constraintdef(oid, true) as condef
                                                           FROM pg_catalog.pg_constraint r
                                                           WHERE r.conrelid =
                                                           (
@@ -108,7 +118,8 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                                                               LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
                                                               WHERE c.relname ~ ? AND pg_catalog.pg_table_is_visible(c.oid)
                                                           )
-                                                          AND r.contype = 'f'"];
+                                                          AND r.contype = 'f'"
+    ];
 
     /**
      * lists all database triggers
@@ -116,10 +127,7 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
      * @param string|null $database
      * @return array
      */
-    public function listTriggers($database = null)
-    {
-
-    }
+    public function listTriggers($database = null) {}
 
     /**
      * lists table constraints
@@ -148,7 +156,7 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
         $result = $this->conn->fetchAssoc($query);
 
         $columns     = [];
-        foreach ($result as $key => $val) {
+        foreach ($result as $val) {
             $val = array_change_key_case($val, CASE_LOWER);
 
             if ($val['type'] == 'character varying') {
@@ -160,44 +168,55 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
                 $length = preg_replace('~.*\(([0-9]*)\).*~', '$1', $val['complete_type']);
                 $val['length'] = $length;
             }
-            
+
             $decl = $this->conn->dataDict->getPortableDeclaration($val);
 
-            $description = ['name'      => $val['field'], 'ntype'     => $val['type'], 'type'      => $decl['type'][0], 'alltypes'  => $decl['type'], 'length'    => $decl['length'], 'fixed'     => (bool) $decl['fixed'], 'unsigned'  => (bool) $decl['unsigned'], 'notnull'   => ($val['isnotnull'] == 'NO'), 'default'   => $val['default'], 'primary'   => ($val['pri'] == 't')];
+            $description = [
+                'name'      => $val['field'],
+                'ntype'     => $val['type'],
+                'type'      => $decl['type'][0],
+                'alltypes'  => $decl['type'],
+                'length'    => $decl['length'],
+                'fixed'     => (bool) $decl['fixed'],
+                'unsigned'  => (bool) $decl['unsigned'],
+                'notnull'   => ($val['isnotnull'] == 'NO'),
+                'default'   => $val['default'],
+                'primary'   => ($val['pri'] == 't'),
+            ];
 
             // If postgres enum type
-            if ($val['type'] == 'e'){
+            if ($val['type'] == 'e') {
                 $description['default'] = $decl['default'] ?? null;
-                $t_result = $this->conn->fetchAssoc(sprintf('select enum_range(null::%s) as range ', $decl['enum_name']));                
-                if (isset($t_result[0])){
+                $t_result = $this->conn->fetchAssoc(sprintf('select enum_range(null::%s) as range ', $decl['enum_name']));
+                if (isset($t_result[0])) {
                     $range =  $t_result[0]['range'];
-                    $range = str_replace('{','',$range);
-                    $range = str_replace('}','',$range);
-                    $range = explode(',',$range);
+                    $range = str_replace('{', '', $range);
+                    $range = str_replace('}', '', $range);
+                    $range = explode(',', $range);
                     $description['values'] = $range;
                 }
             }
 
-            $matches = []; 
+            $matches = [];
 
-            if (preg_match("/^nextval\('(.*)'(::.*)?\)$/", $description['default'], $matches)) { 
-                $description['sequence'] = $this->conn->formatter->fixSequenceName($matches[1]); 
-                $description['default'] = null; 
+            if (preg_match("/^nextval\('(.*)'(::.*)?\)$/", $description['default'], $matches)) {
+                $description['sequence'] = $this->conn->formatter->fixSequenceName($matches[1]);
+                $description['default'] = null;
             } else if (preg_match("/^'(.*)'::character varying$/", $description['default'], $matches)) {
                 $description['default'] = $matches[1];
             } else if (preg_match("/^(.*)::character varying$/", $description['default'], $matches)) {
                 $description['default'] = $matches[1];
             } else if ($description['type'] == 'boolean') {
                 if ($description['default'] === 'true') {
-                   $description['default'] = true;
+                    $description['default'] = true;
                 } else if ($description['default'] === 'false') {
-                   $description['default'] = false;
+                    $description['default'] = false;
                 }
             }
 
             $columns[$val['field']] = $description;
         }
-        
+
         return $columns;
     }
 
@@ -268,7 +287,11 @@ class Doctrine_Import_Pgsql extends Doctrine_Import
             preg_match('/FOREIGN KEY \((.+)\) REFERENCES (.+)\((.+)\)/', $result['condef'], $values);
             if ((strpos($values[1], ',') === false) && (strpos($values[3], ',') === false)) {
                 $tableName = trim($values[2], '"');
-                $relations[] = ['table'   => $tableName, 'local'   => $values[1], 'foreign' => $values[3]];
+                $relations[] = [
+                    'table'   => $tableName,
+                    'local'   => $values[1],
+                    'foreign' => $values[3]
+                ];
             }
         }
 

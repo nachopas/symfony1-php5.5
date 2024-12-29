@@ -47,7 +47,7 @@ class Doctrine_Import_Mssql extends Doctrine_Import
     /**
      * lists table relations
      *
-     * Expects an array of this format to be returned with all the relationships in it where the key is 
+     * Expects an array of this format to be returned with all the relationships in it where the key is
      * the name of the foreign table, and the value is an array containing the local and foreign column
      * name
      *
@@ -71,7 +71,9 @@ class Doctrine_Import_Mssql extends Doctrine_Import
         foreach ($results as $result)
         {
             $result = array_change_key_case($result, CASE_LOWER);
-            $relations[] = ['table'   => $result['referenced_table_name'], 'local'   => $result['column_name'], 'foreign' => $result['referenced_column_name']];
+            $relations[] = ['table'   => $result['referenced_table_name'],
+                                 'local'   => $result['column_name'],
+                                 'foreign' => $result['referenced_column_name']];
         }
         return $relations;
     }
@@ -95,7 +97,7 @@ class Doctrine_Import_Mssql extends Doctrine_Import
         $result  = $this->conn->fetchAssoc($sql);
         $columns = [];
 
-        foreach ($result as $key => $val) {
+        foreach ($result as $val) {
             $val = array_change_key_case($val, CASE_LOWER);
 
             if (strstr($val['type_name'], ' ')) {
@@ -117,7 +119,19 @@ class Doctrine_Import_Mssql extends Doctrine_Import
             $isNullable = (bool) (strtoupper(trim($val['is_nullable'])) == 'NO');
             $isPrimary = in_array($val['column_name'], $primary);
 
-            $description  = ['name'          => $val['column_name'], 'ntype'         => $type, 'type'          => $decl['type'][0], 'alltypes'      => $decl['type'], 'length'        => $decl['length'], 'fixed'         => (bool) $decl['fixed'], 'unsigned'      => (bool) $decl['unsigned'], 'notnull'       => $isIdentity ? true : $isNullable, 'default'       => $val['column_def'], 'primary'       => $isPrimary, 'autoincrement' => $isIdentity];
+            $description  = [
+                'name'          => $val['column_name'],
+                'ntype'         => $type,
+                'type'          => $decl['type'][0],
+                'alltypes'      => $decl['type'],
+                'length'        => $decl['length'],
+                'fixed'         => (bool) $decl['fixed'],
+                'unsigned'      => (bool) $decl['unsigned'],
+                'notnull'       => $isIdentity ? true : $isNullable,
+                'default'       => $val['column_def'],
+                'primary'       => $isPrimary,
+                'autoincrement' => $isIdentity,
+            ];
 
             $columns[$val['column_name']] = $description;
         }

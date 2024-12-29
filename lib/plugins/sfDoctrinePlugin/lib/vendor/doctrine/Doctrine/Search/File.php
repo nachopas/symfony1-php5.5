@@ -38,7 +38,7 @@ class Doctrine_Search_File extends Doctrine_Search
     {
         parent::__construct($options);
 
-        if ( ! isset($this->_options['resource'])) {
+        if (! isset($this->_options['resource'])) {
             $conn = Doctrine_Manager::connection();
             $tableClass = $conn->getAttribute(Doctrine_Core::ATTR_TABLE_CLASS);
             $table = new $tableClass('File', $conn);
@@ -53,10 +53,7 @@ class Doctrine_Search_File extends Doctrine_Search
         $this->initialize($table);
     }
 
-    public function buildRelation()
-    {
-    	
-    }
+    public function buildRelation() {}
 
     /**
      * indexes given directory
@@ -66,15 +63,20 @@ class Doctrine_Search_File extends Doctrine_Search
      */
     public function indexDirectory($dir)
     {
-        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir),
-                                                RecursiveIteratorIterator::LEAVES_ONLY);
-                                                
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
         foreach ($it as $file) {
             if (strpos($file, DIRECTORY_SEPARATOR . '.svn') !== false) {
                 continue;
             }
 
-            $this->updateIndex(['url' => $file->getPathName(), 'content' => file_get_contents($file)]);
+            $this->updateIndex([
+                'url' => $file->getPathName(),
+                'content' => file_get_contents($file)
+            ]);
         }
     }
 }

@@ -32,7 +32,304 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
     /**
      * @param array $reservedKeyWords     an array of reserved keywords by pgsql
      */
-    protected static $reservedKeyWords = ['abort', 'absolute', 'access', 'action', 'add', 'after', 'aggregate', 'all', 'alter', 'analyse', 'analyze', 'and', 'any', 'as', 'asc', 'assertion', 'assignment', 'at', 'authorization', 'backward', 'before', 'begin', 'between', 'bigint', 'binary', 'bit', 'boolean', 'both', 'by', 'cache', 'called', 'cascade', 'case', 'cast', 'chain', 'char', 'character', 'characteristics', 'check', 'checkpoint', 'class', 'close', 'cluster', 'coalesce', 'collate', 'column', 'comment', 'commit', 'committed', 'constraint', 'constraints', 'conversion', 'convert', 'copy', 'create', 'createdb', 'createuser', 'cross', 'current_date', 'current_time', 'current_timestamp', 'current_user', 'cursor', 'cycle', 'database', 'day', 'deallocate', 'dec', 'decimal', 'declare', 'default', 'deferrable', 'deferred', 'definer', 'delete', 'delimiter', 'delimiters', 'desc', 'distinct', 'do', 'domain', 'double', 'drop', 'each', 'else', 'encoding', 'encrypted', 'end', 'escape', 'except', 'exclusive', 'execute', 'exists', 'explain', 'external', 'extract', 'false', 'fetch', 'float', 'for', 'force', 'foreign', 'forward', 'freeze', 'from', 'full', 'function', 'get', 'global', 'grant', 'group', 'handler', 'having', 'hour', 'ilike', 'immediate', 'immutable', 'implicit', 'in', 'increment', 'index', 'inherits', 'initially', 'inner', 'inout', 'input', 'insensitive', 'insert', 'instead', 'int', 'integer', 'intersect', 'interval', 'into', 'invoker', 'is', 'isnull', 'isolation', 'join', 'key', 'lancompiler', 'language', 'leading', 'left', 'level', 'like', 'limit', 'listen', 'load', 'local', 'localtime', 'localtimestamp', 'location', 'lock', 'match', 'maxvalue', 'minute', 'minvalue', 'mode', 'month', 'move', 'names', 'national', 'natural', 'nchar', 'new', 'next', 'no', 'nocreatedb', 'nocreateuser', 'none', 'not', 'nothing', 'notify', 'notnull', 'null', 'nullif', 'numeric', 'of', 'off', 'offset', 'oids', 'old', 'on', 'only', 'operator', 'option', 'or', 'order', 'out', 'outer', 'overlaps', 'overlay', 'owner', 'partial', 'password', 'path', 'pendant', 'placing', 'position', 'precision', 'prepare', 'primary', 'prior', 'privileges', 'procedural', 'procedure', 'read', 'real', 'recheck', 'references', 'reindex', 'relative', 'rename', 'replace', 'reset', 'restrict', 'returns', 'revoke', 'right', 'rollback', 'row', 'rule', 'schema', 'scroll', 'second', 'security', 'select', 'sequence', 'serializable', 'session', 'session_user', 'set', 'setof', 'share', 'show', 'similar', 'simple', 'smallint', 'some', 'stable', 'start', 'statement', 'statistics', 'stdin', 'stdout', 'storage', 'strict', 'substring', 'sysid', 'table', 'temp', 'template', 'temporary', 'then', 'time', 'timestamp', 'to', 'toast', 'trailing', 'transaction', 'treat', 'trigger', 'trim', 'true', 'truncate', 'trusted', 'type', 'unencrypted', 'union', 'unique', 'unknown', 'unlisten', 'until', 'update', 'usage', 'user', 'using', 'vacuum', 'valid', 'validator', 'values', 'varchar', 'varying', 'verbose', 'version', 'view', 'volatile', 'when', 'where', 'with', 'without', 'work', 'write', 'year', 'zone'];
+    protected static $reservedKeyWords = [
+        'abort',
+        'absolute',
+        'access',
+        'action',
+        'add',
+        'after',
+        'aggregate',
+        'all',
+        'alter',
+        'analyse',
+        'analyze',
+        'and',
+        'any',
+        'as',
+        'asc',
+        'assertion',
+        'assignment',
+        'at',
+        'authorization',
+        'backward',
+        'before',
+        'begin',
+        'between',
+        'bigint',
+        'binary',
+        'bit',
+        'boolean',
+        'both',
+        'by',
+        'cache',
+        'called',
+        'cascade',
+        'case',
+        'cast',
+        'chain',
+        'char',
+        'character',
+        'characteristics',
+        'check',
+        'checkpoint',
+        'class',
+        'close',
+        'cluster',
+        'coalesce',
+        'collate',
+        'column',
+        'comment',
+        'commit',
+        'committed',
+        'constraint',
+        'constraints',
+        'conversion',
+        'convert',
+        'copy',
+        'create',
+        'createdb',
+        'createuser',
+        'cross',
+        'current_date',
+        'current_time',
+        'current_timestamp',
+        'current_user',
+        'cursor',
+        'cycle',
+        'database',
+        'day',
+        'deallocate',
+        'dec',
+        'decimal',
+        'declare',
+        'default',
+        'deferrable',
+        'deferred',
+        'definer',
+        'delete',
+        'delimiter',
+        'delimiters',
+        'desc',
+        'distinct',
+        'do',
+        'domain',
+        'double',
+        'drop',
+        'each',
+        'else',
+        'encoding',
+        'encrypted',
+        'end',
+        'escape',
+        'except',
+        'exclusive',
+        'execute',
+        'exists',
+        'explain',
+        'external',
+        'extract',
+        'false',
+        'fetch',
+        'float',
+        'for',
+        'force',
+        'foreign',
+        'forward',
+        'freeze',
+        'from',
+        'full',
+        'function',
+        'get',
+        'global',
+        'grant',
+        'group',
+        'handler',
+        'having',
+        'hour',
+        'ilike',
+        'immediate',
+        'immutable',
+        'implicit',
+        'in',
+        'increment',
+        'index',
+        'inherits',
+        'initially',
+        'inner',
+        'inout',
+        'input',
+        'insensitive',
+        'insert',
+        'instead',
+        'int',
+        'integer',
+        'intersect',
+        'interval',
+        'into',
+        'invoker',
+        'is',
+        'isnull',
+        'isolation',
+        'join',
+        'key',
+        'lancompiler',
+        'language',
+        'leading',
+        'left',
+        'level',
+        'like',
+        'limit',
+        'listen',
+        'load',
+        'local',
+        'localtime',
+        'localtimestamp',
+        'location',
+        'lock',
+        'match',
+        'maxvalue',
+        'minute',
+        'minvalue',
+        'mode',
+        'month',
+        'move',
+        'names',
+        'national',
+        'natural',
+        'nchar',
+        'new',
+        'next',
+        'no',
+        'nocreatedb',
+        'nocreateuser',
+        'none',
+        'not',
+        'nothing',
+        'notify',
+        'notnull',
+        'null',
+        'nullif',
+        'numeric',
+        'of',
+        'off',
+        'offset',
+        'oids',
+        'old',
+        'on',
+        'only',
+        'operator',
+        'option',
+        'or',
+        'order',
+        'out',
+        'outer',
+        'overlaps',
+        'overlay',
+        'owner',
+        'partial',
+        'password',
+        'path',
+        'pendant',
+        'placing',
+        'position',
+        'precision',
+        'prepare',
+        'primary',
+        'prior',
+        'privileges',
+        'procedural',
+        'procedure',
+        'read',
+        'real',
+        'recheck',
+        'references',
+        'reindex',
+        'relative',
+        'rename',
+        'replace',
+        'reset',
+        'restrict',
+        'returns',
+        'revoke',
+        'right',
+        'rollback',
+        'row',
+        'rule',
+        'schema',
+        'scroll',
+        'second',
+        'security',
+        'select',
+        'sequence',
+        'serializable',
+        'session',
+        'session_user',
+        'set',
+        'setof',
+        'share',
+        'show',
+        'similar',
+        'simple',
+        'smallint',
+        'some',
+        'stable',
+        'start',
+        'statement',
+        'statistics',
+        'stdin',
+        'stdout',
+        'storage',
+        'strict',
+        'substring',
+        'sysid',
+        'table',
+        'temp',
+        'template',
+        'temporary',
+        'then',
+        'time',
+        'timestamp',
+        'to',
+        'toast',
+        'trailing',
+        'transaction',
+        'treat',
+        'trigger',
+        'trim',
+        'true',
+        'truncate',
+        'trusted',
+        'type',
+        'unencrypted',
+        'union',
+        'unique',
+        'unknown',
+        'unlisten',
+        'until',
+        'update',
+        'usage',
+        'user',
+        'using',
+        'vacuum',
+        'valid',
+        'validator',
+        'values',
+        'varchar',
+        'varying',
+        'verbose',
+        'version',
+        'view',
+        'volatile',
+        'when',
+        'where',
+        'with',
+        'without',
+        'work',
+        'write',
+        'year',
+        'zone'
+    ];
 
     /**
      * Obtain DBMS specific SQL code portion needed to declare an text type
@@ -59,18 +356,18 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
      */
     public function getNativeDeclaration(array $field)
     {
-        if ( ! isset($field['type'])) {
+        if (! isset($field['type'])) {
             throw new Doctrine_DataDict_Exception('Missing column type.');
         }
 
         // Postgres enum type by name containing enum
-        if (strpos($field['type'], 'enum') !== false){
-            $field['type'] = 'enum';            
+        if (strpos($field['type'], 'enum') !== false) {
+            $field['type'] = 'enum';
         }
 
         switch ($field['type']) {
             case 'enum':
-                $field['length'] = isset($field['length']) && $field['length'] ? $field['length']:255;
+                $field['length'] = isset($field['length']) && $field['length'] ? $field['length'] : 255;
             case 'char':
             case 'string':
             case 'array':
@@ -82,8 +379,8 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
 
                 $fixed  = ((isset($field['fixed']) && $field['fixed']) || $field['type'] == 'char') ? true : false;
 
-                return $fixed ? ($length ? 'CHAR(' . $length . ')' : 'CHAR('.$this->conn->varchar_max_length.')')
-                    : ($length ? 'VARCHAR(' .$length . ')' : 'TEXT');
+                return $fixed ? ($length ? 'CHAR(' . $length . ')' : 'CHAR(' . $this->conn->varchar_max_length . ')')
+                    : ($length ? 'VARCHAR(' . $length . ')' : 'TEXT');
 
             case 'clob':
                 return 'TEXT';
@@ -91,8 +388,8 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
                 return 'BYTEA';
             case 'integer':
             case 'int':
-                if ( ! empty($field['autoincrement'])) {
-                    if ( ! empty($field['length'])) {
+                if (! empty($field['autoincrement'])) {
+                    if (! empty($field['length'])) {
                         $length = $field['length'];
                         if ($length > 4) {
                             return 'BIGSERIAL';
@@ -100,22 +397,24 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
                     }
                     return 'SERIAL';
                 }
-                if ( ! empty($field['length'])) {
+                if (! empty($field['length'])) {
                     $length = $field['length'];
                     if ($length <= 2) {
                         return 'SMALLINT';
-                    } elseif ($length == 3 || $length == 4) {
+                    }
+                    if ($length == 3 || $length == 4) {
                         return 'INT';
-                    } elseif ($length > 4) {
+                    }
+                    if ($length > 4) {
                         return 'BIGINT';
                     }
                 }
                 return 'INT';
-			case 'inet':
-				return 'INET';
+            case 'inet':
+                return 'INET';
             case 'bit':
             case 'varbit':
-                return 'VARBIT';		
+                return 'VARBIT';
             case 'boolean':
                 return 'BOOLEAN';
             case 'date':
@@ -130,9 +429,9 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
             case 'decimal':
                 $length = !empty($field['length']) ? $field['length'] : 18;
                 $scale = !empty($field['scale']) ? $field['scale'] : $this->conn->getAttribute(Doctrine_Core::ATTR_DECIMAL_PLACES);
-                return 'NUMERIC('.$length.','.$scale.')';
+                return 'NUMERIC(' . $length . ',' . $scale . ')';
         }
-        return $field['type'] . (isset($field['length']) ? '('.$field['length'].')':null);
+        return $field['type'] . (isset($field['length']) ? '(' . $field['length'] . ')' : null);
     }
 
     /**
@@ -154,7 +453,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
         $type = [];
         $unsigned = $fixed = null;
 
-        if ( ! isset($field['name'])) {
+        if (! isset($field['name'])) {
             $field['name'] = '';
         }
 
@@ -163,19 +462,19 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
         // Default from field for enum support
         $default = $field['default'] ?? null;
         $enumName = null;
-        if (strpos($dbType, 'enum') !== false){
+        if (strpos($dbType, 'enum') !== false) {
             $enumName = $dbType;
             $dbType = 'enum';
         }
 
         switch ($dbType) {
-    	    case 'inet':
-                    $type[] = 'inet';
-    		break;
-    	    case 'bit':
-    	    case 'varbit':
-                    $type[] = 'bit';
-    		break;
+            case 'inet':
+                $type[] = 'inet';
+                break;
+            case 'bit':
+            case 'varbit':
+                $type[] = 'bit';
+                break;
             case 'smallint':
             case 'int2':
                 $type[] = 'integer';
@@ -236,7 +535,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
             case 'enum':
                 $type[] = 'enum';
                 $length = $length ?: 255;
-                if($default) {
+                if ($default) {
                     $default = preg_replace('/\'(\w+)\'.*/', '${1}', $default);
                 }
                 break;
@@ -299,7 +598,12 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
                 $length = $field['length'] ?? null;
         }
 
-        $ret = ['type'     => $type, 'length'   => $length, 'unsigned' => $unsigned, 'fixed'    => $fixed];
+        $ret = [
+            'type'     => $type,
+            'length'   => $length,
+            'unsigned' => $unsigned,
+            'fixed'    => $fixed
+        ];
 
         // If this is postgresql enum type we will have non-null values here
         if ($default !== null) {
@@ -339,9 +643,9 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
         if ( ! empty($field['unsigned'])) {
             $this->conn->warnings[] = "unsigned integer field \"$name\" is being declared as signed integer";
         }
-        */
+         */
 
-        if ( ! empty($field['autoincrement'])) {
+        if (! empty($field['autoincrement'])) {
             $name = $this->conn->quoteIdentifier($name, true);
             return $name . ' ' . $this->getNativeDeclaration($field);
         }
@@ -361,7 +665,7 @@ class Doctrine_DataDict_Pgsql extends Doctrine_DataDict
         elseif (empty($field['notnull'])) {
             $default = ' DEFAULT NULL';
         }
-        */
+         */
 
         $notnull = empty($field['notnull']) ? '' : ' NOT NULL';
         $name = $this->conn->quoteIdentifier($name, true);

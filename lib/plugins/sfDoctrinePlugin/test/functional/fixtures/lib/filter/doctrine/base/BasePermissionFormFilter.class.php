@@ -9,9 +9,17 @@ abstract class BasePermissionFormFilter extends BaseFormFilterDoctrine
 {
     public function setup()
     {
-        $this->setWidgets(['name'        => new sfWidgetFormFilterInput(), 'users_list'  => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'User']), 'groups_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group'])]);
+        $this->setWidgets([
+            'name' => new sfWidgetFormFilterInput(),
+            'users_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'User']),
+            'groups_list' => new sfWidgetFormDoctrineChoice(['multiple' => true, 'model' => 'Group']),
+        ]);
 
-        $this->setValidators(['name'        => new sfValidatorPass(['required' => false]), 'users_list'  => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'User', 'required' => false]), 'groups_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false])]);
+        $this->setValidators([
+            'name' => new sfValidatorPass(['required' => false]),
+            'users_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'User', 'required' => false]),
+            'groups_list' => new sfValidatorDoctrineChoice(['multiple' => true, 'model' => 'Group', 'required' => false]),
+        ]);
 
         $this->widgetSchema->setNameFormat('permission_filters[%s]');
 
@@ -33,9 +41,9 @@ abstract class BasePermissionFormFilter extends BaseFormFilterDoctrine
         }
 
         $query
-      ->leftJoin($query->getRootAlias().'.UserPermission UserPermission')
-      ->andWhereIn('UserPermission.user_id', $values)
-    ;
+          ->leftJoin($query->getRootAlias().'.UserPermission UserPermission')
+          ->andWhereIn('UserPermission.user_id', $values)
+        ;
     }
 
     public function addGroupsListColumnQuery(Doctrine_Query $query, $field, $values)
@@ -49,9 +57,9 @@ abstract class BasePermissionFormFilter extends BaseFormFilterDoctrine
         }
 
         $query
-      ->leftJoin($query->getRootAlias().'.GroupPermission GroupPermission')
-      ->andWhereIn('GroupPermission.group_id', $values)
-    ;
+          ->leftJoin($query->getRootAlias().'.GroupPermission GroupPermission')
+          ->andWhereIn('GroupPermission.group_id', $values)
+        ;
     }
 
     public function getModelName()
@@ -61,6 +69,11 @@ abstract class BasePermissionFormFilter extends BaseFormFilterDoctrine
 
     public function getFields()
     {
-        return ['id'          => 'Number', 'name'        => 'Text', 'users_list'  => 'ManyKey', 'groups_list' => 'ManyKey'];
+        return [
+            'id' => 'Number',
+            'name' => 'Text',
+            'users_list' => 'ManyKey',
+            'groups_list' => 'ManyKey',
+        ];
     }
 }

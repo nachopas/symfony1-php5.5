@@ -296,11 +296,10 @@ class Doctrine_Migration
     {
         if (empty($this->_migrationClasses)) {
             return 1;
-        } else {
-            $nums = array_keys($this->_migrationClasses);
-            $num = end($nums) + 1;
-            return $num;
         }
+        $nums = array_keys($this->_migrationClasses);
+        $num = end($nums) + 1;
+        return $num;
     }
 
     /**
@@ -338,22 +337,19 @@ class Doctrine_Migration
 
             if ($dryRun) {
                 return false;
-            } else {
-                $this->_throwErrorsException();
             }
+            $this->_throwErrorsException();
         } else {
             if ($dryRun) {
                 $this->_connection->rollback();
                 if ($this->hasErrors()) {
                     return false;
-                } else {
-                    return $to;
                 }
-            } else {
-                $this->_connection->commit();
-                $this->setCurrentVersion($to);
                 return $to;
             }
+            $this->_connection->commit();
+            $this->setCurrentVersion($to);
+            return $to;
         }
         return false;
     }

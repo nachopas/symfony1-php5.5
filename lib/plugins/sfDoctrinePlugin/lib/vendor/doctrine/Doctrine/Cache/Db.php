@@ -171,9 +171,22 @@ class Doctrine_Cache_Db extends Doctrine_Cache_Driver
     {
         $name = $this->_options['tableName'];
 
-        $fields = ['id' => ['type'   => 'string', 'length' => 255], 'data' => ['type'    => 'blob'], 'expire' => ['type'    => 'timestamp']];
+        $fields = [
+            'id' => [
+                'type'   => 'string',
+                'length' => 255
+            ],
+            'data' => [
+                'type'    => 'blob'
+            ],
+            'expire' => [
+                'type'    => 'timestamp'
+            ]
+        ];
 
-        $options = ['primary' => ['id']];
+        $options = [
+            'primary' => ['id']
+        ];
 
         $this->getConnection()->export->createTable($name, $fields, $options);
     }

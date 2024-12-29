@@ -105,9 +105,8 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
     {
         if ($type === null) {
             return $this->_stmt->bindColumn($column, $param);
-        } else {
-            return $this->_stmt->bindColumn($column, $param, $type);
         }
+        return $this->_stmt->bindColumn($column, $param, $type);
     }
 
     /**
@@ -128,9 +127,8 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
     {
         if ($type === null) {
             return $this->_stmt->bindValue($param, $value);
-        } else {
-            return $this->_stmt->bindValue($param, $value, $type);
         }
+        return $this->_stmt->bindValue($param, $value, $type);
     }
 
     /**
@@ -164,9 +162,8 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
     {
         if ($type === null) {
             return $this->_stmt->bindParam($column, $variable);
-        } else {
-            return $this->_stmt->bindParam($column, $variable, $type, $length, $driverOptions);
         }
+        return $this->_stmt->bindParam($column, $variable, $type, $length, $driverOptions);
     }
 
     /**
@@ -239,7 +236,7 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
             $this->_conn->getListener()->preStmtExecute($event);
 
             $result = true;
-            if ( ! $event->skipOperation) {
+            if (! $event->skipOperation) {
 
                 if ($this->_conn->getAttribute(Doctrine_Core::ATTR_PORTABILITY) & Doctrine_Core::PORTABILITY_EMPTY_TO_NULL) {
                     foreach ($params as $key => $value) {
@@ -272,13 +269,13 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
             //fix a possible "ORA-01000: maximum open cursors exceeded" when many non-SELECTs are executed and the profiling is enabled
             if ('Oracle' == $this->getConnection()->getDriverName()) {
                 $queryBeginningSubstring = strtoupper(substr(ltrim($this->_stmt->queryString), 0, 6));
-                if ($queryBeginningSubstring != 'SELECT' && substr($queryBeginningSubstring, 0, 4) != 'WITH' ){
+                if ($queryBeginningSubstring != 'SELECT' && substr($queryBeginningSubstring, 0, 4) != 'WITH') {
                     $this->closeCursor();
                 }
             }
 
             return $result;
-        } catch (PDOException|Doctrine_Adapter_Exception $e) {
+        } catch (PDOException | Doctrine_Adapter_Exception $e) {
         }
 
         $this->_conn->rethrowException($e, $this);
@@ -313,10 +310,11 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
      *
      * @return mixed
      */
-    public function fetch($fetchMode = Doctrine_Core::FETCH_BOTH,
-                          $cursorOrientation = Doctrine_Core::FETCH_ORI_NEXT,
-                          $cursorOffset = null)
-    {
+    public function fetch(
+        $fetchMode = Doctrine_Core::FETCH_BOTH,
+        $cursorOrientation = Doctrine_Core::FETCH_ORI_NEXT,
+        $cursorOffset = null
+    ) {
         $event = new Doctrine_Event($this, Doctrine_Event::STMT_FETCH, $this->getQuery());
 
         $event->fetchMode = $fetchMode;
@@ -325,7 +323,7 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
 
         $data = $this->_conn->getListener()->preFetch($event);
 
-        if ( ! $event->skipOperation) {
+        if (! $event->skipOperation) {
             $data = $this->_stmt->fetch($fetchMode, $cursorOrientation, $cursorOffset);
         }
 
@@ -347,16 +345,17 @@ class Doctrine_Connection_Statement implements Doctrine_Adapter_Statement_Interf
      *
      * @return array
      */
-    public function fetchAll($fetchMode = Doctrine_Core::FETCH_BOTH,
-                             $columnIndex = null)
-    {
+    public function fetchAll(
+        $fetchMode = Doctrine_Core::FETCH_BOTH,
+        $columnIndex = null
+    ) {
         $event = new Doctrine_Event($this, Doctrine_Event::STMT_FETCHALL, $this->getQuery());
         $event->fetchMode = $fetchMode;
         $event->columnIndex = $columnIndex;
 
         $this->_conn->getListener()->preFetchAll($event);
 
-        if ( ! $event->skipOperation) {
+        if (! $event->skipOperation) {
             if ($columnIndex !== null) {
                 $data = $this->_stmt->fetchAll($fetchMode, $columnIndex);
             } else {

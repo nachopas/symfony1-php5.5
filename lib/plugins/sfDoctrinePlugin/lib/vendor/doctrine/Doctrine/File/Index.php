@@ -31,17 +31,34 @@ class Doctrine_File_Index extends Doctrine_Record
 {
     public function setTableDefinition()
     {
-        $this->hasColumn('keyword', 'string', 255, ['notnull' => true, 'primary' => true]);
-                                                         
-        $this->hasColumn('field', 'string', 50, ['notnull' => true, 'primary' => true]);
+        $this->hasColumn('keyword', 'string', 255, [
+            'notnull' => true,
+            'primary' => true
+        ]);
 
-        $this->hasColumn('position', 'string', 255, ['notnull' => true, 'primary' => true]);
-                                                          
-        $this->hasColumn('file_id', 'integer', 8, ['notnull' => true, 'primary' => true]);
+        $this->hasColumn('field', 'string', 50, [
+            'notnull' => true,
+            'primary' => true
+        ]);
+
+        $this->hasColumn('position', 'string', 255, [
+            'notnull' => true,
+            'primary' => true
+        ]);
+
+        $this->hasColumn('file_id', 'integer', 8, [
+            'notnull' => true,
+            'primary' => true
+        ]);
     }
 
     public function setUp()
     {
-        $this->hasOne('Doctrine_File', ['local' => 'file_id', 'foreign' => 'id', 'onDelete' => 'CASCADE', 'onUpdate' => 'CASCADE']);
+        $this->hasOne('Doctrine_File', [
+            'local' => 'file_id',
+            'foreign' => 'id',
+            'onDelete' => 'CASCADE',
+            'onUpdate' => 'CASCADE'
+        ]);
     }
 }

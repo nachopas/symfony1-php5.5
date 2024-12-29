@@ -29,12 +29,26 @@
  */
 class Doctrine_I18n extends Doctrine_Record_Generator
 {
-    protected $_options = ['className'     => '%CLASS%Translation', 'tableName'     => '%TABLE%_translation', 'fields'        => [], 'generateFiles' => false, 'table'         => false, 'pluginTable'   => false, 'children'      => [], 'i18nField'     => 'lang', 'type'          => 'string', 'length'        => 2, 'options'       => [], 'cascadeDelete' => true, 'appLevelDelete'=> false];
+    protected $_options = [
+        'className'     => '%CLASS%Translation',
+        'tableName'     => '%TABLE%_translation',
+        'fields'        => [],
+        'generateFiles' => false,
+        'table'         => false,
+        'pluginTable'   => false,
+        'children'      => [],
+        'i18nField'     => 'lang',
+        'type'          => 'string',
+        'length'        => 2,
+        'options'       => [],
+        'cascadeDelete' => true,
+        'appLevelDelete' => false,
+    ];
 
     /**
      * __construct
      *
-     * @param string $options 
+     * @param string $options
      * @return void
      */
     public function __construct($options)
@@ -56,9 +70,9 @@ class Doctrine_I18n extends Doctrine_Record_Generator
      */
     public function setTableDefinition()
     {
-      	if (empty($this->_options['fields'])) {
-      	    throw new Doctrine_I18n_Exception('Fields not set.');
-      	}
+        if (empty($this->_options['fields'])) {
+            throw new Doctrine_I18n_Exception('Fields not set.');
+        }
 
         $options = ['className' => $this->_options['className']];
 
@@ -78,26 +92,29 @@ class Doctrine_I18n extends Doctrine_Record_Generator
 
         $this->hasColumns($columns);
 
-        $defaultOptions = ['fixed' => true, 'primary' => true];
+        $defaultOptions = [
+            'fixed' => true,
+            'primary' => true
+        ];
         $options = array_merge($defaultOptions, $this->_options['options']);
 
         $this->hasColumn($this->_options['i18nField'], $this->_options['type'], $this->_options['length'], $options);
 
         $this->bindQueryParts(['indexBy' => $this->_options['i18nField']]);
- 
+
         // Rewrite any relations to our original table
         $originalName = $this->_options['table']->getClassnameToReturn();
         $relations = $this->_options['table']->getRelationParser()->getPendingRelations();
-        foreach($relations as $table => $relation) {
-            if ($table != $this->_table->getTableName() ) {
+        foreach ($relations as $table => $relation) {
+            if ($table != $this->_table->getTableName()) {
                 // check that the localColumn is part of the moved col
                 if (isset($relation['local']) && in_array($relation['local'], $this->_options['fields'])) {
                     // found one, let's rewrite it
                     $this->_options['table']->getRelationParser()->unsetPendingRelations($table);
-        
+
                     // and bind the rewritten one
                     $this->_table->getRelationParser()->bind($table, $relation);
-        
+
                     // now try to get the reverse relation, to rewrite it
                     $rp = Doctrine_Core::getTable($table)->getRelationParser();
                     $others = $rp->getPendingRelation($originalName);
@@ -105,7 +122,7 @@ class Doctrine_I18n extends Doctrine_Record_Generator
                         $others['class'] = $this->_table->getClassnameToReturn();
                         $others['alias'] = $this->_table->getClassnameToReturn();
                         $rp->unsetPendingRelations($originalName);
-                        $rp->bind($this->_table->getClassnameToReturn() ,$others);
+                        $rp->bind($this->_table->getClassnameToReturn(), $others);
                     }
                 }
             }

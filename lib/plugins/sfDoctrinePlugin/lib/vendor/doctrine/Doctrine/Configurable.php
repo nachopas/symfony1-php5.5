@@ -46,7 +46,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      *                                      implementation classes
      */
     protected $_impl = [];
-    
+
     /**
      * @var array $_params                  an array of user defined parameters
      */
@@ -74,7 +74,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
                 $this->setEventListener($value);
                 break;
             case Doctrine_Core::ATTR_COLL_KEY:
-                if ( ! ($this instanceof Doctrine_Table)) {
+                if (! ($this instanceof Doctrine_Table)) {
                     throw new Doctrine_Exception("This attribute can only be set at table level.");
                 }
                 if ($value !== null && ! $this->hasField($value)) {
@@ -85,13 +85,13 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
             case Doctrine_Core::ATTR_RESULT_CACHE:
             case Doctrine_Core::ATTR_QUERY_CACHE:
                 if ($value !== null) {
-                    if ( ! ($value instanceof Doctrine_Cache_Interface)) {
+                    if (! ($value instanceof Doctrine_Cache_Interface)) {
                         throw new Doctrine_Exception('Cache driver should implement Doctrine_Cache_Interface');
                     }
                 }
                 break;
             case Doctrine_Core::ATTR_SEQCOL_NAME:
-                if ( ! is_string($value)) {
+                if (! is_string($value)) {
                     throw new Doctrine_Exception('Sequence column name attribute only accepts string values');
                 }
                 break;
@@ -105,7 +105,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
             case Doctrine_Core::ATTR_FKNAME_FORMAT:
                 if ($this instanceof Doctrine_Table) {
                     throw new Doctrine_Exception('Sequence / index name format attributes cannot be set'
-                                               . 'at table level (only at connection or global level).');
+                        . 'at table level (only at connection or global level).');
                 }
                 break;
         }
@@ -115,46 +115,46 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
 
     public function getParams($namespace = null)
     {
-    	if ($namespace == null) {
-    	    $namespace = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_PARAM_NAMESPACE);
-    	}
-    	
-    	if ( ! isset($this->_params[$namespace])) {
-    	    return null;
-    	}
+        if ($namespace == null) {
+            $namespace = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_PARAM_NAMESPACE);
+        }
+
+        if (! isset($this->_params[$namespace])) {
+            return null;
+        }
 
         return $this->_params[$namespace];
     }
-    
+
     public function getParamNamespaces()
     {
         return array_keys($this->_params);
     }
 
-    public function setParam($name, $value, $namespace = null) 
+    public function setParam($name, $value, $namespace = null)
     {
-    	if ($namespace == null) {
-    	    $namespace = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_PARAM_NAMESPACE);
-    	}
-    	
-    	$this->_params[$namespace][$name] = $value;
-    	
-    	return $this;
+        if ($namespace == null) {
+            $namespace = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_PARAM_NAMESPACE);
+        }
+
+        $this->_params[$namespace][$name] = $value;
+
+        return $this;
     }
-    
-    public function getParam($name, $namespace = null) 
+
+    public function getParam($name, $namespace = null)
     {
-    	if ($namespace == null) {
-    	    $namespace = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_PARAM_NAMESPACE);
-    	}
-    	
-        if ( ! isset($this->_params[$namespace][$name])) {
+        if ($namespace == null) {
+            $namespace = $this->getAttribute(Doctrine_Core::ATTR_DEFAULT_PARAM_NAMESPACE);
+        }
+
+        if (! isset($this->_params[$namespace][$name])) {
             if (isset($this->parent)) {
                 return $this->parent->getParam($name, $namespace);
             }
             return null;
         }
-        
+
         return $this->_params[$namespace][$name];
     }
 
@@ -183,7 +183,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function getImpl($template)
     {
-        if ( ! isset($this->_impl[$template])) {
+        if (!isset($this->_impl[$template])) {
             if (isset($this->parent)) {
                 return $this->parent->getImpl($template);
             }
@@ -191,11 +191,10 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
         }
         return $this->_impl[$template];
     }
-    
-    
+
     public function hasImpl($template)
     {
-        if ( ! isset($this->_impl[$template])) {
+        if (!isset($this->_impl[$template])) {
             if (isset($this->parent)) {
                 return $this->parent->hasImpl($template);
             }
@@ -221,8 +220,10 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function addRecordListener($listener, $name = null)
     {
-        if ( ! isset($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER]) ||
-             ! ($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER] instanceof Doctrine_Record_Listener_Chain)) {
+        if (
+            !isset($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER]) ||
+            !($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER] instanceof Doctrine_Record_Listener_Chain)
+        ) {
 
             $this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER] = new Doctrine_Record_Listener_Chain();
         }
@@ -238,7 +239,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function getRecordListener()
     {
-        if ( ! isset($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER])) {
+        if (!isset($this->attributes[Doctrine_Core::ATTR_RECORD_LISTENER])) {
             if (isset($this->parent)) {
                 return $this->parent->getRecordListener();
             }
@@ -255,7 +256,8 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function setRecordListener($listener)
     {
-        if ( ! ($listener instanceof Doctrine_Record_Listener_Interface)
+        if (
+            !($listener instanceof Doctrine_Record_Listener_Interface)
             && ! ($listener instanceof Doctrine_Overloadable)
         ) {
             throw new Doctrine_Exception("Couldn't set eventlistener. Record listeners should implement either Doctrine_Record_Listener_Interface or Doctrine_Overloadable");
@@ -273,8 +275,10 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function addListener($listener, $name = null)
     {
-        if ( ! isset($this->attributes[Doctrine_Core::ATTR_LISTENER]) ||
-             ! ($this->attributes[Doctrine_Core::ATTR_LISTENER] instanceof Doctrine_EventListener_Chain)) {
+        if (
+            !isset($this->attributes[Doctrine_Core::ATTR_LISTENER]) ||
+            !($this->attributes[Doctrine_Core::ATTR_LISTENER] instanceof Doctrine_EventListener_Chain)
+        ) {
 
             $this->attributes[Doctrine_Core::ATTR_LISTENER] = new Doctrine_EventListener_Chain();
         }
@@ -290,7 +294,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function getListener()
     {
-        if ( ! isset($this->attributes[Doctrine_Core::ATTR_LISTENER])) {
+        if (!isset($this->attributes[Doctrine_Core::ATTR_LISTENER])) {
             if (isset($this->parent)) {
                 return $this->parent->getListener();
             }
@@ -307,7 +311,8 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
      */
     public function setListener($listener)
     {
-        if ( ! ($listener instanceof Doctrine_EventListener_Interface)
+        if (
+            ! ($listener instanceof Doctrine_EventListener_Interface)
             && ! ($listener instanceof Doctrine_Overloadable)
         ) {
             throw new Doctrine_EventListener_Exception("Couldn't set eventlistener. EventListeners should implement either Doctrine_EventListener_Interface or Doctrine_Overloadable");
@@ -328,7 +333,7 @@ abstract class Doctrine_Configurable extends Doctrine_Locator_Injectable
         if (isset($this->attributes[$attribute])) {
             return $this->attributes[$attribute];
         }
-        
+
         if (isset($this->parent)) {
             return $this->parent->getAttribute($attribute);
         }

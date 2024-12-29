@@ -287,10 +287,9 @@ class Doctrine_Expression_Driver extends Doctrine_Connection_Module
         $value = $this->getIdentifier($value);
         if ($len === null)
             return 'SUBSTRING(' . $value . ' FROM ' . $from . ')';
-        else {
-            $len = $this->getIdentifier($len);
-            return 'SUBSTRING(' . $value . ' FROM ' . $from . ' FOR ' . $len . ')';
-        }
+
+        $len = $this->getIdentifier($len);
+        return 'SUBSTRING(' . $value . ' FROM ' . $from . ' FOR ' . $len . ')';
     }
 
     /**
@@ -339,9 +338,8 @@ class Doctrine_Expression_Driver extends Doctrine_Connection_Module
         }
         if (count($elements) == 1) {
             return $elements[0];
-        } else {
-            return '(' . implode(' ' . $type . ' ', $elements) . ')';
         }
+        return '(' . implode(' ' . $type . ' ', $elements) . ')';
     }
 
     /**
@@ -587,7 +585,7 @@ class Doctrine_Expression_Driver extends Doctrine_Connection_Module
     /**
      * sin
      *
-     * @param string $value 
+     * @param string $value
      * @return void
      */
     public function sin($value)
@@ -608,7 +606,7 @@ class Doctrine_Expression_Driver extends Doctrine_Connection_Module
     /**
      * cos
      *
-     * @param string $value 
+     * @param string $value
      * @return void
      */
     public function cos($value)
@@ -633,7 +631,7 @@ class Doctrine_Expression_Driver extends Doctrine_Connection_Module
      *
      * for all native RDBMS functions the function name itself is returned
      */
-    public function __call($m, $a) 
+    public function __call($m, $a)
     {
         if ($this->conn->getAttribute(Doctrine_Core::ATTR_PORTABILITY) & Doctrine_Core::PORTABILITY_EXPR) {
             throw new Doctrine_Expression_Exception('Unknown expression: ' . $m);

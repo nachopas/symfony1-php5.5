@@ -94,11 +94,11 @@ abstract class Doctrine_Hydrator_Abstract extends Doctrine_Locator_Injectable
      * (I.e. ORACLE limit/offset emulation adds doctrine_rownum to the result set).
      *
      * @param string $name
-     * @return bool
+     * @return boolean
      */
     protected function _isIgnoredName($name)
     {
-        return $name === 'DOCTRINE_ROWNUM';
+        return $name == 'DOCTRINE_ROWNUM';
     }
 
     /**
@@ -111,6 +111,7 @@ abstract class Doctrine_Hydrator_Abstract extends Doctrine_Locator_Injectable
      * The key idea is the loop over the rowset only once doing all the needed operations
      * within this massive loop.
      *
+     * @param mixed $stmt
      * @return mixed
      */
     abstract public function hydrateResultSet($stmt);

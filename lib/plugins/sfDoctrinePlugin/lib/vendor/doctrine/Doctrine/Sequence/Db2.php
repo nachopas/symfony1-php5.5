@@ -42,10 +42,10 @@ class Doctrine_Sequence_Db2 extends Doctrine_Sequence
     {
         $sequenceName = $this->conn->quoteIdentifier($this->conn->formatter->getSequenceName($seqName), true);
         $query = 'SELECT NEXTVAL FOR ' . $sequenceName . ' AS VAL FROM SYSIBM.SYSDUMMY1';
-        
+
         try {
             $result = $this->conn->fetchOne($query);
-            $result = ($result) ? $result['VAL'] : null; 
+            $result = ($result) ? $result['VAL'] : null;
         } catch(Doctrine_Connection_Exception $e) {
             if ($onDemand && $e->getPortableCode() == Doctrine_Core::ERR_NOSUCHTABLE) {
                 try {
@@ -53,15 +53,14 @@ class Doctrine_Sequence_Db2 extends Doctrine_Sequence
                 } catch(Doctrine_Exception $e) {
                     throw new Doctrine_Sequence_Exception('on demand sequence ' . $seqName . ' could not be created');
                 }
-                
+
                 return $this->nextId($seqName, false);
-            } else {
-                throw new Doctrine_Sequence_Exception('sequence ' .$seqName . ' does not exist');
             }
+            throw new Doctrine_Sequence_Exception('sequence ' .$seqName . ' does not exist');
         }
         return $result;
     }
-    
+
     /**
      * Return the most recent value from the specified sequence in the database.
      * This is supported only on RDBMS brands that support sequences
@@ -81,9 +80,8 @@ class Doctrine_Sequence_Db2 extends Doctrine_Sequence
         $result = $stmt->fetchAll(Doctrine_Core::FETCH_ASSOC);
         if ($result) {
             return $result[0]['VAL'];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
@@ -122,8 +120,7 @@ class Doctrine_Sequence_Db2 extends Doctrine_Sequence
         $result = $stmt->fetchAll(Doctrine_Core::FETCH_ASSOC);
         if ($result) {
             return $result[0]['VAL'];
-        } else {
-            return null;
         }
+        return null;
     }
 }

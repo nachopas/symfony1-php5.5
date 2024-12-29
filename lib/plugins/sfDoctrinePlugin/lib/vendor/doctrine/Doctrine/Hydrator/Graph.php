@@ -157,7 +157,8 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
                 if ($field = $this->_getCustomIndexField($rootAlias)) {
                     if ( ! isset($element[$field])) {
                         throw new Doctrine_Hydrator_Exception("Couldn't hydrate. Found a non-existent key named '$field'.");
-                    } else if (isset($result[$element[$field]])) {
+                    }
+                    if (isset($result[$element[$field]])) {
                         throw new Doctrine_Hydrator_Exception("Couldn't hydrate. Found non-unique key mapping named '{$element[$field]}' for the field named '$field'.");
                     }
                     $result[$element[$field]] = $element;
@@ -226,7 +227,8 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
                             if ($field = $this->_getCustomIndexField($dqlAlias)) {
                                 if ( ! isset($element[$field])) {
                                     throw new Doctrine_Hydrator_Exception("Couldn't hydrate. Found a non-existent key named '$field'.");
-                                } else if (isset($prev[$parent][$relationAlias][$element[$field]])) {
+                                }
+                                if (isset($prev[$parent][$relationAlias][$element[$field]])) {
                                     throw new Doctrine_Hydrator_Exception("Couldn't hydrate. Found non-unique key mapping named '$field'.");
                                 }
                                 $prev[$parent][$relationAlias][$element[$field]] = $element;
@@ -416,9 +418,8 @@ abstract class Doctrine_Hydrator_Graph extends Doctrine_Hydrator_Abstract
                 $key = $this->_tables[$component]->getFieldName($key);
                 if ( ! isset($data[$key]) || $data[$key] != $value) {
                   continue;
-                } else {
-                  $matchedComponents[] = $table->getComponentName();
                 }
+                $matchedComponents[] = $table->getComponentName();
               }
             }
         }

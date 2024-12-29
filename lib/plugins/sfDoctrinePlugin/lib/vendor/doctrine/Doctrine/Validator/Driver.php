@@ -67,7 +67,7 @@ class Doctrine_Validator_Driver
     public function __set($arg, $value)
     {
         $this->args[$arg] = $value;
-        
+
         return $this;
     }
 
@@ -82,7 +82,7 @@ class Doctrine_Validator_Driver
         if ( ! isset($this->args[$arg])) {
             throw new Doctrine_Validator_Exception('Unknown option ' . $arg);
         }
-        
+
         return $this->args[$arg];
     }
 
@@ -96,7 +96,7 @@ class Doctrine_Validator_Driver
     public function setArg($arg, $value)
     {
         $this->args[$arg] = $value;
-        
+
         return $this;
     }
 
@@ -113,7 +113,7 @@ class Doctrine_Validator_Driver
     public function __toString()
     {
         $className = get_class($this);
-        if (strpos($className, 'Doctrine_Validator_') === 0) { 
+        if (strpos($className, 'Doctrine_Validator_') === 0) {
             return strtolower(substr($className, 19));
         }
         return $className;

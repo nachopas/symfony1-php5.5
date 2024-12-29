@@ -147,14 +147,14 @@ END;
         $down = [];
 
         if ( ! empty($changes['dropped_tables'])) {
-            foreach ($changes['dropped_tables'] as $tableName => $table) {
+            foreach ($changes['dropped_tables'] as $table) {
                 $up[] = $this->buildDropTable($table);
                 $down[] = $this->buildCreateTable($table);
             }
         }
 
         if ( ! empty($changes['created_tables'])) {
-            foreach ($changes['created_tables'] as $tableName => $table) {
+            foreach ($changes['created_tables'] as $table) {
                 $up[] = $this->buildCreateTable($table);
                 $down[] = $this->buildDropTable($table);
             }
@@ -197,11 +197,11 @@ END;
         $down = [];
         if ( ! empty($changes['dropped_foreign_keys'])) {
             foreach ($changes['dropped_foreign_keys'] as $tableName => $droppedFks) {
-                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) { 
-                    continue; 
+                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) {
+                    continue;
                 }
 
-                foreach ($droppedFks as $name => $foreignKey) {
+                foreach ($droppedFks as $foreignKey) {
                     $up[] = $this->buildDropForeignKey($tableName, $foreignKey);
                     $down[] = $this->buildCreateForeignKey($tableName, $foreignKey);
                 }
@@ -210,8 +210,8 @@ END;
 
         if ( ! empty($changes['dropped_indexes'])) {
             foreach ($changes['dropped_indexes'] as $tableName => $removedIndexes) {
-                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) { 
-                    continue; 
+                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) {
+                    continue;
                 }
 
                 foreach ($removedIndexes as $name => $index) {
@@ -223,11 +223,11 @@ END;
 
         if ( ! empty($changes['created_foreign_keys'])) {
             foreach ($changes['created_foreign_keys'] as $tableName => $createdFks) {
-                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) { 
-                    continue; 
+                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) {
+                    continue;
                 }
 
-                foreach ($createdFks as $name => $foreignKey) {
+                foreach ($createdFks as $foreignKey) {
                     $up[] = $this->buildCreateForeignKey($tableName, $foreignKey);
                     $down[] = $this->buildDropForeignKey($tableName, $foreignKey);
                 }
@@ -236,8 +236,8 @@ END;
 
         if ( ! empty($changes['created_indexes'])) {
             foreach ($changes['created_indexes'] as $tableName => $addedIndexes) {
-                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) { 
-                    continue; 
+                if ( ! empty($changes['dropped_tables']) && isset($changes['dropped_tables'][$tableName])) {
+                    continue;
                 }
 
                 foreach ($addedIndexes as $name => $index) {
@@ -489,28 +489,22 @@ END;
 
         if ($return || ! $this->getMigrationsPath()) {
             return $this->buildMigrationClass($className, null, $options, $up, $down);
-        } else {
-            if ( ! $this->getMigrationsPath()) {
-                throw new Doctrine_Migration_Exception('You must specify the path to your migrations.');
-            }
-
-            $next = time() + $this->migration->getNextMigrationClassVersion();
-            $fileName = $next . '_' . Doctrine_Inflector::tableize($className) . $this->suffix;
-
-            $class = $this->buildMigrationClass($className, $fileName, $options, $up, $down);
-
-            $path = $this->getMigrationsPath() . DIRECTORY_SEPARATOR . $fileName;
-            if (class_exists($className) || file_exists($path)) {
-                $this->migration->loadMigrationClass($className);
-                return false;
-            }
-
-            file_put_contents($path, $class);
-            require_once($path);
-            $this->migration->loadMigrationClass($className);
-
-            return true;
         }
+        if ( ! $this->getMigrationsPath()) {
+            throw new Doctrine_Migration_Exception('You must specify the path to your migrations.');
+        }
+        $next = time() + $this->migration->getNextMigrationClassVersion();
+        $fileName = $next . '_' . Doctrine_Inflector::tableize($className) . $this->suffix;
+        $class = $this->buildMigrationClass($className, $fileName, $options, $up, $down);
+        $path = $this->getMigrationsPath() . DIRECTORY_SEPARATOR . $fileName;
+        if (class_exists($className) || file_exists($path)) {
+            $this->migration->loadMigrationClass($className);
+            return false;
+        }
+        file_put_contents($path, $class);
+        require_once($path);
+        $this->migration->loadMigrationClass($className);
+        return true;
     }
 
     /**

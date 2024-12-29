@@ -73,11 +73,13 @@ class sfDoctrinePluginConfiguration extends sfPluginConfiguration
             'baseClassName' => 'sfDoctrineRecord',
         ];
 
+        // for BC
+        $options = array_merge($options, sfConfig::get('doctrine_model_builder_options', []));
+
         // filter options through the dispatcher
         return $this->dispatcher
             ->filter(new sfEvent($this, 'doctrine.filter_model_builder_options'), $options)
-            ->getReturnValue()
-        ;
+            ->getReturnValue();
     }
 
     /**

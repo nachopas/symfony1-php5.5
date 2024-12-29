@@ -74,7 +74,7 @@ class Doctrine_Pager
     /**
      * __construct
      *
-     * @param mixed $query     Accepts either a Doctrine_Query object or a string 
+     * @param mixed $query     Accepts either a Doctrine_Query object or a string
      *                        (which does the Doctrine_Query class creation).
      * @param int $page     Current page
      * @param int $maxPerPage     Maximum itens per page
@@ -439,7 +439,7 @@ class Doctrine_Pager
      *
      * Defines the collector query to be used by pager
      *
-     * @param Doctrine_Query     Accepts either a Doctrine_Query object or a string 
+     * @param Doctrine_Query     Accepts either a Doctrine_Query object or a string
      *                           (which does the Doctrine_Query class creation).
      * @return void
      */
@@ -470,9 +470,9 @@ class Doctrine_Pager
      *
      * Defines the counter query to be used by pager
      *
-     * @param Doctrine_Query  Accepts either a Doctrine_Query object or a string 
+     * @param Doctrine_Query  Accepts either a Doctrine_Query object or a string
      *                        (which does the Doctrine_Query class creation).
-     * @param array           Optional params to be used by counter Doctrine_Query. 
+     * @param array           Optional params to be used by counter Doctrine_Query.
      *                        If not defined, the params passed to execute method will be used.
      * @return void
      */
@@ -507,7 +507,7 @@ class Doctrine_Pager
      *
      * Defines the params to be used by counter Doctrine_Query
      *
-     * @param array       Optional params to be used by counter Doctrine_Query. 
+     * @param array       Optional params to be used by counter Doctrine_Query.
      *                    If not defined, the params passed to execute method will be used.
      * @param boolean     Optional argument that append the query param instead of overriding the existent ones.
      * @return void
@@ -541,7 +541,7 @@ class Doctrine_Pager
         if ( !$this->getExecuted()) {
             $this->_initialize($params);
         }
-        
+
         return $this->getQuery()->execute($params, $hydrationMode);
     }
 }

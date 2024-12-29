@@ -91,14 +91,14 @@ class Doctrine_Tree_NestedSet extends Doctrine_Tree implements Doctrine_Tree_Int
                         . " be created as a root node. Automatic assignment of a root id on"
                         . " transient/new records is no longer supported.");
             }
-            
+
             if ($record->exists() && ! $record->getNode()->getRootValue()) {
                 // Default: root_id = id
                 $identifier = $record->getTable()->getIdentifier();
                 $record->getNode()->setRootValue($record->get($identifier));
             }
         }
-        
+
         if ( ! $record) {
             $record = $this->table->create();
         }
@@ -170,8 +170,8 @@ class Doctrine_Tree_NestedSet extends Doctrine_Tree implements Doctrine_Tree_Int
             $q->addOrderBy($this->_baseAlias . ".lft ASC");
         }
 
-        if ( ! is_null($depth)) { 
-            $q->addWhere($this->_baseAlias . ".level BETWEEN ? AND ?", [0, $depth]); 
+        if ( ! is_null($depth)) {
+            $q->addWhere($this->_baseAlias . ".level BETWEEN ? AND ?", [0, $depth]);
         }
 
         $q = $this->returnQueryWithRootId($q, $rootId);
@@ -209,8 +209,8 @@ class Doctrine_Tree_NestedSet extends Doctrine_Tree implements Doctrine_Tree_Int
         $q->addWhere($this->_baseAlias . ".lft >= ? AND " . $this->_baseAlias . ".rgt <= ?", $params)
                 ->addOrderBy($this->_baseAlias . ".lft asc");
 
-        if ( ! is_null($depth)) { 
-            $q->addWhere($this->_baseAlias . ".level BETWEEN ? AND ?", [$record->get('level'), $record->get('level')+$depth]); 
+        if ( ! is_null($depth)) {
+            $q->addWhere($this->_baseAlias . ".level BETWEEN ? AND ?", [$record->get('level'), $record->get('level')+$depth]);
         }
 
         $q = $this->returnQueryWithRootId($q, $record->getNode()->getRootValue());

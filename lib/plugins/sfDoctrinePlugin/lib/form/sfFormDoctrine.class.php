@@ -245,7 +245,7 @@ abstract class sfFormDoctrine extends sfFormObject
 
         // update defaults for the main object
         if ($this->isNew()) {
-            $defaults = $defaults + $this->getObject()->toArray(false);
+            $defaults += $this->getObject()->toArray(false);
         } else {
             $defaults = $this->getObject()->toArray(false) + $defaults;
         }
@@ -316,15 +316,6 @@ abstract class sfFormDoctrine extends sfFormObject
 
         $directory = $this->validatorSchema[$field]->getOption('path');
         $filename = $this->getObject()->{$field};
-
-        // this is needed if the form is embedded, in which case
-        // the parent form has already changed the value of the field
-        if (!is_string($filename)) {
-            $oldValues = $this->getObject()->getModified(true, false);
-            if (isset($oldValues[$field])) {
-                $filename = $oldValues[$field];
-            }
-        }
 
         if ($directory && $filename && is_file($file = $directory.'/'.$filename)) {
             unlink($file);

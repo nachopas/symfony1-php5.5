@@ -615,9 +615,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 $message .= "    * " . count($errors) . " validator" . (count($errors) > 1 ?  's' : null) . " failed on $field (" . implode(", ", $errors) . ")\n";
             }
             return $message;
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -923,7 +922,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         }
 
         $err = false;
-        if (is_integer($state)) {
+        if (is_int($state)) {
             if ($state >= 1 && $state <= 7) {
                 $this->_state = $state;
             } else {
@@ -1395,9 +1394,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             }
             if ($success) {
                 return $value;
-            } else {
-                throw $e;
             }
+            throw $e;
         }
     }
 
@@ -1512,9 +1510,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 }
                 if ($success) {
                     return $value;
-                } else {
-                    throw $e;
                 }
+                throw $e;
             }
         }
 
@@ -1553,21 +1550,22 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
 
         if ($type == 'boolean' && (is_bool($old) || is_numeric($old)) && (is_bool($new) || is_numeric($new)) && $old == $new) {
             return false;
-        } else if (in_array($type, ['decimal', 'float']) && is_numeric($old) && is_numeric($new)) {
+        }
+        if (in_array($type, ['decimal', 'float']) && is_numeric($old) && is_numeric($new)) {
             return $old * 100 != $new * 100;
-        } else if (in_array($type, ['integer', 'int']) && is_numeric($old) && is_numeric($new)) {
+        }
+        if (in_array($type, ['integer', 'int']) && is_numeric($old) && is_numeric($new)) {
             return $old != $new;
-        } else if ($type == 'timestamp' || $type == 'date') {
+        }
+        if ($type == 'timestamp' || $type == 'date') {
             $oldStrToTime = strtotime($old);
             $newStrToTime = strtotime($new);
             if ($oldStrToTime && $newStrToTime) {
                 return $oldStrToTime !== $newStrToTime;
-            } else {
-                return $old !== $new;
             }
-        } else {
             return $old !== $new;
         }
+        return $old !== $new;
     }
 
     /**
@@ -2088,9 +2086,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     {
         if ($type == 'array') {
             return $this->toArray($deep);
-        } else {
-            return Doctrine_Parser::dump($this->toArray($deep, true), $type);
         }
+        return Doctrine_Parser::dump($this->toArray($deep, true), $type);
     }
 
     /**
@@ -2104,9 +2101,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     {
         if ($type == 'array') {
             return $this->fromArray($data, $deep);
-        } else {
-            return $this->fromArray(Doctrine_Parser::load($data, $type), $deep);
         }
+        return $this->fromArray(Doctrine_Parser::load($data, $type), $deep);
     }
 
     /**
@@ -2473,9 +2469,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 $this->_pendingUnlinks[$alias][$id] = true;
             }
             return $this;
-        } else {
-            return $this->unlinkInDb($alias, $ids);
         }
+        return $this->unlinkInDb($alias, $ids);
     }
 
     /**
@@ -2555,9 +2550,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             }
 
             return $this;
-        } else {
-            return $this->linkInDb($alias, $ids);
         }
+        return $this->linkInDb($alias, $ids);
     }
 
     /**
@@ -2700,7 +2694,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             $this->_id = [];
 
             if ($deep) {
-                foreach ($this->_references as $name => $reference) {
+                foreach ($this->_references as $reference) {
                     if ( ! ($reference instanceof Doctrine_Null)) {
                         $reference->free($deep);
                     }

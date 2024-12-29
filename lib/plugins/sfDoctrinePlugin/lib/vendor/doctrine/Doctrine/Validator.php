@@ -91,7 +91,8 @@ class Doctrine_Validator extends Doctrine_Locator_Injectable
         }
         if ($type == 'timestamp' || $type == 'integer' || $type == 'enum') {
             return true;
-        } else if ($type == 'array' || $type == 'object') {
+        }
+        if ($type == 'array' || $type == 'object') {
             $length = strlen(serialize($value));
         } else if ($type == 'decimal' || $type == 'float') {
             $value = abs($value);
@@ -101,7 +102,7 @@ class Doctrine_Validator extends Doctrine_Locator_Injectable
             $e = explode($decimalPoint, $value);
 
             $length = strlen($e[0]);
-            
+
             if (isset($e[1])) {
                 $length += strlen($e[1]);
             }
@@ -119,16 +120,15 @@ class Doctrine_Validator extends Doctrine_Locator_Injectable
     /**
      * Get length of passed string. Will use multibyte character functions if they exist
      *
-     * @param string $string 
+     * @param string $string
      * @return integer $length
      */
     public static function getStringLength($string)
     {
         if (function_exists('mb_strlen')) {
             return mb_strlen($string, 'utf8');
-        } else {
-            return strlen(utf8_decode($string));
         }
+        return strlen(utf8_decode($string));
     }
 
     /**
@@ -152,9 +152,11 @@ class Doctrine_Validator extends Doctrine_Locator_Injectable
      {
          if ($var instanceof Doctrine_Expression) {
              return true;
-         } else if ($var === null) {
+         }
+         if ($var === null) {
              return true;
-         } else if (is_object($var)) {
+         }
+         if (is_object($var)) {
              return $type == 'object';
          }
 

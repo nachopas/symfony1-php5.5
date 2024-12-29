@@ -42,16 +42,16 @@ class Doctrine_Task_BuildAllReload extends Doctrine_Task
 
         $this->rebuildDb = new Doctrine_Task_RebuildDb($this->dispatcher);
         $this->loadData = new Doctrine_Task_LoadData($this->dispatcher);
-        
+
         $this->requiredArguments = array_merge($this->requiredArguments, $this->rebuildDb->requiredArguments, $this->loadData->requiredArguments);
         $this->optionalArguments = array_merge($this->optionalArguments, $this->rebuildDb->optionalArguments, $this->loadData->optionalArguments);
     }
-    
+
     public function execute()
     {
         $this->rebuildDb->setArguments($this->getArguments());
         $this->rebuildDb->execute();
-        
+
         $this->loadData->setArguments($this->getArguments());
         $this->loadData->execute();
     }

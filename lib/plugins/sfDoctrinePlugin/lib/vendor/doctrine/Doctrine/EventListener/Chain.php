@@ -48,7 +48,7 @@ class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_E
     {
         if ( ! ($listener instanceof Doctrine_EventListener_Interface) &&
              ! ($listener instanceof Doctrine_Overloadable)) {
-            
+
             throw new Doctrine_EventListener_Exception("Couldn't add eventlistener. EventListeners should implement either Doctrine_EventListener_Interface or Doctrine_Overloadable");
         }
         if ($name === null) {
@@ -402,7 +402,7 @@ class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_E
     }
 
     public function preQuery(Doctrine_Event $event)
-    { 
+    {
         foreach ($this->_listeners as $listener) {
             $listener->preQuery($event);
         }
@@ -416,7 +416,7 @@ class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_E
     }
 
     public function prePrepare(Doctrine_Event $event)
-    { 
+    {
         foreach ($this->_listeners as $listener) {
             $listener->prePrepare($event);
         }
@@ -444,7 +444,7 @@ class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_E
     }
 
     public function preError(Doctrine_Event $event)
-    { 
+    {
         foreach ($this->_listeners as $listener) {
             $listener->preError($event);
         }
@@ -458,7 +458,7 @@ class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_E
     }
 
     public function preFetch(Doctrine_Event $event)
-    { 
+    {
         foreach ($this->_listeners as $listener) {
             $listener->preFetch($event);
         }
@@ -472,7 +472,7 @@ class Doctrine_EventListener_Chain extends Doctrine_Access implements Doctrine_E
     }
 
     public function preFetchAll(Doctrine_Event $event)
-    { 
+    {
         foreach ($this->_listeners as $listener) {
             $listener->preFetchAll($event);
         }

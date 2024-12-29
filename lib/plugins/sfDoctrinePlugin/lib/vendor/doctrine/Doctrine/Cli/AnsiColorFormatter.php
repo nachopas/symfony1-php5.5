@@ -40,7 +40,12 @@
 class Doctrine_Cli_AnsiColorFormatter extends Doctrine_Cli_Formatter
 {
     protected
-        $_styles = ['HEADER'  => ['fg' => 'black', 'bold' => true], 'ERROR'   => ['bg' => 'red', 'fg' => 'white', 'bold' => true], 'INFO'    => ['fg' => 'green', 'bold' => true], 'COMMENT' => ['fg' => 'yellow']],
+        $_styles = [
+            'HEADER'  => ['fg' => 'black', 'bold' => true],
+            'ERROR'   => ['bg' => 'red', 'fg' => 'white', 'bold' => true],
+            'INFO'    => ['fg' => 'green', 'bold' => true],
+            'COMMENT' => ['fg' => 'yellow'],
+        ],
         $_options    = ['bold' => 1, 'underscore' => 4, 'blink' => 5, 'reverse' => 7, 'conceal' => 8],
         $_foreground = ['black' => 30, 'red' => 31, 'green' => 32, 'yellow' => 33, 'blue' => 34, 'magenta' => 35, 'cyan' => 36, 'white' => 37],
         $_background = ['black' => 40, 'red' => 41, 'green' => 42, 'yellow' => 43, 'blue' => 44, 'magenta' => 45, 'cyan' => 46, 'white' => 47];
@@ -82,11 +87,11 @@ class Doctrine_Cli_AnsiColorFormatter extends Doctrine_Cli_Formatter
         if (isset($parameters['fg'])) {
             $codes[] = $this->_foreground[$parameters['fg']];
         }
-        
+
         if (isset($parameters['bg'])) {
             $codes[] = $this->_background[$parameters['bg']];
         }
-        
+
         foreach ($this->_options as $option => $value) {
             if (isset($parameters[$option]) && $parameters[$option]) {
                 $codes[] = $value;

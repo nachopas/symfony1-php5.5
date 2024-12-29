@@ -41,8 +41,7 @@ class Doctrine_Hydrator_SingleScalarDriver extends Doctrine_Hydrator_Abstract
         }
         if (count($result) === 1) {
             return $result[0];
-        } else {
-            return $result;
         }
+        return $result;
     }
 }

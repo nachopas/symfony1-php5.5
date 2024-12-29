@@ -31,14 +31,24 @@
 class Doctrine_Migration_Diff
 {
     protected $_from,
-              $_to,
-              $_changes = ['created_tables'      =>  [], 'dropped_tables'      =>  [], 'created_foreign_keys'=>  [], 'dropped_foreign_keys'=>  [], 'created_columns'     =>  [], 'dropped_columns'     =>  [], 'changed_columns'     =>  [], 'created_indexes'     =>  [], 'dropped_indexes'     =>  []],
-              $_migration,
-              $_startingModelFiles = [],
-              $_tmpPath;
+        $_to,
+        $_changes = [
+            'created_tables'      =>  [],
+            'dropped_tables'      =>  [],
+            'created_foreign_keys' =>  [],
+            'dropped_foreign_keys' =>  [],
+            'created_columns'     =>  [],
+            'dropped_columns'     =>  [],
+            'changed_columns'     =>  [],
+            'created_indexes'     =>  [],
+            'dropped_indexes'     =>  []
+        ],
+        $_migration,
+        $_startingModelFiles = [],
+        $_tmpPath;
 
     protected static $_toPrefix   = 'ToPrfx',
-                     $_fromPrefix = 'FromPrfx';
+        $_fromPrefix = 'FromPrfx';
 
     /**
      * Instantiate new Doctrine_Migration_Diff instance
@@ -75,7 +85,7 @@ class Doctrine_Migration_Diff
      */
     public function setTmpPath($tmpPath)
     {
-        if ( ! is_dir($tmpPath)) {
+        if (! is_dir($tmpPath)) {
             mkdir($tmpPath, 0777, true);
         }
         $this->_tmpPath = $tmpPath;
@@ -124,7 +134,7 @@ class Doctrine_Migration_Diff
     /**
      * Initialize some Doctrine models at a given path.
      *
-     * @param string $path 
+     * @param string $path
      * @return array $models
      */
     protected function _initializeModels($path)
@@ -179,7 +189,7 @@ class Doctrine_Migration_Diff
         // Loop over the to schema information and compare it to the from
         foreach ($to as $className => $info) {
             // If the from doesn't have this class then it is a new table
-            if ( ! isset($from[$className])) {
+            if (! isset($from[$className])) {
                 $names = ['type', 'charset', 'collate', 'indexes', 'foreignKeys', 'primary'];
                 $options = [];
                 foreach ($names as $name) {
@@ -188,7 +198,11 @@ class Doctrine_Migration_Diff
                     }
                 }
 
-                $table = ['tableName' => $info['tableName'], 'columns'   => $info['columns'], 'options'   => $options];
+                $table = [
+                    'tableName' => $info['tableName'],
+                    'columns'   => $info['columns'],
+                    'options'   => $options
+                ];
                 $this->_changes['created_tables'][$info['tableName']] = $table;
             }
             // Check for new and changed columns
@@ -206,11 +220,11 @@ class Doctrine_Migration_Diff
             foreach ($info['options']['foreignKeys'] as $name => $foreignKey) {
                 $foreignKey['name'] = $name;
                 // If foreign key doesn't exist in the from schema information then we need to add a index and the new fk
-                if ( ! isset($from[$className]['options']['foreignKeys'][$name])) {
+                if (! isset($from[$className]['options']['foreignKeys'][$name])) {
                     $this->_changes['created_foreign_keys'][$info['tableName']][$name] = $foreignKey;
                     $indexName = Doctrine_Manager::connection()->generateUniqueIndexName($info['tableName'], $foreignKey['local']);
                     $this->_changes['created_indexes'][$info['tableName']][$indexName] = ['fields' => [$foreignKey['local']]];
-                // If foreign key does exist then lets see if anything has changed with it
+                    // If foreign key does exist then lets see if anything has changed with it
                 } else if (isset($from[$className]['options']['foreignKeys'][$name])) {
                     $oldForeignKey = $from[$className]['options']['foreignKeys'][$name];
                     $oldForeignKey['name'] = $name;
@@ -224,7 +238,7 @@ class Doctrine_Migration_Diff
             // Check for new indexes
             foreach ($info['options']['indexes'] as $name => $index) {
                 // If index doesn't exist in the from schema information
-                if ( ! isset($from[$className]['options']['indexes'][$name])) {
+                if (! isset($from[$className]['options']['indexes'][$name])) {
                     $this->_changes['created_indexes'][$info['tableName']][$name] = $index;
                 }
             }
@@ -232,8 +246,19 @@ class Doctrine_Migration_Diff
         // Loop over the from schema information and compare it to the to schema information
         foreach ($from as $className => $info) {
             // If the class exists in the from but not in the to then it is a dropped table
-            if ( ! isset($to[$className])) {
-                $table = ['tableName' => $info['tableName'], 'columns'   => $info['columns'], 'options'   => ['type'        => $info['options']['type'], 'charset'     => $info['options']['charset'], 'collate'     => $info['options']['collate'], 'indexes'     => $info['options']['indexes'], 'foreignKeys' => $info['options']['foreignKeys'], 'primary'     => $info['options']['primary']]];
+            if (! isset($to[$className])) {
+                $table = [
+                    'tableName' => $info['tableName'],
+                    'columns'   => $info['columns'],
+                    'options'   => [
+                        'type'        => $info['options']['type'],
+                        'charset'     => $info['options']['charset'],
+                        'collate'     => $info['options']['collate'],
+                        'indexes'     => $info['options']['indexes'],
+                        'foreignKeys' => $info['options']['foreignKeys'],
+                        'primary'     => $info['options']['primary']
+                    ]
+                ];
                 $this->_changes['dropped_tables'][$info['tableName']] = $table;
             }
             // Check for removed columns
@@ -246,14 +271,14 @@ class Doctrine_Migration_Diff
             // Check for dropped foreign keys
             foreach ($info['options']['foreignKeys'] as $name => $foreignKey) {
                 // If the foreign key exists in the from but not in the to then we need to drop it
-                if ( ! isset($to[$className]['options']['foreignKeys'][$name])) {
+                if (! isset($to[$className]['options']['foreignKeys'][$name])) {
                     $this->_changes['dropped_foreign_keys'][$info['tableName']][$name] = $foreignKey;
                 }
             }
             // Check for removed indexes
             foreach ($info['options']['indexes'] as $name => $index) {
                 // If the index exists in the from but not the to then we need to remove it
-                if ( ! isset($to[$className]['options']['indexes'][$name])) {
+                if (! isset($to[$className]['options']['indexes'][$name])) {
                     $this->_changes['dropped_indexes'][$info['tableName']][$name] = $index;
                 }
             }
@@ -271,7 +296,7 @@ class Doctrine_Migration_Diff
     protected function _buildModelInformation(array $models)
     {
         $info = [];
-        foreach ($models as $key => $model) {
+        foreach ($models as $model) {
             $table = Doctrine_Core::getTable($model);
             if ($table->getTableName() !== $this->_migration->getTableName()) {
                 $info[$model] = $table->getExportableFormat();
@@ -298,10 +323,16 @@ class Doctrine_Migration_Diff
                 $info[$key] = $this->_cleanModelInformation($value);
             }
             return $info;
-        } else {
-            $find = [self::$_toPrefix, self::$_fromPrefix, Doctrine_Inflector::tableize(self::$_toPrefix) . '_', Doctrine_Inflector::tableize(self::$_fromPrefix) . '_', Doctrine_Inflector::tableize(self::$_toPrefix), Doctrine_Inflector::tableize(self::$_fromPrefix)];
-            return str_replace($find, null, $info);
         }
+        $find = [
+            self::$_toPrefix,
+            self::$_fromPrefix,
+            Doctrine_Inflector::tableize(self::$_toPrefix) . '_',
+            Doctrine_Inflector::tableize(self::$_fromPrefix) . '_',
+            Doctrine_Inflector::tableize(self::$_toPrefix),
+            Doctrine_Inflector::tableize(self::$_fromPrefix)
+        ];
+        return str_replace($find, null, $info);
     }
 
     /**
@@ -342,7 +373,10 @@ class Doctrine_Migration_Diff
     protected function _generateModels($prefix, $item)
     {
         $path = $this->_tmpPath . DIRECTORY_SEPARATOR . strtolower($prefix) . '_doctrine_tmp_dirs';
-        $options = ['classPrefix' => $prefix, 'generateBaseClasses' => false];
+        $options = [
+            'classPrefix' => $prefix,
+            'generateBaseClasses' => false
+        ];
 
         if (is_string($item) && file_exists($item)) {
             $extension = $this->_getItemExtension($item);
@@ -351,20 +385,19 @@ class Doctrine_Migration_Diff
                 Doctrine_Core::generateModelsFromYaml($item, $path, $options);
 
                 return $path;
-            } else if ($extension === 'php') {
+            }
+            if ($extension === 'php') {
                 Doctrine_Lib::copyDirectory($item, $path);
 
                 return $path;
-            } else {
-                throw new Doctrine_Migration_Exception('No php or yml files found at path: "' . $item . '"');
             }
-        } else {
-            try {
-                Doctrine_Core::generateModelsFromDb($path, (array) $item, $options);
-                return $path;
-            } catch (Exception $e) {
-                throw new Doctrine_Migration_Exception('Could not generate models from connection: ' . $e->getMessage());
-            }
+            throw new Doctrine_Migration_Exception('No php or yml files found at path: "' . $item . '"');
+        }
+        try {
+            Doctrine_Core::generateModelsFromDb($path, (array) $item, $options);
+            return $path;
+        } catch (Exception $e) {
+            throw new Doctrine_Migration_Exception('Could not generate models from connection: ' . $e->getMessage());
         }
     }
 

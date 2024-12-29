@@ -40,7 +40,7 @@ class Doctrine_Template_Listener_Timestampable extends Doctrine_Record_Listener
     /**
      * __construct
      *
-     * @param string $options 
+     * @param string $options
      * @return void
      */
     public function __construct(array $options)
@@ -113,7 +113,7 @@ class Doctrine_Template_Listener_Timestampable extends Doctrine_Record_Listener
     /**
      * Gets the timestamp in the correct format based on the way the behavior is configured
      *
-     * @param string $type 
+     * @param string $type
      * @return void
      */
     public function getTimestamp($type, $conn = null)
@@ -122,14 +122,13 @@ class Doctrine_Template_Listener_Timestampable extends Doctrine_Record_Listener
 
         if ($options['expression'] !== false && is_string($options['expression'])) {
             return new Doctrine_Expression($options['expression'], $conn);
-        } else {
-            if ($options['type'] == 'date') {
-                return date($options['format'], time());
-            } else if ($options['type'] == 'timestamp') {
-                return date($options['format'], time());
-            } else {
-                return time();
-            }
         }
+        if ($options['type'] == 'date') {
+            return date($options['format'], time());
+        }
+        if ($options['type'] == 'timestamp') {
+            return date($options['format'], time());
+        }
+        return time();
     }
 }
