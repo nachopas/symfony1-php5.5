@@ -7,7 +7,8 @@
         }
     ],
     "scripts": {
-        "pcs": "php php-cs-fixer-v2.phar --config=.php_cs.default fix"
+        "pcs": "php php-cs-fixer-v2.phar --config=.php_cs.default --allow-risky=yes fix",
+        "pcs3": "php php-cs-fixer-v3.phar --config=.php_cs.v3 --allow-risky=yes fix"
     },
     "config": {
         "sort-packages": true

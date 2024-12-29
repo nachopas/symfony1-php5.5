@@ -1,0 +1,35 @@
+<?php
+
+use PhpCsFixer\Config;
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/lib')
+    ->in(__DIR__ . '/data/bin')
+    ->in(__DIR__ . '/test')
+    ->exclude('vendor');
+;
+
+return (new Config())
+    ->setCacheFile(__DIR__ . '/.php_cs.cache3')
+    ->setRules([
+        '@Symfony' => true,
+        'native_function_invocation' => [
+            'include' => [], // Verhindert, dass Backslashes hinzugefügt werden
+            'scope' => 'namespaced', // Optional: Nur für namespaces aktiv
+        ],
+        'binary_operator_spaces' => [
+            'default' => 'single_space',
+        ],
+        'no_whitespace_before_comma_in_array' => true,
+		'no_null_property_initialization' => true,
+        'indentation_type' => true,
+		'array_syntax' => ['syntax' => 'short'],
+        'array_indentation' => true,
+        'trim_array_spaces' => true,
+        'no_unused_imports' => true,
+    ])
+    ->setIndent("    ") // 4 Spaces
+    ->setLineEnding("\r\n")
+    ->setFinder($finder)
+    ->setRiskyAllowed(true)
+;
