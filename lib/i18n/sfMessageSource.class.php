@@ -143,7 +143,7 @@ abstract class sfMessageSource implements sfIMessageSource
     /**
      * Loads a particular message catalogue. Use read() to
      * to get the array of messages. The catalogue loading sequence
-     * is as follows:.
+     * is as follows:
      *
      *  # [1] Call getCatalogueList($catalogue) to get a list of variants for for the specified $catalogue.
      *  # [2] For each of the variants, call getSource($variant) to get the resource, could be a file or catalogue ID.

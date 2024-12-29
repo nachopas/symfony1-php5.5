@@ -253,7 +253,7 @@ class sfMessageSource_SQLite extends sfMessageSource_Database
         $details = $this->getCatalogueDetails($catalogue);
 
         if ($details) {
-            list($cat_id, $variant, $count) = $details;
+            [$cat_id, $variant, $count] = $details;
         } else {
             return false;
         }
@@ -296,7 +296,7 @@ class sfMessageSource_SQLite extends sfMessageSource_Database
     {
         $details = $this->getCatalogueDetails($catalogue);
         if ($details) {
-            list($cat_id, $variant, $count) = $details;
+            [$cat_id, $variant, $count] = $details;
         } else {
             return false;
         }
@@ -335,7 +335,7 @@ class sfMessageSource_SQLite extends sfMessageSource_Database
     {
         $details = $this->getCatalogueDetails($catalogue);
         if ($details) {
-            list($cat_id, $variant, $count) = $details;
+            [$cat_id, $variant, $count] = $details;
         } else {
             return false;
         }

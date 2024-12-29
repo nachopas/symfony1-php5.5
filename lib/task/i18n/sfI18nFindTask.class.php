@@ -95,7 +95,7 @@ EOF;
                         $tokens = token_get_all('<?php '.$node->nodeValue);
                         foreach ($tokens as $token) {
                             if (is_array($token)) {
-                                list($id, $text) = $token;
+                                [$id, $text] = $token;
 
                                 if (T_CONSTANT_ENCAPSED_STRING === $id) {
                                     $strings[$template][] = substr($text, 1, -1);

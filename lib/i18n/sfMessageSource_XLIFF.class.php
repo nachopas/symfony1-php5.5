@@ -138,9 +138,9 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
 
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            list($variant, $filename) = $variants;
+            [$variant, $filename] = $variants;
         } else {
-            list($variant, $filename) = $this->createMessageTemplate($catalogue);
+            [$variant, $filename] = $this->createMessageTemplate($catalogue);
         }
 
         if (false == is_writable($filename)) {
@@ -215,7 +215,7 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
     {
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            list($variant, $filename) = $variants;
+            [$variant, $filename] = $variants;
         } else {
             return false;
         }
@@ -308,7 +308,7 @@ class sfMessageSource_XLIFF extends sfMessageSource_File
     {
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            list($variant, $filename) = $variants;
+            [$variant, $filename] = $variants;
         } else {
             return false;
         }

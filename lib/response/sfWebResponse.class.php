@@ -356,9 +356,15 @@ class sfWebResponse extends sfResponse
 
         // cookies
         foreach ($this->cookies as $cookie) {
-            $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
-            $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
-            setrawcookie($cookie['name'], $cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
+            $expire = $cookie['expire'] ?? 0;
+            $domain = $cookie['domain'] ?? '';
+            setrawcookie($cookie['name'], $cookie['value'], [
+                'expires'  => $expire,
+                'path'     => $cookie['path'],
+                'domain'   => $domain,
+                'secure'   => $cookie['secure'],
+                'httponly' => $cookie['httpOnly'],
+            ]);
 
             if ($this->options['logging']) {
                 $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Send cookie "%s": "%s"', $cookie['name'], $cookie['value'])]));
@@ -854,29 +860,5 @@ class sfWebResponse extends sfResponse
         }
 
         return $contentType;
-    }
-
-    /**
-     * Preprend title.
-     *
-     * @param string $title     Title name
-     * @param string $separator Separator string (default: " - ")
-     * @param bool   $escape    true, for escaping the title
-     */
-    public function prependTitle($title, $separator = ' - ', $escape = true)
-    {
-        if (!isset($this->metas['title'])) {
-            $this->setTitle($title);
-
-            return;
-        }
-
-        // FIXME: If you use the i18n layer and escape the data here, it won't work
-        // see include_metas() in AssetHelper
-        if ($escape) {
-            $title = htmlspecialchars($title, ENT_QUOTES, $this->options['charset']);
-        }
-
-        $this->metas['title'] = $title.$separator.$this->metas['title'];
     }
 }

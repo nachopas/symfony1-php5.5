@@ -13,8 +13,6 @@
  * {@link http://prado.sourceforge.net/}
  *
  * @author     Wei Zhuo <weizhuo[at]gmail[dot]com>
- *
- * @version    $Id$
  */
 
 /**
@@ -23,8 +21,6 @@
  * This is the base class for file based message sources like XLIFF or gettext.
  *
  * @author Xiang Wei Zhuo <weizhuo[at]gmail[dot]com>
- *
- * @version v1.0, last update on Fri Dec 24 16:18:44 EST 2004
  */
 abstract class sfMessageSource_File extends sfMessageSource
 {

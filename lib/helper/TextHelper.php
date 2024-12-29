@@ -28,7 +28,7 @@
  * @param string $truncate_string    The string to add after truncated text
  * @param string $truncate_lastspace Remove or not last space after truncate
  * @param string $truncate_pattern   Pattern
- * @param int    $length_max         Used only with truncate_patter
+ * @param int    $length_max         Used only with truncate_pattern
  *
  * @return string
  */

@@ -118,9 +118,9 @@ class sfMessageSource_gettext extends sfMessageSource_File
         $variants = $this->getVariants($catalogue);
 
         if ($variants) {
-            list($variant, $MOFile, $POFile) = $variants;
+            [$variant, $MOFile, $POFile] = $variants;
         } else {
-            list($variant, $MOFile, $POFile) = $this->createMessageTemplate($catalogue);
+            [$variant, $MOFile, $POFile] = $this->createMessageTemplate($catalogue);
         }
 
         if (false == is_writable($MOFile)) {
@@ -180,7 +180,7 @@ class sfMessageSource_gettext extends sfMessageSource_File
     {
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            list($variant, $MOFile, $POFile) = $variants;
+            [$variant, $MOFile, $POFile] = $variants;
         } else {
             return false;
         }
@@ -233,7 +233,7 @@ class sfMessageSource_gettext extends sfMessageSource_File
     {
         $variants = $this->getVariants($catalogue);
         if ($variants) {
-            list($variant, $MOFile, $POFile) = $variants;
+            [$variant, $MOFile, $POFile] = $variants;
         } else {
             return false;
         }

@@ -110,7 +110,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
      * Constructor.
      * Creates a new message source using MySQL.
      *
-     * @param string $source mySQL datasource, in PEAR's DB DSN format
+     * @param string $source MySQL datasource, in PEAR's DB DSN format.
      *
      * @see MessageSource::factory();
      */
@@ -132,7 +132,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
     /**
      * Connects to the MySQL datasource.
      *
-     * @return resource mySQL connection
+     * @return resource MySQL connection.
      *
      * @throws sfException, connection and database errors
      */
@@ -259,7 +259,6 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
         return $row && '1' == $row[0];
     }
 
-
     /**
      * Retrieves catalogue details, array($cat_id, $variant, $count).
      *
@@ -331,7 +330,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
         $details = $this->getCatalogueDetails($catalogue);
 
         if ($details) {
-            list($cat_id, $variant, $count) = $details;
+            [$cat_id, $variant, $count] = $details;
         } else {
             return false;
         }
@@ -371,7 +370,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
     {
         $details = $this->getCatalogueDetails($catalogue);
         if ($details) {
-            list($cat_id, $variant, $count) = $details;
+            [$cat_id, $variant, $count] = $details;
         } else {
             return false;
         }
@@ -404,7 +403,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
     {
         $details = $this->getCatalogueDetails($catalogue);
         if ($details) {
-            list($cat_id, $variant, $count) = $details;
+            [$cat_id, $variant, $count] = $details;
         } else {
             return false;
         }
