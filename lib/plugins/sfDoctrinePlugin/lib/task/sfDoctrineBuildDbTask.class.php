@@ -38,7 +38,7 @@ class sfDoctrineBuildDbTask extends sfDoctrineBaseTask
         $this->name = 'build-db';
         $this->briefDescription = 'Creates database for current model';
 
-        $this->detailedDescription = <<<'EOF'
+        $this->detailedDescription = <<<EOF
 The [doctrine:build-db|INFO] task creates one or more databases based on
 configuration in [config/databases.yml|COMMENT]:
 

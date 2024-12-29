@@ -71,9 +71,8 @@ class Doctrine_Expression_Pgsql extends Doctrine_Expression_Driver
         if ($len === null) {
             $len = $this->getIdentifier($len);
             return 'SUBSTR(' . $value . ', ' . $from . ')';
-        } else {
-            return 'SUBSTR(' . $value . ', ' . $from . ', ' . $len . ')';
         }
+        return 'SUBSTR(' . $value . ', ' . $from . ', ' . $len . ')';
     }
 
     /**

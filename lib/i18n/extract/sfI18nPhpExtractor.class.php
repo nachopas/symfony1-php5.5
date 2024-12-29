@@ -43,7 +43,7 @@ class sfI18nPhpExtractor implements sfI18nExtractorInterface
                         $i18n_function = 0;
                 }
             } else {
-                list($id, $text) = $token;
+                [$id, $text] = $token;
 
                 switch ($id) {
                     case T_STRING:

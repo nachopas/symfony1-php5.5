@@ -35,7 +35,7 @@ class Doctrine_Task_BuildAllReload extends Doctrine_Task
 
     protected $rebuildDb,
               $loadData;
-    
+
     public function __construct($dispatcher = null)
     {
         parent::__construct($dispatcher);

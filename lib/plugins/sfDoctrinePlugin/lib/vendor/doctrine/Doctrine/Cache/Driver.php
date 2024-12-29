@@ -226,9 +226,8 @@ abstract class Doctrine_Cache_Driver implements Doctrine_Cache_Interface
 
         if ( ! $prefix || strpos($id, (string) $prefix) === 0) {
             return $id;
-        } else {
-            return $prefix . $id;
         }
+        return $prefix . $id;
     }
 
     /**

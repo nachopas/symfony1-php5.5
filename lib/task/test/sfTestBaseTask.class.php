@@ -32,25 +32,4 @@ abstract class sfTestBaseTask extends sfBaseTask
 
         return $event->getReturnValue();
     }
-
-    /**
-     * Checks if a plugin exists.
-     *
-     * The plugin directory must exist and have at least one file or folder
-     * inside for that plugin to exist.
-     *
-     * @param string $plugin
-     *
-     * @return bool True if the plugin exist, false otherwise
-     */
-    protected function checkPluginExists($plugin)
-    {
-        try {
-            sfApplicationConfiguration::getActive()->getPluginConfiguration($plugin);
-
-            return true;
-        } catch (Exception $e) {
-            return false;
-        }
-    }
 }

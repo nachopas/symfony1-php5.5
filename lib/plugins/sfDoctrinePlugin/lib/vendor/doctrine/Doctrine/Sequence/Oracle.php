@@ -53,9 +53,8 @@ class Doctrine_Sequence_Oracle extends Doctrine_Sequence
                 }
 
                 return $this->nextId($seqName, false);
-            } else {
-                throw new Doctrine_Sequence_Exception('sequence ' .$seqName . ' does not exist');
             }
+            throw new Doctrine_Sequence_Exception('sequence ' .$seqName . ' does not exist');
         }
 
         return $result;

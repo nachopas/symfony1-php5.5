@@ -225,9 +225,8 @@ class Doctrine_Adapter_Mock implements Doctrine_Adapter_Interface, Countable
         $this->_queries[] = 'LAST_INSERT_ID()';
         if ($this->_lastInsertIdFail) {
             return null;
-        } else {
-            return 1;
         }
+        return 1;
     }
 
     /**

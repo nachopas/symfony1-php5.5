@@ -55,8 +55,7 @@ class Doctrine_Task_GenerateMigrationsDb extends Doctrine_Task
         }
         if ( ! $result) {
             throw new Doctrine_Task_Exception('Could not generate migration classes from database');
-        } else {
-            $this->notify('Generated migration classes successfully from database');
         }
+        $this->notify('Generated migration classes successfully from database');
     }
 }

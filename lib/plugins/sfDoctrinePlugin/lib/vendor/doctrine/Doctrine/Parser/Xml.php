@@ -145,8 +145,7 @@ class Doctrine_Parser_Xml extends Doctrine_Parser
 
         if (is_array($return)) {
             return $return;
-        } else {
-            return [];
         }
+        return [];
     }
 }

@@ -63,9 +63,8 @@ class Doctrine_Query_Having extends Doctrine_Query_Condition
             $funcs = $name . '(' . implode(', ', $params) . ')';
 
             return $funcs;
-        } else {
-            return $this->_parseAliases($func);
         }
+        return $this->_parseAliases($func);
     }
 
     /**
@@ -75,7 +74,7 @@ class Doctrine_Query_Having extends Doctrine_Query_Condition
      * @param mixed $value
      * @return string
      */
-    private function _parseAliases($value)
+    final private function _parseAliases($value)
     {
         if ( ! is_numeric($value)) {
             $a = explode('.', $value);

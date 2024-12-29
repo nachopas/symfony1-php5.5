@@ -48,8 +48,7 @@ class Doctrine_Task_GenerateMigrationsDiff extends Doctrine_Task
 
         if ( ! $numChanges) {
             throw new Doctrine_Task_Exception('Could not generate migration classes from difference');
-        } else {
-            $this->notify('Generated migration classes successfully from difference');
         }
+        $this->notify('Generated migration classes successfully from difference');
     }
 }

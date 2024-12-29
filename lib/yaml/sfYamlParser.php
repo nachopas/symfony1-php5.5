@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfYamlInline.php');
+require_once __DIR__.'/sfYamlInline.php';
 
 if (!defined('PREG_BAD_UTF8_OFFSET_ERROR')) {
     define('PREG_BAD_UTF8_OFFSET_ERROR', 5);
@@ -21,16 +21,16 @@ if (!defined('PREG_BAD_UTF8_OFFSET_ERROR')) {
  */
 class sfYamlParser
 {
-    protected $offset        = 0;
-    protected $lines         = [];
+    protected $offset = 0;
+    protected $lines = [];
     protected $currentLineNb = -1;
-    protected $currentLine   = '';
-    protected $refs          = [];
+    protected $currentLine = '';
+    protected $refs = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param integer $offset The offset of YAML document (used for line numbers in error messages)
+     * @param int $offset The offset of YAML document (used for line numbers in error messages)
      */
     public function __construct($offset = 0)
     {
@@ -40,9 +40,9 @@ class sfYamlParser
     /**
      * Parses a YAML string to a PHP value.
      *
-     * @param  string $value A YAML string
+     * @param string $value A YAML string
      *
-     * @return mixed  A PHP value
+     * @return mixed A PHP value
      *
      * @throws InvalidArgumentException If the YAML is not valid
      */
@@ -79,7 +79,7 @@ class sfYamlParser
                 if (!isset($values['value']) || '' == trim($values['value'], ' ') || 0 === strpos(ltrim($values['value'], ' '), '#')) {
                     $c = $this->getRealCurrentLineNb() + 1;
                     $parser = new sfYamlParser($c);
-                    $parser->refs =& $this->refs;
+                    $parser->refs = &$this->refs;
                     $data[] = $parser->parse($this->getNextEmbedBlock());
                 } else {
                     if (preg_match('/^([^ ]+)\: +({.*?)$/u', $values['value'], $matches)) {
@@ -98,28 +98,30 @@ class sfYamlParser
                             throw new InvalidArgumentException(sprintf('Reference "%s" does not exist at line %s (%s).', $isInPlace, $this->getRealCurrentLineNb() + 1, $this->currentLine));
                         }
                     } else {
-                        if (isset($values['value']) && $values['value'] !== '') {
+                        if (isset($values['value']) && '' !== $values['value']) {
                             $value = $values['value'];
                         } else {
                             $value = $this->getNextEmbedBlock();
                         }
                         $c = $this->getRealCurrentLineNb() + 1;
                         $parser = new sfYamlParser($c);
-                        $parser->refs =& $this->refs;
+                        $parser->refs = &$this->refs;
                         $parsed = $parser->parse($value);
 
                         $merged = [];
                         if (!is_array($parsed)) {
-                            throw new InvalidArgumentException(sprintf("YAML merge keys used with a scalar value instead of an array at line %s (%s)", $this->getRealCurrentLineNb() + 1, $this->currentLine));
-                        } elseif (isset($parsed[0])) {
+                            throw new InvalidArgumentException(sprintf('YAML merge keys used with a scalar value instead of an array at line %s (%s)', $this->getRealCurrentLineNb() + 1, $this->currentLine));
+                        }
+                        if (isset($parsed[0])) {
                             // Numeric array, merge individual elements
                             foreach (array_reverse($parsed) as $parsedItem) {
                                 if (!is_array($parsedItem)) {
-                                    throw new InvalidArgumentException(sprintf("Merge items must be arrays at line %s (%s).", $this->getRealCurrentLineNb() + 1, $parsedItem));
+                                    throw new InvalidArgumentException(sprintf('Merge items must be arrays at line %s (%s).', $this->getRealCurrentLineNb() + 1, $parsedItem));
                                 }
                                 $merged = array_merge($parsedItem, $merged);
                             }
-                        } else {
+                        }
+                        else {
                             // Associative array, merge
                             $merged = array_merge($merged, $parsed);
                         }
@@ -143,7 +145,7 @@ class sfYamlParser
                     } else {
                         $c = $this->getRealCurrentLineNb() + 1;
                         $parser = new sfYamlParser($c);
-                        $parser->refs =& $this->refs;
+                        $parser->refs = &$this->refs;
                         $data[$key] = $parser->parse($this->getNextEmbedBlock());
                     }
                 } else {
@@ -176,24 +178,24 @@ class sfYamlParser
                 }
 
                 switch (preg_last_error()) {
-          case PREG_INTERNAL_ERROR:
-            $error = 'Internal PCRE error on line';
-            break;
-          case PREG_BACKTRACK_LIMIT_ERROR:
-            $error = 'pcre.backtrack_limit reached on line';
-            break;
-          case PREG_RECURSION_LIMIT_ERROR:
-            $error = 'pcre.recursion_limit reached on line';
-            break;
-          case PREG_BAD_UTF8_ERROR:
-            $error = 'Malformed UTF-8 data on line';
-            break;
-          case PREG_BAD_UTF8_OFFSET_ERROR:
-            $error = 'Offset doesn\'t correspond to the begin of a valid UTF-8 code point on line';
-            break;
-          default:
-            $error = 'Unable to parse line';
-        }
+                    case PREG_INTERNAL_ERROR:
+                        $error = 'Internal PCRE error on line';
+                        break;
+                    case PREG_BACKTRACK_LIMIT_ERROR:
+                        $error = 'pcre.backtrack_limit reached on line';
+                        break;
+                    case PREG_RECURSION_LIMIT_ERROR:
+                        $error = 'pcre.recursion_limit reached on line';
+                        break;
+                    case PREG_BAD_UTF8_ERROR:
+                        $error = 'Malformed UTF-8 data on line';
+                        break;
+                    case PREG_BAD_UTF8_OFFSET_ERROR:
+                        $error = 'Offset doesn\'t correspond to the begin of a valid UTF-8 code point on line';
+                        break;
+                    default:
+                        $error = 'Unable to parse line';
+                }
 
                 throw new InvalidArgumentException(sprintf('%s %d (%s).', $error, $this->getRealCurrentLineNb() + 1, $this->currentLine));
             }
@@ -213,7 +215,7 @@ class sfYamlParser
     /**
      * Returns the current line number (takes the offset into account).
      *
-     * @return integer The current line number
+     * @return int The current line number
      */
     protected function getRealCurrentLineNb()
     {
@@ -223,7 +225,7 @@ class sfYamlParser
     /**
      * Returns the current line indentation.
      *
-     * @return integer The current line indentation
+     * @return int The current line indentation
      */
     protected function getCurrentLineIndentation()
     {
@@ -300,9 +302,9 @@ class sfYamlParser
     /**
      * Parses a YAML value.
      *
-     * @param  string $value A YAML value
+     * @param string $value A YAML value
      *
-     * @return mixed  A PHP value
+     * @return mixed A PHP value
      */
     protected function parseValue($value)
     {
@@ -316,6 +318,7 @@ class sfYamlParser
             if (!array_key_exists($value, $this->refs)) {
                 throw new InvalidArgumentException(sprintf('Reference "%s" does not exist (%s).', $value, $this->currentLine));
             }
+
             return $this->refs[$value];
         }
 
@@ -323,19 +326,18 @@ class sfYamlParser
             $modifiers = $matches['modifiers'] ?? '';
 
             return $this->parseFoldedScalar($matches['separator'], preg_replace('#\d+#', '', $modifiers), intval(abs($modifiers)));
-        } else {
-            return sfYamlInline::load($value);
         }
+        return sfYamlInline::load($value);
     }
 
     /**
      * Parses a folded scalar.
      *
-     * @param  string  $separator   The separator that was used to begin this folded scalar (| or >)
-     * @param  string  $indicator   The indicator that was used to begin this folded scalar (+ or -)
-     * @param  integer $indentation The indentation that was used to begin this folded scalar
+     * @param string $separator   The separator that was used to begin this folded scalar (| or >)
+     * @param string $indicator   The indicator that was used to begin this folded scalar (+ or -)
+     * @param int    $indentation The indentation that was used to begin this folded scalar
      *
-     * @return string  The text value
+     * @return string The text value
      */
     protected function parseFoldedScalar($separator, $indicator = '', $indentation = 0)
     {
@@ -389,15 +391,15 @@ class sfYamlParser
         }
 
         switch ($indicator) {
-      case '':
-        $text = preg_replace('#\n+$#s', "\n", $text);
-        break;
-      case '+':
-        break;
-      case '-':
-        $text = preg_replace('#\n+$#s', '', $text);
-        break;
-    }
+            case '':
+                $text = preg_replace('#\n+$#s', "\n", $text);
+                break;
+            case '+':
+                break;
+            case '-':
+                $text = preg_replace('#\n+$#s', '', $text);
+                break;
+        }
 
         return $text;
     }
@@ -405,7 +407,7 @@ class sfYamlParser
     /**
      * Returns true if the next line is indented.
      *
-     * @return Boolean Returns true if the next line is indented, false otherwise
+     * @return bool Returns true if the next line is indented, false otherwise
      */
     protected function isNextLineIndented()
     {
@@ -433,7 +435,7 @@ class sfYamlParser
     /**
      * Returns true if the current line is blank or if it is a comment line.
      *
-     * @return Boolean Returns true if the current line is empty or if it is a comment line, false otherwise
+     * @return bool Returns true if the current line is empty or if it is a comment line, false otherwise
      */
     protected function isCurrentLineEmpty()
     {
@@ -443,7 +445,7 @@ class sfYamlParser
     /**
      * Returns true if the current line is blank.
      *
-     * @return Boolean Returns true if the current line is blank, false otherwise
+     * @return bool Returns true if the current line is blank, false otherwise
      */
     protected function isCurrentLineBlank()
     {
@@ -453,19 +455,20 @@ class sfYamlParser
     /**
      * Returns true if the current line is a comment line.
      *
-     * @return Boolean Returns true if the current line is a comment line, false otherwise
+     * @return bool Returns true if the current line is a comment line, false otherwise
      */
     protected function isCurrentLineComment()
     {
-        //checking explicitly the first char of the trim is faster than loops or strpos
+        // checking explicitly the first char of the trim is faster than loops or strpos
         $ltrimmedLine = ltrim($this->currentLine, ' ');
-        return $ltrimmedLine[0] === '#';
+
+        return '#' === $ltrimmedLine[0];
     }
 
     /**
      * Cleanups a YAML string to be parsed.
      *
-     * @param  string $value The input YAML string
+     * @param string $value The input YAML string
      *
      * @return string A cleaned up YAML string
      */
@@ -484,7 +487,7 @@ class sfYamlParser
 
         // remove leading comments
         $trimmedValue = preg_replace('#^(\#.*?\n)+#s', '', $value, -1, $count);
-        if ($count == 1) {
+        if (1 == $count) {
             // items have been removed, update the offset
             $this->offset += substr_count($value, "\n") - substr_count($trimmedValue, "\n");
             $value = $trimmedValue;
@@ -492,7 +495,7 @@ class sfYamlParser
 
         // remove start of the document marker (---)
         $trimmedValue = preg_replace('#^\-\-\-.*?\n#s', '', $value, -1, $count);
-        if ($count == 1) {
+        if (1 == $count) {
             // items have been removed, update the offset
             $this->offset += substr_count($value, "\n") - substr_count($trimmedValue, "\n");
             $value = $trimmedValue;

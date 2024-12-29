@@ -28,9 +28,9 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
      * @param string             $value  The field value
      * @param sfValidatorError   $error  A sfValidatorError instance
      */
-    public function __construct(sfWidgetFormSchema $widget, $name = null, $value = null, ?sfFormField $parent = null, ?sfValidatorError $error = null)
+    public function __construct(sfWidgetFormSchema $widget, ?sfFormField $parent = null, $name = null, $value = null, ?sfValidatorError $error = null)
     {
-        parent::__construct($widget, $name, $value, $parent, $error);
+        parent::__construct($widget, $parent, $name, $value, $error);
 
         $this->fieldNames = $widget->getPositions();
     }
@@ -64,7 +64,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
     {
         $fields = [];
 
-        foreach ($this as $name => $field) {
+        foreach ($this as $field) {
             if ($field instanceof sfFormFieldSchema && $recursive) {
                 $fields = array_merge($fields, $field->getHiddenFields($recursive));
             } elseif ($field->isHidden()) {

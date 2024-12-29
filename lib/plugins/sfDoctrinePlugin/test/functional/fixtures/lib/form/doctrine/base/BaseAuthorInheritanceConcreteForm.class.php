@@ -13,7 +13,7 @@ abstract class BaseAuthorInheritanceConcreteForm extends AuthorForm
     {
         parent::setupInheritance();
 
-        $this->widgetSchema   ['additional'] = new sfWidgetFormInputText();
+        $this->widgetSchema['additional'] = new sfWidgetFormInputText();
         $this->validatorSchema['additional'] = new sfValidatorString(['max_length' => 255, 'required' => false]);
 
         $this->widgetSchema->setNameFormat('author_inheritance_concrete[%s]');

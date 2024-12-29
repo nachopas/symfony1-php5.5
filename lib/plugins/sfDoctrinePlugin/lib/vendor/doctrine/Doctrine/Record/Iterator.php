@@ -71,8 +71,7 @@ class Doctrine_Record_Iterator extends ArrayIterator
 
         if ($value === self::$null) {
             return null;
-        } else {
-            return $value;
         }
+        return $value;
     }
 }

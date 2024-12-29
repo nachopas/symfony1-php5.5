@@ -38,7 +38,7 @@ $filesystem = new sfFilesystem();
 if (('beta' == $stability || 'alpha' == $stability) && count(explode('.', $argv[1])) < 2) {
     $version_prefix = $argv[1];
 
-    list($result) = $filesystem->execute('svn status -u '.getcwd());
+    [$result] = $filesystem->execute('svn status -u '.getcwd());
     if (preg_match('/Status against revision\:\s+(\d+)\s*$/im', $result, $match)) {
         $version = $match[1];
     }
@@ -56,7 +56,7 @@ if (('beta' == $stability || 'alpha' == $stability) && count(explode('.', $argv[
 echo sprintf("Releasing symfony version \"%s\".\n", $version);
 
 // tests
-list($result) = $filesystem->execute('php data/bin/symfony symfony:test');
+[$result] = $filesystem->execute('php data/bin/symfony symfony:test');
 
 if (0 != $result) {
     throw new Exception('Some tests failed. Release process aborted!');
@@ -87,7 +87,7 @@ $filesystem->replaceTokens(getcwd().DIRECTORY_SEPARATOR.'package.xml', '##', '##
     'STABILITY' => $stability,
 ]);
 
-list($results) = $filesystem->execute('pear package');
+[$results] = $filesystem->execute('pear package');
 echo $results;
 
 $filesystem->remove(getcwd().DIRECTORY_SEPARATOR.'package.xml');

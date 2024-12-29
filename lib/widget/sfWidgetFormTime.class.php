@@ -66,7 +66,7 @@ class sfWidgetFormTime extends sfWidgetForm
         if (is_array($value)) {
             $value = array_merge($default, $value);
         } else {
-            $value = ctype_digit((string) $value) ? (int) $value : strtotime((string) $value);
+            $value = ctype_digit($value) ? (int) $value : strtotime($value);
             if (false === $value) {
                 $value = $default;
             } else {

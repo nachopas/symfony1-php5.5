@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-require_once(__DIR__.'/sfYamlInline.php');
+require_once __DIR__.'/sfYamlInline.php';
 
 /**
  * sfYamlDumper dumps PHP variables to YAML strings.
@@ -20,11 +20,11 @@ class sfYamlDumper
     /**
      * Dumps a PHP value to YAML.
      *
-     * @param  mixed   $input  The PHP value
-     * @param  integer $inline The level where you switch to inline YAML
-     * @param  integer $indent The level o indentation indentation (used internally)
+     * @param mixed $input  The PHP value
+     * @param int   $inline The level where you switch to inline YAML
+     * @param int   $indent The level o indentation indentation (used internally)
      *
-     * @return string  The YAML representation of the PHP value
+     * @return string The YAML representation of the PHP value
      */
     public function dump($input, $inline = 0, $indent = 0)
     {
@@ -39,8 +39,7 @@ class sfYamlDumper
             foreach ($input as $key => $value) {
                 $willBeInlined = $inline - 1 <= 0 || !is_array($value) || empty($value);
 
-                $output .= sprintf(
-                    '%s%s%s%s',
+                $output .= sprintf('%s%s%s%s',
                     $prefix,
                     $isAHash ? sfYamlInline::dump($key).':' : '-',
                     $willBeInlined ? ' ' : "\n",

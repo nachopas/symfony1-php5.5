@@ -64,11 +64,11 @@ class sfYaml
         $file = '';
 
         // if input is a file, process it
-        if (strpos($input, "\n") === false && is_file($input)) {
+        if (false === strpos($input, "\n") && is_file($input)) {
             $file = $input;
 
             ob_start();
-            $retval = include($input);
+            $retval = include $input;
             $content = ob_get_clean();
 
             // if an array is returned by the config file assume it's in plain php form else in YAML

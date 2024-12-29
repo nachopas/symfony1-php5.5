@@ -45,7 +45,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
     protected $isBound = false;
     protected $taintedValues = [];
     protected $taintedFiles = [];
-    protected $values = [];
+    protected $values;
     protected $defaults = [];
     protected $fieldNames = [];
     protected $options = [];
@@ -69,8 +69,8 @@ class sfForm implements ArrayAccess, Iterator, Countable
         $this->localCSRFSecret = $CSRFSecret;
 
         $this->validatorSchema = new sfValidatorSchema();
-        $this->widgetSchema    = new sfWidgetFormSchema();
-        $this->errorSchema     = new sfValidatorErrorSchema($this->validatorSchema);
+        $this->widgetSchema = new sfWidgetFormSchema();
+        $this->errorSchema = new sfValidatorErrorSchema($this->validatorSchema);
 
         $this->setup();
         $this->configure();
@@ -412,7 +412,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
 
         // generate default values
         $defaults = [];
-        for ($i = 0; $i < $n; $i++) {
+        for ($i = 0; $i < $n; ++$i) {
             $defaults[$i] = $form->getDefaults();
 
             $this->embeddedForms[$name]->embedForm($i, $form);
@@ -427,7 +427,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
         $this->validatorSchema[$name] = new sfValidatorSchemaForEach($form->getValidatorSchema(), $n);
 
         // generate labels
-        for ($i = 0; $i < $n; $i++) {
+        for ($i = 0; $i < $n; ++$i) {
             if (!isset($labels[$i])) {
                 $labels[$i] = sprintf('%s (%s)', $this->widgetSchema->getFormFormatter()->generateLabelName($name), $i);
             }
@@ -441,7 +441,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
     /**
      * Gets the list of embedded forms.
      *
-     * @return sfForm[] An array of embedded forms
+     * @return array An array of embedded forms
      */
     public function getEmbeddedForms()
     {
@@ -1010,7 +1010,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
      *
      * @param string $name The offset of the value to get
      *
-     * @return sfFormField|sfFormFieldSchema A form field instance
+     * @return sfFormField A form field instance
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($name)
@@ -1107,7 +1107,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
         if (null === $this->formFieldSchema) {
             $values = $this->isBound ? $this->taintedValues : $this->defaults + $this->widgetSchema->getDefaults();
 
-            $this->formFieldSchema = new sfFormFieldSchema($this->widgetSchema, null, $values, null, $this->errorSchema);
+            $this->formFieldSchema = new sfFormFieldSchema($this->widgetSchema, null, null, $values, $this->errorSchema);
         }
 
         return $this->formFieldSchema;
@@ -1303,7 +1303,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
      */
     protected function checkTaintedValues($values)
     {
-        foreach ($values as $name => $value) {
+        foreach ($values as $value) {
             if (!is_array($value)) {
                 continue;
             }
