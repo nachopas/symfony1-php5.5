@@ -122,7 +122,7 @@ class Doctrine_Migration_Process
         $options = [];
         $options = $column['options'];
         $options['type'] = $column['type'];
-    
+
         $this->getConnection()->export->alterTable($column['tableName'], ['change' => [$column['columnName'] => ['definition' => $options]]]);
     }
 

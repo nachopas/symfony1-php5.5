@@ -32,7 +32,7 @@ class Doctrine_Search_Parser
     public function parse($file)
     {
         $contents = file_get_contents($file);
-        
+
         return ['url' => $file, 'contents' => $contents];
     }
 }

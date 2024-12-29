@@ -28,7 +28,7 @@ class Swift_Mime_HeaderEncoder_QpHeaderEncoder extends Swift_Encoder_QpEncoder
   {
     parent::__construct($charStream);
   }
-  
+
   protected function initSafeMap()
   {
     foreach (array_merge(

@@ -25,6 +25,7 @@ return $config
         'indentation_type' => true,
         'array_syntax' => ['syntax' => 'short'],
         'array_indentation' => true,
+        'single_blank_line_at_eof' => true,
         'binary_operator_spaces' => ['default' => 'align_single_space'],
     ])
     ->setIndent("    ") // 4 Spaces

@@ -22,7 +22,7 @@
 require_once 'Doctrine/Core.php';
 
 /**
- * This class only exists for backwards compatability. All code was moved to 
+ * This class only exists for backwards compatability. All code was moved to
  * Doctrine_Core and this class extends Doctrine_Core
  *
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>

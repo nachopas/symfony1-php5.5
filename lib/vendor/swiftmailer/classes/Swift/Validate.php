@@ -17,7 +17,7 @@ class Swift_Validate
    * @var Swift_Mime_Grammar
    */
   private static $grammar = null;
-  
+
   /**
    * Checks if an email matches the current grammars
    * @param string $email

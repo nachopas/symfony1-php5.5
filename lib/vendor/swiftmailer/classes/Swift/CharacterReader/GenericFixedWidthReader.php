@@ -52,7 +52,7 @@ class Swift_CharacterReader_GenericFixedWidthReader
 
     return ($strlen - $ignored)/$this->_width;
   }
-  
+
   /**
    * Returns mapType
    * @return int mapType
