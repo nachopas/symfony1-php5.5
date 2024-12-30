@@ -53,6 +53,7 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/data/bin',
         __DIR__ . '/lib',
+//        __DIR__ . '/test',
     ])
     // uncomment to reach your current PHP version
     // ->withPhpSets()
