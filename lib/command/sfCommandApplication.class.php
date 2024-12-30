@@ -77,6 +77,7 @@ abstract class sfCommandApplication
             new sfCommandOption('--trace', '-t', sfCommandOption::PARAMETER_NONE, 'Turn on invoke/execute tracing, enable full backtrace.'),
             new sfCommandOption('--version', '-V', sfCommandOption::PARAMETER_NONE, 'Display the program version.'),
             new sfCommandOption('--color', '', sfCommandOption::PARAMETER_NONE, 'Forces ANSI color output.'),
+            new sfCommandOption('--no-debug', '', sfCommandOption::PARAMETER_NONE, 'Disable debug'),
         ]);
         $this->commandManager = new sfCommandManager($argumentSet, $optionSet);
 
@@ -312,6 +313,16 @@ abstract class sfCommandApplication
     }
 
     /**
+     * Returns whether the application must be verbose.
+     *
+     * @return bool true if the application is in debug mode, false otherwise
+     */
+    public function isDebug()
+    {
+        return $this->debug;
+    }
+
+    /**
      * Outputs a help message for the current application.
      */
     public function help()
@@ -351,6 +362,10 @@ abstract class sfCommandApplication
 
         if ($this->commandManager->getOptionSet()->hasOption('quiet') && false !== $this->commandManager->getOptionValue('quiet')) {
             $this->verbose = false;
+        }
+
+        if ($this->commandManager->getOptionSet()->hasOption('no-debug') && false !== $this->commandManager->getOptionValue('no-debug')) {
+            $this->debug = false;
         }
 
         if ($this->commandManager->getOptionSet()->hasOption('trace') && false !== $this->commandManager->getOptionValue('trace')) {
