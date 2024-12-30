@@ -5,6 +5,8 @@
  *
  * @method <?php echo $this->modelName ?> getObject() Returns the current form's model object
  *
+ * @package    ##PROJECT_NAME##
+ * @subpackage form
  * @author     ##AUTHOR_NAME##
  */
 abstract class Base<?php echo $this->modelName ?>Form extends <?php echo $this->getFormClassToExtend().PHP_EOL ?>
