@@ -322,7 +322,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
     return [$this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors];
   }
 
-  public function __unserialize(array $array)
+  public function __unserialize(array $array): void
   {
     list($this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors) = $array;
   }
