@@ -16,7 +16,7 @@
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfValidatorError.class.php 15393 2009-02-10 12:58:49Z fabien $
  */
-class sfValidatorError extends Exception implements Serializable
+class sfValidatorError extends Exception
 {
   protected
     $validator = null,
@@ -129,18 +129,16 @@ class sfValidatorError extends Exception implements Serializable
   /**
    * Serializes the current instance.
    *
-   * We must implement the Serializable interface to overcome a problem with PDO
-   * used as a session handler.
+   * We must implement it to overcome a problem with PDO used as a session handler.
    *
    * The default serialization process serializes the exception trace, and because
    * the trace can contain a PDO instance which is not serializable, serializing won't
    * work when using PDO.
    *
-   * @return string The instance as a serialized string
    */
-  public function serialize()
+  public function __serialize(): array
   {
-    return serialize(array($this->validator, $this->arguments, $this->code, $this->message));
+    return [$this->validator, $this->arguments, $this->code, $this->message];
   }
 
   /**
@@ -149,8 +147,8 @@ class sfValidatorError extends Exception implements Serializable
    * @param string $serialized  A serialized sfValidatorError instance
    *
    */
-  public function unserialize($serialized)
+  public function __unserialize(array $array): void
   {
-    list($this->validator, $this->arguments, $this->code, $this->message) = unserialize($serialized);
+    list($this->validator, $this->arguments, $this->code, $this->message) = $array;
   }
 }
