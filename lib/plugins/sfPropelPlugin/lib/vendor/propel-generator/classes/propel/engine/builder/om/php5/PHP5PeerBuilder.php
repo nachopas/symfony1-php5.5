@@ -1042,7 +1042,7 @@ abstract class ".$this->getClassname(). $extendingPeerClass . " {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	abstract public static function getOMClass();
+	public static function getOMClass() {};
 ";
 	}
 
@@ -1084,7 +1084,7 @@ abstract class ".$this->getClassname(). $extendingPeerClass . " {
 	 * This method must be overridden by the stub subclass, because
 	 * ".$this->getObjectClassname()." is declared abstract in the schema.
 	 */
-	abstract public static function getOMClass(\$withPrefix = true);
+	public static function getOMClass(\$withPrefix = true) {};
 ";
 	}
 
