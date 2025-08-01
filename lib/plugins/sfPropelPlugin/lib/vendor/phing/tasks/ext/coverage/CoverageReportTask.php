@@ -193,7 +193,7 @@ class CoverageReportTask extends Task
 				}
 				else
 				{
-					$lines[$i] = utf8_encode($line);
+					$lines[$i] = iconv('ISO-8859-1', 'UTF-8//IGNORE', $line);
 				}
 			}
 			
