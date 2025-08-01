@@ -112,7 +112,7 @@ class Regexp {
         if($this->pattern === null) {            
             throw new Exception("No pattern specified for regexp match().");
         }
-        return $this->engine->match($this->pattern, $subject, $this->groups);
+        return $this->engine->strMatch($this->pattern, $subject, $this->groups);
     }
     
     /**

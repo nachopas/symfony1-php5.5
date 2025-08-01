@@ -49,7 +49,7 @@ interface RegexpEngine {
      * @param array $matches The array in which to store matches.
      * @return boolean Success of matching operation.
      */
-    function match($pattern, $source, &$matches);
+    function strMatch($pattern, $source, &$matches);
     
     /**
      * Matches all patterns in source string and sets the matches array.

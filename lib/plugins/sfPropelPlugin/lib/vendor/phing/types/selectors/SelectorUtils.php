@@ -93,7 +93,7 @@ class SelectorUtils {
             if ($patDir == "**") {
                 break;
             }
-            if (!self::match($patDir, $strDirs[$strIdxStart], $isCaseSensitive)) {
+            if (!self::strMatch($patDir, $strDirs[$strIdxStart], $isCaseSensitive)) {
                 return false;
             }
             $patIdxStart++;
@@ -151,7 +151,7 @@ class SelectorUtils {
             if ($patDir == "**") {
                 break;
             }
-            if (!self::match($patDir, $strDirs[$strIdxStart], $isCaseSensitive)) {
+            if (!self::strMatch($patDir, $strDirs[$strIdxStart], $isCaseSensitive)) {
                 return false;
             }
             $patIdxStart++;
@@ -176,7 +176,7 @@ class SelectorUtils {
             if ($patDir == "**") {
                 break;
             }
-            if (!self::match($patDir, $strDirs[$strIdxEnd], $isCaseSensitive)) {
+            if (!self::strMatch($patDir, $strDirs[$strIdxEnd], $isCaseSensitive)) {
                 return false;
             }
             $patIdxEnd--;
@@ -217,7 +217,7 @@ class SelectorUtils {
                 for ($j = 0; $j < $patLength; $j++) {
                     $subPat = $patDirs[$patIdxStart+$j+1];
                     $subStr = $strDirs[$strIdxStart+$i+$j];
-                    if (!self::match($subPat, $subStr, $isCaseSensitive)) {
+                    if (!self::strMatch($subPat, $subStr, $isCaseSensitive)) {
                         continue 2; // continue up two levels (to strLoop:)
                     }
                 }                                
@@ -259,7 +259,7 @@ class SelectorUtils {
      * @return <code>true</code> if the string matches against the pattern,
      *         or <code>false</code> otherwise.
      */
-    public static function match($pattern, $str, $isCaseSensitive = true) {
+    public static function strMatch($pattern, $str, $isCaseSensitive = true) {
     
         $patArr = StringHelper::toCharArray($pattern);
         $strArr = StringHelper::toCharArray($str);

@@ -69,7 +69,7 @@ class PregEngine implements RegexpEngine {
      * @param array $matches The array in which to store matches.
      * @return boolean Success of matching operation.
      */
-    function match($pattern, $source, &$matches) { 
+    function strMatch($pattern, $source, &$matches) { 
         return preg_match($this->preparePattern($pattern), $source, $matches);
     }
 

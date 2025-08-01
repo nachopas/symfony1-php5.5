@@ -233,8 +233,8 @@ class DirectoryScanner implements SelectorScanner {
      *                 false otherwise.
      * @access public
      */
-    function match($pattern, $str, $isCaseSensitive = true) {
-        return SelectorUtils::match($pattern, $str, $isCaseSensitive);
+    function strMatch($pattern, $str, $isCaseSensitive = true) {
+        return SelectorUtils::strMatch($pattern, $str, $isCaseSensitive);
     }
 
     /**
