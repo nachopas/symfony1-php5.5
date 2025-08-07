@@ -18,3 +18,26 @@ INSTALLATION
 ------------
 
 see http://www.symfony-project.org/getting-started/1_4/en/
+
+RUN TESTS
+---------
+
+In order to run an individual test:
+```sh
+php test/unit/response/sfResponseTest.php
+```
+
+To run all tests, it's recommended to use the task provided by Symfony. This requires a valid Symfony project, so if you don't have one, you can create a temporary project:
+```sh
+php data/bin/symfony generate:project test-project
+```
+
+Now you can run the task:
+```sh
+php symfony test:all
+```
+
+If you don't have PHP 7 installed locally, you can use Docker to run PHP quickly:
+```sh
+docker run --rm -v "$PWD":/app -w /app php:7.4-cli php <MY PHP COMMAND>
+```
