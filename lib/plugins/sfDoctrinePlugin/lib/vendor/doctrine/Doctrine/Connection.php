@@ -53,7 +53,7 @@
  * @author      Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author      Lukas Smith <smith@pooteeweet.org> (MDB2 library)
  */
-abstract class Doctrine_Connection extends Doctrine_Configurable implements Countable, IteratorAggregate, Serializable
+abstract class Doctrine_Connection extends Doctrine_Configurable implements Countable, IteratorAggregate
 {
     /**
      * @var $dbh                                the database handler
@@ -1554,29 +1554,16 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
         return Doctrine_Lib::getConnectionAsString($this);
     }
 
-    /**
-     * Serialize. Remove database connection(pdo) since it cannot be serialized
-     *
-     * @return string $serialized
-     */
-    public function serialize()
+    public function __serialize(): array
     {
         $vars = get_object_vars($this);
         $vars['dbh'] = null;
         $vars['isConnected'] = false;
-        return serialize($vars);
+        return $vars;
     }
 
-    /**
-     * Unserialize. Recreate connection from serialized content
-     *
-     * @param string $serialized
-     * @return void
-     */
-    public function unserialize($serialized)
+    public function __unserialize(array $array): void
     {
-        $array = unserialize($serialized);
-
         foreach ($array as $name => $values) {
             $this->$name = $values;
         }

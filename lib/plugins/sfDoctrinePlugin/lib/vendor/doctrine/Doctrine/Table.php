@@ -34,7 +34,7 @@
  * @method mixed findBy*(mixed $value) magic finders; @see __call()
  * @method mixed findOneBy*(mixed $value) magic finders; @see __call()
  */
-class Doctrine_Table extends Doctrine_Configurable implements Countable, Serializable
+class Doctrine_Table extends Doctrine_Configurable implements Countable
 {
     /**
      * @var array $data                                 temporary data which is then loaded into Doctrine_Record::$_data
@@ -2945,12 +2945,12 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable, Seriali
         throw new Doctrine_Table_Exception(sprintf('Unknown method %s::%s', get_class($this), $method));
     }
 
-    public function serialize()
+    public function __serialize(): array
     {
         $options = $this->_options;
         unset($options['declaringClass']);
 
-        return serialize(array(
+        return [
             $this->_identifier,
             $this->_identifierType,
             $this->_columns,
@@ -2962,13 +2962,11 @@ class Doctrine_Table extends Doctrine_Configurable implements Countable, Seriali
             $options,
             $this->_invokedMethods,
             $this->_useIdentityMap,
-        ));
+        ];
     }
 
-    public function unserialize($data)
+    public function __unserialize(array $all): void
     {
-        $all = unserialize($data);
-
         $this->_identifier = $all[0];
         $this->_identifierType = $all[1];
         $this->_columns = $all[2];

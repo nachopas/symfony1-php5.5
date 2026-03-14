@@ -162,24 +162,14 @@ class sfViewParameterHolder extends sfParameterHolder
     $this->escapingMethod = $method;
   }
 
-  /**
-   * Serializes the current instance.
-   *
-   * @return array Objects instance
-   */
-  public function serialize()
+  public function __serialize(): array
   {
-    return serialize(array($this->getAll(), $this->escapingMethod, $this->escaping));
+    return [$this->getAll(), $this->escapingMethod, $this->escaping];
   }
 
-  /**
-   * Unserializes a sfViewParameterHolder instance.
-   *
-   * @param string $serialized The serialized instance data
-   */
-  public function unserialize($serialized)
+  public function __unserialize(array $array): void
   {
-    list($this->parameters, $escapingMethod, $escaping) = unserialize($serialized);
+    list($this->parameters, $escapingMethod, $escaping) = $array;
 
     $this->initialize(sfContext::hasInstance() ? sfContext::getInstance()->getEventDispatcher() : new sfEventDispatcher());
 
