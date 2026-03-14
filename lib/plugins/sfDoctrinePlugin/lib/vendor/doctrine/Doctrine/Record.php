@@ -185,7 +185,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      *
      * @var array
      */
-    protected $_invokedSaveHooks = false;
+    protected $_invokedSaveHooks = array();
 
     /**
      * @var integer $index                  this index is used for creating object identifiers
@@ -1544,8 +1544,8 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         } else if (in_array($type, array('integer', 'int')) && is_numeric($old) && is_numeric($new)) {
             return $old != $new;
         } else if ($type == 'timestamp' || $type == 'date') {
-            $oldStrToTime = strtotime($old);
-            $newStrToTime = strtotime($new);
+            $oldStrToTime = is_string($old) && '' !== $old ? strtotime($old) : false;
+            $newStrToTime = is_string($new) && '' !== $new ? strtotime($new) : false;
             if ($oldStrToTime && $newStrToTime) {
                 return $oldStrToTime !== $newStrToTime;
             } else {
