@@ -559,7 +559,7 @@ class Doctrine_Core
     public static function getPath()
     {
         if ( ! self::$_path) {
-            self::$_path = realpath(dirname(__FILE__) . '/..');
+            self::$_path = realpath(__DIR__ . '/..');
         }
 
         return self::$_path;
@@ -1115,7 +1115,7 @@ class Doctrine_Core
     public static function autoload($className)
     {
         if (strpos($className, 'sfYaml') === 0) {
-            require dirname(__FILE__) . '/Parser/sfYaml/' . $className . '.php';
+            require __DIR__ . '/Parser/sfYaml/' . $className . '.php';
 
             return true;
         }
@@ -1177,7 +1177,7 @@ class Doctrine_Core
         $extensions = Doctrine_Manager::getInstance()
             ->getExtensions();
 
-        foreach ($extensions as $name => $path) {
+        foreach ($extensions as $path) {
             $class = $path . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
             if (file_exists($class)) {
