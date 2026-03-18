@@ -311,22 +311,23 @@ class sfDoctrineColumn implements ArrayAccess
     return $this->table;
   }
 
-  public function offsetExists($offset)
+  public function offsetExists($offset): bool
   {
     return isset($this->definition[$offset]);
   }
 
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     $this->definition[$offset] = $value;
   }
 
+  #[\ReturnTypeWillChange]
   public function offsetGet($offset)
   {
     return $this->definition[$offset];
   }
 
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     unset($this->definition[$offset]);
   }
