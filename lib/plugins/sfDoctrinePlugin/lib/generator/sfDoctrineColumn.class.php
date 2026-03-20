@@ -321,8 +321,7 @@ class sfDoctrineColumn implements ArrayAccess
     $this->definition[$offset] = $value;
   }
 
-  #[\ReturnTypeWillChange]
-  public function offsetGet($offset)
+  public function offsetGet($offset): mixed
   {
     return $this->definition[$offset];
   }
