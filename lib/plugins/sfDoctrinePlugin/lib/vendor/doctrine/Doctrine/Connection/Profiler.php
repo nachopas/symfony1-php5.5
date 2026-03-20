@@ -134,8 +134,7 @@ class Doctrine_Connection_Profiler implements Doctrine_Overloadable, IteratorAgg
      *
      * @return ArrayIterator
      */
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->events);
     }
@@ -145,8 +144,7 @@ class Doctrine_Connection_Profiler implements Doctrine_Overloadable, IteratorAgg
      * 
      * @return integer
      */
-    #[\ReturnTypeWillChange]
-    public function count() 
+    public function count(): int
     {
         return count($this->events);
     }
