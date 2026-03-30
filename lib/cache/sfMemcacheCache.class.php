@@ -201,16 +201,18 @@ class sfMemcacheCache extends sfCache
   /**
    * @see sfCache
    */
-  public function getMany($keys)
-  {
-    $values = array();
-    foreach ($this->memcache->get(array_map(function($k) { return "'.$this->getOption('prefix').'".$k; }, $keys)) as $key => $value)
+    public function getMany($keys)
     {
-      $values[str_replace($this->getOption('prefix'), '', $key)] = $value;
-    }
+        $values = [];
+        $prefix = $this->getOption('prefix');
+        $prefixed_keys = array_map(function ($k) use ($prefix) { return $prefix.$k; }, $keys);
 
-    return $values;
-  }
+        foreach ($this->memcache->get($prefixed_keys) as $key => $value) {
+            $values[str_replace($prefix, '', $key)] = $value;
+        }
+
+        return $values;
+    }
 
   /**
    * Gets metadata about a key in the cache.
