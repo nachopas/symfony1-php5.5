@@ -15,7 +15,7 @@
         foreach ($errorStack as $field => $errors) {
             $message .= "$field (" . implode(", ", $errors) . "), ";
         }
-        $message = trim($message, ', ');
+        $message = trim((string)$message, ', ');
 
         $this->getUser()->setFlash('error', $message);
         return sfView::SUCCESS;
