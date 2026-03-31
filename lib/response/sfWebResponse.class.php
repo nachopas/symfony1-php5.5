@@ -58,6 +58,7 @@ class sfWebResponse extends sfResponse
     '305' => 'Use Proxy',
     '306' => '(Unused)',
     '307' => 'Temporary Redirect',
+    '308' => 'Permanent Redirect',
     '400' => 'Bad Request',
     '401' => 'Unauthorized',
     '402' => 'Payment Required',
@@ -365,7 +366,9 @@ class sfWebResponse extends sfResponse
     // cookies
     foreach ($this->cookies as $cookie)
     {
-      setrawcookie($cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+      $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
+      $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
+      setrawcookie($cookie['name'], $cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
 
       if ($this->options['logging'])
       {
