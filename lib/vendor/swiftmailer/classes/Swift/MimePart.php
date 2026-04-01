@@ -28,8 +28,11 @@ class Swift_MimePart extends Swift_Mime_MimePart
   public function __construct($body = null, $contentType = null,
     $charset = null)
   {
-    call_user_func_array(
-      array($this, 'Swift_Mime_MimePart::__construct'),
+    $constructor = new ReflectionMethod(
+      'Swift_Mime_MimePart', '__construct'
+    );
+    $constructor->invokeArgs(
+      $this,
       Swift_DependencyContainer::getInstance()
         ->createDependenciesFor('mime.part')
       );
