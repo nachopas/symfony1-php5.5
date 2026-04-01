@@ -32,6 +32,9 @@
  */
 class Doctrine_Task_RebuildDb extends Doctrine_Task
 {
+    public $dropDb;
+    public $createDb;
+    public $createTables;
     public $description          =   'Drops and re-creates databases',
            $requiredArguments    =   array(),
            $optionalArguments    =   array();

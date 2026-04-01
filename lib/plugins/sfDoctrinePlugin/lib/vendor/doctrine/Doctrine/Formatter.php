@@ -32,6 +32,9 @@
  */
 class Doctrine_Formatter extends Doctrine_Connection_Module
 {
+    public $string_quoting;
+    public $wildcards;
+
     /**
      * Quotes pattern (% and _) characters in a string)
      *

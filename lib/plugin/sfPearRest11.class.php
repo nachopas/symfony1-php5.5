@@ -20,6 +20,8 @@ require_once 'PEAR/REST/11.php';
  */
 class sfPearRest11 extends PEAR_REST_11
 {
+  public $_rest;
+
   /**
    * @see PEAR_REST_11
    */

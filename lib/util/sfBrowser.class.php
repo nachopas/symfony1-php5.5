@@ -18,6 +18,7 @@
  */
 class sfBrowser extends sfBrowserBase
 {
+  public $rawConfiguration;
   protected
     $listeners        = array(),
     $context          = null,

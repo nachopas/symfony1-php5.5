@@ -22,6 +22,7 @@
  */
 class sfViewCacheManager
 {
+  public $options;
   protected
     $cache       = null,
     $cacheConfig = array(),

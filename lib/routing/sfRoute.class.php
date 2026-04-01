@@ -18,6 +18,8 @@
  */
 class sfRoute
 {
+  public $firstOptional;
+  public $segments;
   protected
     $isBound           = false,
     $context           = null,

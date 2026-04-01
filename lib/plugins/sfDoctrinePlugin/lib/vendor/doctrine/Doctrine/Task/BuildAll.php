@@ -36,6 +36,7 @@ class Doctrine_Task_BuildAll extends Doctrine_Task
            $requiredArguments    =   array(),
            $optionalArguments    =   array();
     
+    public $createDb;
     protected $models,
               $tables;
     

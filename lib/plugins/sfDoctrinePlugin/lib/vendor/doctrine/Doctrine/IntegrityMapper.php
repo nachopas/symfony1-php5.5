@@ -32,6 +32,8 @@
  */
 class Doctrine_IntegrityMapper 
 {
+    public $conn;
+
     /**
      * processDeleteIntegrity 
      * 

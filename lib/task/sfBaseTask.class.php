@@ -18,6 +18,8 @@
  */
 abstract class sfBaseTask extends sfCommandApplicationTask
 {
+  public $filesystem;
+  public $tokens;
   protected
     $configuration = null,
     $pluginManager = null;

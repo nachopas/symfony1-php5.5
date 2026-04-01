@@ -33,6 +33,7 @@
  */
 class Doctrine_Validator extends Doctrine_Locator_Injectable
 {
+    public $stack;
     /**
      * @var array $validators           an array of validator objects
      */

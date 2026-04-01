@@ -20,6 +20,8 @@ require_once(dirname(__FILE__).'/sfDoctrineBaseTask.class.php');
  */
 class sfDoctrineGenerateModuleTask extends sfDoctrineBaseTask
 {
+  protected $constants;
+
   /**
    * @see sfTask
    */

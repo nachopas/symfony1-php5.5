@@ -330,6 +330,7 @@ class sfValidatorFDTokenFilter
 
 class sfValidatorFDTokenOperator
 {
+  public $arguments;
   protected
     $class,
     $operator,

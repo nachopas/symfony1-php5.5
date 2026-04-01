@@ -270,6 +270,10 @@ abstract class Doctrine_Query_Abstract
      */
     protected $disableLimitSubquery = false;
 
+    protected $_pendingJoinConditions = [];
+
+    protected $_parsers = [];
+
     /**
      * Constructor.
      *

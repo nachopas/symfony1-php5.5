@@ -19,6 +19,7 @@
  */
 abstract class sfData
 {
+  public $maps = [];
   protected
     $deleteCurrentData = true,
     $object_references = array();

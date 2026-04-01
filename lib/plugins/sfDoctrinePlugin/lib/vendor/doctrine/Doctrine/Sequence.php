@@ -34,6 +34,11 @@
 class Doctrine_Sequence extends Doctrine_Connection_Module
 {
     /**
+     * @var string[]
+     */
+    public $warnings;
+
+    /**
      * Returns the next free id of a sequence
      *
      * @param string $seqName   name of the sequence
