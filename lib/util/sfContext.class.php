@@ -457,8 +457,7 @@ class sfContext implements ArrayAccess
    *
    * @return Boolean true if the context object exists, false otherwise
    */
-  #[\ReturnTypeWillChange]
-  public function offsetExists($name)
+  public function offsetExists($name): bool
   {
     return $this->has($name);
   }
@@ -470,8 +469,7 @@ class sfContext implements ArrayAccess
    *
    * @return mixed The context object if exists, null otherwise
    */
-  #[\ReturnTypeWillChange]
-  public function offsetGet($name)
+  public function offsetGet($name): mixed
   {
     return $this->get($name);
   }
@@ -482,8 +480,7 @@ class sfContext implements ArrayAccess
    * @param string $offset The parameter name
    * @param string $value The parameter value
    */
-  #[\ReturnTypeWillChange]
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     $this->set($offset, $value);
   }
@@ -493,8 +490,7 @@ class sfContext implements ArrayAccess
    *
    * @param string $offset The parameter name
    */
-  #[\ReturnTypeWillChange]
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     unset($this->factories[$offset]);
   }

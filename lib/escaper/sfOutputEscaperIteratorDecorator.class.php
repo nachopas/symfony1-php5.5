@@ -67,8 +67,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return mixed The escaped value
    */
-  #[\ReturnTypeWillChange]
-  public function current()
+  public function current(): mixed
   {
     return sfOutputEscaper::escape($this->escapingMethod, $this->iterator->current());
   }
@@ -78,8 +77,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return string Iterator key
    */
-  #[\ReturnTypeWillChange]
-  public function key()
+  public function key(): mixed
   {
     return $this->iterator->key();
   }
@@ -99,8 +97,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return bool true if the current element is valid; false otherwise
    */
-  #[\ReturnTypeWillChange]
-  public function valid()
+  public function valid(): bool
   {
     return $this->iterator->valid();
   }
@@ -112,8 +109,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return bool true if the offset isset; false otherwise
    */
-  #[\ReturnTypeWillChange]
-  public function offsetExists($offset)
+  public function offsetExists($offset): bool
   {
     return isset($this->value[$offset]);
   }
@@ -125,8 +121,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @return mixed The escaped value
    */
-  #[\ReturnTypeWillChange]
-  public function offsetGet($offset)
+  public function offsetGet($offset): mixed
   {
     return sfOutputEscaper::escape($this->escapingMethod, $this->value[$offset]);
   }
@@ -143,8 +138,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @throws sfException
    */
-  #[\ReturnTypeWillChange]
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     throw new sfException('Cannot set values.');
   }
@@ -160,8 +154,7 @@ class sfOutputEscaperIteratorDecorator extends sfOutputEscaperObjectDecorator im
    *
    * @throws sfException
    */
-  #[\ReturnTypeWillChange]
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     throw new sfException('Cannot unset values.');
   }

@@ -528,8 +528,7 @@ abstract class sfPager implements Iterator, Countable
    *
    * @see Iterator
    */
-  #[\ReturnTypeWillChange]
-  public function current()
+  public function current(): mixed
   {
     if (!$this->isIteratorInitialized())
     {
@@ -544,8 +543,7 @@ abstract class sfPager implements Iterator, Countable
    *
    * @see Iterator
    */
-  #[\ReturnTypeWillChange]
-  public function key()
+  public function key(): mixed
   {
     if (!$this->isIteratorInitialized())
     {
@@ -596,8 +594,7 @@ abstract class sfPager implements Iterator, Countable
    *
    * @see Iterator
    */
-  #[\ReturnTypeWillChange]
-  public function valid()
+  public function valid(): bool
   {
     if (!$this->isIteratorInitialized())
     {
@@ -612,8 +609,7 @@ abstract class sfPager implements Iterator, Countable
    *
    * @see Countable
    */
-  #[\ReturnTypeWillChange]
-  public function count()
+  public function count(): int
   {
     return $this->getNbResults();
   }
