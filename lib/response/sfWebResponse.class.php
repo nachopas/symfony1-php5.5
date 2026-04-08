@@ -368,7 +368,7 @@ class sfWebResponse extends sfResponse
     {
       $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
       $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
-      setrawcookie($cookie['name'], $cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
+      setrawcookie($cookie['name'], (string)$cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
 
       if ($this->options['logging'])
       {
