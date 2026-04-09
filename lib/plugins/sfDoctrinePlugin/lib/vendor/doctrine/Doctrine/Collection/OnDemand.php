@@ -64,7 +64,7 @@ class Doctrine_Collection_OnDemand implements Iterator
         }
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = 0;
         $this->_stmt->closeCursor();
@@ -73,16 +73,19 @@ class Doctrine_Collection_OnDemand implements Iterator
         $this->_hydrateCurrent();
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->index;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_current;
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_current = null;
@@ -90,7 +93,7 @@ class Doctrine_Collection_OnDemand implements Iterator
         $this->_hydrateCurrent();
     }
 
-    public function valid()
+    public function valid(): bool
     {
         if ( ! is_null($this->_current) && $this->_current !== false) {
             return true;

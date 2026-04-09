@@ -157,8 +157,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @throws LogicException
    */
-  #[\ReturnTypeWillChange]
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     throw new LogicException('Cannot remove form fields (read-only).');
   }
@@ -166,8 +165,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
   /**
    * Resets the field names array to the beginning (implements the Iterator interface).
    */
-  #[\ReturnTypeWillChange]
-  public function rewind()
+  public function rewind(): void
   {
     reset($this->fieldNames);
     $this->count = count($this->fieldNames);
@@ -198,8 +196,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
   /**
    * Moves to the next form field (implements the Iterator interface).
    */
-  #[\ReturnTypeWillChange]
-  public function next()
+  public function next(): void
   {
     next($this->fieldNames);
     --$this->count;
@@ -210,8 +207,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return boolean The validity of the current element; true if it is valid
    */
-  #[\ReturnTypeWillChange]
-  public function valid()
+  public function valid(): bool
   {
     return $this->count > 0;
   }
@@ -221,8 +217,7 @@ class sfFormFieldSchema extends sfFormField implements ArrayAccess, Iterator, Co
    *
    * @return integer The number of embedded form fields
    */
-  #[\ReturnTypeWillChange]
-  public function count()
+  public function count(): int
   {
     return count($this->fieldNames);
   }
