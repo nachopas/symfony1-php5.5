@@ -74,6 +74,7 @@ abstract class Doctrine_Collection_Iterator implements Iterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->index = 0;
@@ -88,6 +89,7 @@ abstract class Doctrine_Collection_Iterator implements Iterator
      *
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->key;
@@ -98,7 +100,7 @@ abstract class Doctrine_Collection_Iterator implements Iterator
      *
      * @return Doctrine_Record
      */
-    public function current()
+    public function current(): Doctrine_Record
     {
         return $this->collection->get($this->key);
     }
@@ -108,7 +110,7 @@ abstract class Doctrine_Collection_Iterator implements Iterator
      *
      * @return void
      */
-    public function next()
+    public function next(): void
     {
         $this->index++;
         $i = $this->index;

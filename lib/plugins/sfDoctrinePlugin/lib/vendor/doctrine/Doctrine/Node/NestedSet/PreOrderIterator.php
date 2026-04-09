@@ -100,7 +100,7 @@ class Doctrine_Node_NestedSet_PreOrderIterator implements Iterator
      *
      * @return void
      */
-    public function rewind()
+    public function rewind(): void
     {
         $this->index = -1;
         $this->key = null;
@@ -111,6 +111,7 @@ class Doctrine_Node_NestedSet_PreOrderIterator implements Iterator
      *
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->key;
@@ -121,7 +122,7 @@ class Doctrine_Node_NestedSet_PreOrderIterator implements Iterator
      *
      * @return Doctrine_Record
      */
-    public function current()
+    public function current(): Doctrine_Record
     {
         $record = $this->collection->get($this->key);
         $record->getNode()->setLevel($this->level);
@@ -133,6 +134,7 @@ class Doctrine_Node_NestedSet_PreOrderIterator implements Iterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         while ($current = $this->advanceIndex()) {
@@ -149,7 +151,7 @@ class Doctrine_Node_NestedSet_PreOrderIterator implements Iterator
     /**
      * @return boolean                          whether or not the iteration will continue
      */
-    public function valid()
+    public function valid(): bool
     {
         return ($this->index < $this->count);
     }
