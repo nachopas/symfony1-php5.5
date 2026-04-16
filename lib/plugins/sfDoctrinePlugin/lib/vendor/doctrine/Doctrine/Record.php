@@ -31,7 +31,7 @@
  * @since       1.0
  * @version     $Revision: 7673 $
  */
-abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate
+abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Countable, IteratorAggregate, Serializable
 {
     /**
      * STATE CONSTANTS
@@ -788,6 +788,32 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
                 }
                 break;
         }
+    }
+
+    /**
+     * Serializable interface implementation for BC with PHP7-
+     *
+     * @return string
+     */
+    public function serialize()
+    {
+        $vars = $this->__serialize();
+
+        return serialize($vars);
+    }
+
+    /**
+     * Serializable interface implementation for BC with PHP7-
+     *
+     * @param string $serialized                Doctrine_Record as serialized string
+     * @throws Doctrine_Record_Exception        if the cleanData operation fails somehow
+     * @return void
+     */
+    public function unserialize($serialized)
+    {
+        $array = unserialize($serialized);
+
+        $this->__unserialize($array);
     }
 
     public function __serialize(): array
