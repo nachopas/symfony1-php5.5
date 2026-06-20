@@ -40,7 +40,7 @@ class sfWebResponse extends sfResponse
     $javascripts = array(),
     $slots       = array();
 
-  static protected $statusTexts = array(
+  protected static $statusTexts = [
     '100' => 'Continue',
     '101' => 'Switching Protocols',
     '200' => 'OK',
@@ -83,7 +83,7 @@ class sfWebResponse extends sfResponse
     '503' => 'Service Unavailable',
     '504' => 'Gateway Timeout',
     '505' => 'HTTP Version Not Supported',
-  );
+  ];
 
   /**
    * Initializes this sfWebResponse.
@@ -136,7 +136,7 @@ class sfWebResponse extends sfResponse
    */
   public function setHeaderOnly($value = true)
   {
-    $this->headerOnly = (boolean) $value;
+    $this->headerOnly = (bool) $value;
   }
 
   /**
@@ -159,10 +159,11 @@ class sfWebResponse extends sfResponse
    * @param  string  $domain    Domain name
    * @param  bool    $secure    If secure
    * @param  bool    $httpOnly  If uses only HTTP
+   * @param ''|'None'|'Lax'|'Strict' $samesite If uses Same-site cookies
    *
-   * @throws <b>sfException</b> If fails to set the cookie
+   * @throws sfException If fails to set the cookie
    */
-  public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = false, $httpOnly = false)
+  public function setCookie($name, $value, $expire = null, $path = '/', $domain = '', $secure = false, $httpOnly = false, string $samesite = '')
   {
     if ($expire !== null)
     {
@@ -188,6 +189,7 @@ class sfWebResponse extends sfResponse
       'domain'   => $domain,
       'secure'   => $secure ? true : false,
       'httpOnly' => $httpOnly,
+      'samesite' => $samesite,
     );
   }
 
@@ -217,7 +219,7 @@ class sfWebResponse extends sfResponse
   /**
    * Retrieves status code for the current web response.
    *
-   * @return integer Status code
+   * @return int Status code
    */
   public function getStatusCode()
   {
@@ -313,7 +315,7 @@ class sfWebResponse extends sfResponse
   /**
    * Gets response content type.
    *
-   * @return array
+   * @return string
    */
   public function getContentType()
   {
@@ -345,7 +347,7 @@ class sfWebResponse extends sfResponse
 
     if ($this->options['logging'])
     {
-      $this->dispatcher->notify(new sfEvent($this, 'application.log', array(sprintf('Send status "%s"', $status))));
+      $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Send status "%s"', $status)]));
     }
 
     // headers
@@ -359,7 +361,7 @@ class sfWebResponse extends sfResponse
 
       if ($value != '' && $this->options['logging'])
       {
-        $this->dispatcher->notify(new sfEvent($this, 'application.log', array(sprintf('Send header "%s: %s"', $name, $value))));
+        $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Send header "%s: %s"', $name, $value)]));
       }
     }
 
@@ -368,7 +370,14 @@ class sfWebResponse extends sfResponse
     {
       $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
       $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
-      setrawcookie($cookie['name'], (string)$cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
+      setrawcookie($cookie['name'], (string)$cookie['value'], [
+        'expires'  => $expire,
+        'path'     => $cookie['path'],
+        'domain'   => $domain,
+        'secure'   => $cookie['secure'],
+        'httpOnly' => $cookie['httpOnly'],
+        'samesite' => $cookie['samesite'],
+      ]);
 
       if ($this->options['logging'])
       {
@@ -414,7 +423,7 @@ class sfWebResponse extends sfResponse
    */
   protected function normalizeHeaderName($name)
   {
-    return strtr(ucwords(strtr(strtolower($name), array('_' => ' ', '-' => ' '))), array(' ' => '-'));
+    return strtr(ucwords(strtr(strtolower($name), ['_' => ' ', '-' => ' '])), [' ' => '-']);
   }
 
   /**
@@ -425,7 +434,7 @@ class sfWebResponse extends sfResponse
    *
    * @return string Formatted date
    */
-  static public function getDate($timestamp, $type = 'rfc1123')
+  public static function getDate($timestamp, $type = 'rfc1123')
   {
     $type = strtolower($type);
 
@@ -630,7 +639,7 @@ class sfWebResponse extends sfResponse
   {
     if (self::ALL === $position)
     {
-      $stylesheets = array();
+      $stylesheets = [];
       foreach ($this->getPositions() as $position)
       {
         foreach ($this->stylesheets[$position] as $file => $options)

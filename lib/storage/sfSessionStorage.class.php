@@ -39,7 +39,8 @@ class sfSessionStorage extends sfStorage
    *  * session_cookie_path:     Cookie path
    *  * session_cookie_domain:   Cookie domain
    *  * session_cookie_secure:   Cookie secure
-   *  * session_cookie_httponly: Cookie http only (only for PHP >= 5.2)
+   *  * session_cookie_httponly: Cookie http only
+   *  * session.cookie_samesite: Cookie same site
    *
    * The default values for all 'session_cookie_*' options are those returned by the session_get_cookie_params() function
    *
@@ -51,7 +52,7 @@ class sfSessionStorage extends sfStorage
   {
     $cookieDefaults = session_get_cookie_params();
 
-    $options = array_merge(array(
+    $options = array_merge([
       'session_name'            => 'symfony',
       'session_id'              => null,
       'auto_start'              => true,
@@ -60,8 +61,9 @@ class sfSessionStorage extends sfStorage
       'session_cookie_domain'   => $cookieDefaults['domain'],
       'session_cookie_secure'   => $cookieDefaults['secure'],
       'session_cookie_httponly' => isset($cookieDefaults['httponly']) ? $cookieDefaults['httponly'] : false,
+      'session_cookie_samesite' => isset($cookieDefaults['samesite']) ? $cookieDefaults['samesite'] : '',
       'session_cache_limiter'   => null,
-    ), $options);
+    ], $options);
 
     // initialize parent
     parent::initialize($options);
@@ -71,7 +73,7 @@ class sfSessionStorage extends sfStorage
 
     session_name($sessionName);
 
-    if (!(boolean) ini_get('session.use_cookies') && $sessionId = $this->options['session_id'])
+    if (!(bool) ini_get('session.use_cookies') && $sessionId = $this->options['session_id'])
     {
       session_id($sessionId);
     }
@@ -81,7 +83,15 @@ class sfSessionStorage extends sfStorage
     $domain   = $this->options['session_cookie_domain'];
     $secure   = $this->options['session_cookie_secure'];
     $httpOnly = $this->options['session_cookie_httponly'];
-    session_set_cookie_params($lifetime, $path, $domain, $secure, $httpOnly);
+    $samesite = $this->options['session_cookie_samesite'];
+    session_set_cookie_params([
+      'lifetime' => $lifetime,
+      'path'     => $path,
+      'domain'   => $domain,
+      'secure'   => $secure,
+      'httponly' => $httpOnly,
+      'samesite' => $samesite,
+    ]);
 
     if (null !== $this->options['session_cache_limiter'])
     {
@@ -155,10 +165,9 @@ class sfSessionStorage extends sfStorage
   /**
    * Regenerates id that represents this storage.
    *
-   * @param  boolean $destroy Destroy session when regenerating?
+   * @param bool $destroy Destroy session when regenerating?
    *
-   * @return boolean True if session regenerated, false if error
-   *
+   * @return bool|void
    */
   public function regenerate($destroy = false)
   {
@@ -181,5 +190,6 @@ class sfSessionStorage extends sfStorage
   {
     // don't need a shutdown procedure because read/write do it in real-time
     session_write_close();
+    self::$sessionStarted = false;
   }
 }
