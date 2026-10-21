@@ -85,6 +85,23 @@ class sfFileLogger extends sfLogger
   }
 
   /**
+   * Locale-safe strftime for PHP 8.1+ (native strftime is deprecated).
+   *
+   * @param  string $format
+   *
+   * @return string
+   */
+  public static function strftime($format)
+  {
+    if (version_compare(PHP_VERSION, '8.1.0') < 0)
+    {
+      return strftime($format);
+    }
+
+    return date(self::_strftimeFormatToDateFormat($format));
+  }
+
+  /**
    * Logs a message.
    *
    * @param string $message   Message
@@ -96,7 +113,7 @@ class sfFileLogger extends sfLogger
     fwrite($this->fp, strtr($this->format, array(
       '%type%'     => $this->type,
       '%message%'  => $message,
-      '%time%'     => strftime($this->timeFormat),
+      '%time%'     => self::strftime($this->timeFormat),
       '%priority%' => $this->getPriority($priority),
       '%EOL%'      => PHP_EOL,
     )));
@@ -124,5 +141,41 @@ class sfFileLogger extends sfLogger
     {
       fclose($this->fp);
     }
+  }
+
+  /**
+   * Convert a strftime format to a date() format (no locale translation).
+   * Incomplete for rare tokens (%V %C %g %G); enough for log timestamps.
+   *
+   * @param  string $strftimeFormat
+   *
+   * @return string
+   */
+  private static function _strftimeFormatToDateFormat($strftimeFormat)
+  {
+    // Missing %V %C %g %G
+    $search = array(
+      '%a', '%A', '%d', '%e', '%u',
+      '%w', '%W', '%b', '%h', '%B',
+      '%m', '%y', '%Y', '%D', '%F',
+      '%x', '%n', '%t', '%H', '%k',
+      '%I', '%l', '%M', '%p', '%P',
+      '%r' /* %I:%M:%S %p */, '%R' /* %H:%M */, '%S', '%T' /* %H:%M:%S */, '%X', '%z', '%Z',
+      '%c', '%s', '%j',
+      '%%',
+    );
+
+    $replace = array(
+      'D', 'l', 'd', 'j', 'N',
+      'w', 'W', 'M', 'M', 'F',
+      'm', 'y', 'Y', 'm/d/y', 'Y-m-d',
+      'm/d/y', "\n", "\t", 'H', 'G',
+      'h', 'g', 'i', 'A', 'a',
+      'h:i:s A', 'H:i', 's', 'H:i:s', 'H:i:s', 'O', 'T',
+      'D M j H:i:s Y' /* Tue Feb 5 00:45:10 2009 */, 'U', 'z',
+      '%',
+    );
+
+    return str_replace($search, $replace, $strftimeFormat);
   }
 }
