@@ -21,7 +21,8 @@ abstract class sfData
 {
   protected
     $deleteCurrentData = true,
-    $object_references = array();
+    $object_references = array(),
+    $maps = array();
 
   /**
    * Sets a flag to indicate if the current data in the database

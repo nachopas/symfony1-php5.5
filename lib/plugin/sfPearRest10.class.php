@@ -20,6 +20,8 @@ require_once 'PEAR/REST/10.php';
  */
 class sfPearRest10 extends PEAR_REST_10
 {
+  protected $_rest;
+
   /**
    * @see PEAR_REST_10
    */

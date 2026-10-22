@@ -22,7 +22,8 @@ class sfPearRestPlugin extends sfPearRest11
     $config,
     $rest10,
     $restBase,
-    $channel;
+    $channel,
+    $_rest;
 
   /**
    * Constructs a new sfRestPlugin instance.
