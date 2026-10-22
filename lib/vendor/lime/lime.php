@@ -547,7 +547,7 @@ class lime_test
     return array($traces[$last]['file'], $traces[$last]['line']);
   }
 
-  public function handle_error($code, $message, $file, $line, $context)
+  public function handle_error($code, $message, $file, $line, $context = null)
   {
     if (!$this->options['error_reporting'] || ($code & error_reporting()) == 0)
     {
@@ -570,7 +570,12 @@ class lime_test
     $this->error($type.': '.$message, $file, $line, $trace);
   }
 
-  public function handle_exception(Exception $exception)
+  /**
+   * @param Throwable|Exception $exception
+   *
+   * @return bool
+   */
+  public function handle_exception($exception)
   {
     $this->error(get_class($exception).': '.$exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getTrace());
 
