@@ -25,8 +25,10 @@ abstract class sfRequest implements ArrayAccess
   const GET    = 'GET';
   const POST   = 'POST';
   const PUT    = 'PUT';
+  const PATCH  = 'PATCH';
   const DELETE = 'DELETE';
   const HEAD   = 'HEAD';
+  const OPTIONS = 'OPTIONS';
 
   protected
     $dispatcher      = null,
@@ -79,6 +81,18 @@ abstract class sfRequest implements ArrayAccess
 
     $this->parameterHolder->add($parameters);
     $this->attributeHolder->add($attributes);
+  }
+
+  /**
+   * Return an option value or null if the option does not exist.
+   *
+   * @param  string $name The option name
+   *
+   * @return mixed The option value
+   */
+  public function getOption($name)
+  {
+    return isset($this->options[$name]) ? $this->options[$name] : null;
   }
 
   /**
@@ -135,7 +149,7 @@ abstract class sfRequest implements ArrayAccess
    */
   public function setMethod($method)
   {
-    if (!in_array(strtoupper($method), array(self::GET, self::POST, self::PUT, self::DELETE, self::HEAD)))
+    if (!in_array(strtoupper($method), array(self::GET, self::POST, self::PUT, self::PATCH, self::DELETE, self::HEAD, self::OPTIONS)))
     {
       throw new sfException(sprintf('Invalid request method: %s.', $method));
     }
@@ -292,12 +306,9 @@ abstract class sfRequest implements ArrayAccess
    */
   public function getContent()
   {
-    if (null === $this->content)
+    if (null === $this->content && '' === trim($this->content = file_get_contents('php://input')))
     {
-      if (0 === strlen(trim($this->content = file_get_contents('php://input'))))
-      {
-        $this->content = false;
-      }
+      $this->content = false;
     }
 
     return $this->content;
