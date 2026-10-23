@@ -37,6 +37,12 @@ abstract class sfMessageSource_File extends sfMessageSource
   protected $dataSeparator = '.';
 
   /**
+   * File extension for catalogues (set by concrete drivers, e.g. .xml / .mo).
+   * @var string
+   */
+  protected $dataExt;
+
+  /**
    * Constructor.
    *
    * @param string $source the directory where the messages are stored.

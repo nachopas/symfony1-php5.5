@@ -33,6 +33,11 @@
 class Doctrine_IntegrityMapper 
 {
     /**
+     * @var Doctrine_Connection
+     */
+    protected $conn;
+
+    /**
      * processDeleteIntegrity 
      * 
      * @param Doctrine_Record $record 

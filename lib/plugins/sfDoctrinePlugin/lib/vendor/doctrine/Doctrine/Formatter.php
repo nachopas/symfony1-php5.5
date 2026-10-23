@@ -33,6 +33,16 @@
 class Doctrine_Formatter extends Doctrine_Connection_Module
 {
     /**
+     * @var array
+     */
+    protected $string_quoting;
+
+    /**
+     * @var array
+     */
+    protected $wildcards;
+
+    /**
      * Quotes pattern (% and _) characters in a string)
      *
      * EXPERIMENTAL
