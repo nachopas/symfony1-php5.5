@@ -410,6 +410,8 @@ class sfWebResponse extends sfResponse
 
     if (function_exists('fastcgi_finish_request'))
     {
+      // Allow listeners to finish work before the FPM worker is released
+      $this->dispatcher->notify(new sfEvent($this, 'response.fastcgi_finish_request'));
       fastcgi_finish_request();
     }
   }

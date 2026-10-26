@@ -23,10 +23,11 @@
 class sfContext implements ArrayAccess
 {
   protected
-    $dispatcher          = null,
-    $configuration       = null,
-    $mailerConfiguration = array(),
-    $factories           = array();
+    $dispatcher                 = null,
+    $configuration              = null,
+    $mailerConfiguration        = array(),
+    $factories                  = array(),
+    $hasShutdownUserAndStorage  = false;
 
   protected static
     $instances = array(),
@@ -86,6 +87,8 @@ class sfContext implements ArrayAccess
     }
 
     $this->dispatcher->connect('template.filter_parameters', array($this, 'filterTemplateParameters'));
+    // Persist user/session before FPM releases the request (see sfWebResponse::send())
+    $this->dispatcher->connect('response.fastcgi_finish_request', array($this, 'shutdownUserAndStorage'));
 
     // register our shutdown function
     register_shutdown_function(array($this, 'shutdown'));
@@ -595,18 +598,29 @@ class sfContext implements ArrayAccess
   }
 
   /**
+   * Shuts the user/storage down.
+   *
+   * Called from response.fastcgi_finish_request and from shutdown(); safe to call twice.
+   */
+  public function shutdownUserAndStorage()
+  {
+    if (!$this->hasShutdownUserAndStorage && $this->has('user'))
+    {
+      $this->getUser()->shutdown();
+      $this->getStorage()->shutdown();
+
+      $this->hasShutdownUserAndStorage = true;
+    }
+  }
+
+  /**
    * Execute the shutdown procedure.
    *
    * @return void
    */
   public function shutdown()
   {
-    // shutdown all factories
-    if($this->has('user'))
-    {
-      $this->getUser()->shutdown();
-      $this->getStorage()->shutdown();
-    }
+    $this->shutdownUserAndStorage();
 
     if ($this->has('routing'))
     {
