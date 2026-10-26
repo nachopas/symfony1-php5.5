@@ -60,6 +60,8 @@ If your database supports rolling back DDL statements, you can run migrations
 in dry-run mode using the [--dry-run|COMMENT] option:
 
   [./symfony doctrine:migrate --dry-run|INFO]
+
+MySQL implicitly commits DDL statements. A dry run cannot undo those schema changes.
 EOF;
   }
 
@@ -120,6 +122,10 @@ EOF;
     }
     catch (Exception $e)
     {
+      if (!$migration->hasErrors())
+      {
+        throw $e;
+      }
     }
 
     // render errors
