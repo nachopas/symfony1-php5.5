@@ -115,6 +115,38 @@ class sfValidatorChoice extends sfValidatorBase
   }
 
   /**
+   * Returns true if the value is empty.
+   *
+   * Multiple choice may submit an array of empty values; treat that as empty.
+   *
+   * @param  mixed $value The input value
+   *
+   * @return bool true if the value is empty, false otherwise
+   */
+  protected function isEmpty($value)
+  {
+    if (parent::isEmpty($value))
+    {
+      return true;
+    }
+
+    if (is_array($value))
+    {
+      foreach ($value as $v)
+      {
+        if (!parent::isEmpty($v))
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Checks if a value is part of given choices (see bug #4212)
    *
    * @param  mixed $value   The value to check
