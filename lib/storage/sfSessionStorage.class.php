@@ -63,6 +63,7 @@ class sfSessionStorage extends sfStorage
       'session_cookie_httponly' => isset($cookieDefaults['httponly']) ? $cookieDefaults['httponly'] : false,
       'session_cookie_samesite' => isset($cookieDefaults['samesite']) ? $cookieDefaults['samesite'] : '',
       'session_cache_limiter'   => null,
+      'gc_maxlifetime'          => 1800,
     ], $options);
 
     // initialize parent
@@ -96,6 +97,12 @@ class sfSessionStorage extends sfStorage
     if (null !== $this->options['session_cache_limiter'])
     {
       session_cache_limiter($this->options['session_cache_limiter']);
+    }
+
+    // Keep PHP GC lifetime at least as long as the configured session timeout
+    if (ini_get('session.gc_maxlifetime') < $this->options['gc_maxlifetime'])
+    {
+      ini_set('session.gc_maxlifetime', $this->options['gc_maxlifetime']);
     }
 
     if ($this->options['auto_start'] && !self::$sessionStarted)
