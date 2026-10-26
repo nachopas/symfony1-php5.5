@@ -75,7 +75,7 @@ class sfValidatorFile extends sfValidatorBase
     $this->addOption('validated_file_class', 'sfValidatedFile');
     $this->addOption('path', null);
 
-    $this->addMessage('max_size', 'File is too large (maximum is %max_size% bytes).');
+    $this->addMessage('max_size', 'File is too large (maximum is %max_size% kilobytes).');
     $this->addMessage('mime_types', 'Invalid mime type (%mime_type%).');
     $this->addMessage('partial', 'The uploaded file was only partially uploaded.');
     $this->addMessage('no_tmp_dir', 'Missing a temporary folder.');
@@ -126,12 +126,12 @@ class sfValidatorFile extends sfValidatorBase
     switch ($value['error'])
     {
       case UPLOAD_ERR_INI_SIZE:
-        $max = ini_get('upload_max_filesize');
+        $max = $this->getMaxFilesize();
         if ($this->getOption('max_size'))
         {
           $max = min($max, $this->getOption('max_size'));
         }
-        throw new sfValidatorError($this, 'max_size', array('max_size' => $max, 'size' => (int) $value['size']));
+        throw new sfValidatorError($this, 'max_size', array('max_size' => round($max / 1024, 0), 'size' => (int) $value['size']));
       case UPLOAD_ERR_FORM_SIZE:
         throw new sfValidatorError($this, 'max_size', array('max_size' => 0, 'size' => (int) $value['size']));
       case UPLOAD_ERR_PARTIAL:
@@ -147,7 +147,7 @@ class sfValidatorFile extends sfValidatorBase
     // check file size
     if ($this->hasOption('max_size') && $this->getOption('max_size') < (int) $value['size'])
     {
-      throw new sfValidatorError($this, 'max_size', array('max_size' => $this->getOption('max_size'), 'size' => (int) $value['size']));
+      throw new sfValidatorError($this, 'max_size', array('max_size' => round($this->getOption('max_size') / 1024, 0), 'size' => (int) $value['size']));
     }
 
     $mimeType = $this->getMimeType((string) $value['tmp_name'], (string) $value['type']);
@@ -253,8 +253,11 @@ class sfValidatorFile extends sfValidatorBase
   protected function guessFromFileBinary($file)
   {
     ob_start();
-    //need to use --mime instead of -i. see #6641
-    passthru(sprintf('file -b --mime %s 2>/dev/null', escapeshellarg($file)), $return);
+    // need to use --mime instead of -i. see #6641
+    // "--" stops option parsing; prefix ./ if path starts with "-"
+    $cmd = 'file -b --mime -- %s 2>/dev/null';
+    $file = (0 === strpos($file, '-') ? './' : '').$file;
+    passthru(sprintf($cmd, escapeshellarg($file)), $return);
     if ($return > 0)
     {
       ob_end_clean();
@@ -270,6 +273,37 @@ class sfValidatorFile extends sfValidatorBase
     }
 
     return $match[1];
+  }
+
+  /**
+   * Returns the maximum size of an uploaded file as configured in php.ini.
+   *
+   * @return int The maximum size of an uploaded file in bytes
+   */
+  protected function getMaxFilesize()
+  {
+    $max = trim(ini_get('upload_max_filesize'));
+
+    if ('' === $max)
+    {
+      return PHP_INT_MAX;
+    }
+
+    $value = (int) $max;
+
+    switch (strtolower(substr($max, -1)))
+    {
+      case 'g':
+        $value *= 1024;
+        // no break
+      case 'm':
+        $value *= 1024;
+        // no break
+      case 'k':
+        $value *= 1024;
+    }
+
+    return (int) $value;
   }
 
   protected function getMimeTypesFromCategory($category)
