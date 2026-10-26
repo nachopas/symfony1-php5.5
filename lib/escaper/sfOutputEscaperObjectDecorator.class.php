@@ -118,6 +118,12 @@ class sfOutputEscaperObjectDecorator extends sfOutputEscaperGetterDecorator impl
   #[\ReturnTypeWillChange]
   public function count()
   {
-    return count($this->value);
+    // PHP 8.0+: count() on a non-Countable object throws TypeError
+    if (is_array($this->value) || $this->value instanceof Countable || $this->value instanceof ResourceBundle || $this->value instanceof SimpleXMLElement)
+    {
+      return count($this->value);
+    }
+
+    return 1;
   }
 }
