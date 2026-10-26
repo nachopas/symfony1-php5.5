@@ -10,7 +10,7 @@
 
 require_once(dirname(__FILE__).'/../../bootstrap/unit.php');
 
-$t = new lime_test(24);
+$t = new lime_test(26);
 
 foreach (array(
   'cache', 'configuration', 'controller', 'database', 
@@ -42,3 +42,18 @@ $t->is(myException::formatArgsTest(array('foo' => new stdClass(), 'bar' => 2), t
 
 $t->is(myException::formatArgsTest('&', true), "'&amp;'", 'formatArgs() escapes strings');
 $t->is(myException::formatArgsTest(array('&' => '&'), true), "<em>array</em>('&amp;' => '&amp;')", 'formatArgs() escapes strings for keys and values in arrays');
+
+// createFromException() must accept PHP 8 TypeError (Throwable, not Exception)
+$t->diag('sfException::createFromException() with TypeError');
+try
+{
+  $fn = function (int $x) {};
+  $fn([]);
+  $t->fail('TypeError was not thrown');
+}
+catch (TypeError $e)
+{
+  $wrapped = sfException::createFromException($e);
+  $t->isa_ok($wrapped, 'sfException', '::createFromException() wraps a TypeError');
+  $t->isa_ok(sfException::getLastException(), 'TypeError', '::getLastException() keeps the original TypeError');
+}
