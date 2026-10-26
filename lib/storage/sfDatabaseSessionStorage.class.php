@@ -61,13 +61,8 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
       throw new sfInitializationException('You must provide a "database" option to sfDatabaseSessionStorage.');
     }
 
-    // use this object as the session handler
-    session_set_save_handler(array($this, 'sessionOpen'),
-                             array($this, 'sessionClose'),
-                             array($this, 'sessionRead'),
-                             array($this, 'sessionWrite'),
-                             array($this, 'sessionDestroy'),
-                             array($this, 'sessionGC'));
+    // PHP 8.4 deprecates the 6-callback form; use SessionHandlerInterface instead
+    session_set_save_handler(new sfDatabaseSessionHandler($this), true);
 
     // start our session
     session_start();
@@ -192,5 +187,59 @@ abstract class sfDatabaseSessionStorage extends sfSessionStorage
     $this->sessionRead($newId);
 
     return $this->sessionWrite($newId, $this->sessionRead($currentId));
+  }
+}
+
+/**
+ * Adapts sfDatabaseSessionStorage to SessionHandlerInterface for session_set_save_handler().
+ *
+ * Kept as a separate class because sfSessionStorage already defines read()/write() for
+ * attribute storage, which would collide with the interface methods.
+ */
+class sfDatabaseSessionHandler implements SessionHandlerInterface
+{
+  private sfDatabaseSessionStorage $storage;
+
+  public function __construct(sfDatabaseSessionStorage $storage)
+  {
+    $this->storage = $storage;
+  }
+
+  public function open(string $path, string $name): bool
+  {
+    return $this->storage->sessionOpen($path, $name);
+  }
+
+  public function close(): bool
+  {
+    return $this->storage->sessionClose();
+  }
+
+  public function read(string $id): string|false
+  {
+    return $this->storage->sessionRead($id);
+  }
+
+  public function write(string $id, string $data): bool
+  {
+    return $this->storage->sessionWrite($id, $data);
+  }
+
+  public function destroy(string $id): bool
+  {
+    return $this->storage->sessionDestroy($id);
+  }
+
+  public function gc(int $max_lifetime): int|false
+  {
+    $result = $this->storage->sessionGC($max_lifetime);
+
+    // Concrete storages historically return bool; interface wants int|false
+    if (false === $result)
+    {
+      return false;
+    }
+
+    return is_int($result) ? $result : (int) $result;
   }
 }
