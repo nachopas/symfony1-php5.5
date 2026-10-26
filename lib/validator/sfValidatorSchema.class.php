@@ -162,6 +162,12 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
 
         $errorSchema->addError($e, (string) $name);
       }
+      catch (Exception $e)
+      {
+        $class = get_class($e);
+
+        throw new $class($e->getMessage().' of "'.$name.'" field');
+      }
     }
 
     // are non given values required?
@@ -331,7 +337,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
   {
     if (!$validator instanceof sfValidatorBase)
     {
-      throw new InvalidArgumentException('A field must be an instance of sfValidatorBase.');
+      throw new InvalidArgumentException('A validator must be an instance of sfValidatorBase.');
     }
 
     $this->fields[$name] = clone $validator;
