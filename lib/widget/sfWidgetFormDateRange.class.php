@@ -56,11 +56,15 @@ class sfWidgetFormDateRange extends sfWidgetForm
   public function render($name, $value = null, $attributes = array(), $errors = array())
   {
     $value = array_merge(array('from' => '', 'to' => ''), is_array($value) ? $value : array());
+    $attributes = array_merge([
+      'from' => [],
+      'to' => [],
+    ], is_array($attributes) ? $attributes : []);
 
-    return strtr($this->translate($this->getOption('template')), array(
-      '%from_date%'      => $this->getOption('from_date')->render($name.'[from]', $value['from']),
-      '%to_date%'        => $this->getOption('to_date')->render($name.'[to]', $value['to']),
-    ));
+    return strtr($this->translate($this->getOption('template')), [
+      '%from_date%'      => $this->getOption('from_date')->render($name.'[from]', $value['from'], $attributes['from'], $errors),
+      '%to_date%'        => $this->getOption('to_date')->render($name.'[to]', $value['to'], $attributes['to'], $errors),
+    ]);
   }
 
   /**
@@ -70,7 +74,7 @@ class sfWidgetFormDateRange extends sfWidgetForm
    */
   public function getStylesheets()
   {
-    return array_unique(array_merge($this->getOption('from_date')->getStylesheets(), $this->getOption('to_date')->getStylesheets()));
+    return array_merge($this->getOption('from_date')->getStylesheets(), $this->getOption('to_date')->getStylesheets());
   }
 
   /**
@@ -80,6 +84,6 @@ class sfWidgetFormDateRange extends sfWidgetForm
    */
   public function getJavaScripts()
   {
-    return array_unique(array_merge($this->getOption('from_date')->getJavaScripts(), $this->getOption('to_date')->getJavaScripts()));
+    return array_merge($this->getOption('from_date')->getJavaScripts(), $this->getOption('to_date')->getJavaScripts());
   }
 }
