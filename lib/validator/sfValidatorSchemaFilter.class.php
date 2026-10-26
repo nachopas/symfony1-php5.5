@@ -48,7 +48,7 @@ class sfValidatorSchemaFilter extends sfValidatorSchema
 
     if (!is_array($values))
     {
-      throw new InvalidArgumentException('You must pass an array parameter to the clean() method');
+      throw new InvalidArgumentException(sprintf('You must pass an array parameter to the clean() method for filter field "%s"', $this->getOption('field')));
     }
 
     $value = isset($values[$this->getOption('field')]) ? $values[$this->getOption('field')] : null;
@@ -59,7 +59,10 @@ class sfValidatorSchemaFilter extends sfValidatorSchema
     }
     catch (sfValidatorError $error)
     {
-      throw new sfValidatorErrorSchema($this, array($this->getOption('field') => $error));
+      $errorSchema = new sfValidatorErrorSchema($this);
+      $errorSchema->addError($error, $this->getOption('field'));
+
+      throw $errorSchema;
     }
 
     return $values;

@@ -35,19 +35,56 @@ $e->addError($e1, '2');
 $t->is($e->getErrors(), array($e1, 'e2' => $e2, '2' => $e1), '->addError() adds an error to the error schema');
 
 $t->diag('embedded errors');
-$es1 = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $e2));
-$es = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $es1));
+// Build nested schemas with addError; do not reuse the same schema instance after merge
+$es1 = new sfValidatorErrorSchema(new sfValidatorString());
+$es1->addError($e1);
+$es1->addError($e1, 'e1');
+$es1->addError($e2, 'e2');
+
+$es = new sfValidatorErrorSchema(new sfValidatorString());
+$es->addError($e1);
+$es->addError($e1, 'e1');
+$es->addError($es1, 'e2');
 $es->addError($e2, 'e1');
 $t->is($es->getCode(), 'max_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
+
 $es->addError($e2);
 $t->is($es->getCode(), 'max_length min_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
-$es->addError($es1, 'e3');
+
+$es2 = new sfValidatorErrorSchema(new sfValidatorString());
+$es2->addError($e1);
+$es2->addError($e1, 'e1');
+$es2->addError($e2, 'e2');
+
+$es->addError($es2, 'e3');
 $t->is($es->getCode(), 'max_length min_length e1 [max_length min_length] e2 [max_length e1 [max_length] e2 [min_length]] e3 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
-$es->addError($es1);
+
+$es3 = new sfValidatorErrorSchema(new sfValidatorString());
+$es3->addError($e1);
+$es3->addError($e1, 'e1');
+$es3->addError($e2, 'e2');
+
+$es->addError($es3);
 $t->is($es->getCode(), 'max_length min_length max_length e1 [max_length min_length max_length] e2 [max_length min_length e1 [max_length] e2 [min_length]] e3 [max_length e1 [max_length] e2 [min_length]]', '->addError() adds an error to the error schema');
 
-$es = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $es1));
-$es2 = new sfValidatorErrorSchema($v1, array($e1, 'e1' => $e1, 'e2' => $es1));
+$es1 = new sfValidatorErrorSchema($v1);
+$es1->addError($e1);
+$es1->addError($e1, 'e1');
+$es1->addError($e2, 'e2');
+$es = new sfValidatorErrorSchema($v1);
+$es->addError($e1);
+$es->addError($e1, 'e1');
+$es->addError($es1, 'e2');
+
+$es1 = new sfValidatorErrorSchema($v1);
+$es1->addError($e1);
+$es1->addError($e1, 'e1');
+$es1->addError($e2, 'e2');
+$es2 = new sfValidatorErrorSchema($v1);
+$es2->addError($e1);
+$es2->addError($e1, 'e1');
+$es2->addError($es1, 'e2');
+
 $es->addError($es2, 'e2');
 $t->is($es->getCode(), 'max_length e1 [max_length] e2 [max_length max_length e1 [max_length max_length] e2 [min_length max_length e1 [max_length] e2 [min_length]]]', '->addError() adds an error to the error schema');
 
@@ -55,11 +92,12 @@ $t->is($es->getCode(), 'max_length e1 [max_length] e2 [max_length max_length e1 
 $t->diag('->addErrors()');
 $es1 = new sfValidatorErrorSchema($v1);
 $es1->addError($e1);
+$es1->addError($e1, 0); // integer name stays named (not global)
 $es1->addError($e2, '1');
 $es = new sfValidatorErrorSchema($v1);
 $es->addErrors($es1);
 $t->is($es->getGlobalErrors(), array($e1), '->addErrors() adds an array of errors to the current error');
-$t->is($es->getNamedErrors(), array('1' => $e2), '->addErrors() merges a sfValidatorErrorSchema to the current error');
+$t->is($es->getNamedErrors(), array(0 => $e1, '1' => $e2), '->addErrors() merges a sfValidatorErrorSchema to the current error');
 
 // ->getGlobalErrors()
 $t->diag('->getGlobalErrors()');
