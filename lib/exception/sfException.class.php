@@ -29,13 +29,13 @@ class sfException extends Exception
     $lastException = null;
 
   /**
-   * Wraps an Exception.
+   * Wraps an Exception or Error (PHP 7+ Throwable).
    *
-   * @param Exception $e An Exception instance
+   * @param Exception|Throwable $e
    *
-   * @return sfException An sfException instance that wraps the given Exception object
+   * @return sfException An sfException instance that wraps the given throwable
    */
-  static public function createFromException(Exception $e)
+  static public function createFromException($e)
   {
     $exception = new sfException(sprintf('Wrapped %s: %s', get_class($e), $e->getMessage()));
     $exception->setWrappedException($e);
@@ -45,11 +45,11 @@ class sfException extends Exception
   }
 
   /**
-   * Sets the wrapped exception.
+   * Sets the wrapped exception / error.
    *
-   * @param Exception $e An Exception instance
+   * @param Exception|Throwable $e
    */
-  public function setWrappedException(Exception $e)
+  public function setWrappedException($e)
   {
     $this->wrappedException = $e;
 
@@ -57,9 +57,9 @@ class sfException extends Exception
   }
 
   /**
-   * Gets the last wrapped exception.
+   * Gets the last wrapped throwable.
    *
-   * @return Exception An Exception instance
+   * @return Exception|Throwable|null
    */
   static public function getLastException()
   {
@@ -111,8 +111,9 @@ class sfException extends Exception
     {
       $this->outputStackTrace($exception);
     }
-    catch (Exception $e)
+    catch (Throwable $e)
     {
+      // Swallow errors from the error page itself (TypeError etc. on PHP 8+)
     }
 
     if (!sfConfig::get('sf_test'))
@@ -123,8 +124,10 @@ class sfException extends Exception
 
   /**
    * Gets the stack trace for this exception.
+   *
+   * @param Exception|Throwable $exception
    */
-  static protected function outputStackTrace(Exception $exception)
+  static protected function outputStackTrace($exception)
   {
     $format = 'html';
     $code   = '500';

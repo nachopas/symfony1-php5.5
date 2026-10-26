@@ -80,8 +80,9 @@ class sfContext implements ArrayAccess
     {
       $e->printStackTrace();
     }
-    catch (Exception $e)
+    catch (Throwable $e)
     {
+      // PHP 8+: TypeError/Error are Throwable, not Exception
       sfException::createFromException($e)->printStackTrace();
     }
 
