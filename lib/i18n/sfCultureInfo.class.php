@@ -516,7 +516,8 @@ class sfCultureInfo
     $culture = $this->getInvariantCulture();
 
     $language = $culture->findInfo("Languages/{$lang}");
-    if (count($language) == 0)
+    // findInfo returns a string when found, or [] when missing; count() on a string TypeErrors on PHP 8+
+    if (is_array($language) && count($language) == 0)
     {
       return $this->culture;
     }

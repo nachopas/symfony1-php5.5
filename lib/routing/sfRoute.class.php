@@ -263,7 +263,8 @@ class sfRoute
 
   static private function generateCompareVarsByStrlen($a, $b)
   {
-    return strlen($a) < strlen($b);
+    // uasort expects int; boolean return is deprecated on PHP 8+
+    return (strlen($a) < strlen($b)) ? 1 : -1;
   }
 
   /**

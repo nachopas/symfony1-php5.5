@@ -88,15 +88,15 @@ class sfWebRequest extends sfRequest
           break;
 
         case 'POST':
-          if (isset($_POST['sf_method']))
+          if (isset($postParameters['sf_method']))
           {
-            $this->setMethod(strtoupper($_POST['sf_method']));
+            $this->setMethod(strtoupper($postParameters['sf_method']));
             unset($postParameters['sf_method']);
           }
-          elseif (isset($_GET['sf_method']))
+          elseif (isset($this->getParameters['sf_method']))
           {
-            $this->setMethod(strtoupper($_GET['sf_method']));
-            unset($_GET['sf_method']);
+            $this->setMethod(strtoupper($this->getParameters['sf_method']));
+            unset($this->getParameters['sf_method']);
           }
           else
           {
@@ -113,6 +113,14 @@ class sfWebRequest extends sfRequest
           }
           break;
 
+        case 'PATCH':
+          $this->setMethod(self::PATCH);
+          if ('application/x-www-form-urlencoded' === $this->getContentType())
+          {
+            parse_str($this->getContent(), $postParameters);
+          }
+          break;
+
         case 'DELETE':
           $this->setMethod(self::DELETE);
           if ('application/x-www-form-urlencoded' === $this->getContentType())
@@ -123,6 +131,10 @@ class sfWebRequest extends sfRequest
 
         case 'HEAD':
           $this->setMethod(self::HEAD);
+          break;
+
+        case 'OPTIONS':
+          $this->setMethod(self::OPTIONS);
           break;
 
         default:

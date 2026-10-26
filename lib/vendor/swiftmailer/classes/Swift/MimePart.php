@@ -28,11 +28,9 @@ class Swift_MimePart extends Swift_Mime_MimePart
   public function __construct($body = null, $contentType = null,
     $charset = null)
   {
-    call_user_func_array(
-      array($this, 'Swift_Mime_MimePart::__construct'),
-      Swift_DependencyContainer::getInstance()
-        ->createDependenciesFor('mime.part')
-      );
+    // Avoid PHP 8.2+ deprecated [$this, 'Parent::__construct'] callable
+    parent::__construct(...Swift_DependencyContainer::getInstance()
+      ->createDependenciesFor('mime.part'));
     
     if (!isset($charset))
     {

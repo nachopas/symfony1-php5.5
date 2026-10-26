@@ -264,6 +264,16 @@ abstract class Doctrine_Query_Abstract
     protected $_preQueried = false;
 
     /**
+     * @var array pending join conditions (also declared on Doctrine_Query)
+     */
+    protected $_pendingJoinConditions = array();
+
+    /**
+     * @var array parser objects per DQL query part (also declared on Doctrine_Query)
+     */
+    protected $_parsers = array();
+
+    /**
      * Fix for http://www.doctrine-project.org/jira/browse/DC-701
      *
      * @var bool Boolean variable for whether the limitSubquery method of accessing tables via a many relationship should be used.

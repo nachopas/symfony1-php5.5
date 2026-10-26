@@ -26,10 +26,8 @@ class Swift_SpoolTransport extends Swift_Transport_SpoolTransport
 
     $arguments[] = $spool;
 
-    call_user_func_array(
-      array($this, 'Swift_Transport_SpoolTransport::__construct'),
-      $arguments
-    );
+    // Avoid PHP 8.2+ deprecated [$this, 'Parent::__construct'] callable
+    parent::__construct(...$arguments);
   }
   
   /**

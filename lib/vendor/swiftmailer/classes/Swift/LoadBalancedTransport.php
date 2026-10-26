@@ -24,11 +24,9 @@ class Swift_LoadBalancedTransport extends Swift_Transport_LoadBalancedTransport
    */
   public function __construct($transports = array())
   {
-    call_user_func_array(
-      array($this, 'Swift_Transport_LoadBalancedTransport::__construct'),
-      Swift_DependencyContainer::getInstance()
-        ->createDependenciesFor('transport.loadbalanced')
-      );
+    // Avoid PHP 8.2+ deprecated [$this, 'Parent::__construct'] callable
+    parent::__construct(...Swift_DependencyContainer::getInstance()
+      ->createDependenciesFor('transport.loadbalanced'));
     
     $this->setTransports($transports);
   }
