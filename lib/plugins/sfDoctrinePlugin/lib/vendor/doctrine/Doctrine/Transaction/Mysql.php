@@ -32,6 +32,26 @@
  */
 class Doctrine_Transaction_Mysql extends Doctrine_Transaction
 {
+    protected function _doCommit()
+    {
+        $dbh = $this->conn->getDbh();
+
+        // MySQL DDL implicitly commits; PDO 8 throws if we commit it again.
+        if ( ! ($dbh instanceof PDO) || $dbh->inTransaction()) {
+            parent::_doCommit();
+        }
+    }
+
+    protected function _doRollback()
+    {
+        $dbh = $this->conn->getDbh();
+
+        // DDL cannot be rolled back, but Doctrine must still reset its nesting level.
+        if ( ! ($dbh instanceof PDO) || $dbh->inTransaction()) {
+            parent::_doRollback();
+        }
+    }
+
     /**
      * createSavepoint
      * creates a new savepoint
