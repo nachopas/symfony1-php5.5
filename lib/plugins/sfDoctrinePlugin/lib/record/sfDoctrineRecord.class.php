@@ -209,6 +209,9 @@ abstract class sfDoctrineRecord extends Doctrine_Record
   /**
    * Get the Doctrine date value as a PHP DateTime object
    *
+   * Empty/null fields keep the old DateTime(null) behaviour (current date/time)
+   * without passing null into the constructor (deprecated on PHP 8.1+).
+   *
    * @param string $dateFieldName   The field name to get the DateTime object for
    * @return DateTime $dateTime     The instance of PHPs DateTime
    */
@@ -217,7 +220,9 @@ abstract class sfDoctrineRecord extends Doctrine_Record
     $type = $this->getTable()->getTypeOf($dateFieldName);
     if ($type == 'date' || $type == 'timestamp' || $type == 'datetime')
     {
-      return new DateTime($this->get($dateFieldName));
+      $datetime = $this->get($dateFieldName);
+
+      return new DateTime($datetime ? $datetime : 'now');
     }
     else
     {
