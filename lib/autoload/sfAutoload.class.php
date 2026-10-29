@@ -174,8 +174,8 @@ class sfAutoload
   {
     $class = strtolower($class);
 
-    // class already exists
-    if (class_exists($class, false) || interface_exists($class, false))
+    // class / interface / trait already exists
+    if (class_exists($class, false) || interface_exists($class, false) || trait_exists($class, false))
     {
       return true;
     }
