@@ -132,6 +132,15 @@ abstract class sfRouting
   abstract public function getRoutes();
 
   /**
+   * Gets a route by name (may unserialize a lazy-loaded route).
+   *
+   * @param  string $name The route name
+   *
+   * @return sfRoute
+   */
+  abstract public function getRoute($name);
+
+  /**
    * Sets the compiled route array.
    *
    * @param  array $routes  The route array
